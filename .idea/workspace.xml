@@ -4,10 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/leetcode6.py" line="880" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ccd1792-7d20-4e90-a057-4adb15228c1d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="8ccd1792-7d20-4e90-a057-4adb15228c1d" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -42,8 +39,8 @@
       <file leaf-file-name="leetcode9.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/leetcode9.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="40" column="20" lean-forward="false" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
+            <state relative-caret-position="323">
+              <caret line="31" column="20" lean-forward="true" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <marker date="1511105448712" expanded="true" signature="1075:1542" ph="..." />
@@ -140,7 +137,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="776" />
     <option name="width" value="597" />
     <option name="height" value="775" />
@@ -513,15 +510,15 @@
       <workItem from="1510978256411" duration="4216000" />
       <workItem from="1510990487434" duration="1300000" />
       <workItem from="1511105455884" duration="604000" />
-      <workItem from="1511106070182" duration="375000" />
+      <workItem from="1511106070182" duration="924000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="516161000" />
+    <option name="totallyTimeSpent" value="516710000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="776" y="0" width="597" height="775" extended-state="0" />
+    <frame x="776" y="0" width="597" height="775" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -770,8 +767,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/leetcode9.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="40" column="20" lean-forward="false" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
+        <state relative-caret-position="323">
+          <caret line="31" column="20" lean-forward="true" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <marker date="1511105448712" expanded="true" signature="1075:1542" ph="..." />
