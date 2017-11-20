@@ -1,5 +1,6 @@
 import heapq
 import random
+from queue import PriorityQueue
 
 
 class ListNode(object):
@@ -401,6 +402,53 @@ class Solution(object):
                 if bitCount(64 * h + m) == num:
                     ret.append("{:d}:{:02d}".format(h, m))
         return ret
+
+    def originalDigits(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        # 423
+        words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+        d = {}
+        for i in s:
+            if i not in d:
+                d[i] = 1
+            else:
+                d[i] += 1
+
+        def dfs(d: dict, ret: PriorityQueue):
+
+            flag = True
+            for v in d.values:
+                if v != 0:
+                    flag = False
+                    break
+            if flag:
+                return True
+
+            for word in words:
+                flag = True
+                for wi in word:
+                    if d[wi] <= 0:
+                        flag = False
+                        break
+                if flag:
+                    for wi in word:
+                        d[wi] -= 1
+                    if dfs(d, ret):
+                        ret.put(word)
+                    else:
+                        for wi in word:
+                            d[wi] += 1
+            flag = True
+            for v in d.values:
+                if v != 0:
+                    flag = False
+                    break
+            if flag:
+                return True
+            return False
 
 
 def binarysearch(nums, target):
