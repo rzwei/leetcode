@@ -14,4 +14,15 @@ def binarysearch(num, m, n):
 
 
 if __name__ == '__main__':
-    print(binarysearch(6, 2, 3))
+    # print(binarysearch(6, 2, 3))
+    words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+    d = {}
+    for i, v in enumerate(words):
+        d[i] = set(v)
+
+    S = set([chr(i + ord('a')) for i in range(26)])
+    for s in d.values():
+        S &= s
+    print('S', S)
+    for k, v in d.items():
+        print(k, v - S)
