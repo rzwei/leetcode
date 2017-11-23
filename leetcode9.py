@@ -1,6 +1,6 @@
 import heapq
 import random
-from collections import OrderedDict
+
 
 class Interval(object):
     def __init__(self, s=0, e=0):
@@ -489,6 +489,26 @@ class Solution(object):
                 ret.append(-1)
         return ret
 
+    def findMinArrowShots(self, points: list):
+        """
+        :type points: List[List[int]]
+        :rtype: int
+        """
+        # 452
+        if not points:
+            return 0
+        points.sort(key=lambda x: (x[1], x[0]))
+        res = 1
+        cur = points[0][1]
+        for i in range(len(points)):
+            s = points[i][0]
+            e = points[i][1]
+            if s <= cur:
+                res -= 1
+            else:
+                cur = e
+        return res
+
 
 def binarysearch(nums, target):
     i = 0
@@ -504,8 +524,9 @@ def binarysearch(nums, target):
 
 if __name__ == '__main__':
     sol = Solution()
-    intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
-    print(sol.findRightInterval(intervals))
+    print(sol.findMinArrowShots([[10, 16], [2, 8], [1, 6], [7, 12]]))
+    # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
+    # print(sol.findRightInterval(intervals))
     # nums = [1, 2, 3, 4, 5, 6, 7]
     # dummy = RandomListNode(-1)
     # pd = dummy
