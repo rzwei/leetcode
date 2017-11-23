@@ -1,6 +1,6 @@
 import heapq
 import random
-from collections import OrderedDict
+
 
 class Interval(object):
     def __init__(self, s=0, e=0):
@@ -474,8 +474,6 @@ class Solution(object):
         :rtype: List[int]
         """
         # 436
-
-
         if not intervals:
             return intervals
         d = {}
