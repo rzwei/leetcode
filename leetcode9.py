@@ -52,6 +52,18 @@ class RandomListNode(object):
         self.random = None
 
 
+def binarysearch(nums, target):
+    i = 0
+    j = len(nums) - 1
+    while i <= j:
+        mid = (i + j) // 2
+        if nums[mid] > target:
+            j = mid - 1
+        else:
+            i = mid + 1
+    return i, j
+
+
 # Definition for a binary tree node.
 class TreeNode(object):
     def __init__(self, x):
@@ -487,23 +499,45 @@ class Solution(object):
                 ret.append(-1)
         return ret
 
+    def numberOfBoomerangs(self, points):
+        """
+        :type points: List[List[int]]
+        :rtype: int
+        """
+        # 447
+        d = {}
+        distence = lambda x, y: (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2
+        res = 0
 
-def binarysearch(nums, target):
-    i = 0
-    j = len(nums) - 1
-    while i <= j:
-        mid = (i + j) // 2
-        if nums[mid] > target:
-            j = mid - 1
-        else:
-            i = mid + 1
-    return i, j
+        for i in range(len(points)):
+            d.clear()
+            for j in range(len(points)):
+                if i == j:
+                    continue
+                dis = distence(points[i], points[j])
+                if dis not in d:
+                    d[dis] = 1
+                else:
+                    d[dis] += 1
+            for v in d.values():
+                res += v * (v - 1)
+        return res
+
+    def deleteNode(self, root: TreeNode, key):
+        """
+        :type root: TreeNode
+        :type key: int
+        :rtype: TreeNode
+        """
+        # 450
+
 
 
 if __name__ == '__main__':
     sol = Solution()
-    intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
-    print(sol.findRightInterval(intervals))
+    print(sol.numberOfBoomerangs([[0, 0], [1, 0], [2, 0]]))
+    # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
+    # print(sol.findRightInterval(intervals))
     # nums = [1, 2, 3, 4, 5, 6, 7]
     # dummy = RandomListNode(-1)
     # pd = dummy
