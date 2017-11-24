@@ -523,19 +523,46 @@ class Solution(object):
                 res += v * (v - 1)
         return res
 
-    def deleteNode(self, root: TreeNode, key):
+    def findContentChildren(self, g: list, s: list):
         """
-        :type root: TreeNode
-        :type key: int
-        :rtype: TreeNode
+        :type g: List[int]
+        :type s: List[int]
+        :rtype: int
         """
-        # 450
+        g.sort()
+        s.sort()
+        si = 0
+        res = 0
+        for i, gi in enumerate(g):
+            while si < len(s) and s[si] < gi:
+                si += 1
+            if si >= len(s):
+                break
+            if s[si] >= gi:
+                si += 1
+                res += 1
+        return res
 
+    def minMoves2(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        i = 0
+        j = len(nums) - 1
+        res = 0
+        nums.sort()
+        while i < j:
+            res += nums[j] - nums[i]
+            i += 1
+            j -= 1
+        return res
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.numberOfBoomerangs([[0, 0], [1, 0], [2, 0]]))
+    print(sol.findContentChildren([1, 2, 3], [3]))
+    # print(sol.numberOfBoomerangs([[0, 0], [1, 0], [2, 0]]))
     # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
     # print(sol.findRightInterval(intervals))
     # nums = [1, 2, 3, 4, 5, 6, 7]
