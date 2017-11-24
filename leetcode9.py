@@ -558,10 +558,35 @@ class Solution(object):
             j -= 1
         return res
 
+    def findMaxForm(self, strs: list, m, n):
+        """
+        :type strs: List[str]
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        # 474
+        dp = [[0 for _ in range(n + 1)] for __ in range(m + 1)]
+        nums = [[0, 0] for _ in range(len(strs))]
+        for i in range(len(strs)):
+            for j in strs[i]:
+                if j == '0':
+                    nums[i][0] += 1
+                else:
+                    nums[i][1] += 1
+        for ni in nums:
+            for i in reversed(range(ni[0], m + 1)):
+                for j in reversed(range(ni[1], n + 1)):
+                    if i - ni[0] >= 0 and j - ni[1] >= 0:
+                        dp[i][j] = max(dp[i][j], dp[i - ni[0]][j - ni[1]] + 1)
+
+        return dp[m][n]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findContentChildren([1, 2, 3], [3]))
+    print(sol.findMaxForm(["10", "0001", "111001", "1", "0"], 5, 3))
+    # print(sol.findContentChildren([1, 2, 3], [3]))
     # print(sol.numberOfBoomerangs([[0, 0], [1, 0], [2, 0]]))
     # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
     # print(sol.findRightInterval(intervals))
