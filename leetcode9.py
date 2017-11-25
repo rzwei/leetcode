@@ -1,6 +1,6 @@
 import heapq
 import random
-from collections import OrderedDict
+
 
 class Interval(object):
     def __init__(self, s=0, e=0):
@@ -474,8 +474,6 @@ class Solution(object):
         :rtype: List[int]
         """
         # 436
-
-
         if not intervals:
             return intervals
         d = {}
@@ -488,6 +486,35 @@ class Solution(object):
             else:
                 ret.append(-1)
         return ret
+
+    def makesquare(self, nums: list):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        # 475
+        nums.sort(reverse=True)
+        sums = sum(nums)
+        if sums % 4 != 0:
+            return False
+        L = sums / 4
+        vis = [0 for _ in range(len(nums))]
+
+        def dfs(vis, n, l):
+            if n == 0 and l == 0:
+                return True
+            if l == 0:
+                n -= 1
+                l = L
+            for i in range(len(vis)):
+                if vis[i] == 0 and nums[i] <= l:
+                    vis[i] = 1
+                    if dfs(vis, n, l - nums[i]):
+                        return True
+                    vis[i] = 0
+            return False
+
+        return dfs(vis, 4, L)
 
 
 def binarysearch(nums, target):
@@ -504,8 +531,9 @@ def binarysearch(nums, target):
 
 if __name__ == '__main__':
     sol = Solution()
-    intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
-    print(sol.findRightInterval(intervals))
+    print(sol.makesquare([1, 1, 2, 2, 2]))
+    # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
+    # print(sol.findRightInterval(intervals))
     # nums = [1, 2, 3, 4, 5, 6, 7]
     # dummy = RandomListNode(-1)
     # pd = dummy
