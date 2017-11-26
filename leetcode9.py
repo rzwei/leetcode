@@ -17,6 +17,18 @@ class ListNode(object):
         self.next = None
 
 
+def binarysearch(nums, target):
+    i = 0
+    j = len(nums) - 1
+    while i <= j:
+        mid = (i + j) // 2
+        if nums[mid] > target:
+            j = mid - 1
+        else:
+            i = mid + 1
+    return i, j
+
+
 def heapAdjust(nums, i, size):
     if i >= size // 2:
         return
@@ -519,22 +531,118 @@ class Solution(object):
 
         return dfs([0, 0, 0, 0], 0, L)
 
+    def licenseKeyFormatting(self, S: str, K):
+        """
+        :type S: str
+        :type K: int
+        :rtype: str
+        """
+        ret = ''
+        k = K
+        for i in reversed(S):
+            if i == '-':
+                continue
+            if k == 0:
+                ret = '-' + ret
+                k = K
+            ret = i.upper() + ret
+            k -= 1
+        return ret
 
-def binarysearch(nums, target):
-    i = 0
-    j = len(nums) - 1
-    while i <= j:
-        mid = (i + j) // 2
-        if nums[mid] > target:
-            j = mid - 1
-        else:
-            i = mid + 1
-    return i, j
+    def PredictTheWinner(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+
+        # 486
+        cache = {}
+
+        def dp(s, e):
+            if s == e:
+                return nums[s]
+            if (s, e) in cache:
+                return cache[(s, e)]
+            r = max(nums[s] - dp(s + 1, e), nums[e] - dp(s, e - 1))
+            cache[(s, e)] = r
+            return r
+
+        return dp(0, len(nums) - 1) >= 0
+
+    def findPoisonedDuration(self, timeSeries: list, duration):
+        """
+        :type timeSeries: List[int]
+        :type duration: int
+        :rtype: int
+        """
+        # 495
+        # last = -1
+        # ret = 0
+        # for i in range(len(timeSeries)):
+        #     if timeSeries[i] > last:
+        #         last = timeSeries[i] + duration - 1
+        #         ret += duration
+        #     else:
+        #         ret += timeSeries[i] + duration - 1 - last
+        #         last = timeSeries[i] + duration - 1
+        # return ret
+        if len(timeSeries) == 0:
+            return 0
+
+        res = 0
+        for i in range(len(timeSeries) - 1):
+            if timeSeries[i] + duration > timeSeries[i + 1]:
+                res += timeSeries[i + 1] - timeSeries[i]
+            else:
+                res += duration
+        res += duration
+        return res
+
+    def nextGreaterElement(self, findNums, nums):
+        """
+        :type findNums: List[int]
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        # ret = [-1] * len(findNums)
+        # d = {}
+        # for i, v in enumerate(nums):
+        #     d[v] = i
+        # for i in range(len(findNums)):
+        #     for j in range(d[findNums[i]] + 1, len(nums)):
+        #         if nums[j] > findNums[i]:
+        #             ret[i] = nums[j]
+        #             break
+        # return ret
+        stack = []
+        d = {}
+        for n in nums:
+            while stack and stack[-1] < n:
+                d[stack.pop()] = n
+            stack.append(n)
+        res = [-1] * len(findNums)
+        for i in range(len(findNums)):
+            res[i] = d.get(findNums[i], -1)
+        return res
+
+    def longestPalindromeSubseq(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.makesquare([3, 1, 3, 3, 10, 7, 10, 3, 6, 9, 10, 3, 7, 6, 7]))
+    print(sol.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
+    print(sol.nextGreaterElement([2, 4], [1, 2, 3, 4]))
+    # print(sol.findPoisonedDuration([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1))
+    # print(sol.findPoisonedDuration([1, 2], 2))
+    # print(sol.findPoisonedDuration([1, 4], 2))
+    # print(sol.findPoisonedDuration([1, 2, 3, 4, 5], 5))
+    # print(sol.PredictTheWinner([1, 5, 233, 7]))
+    # print(sol.licenseKeyFormatting('2-4A0r7-4k', 3))
+    # print(sol.makesquare([3, 1, 3, 3, 10, 7, 10, 3, 6, 9, 10, 3, 7, 6, 7]))
     # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
     # print(sol.findRightInterval(intervals))
     # nums = [1, 2, 3, 4, 5, 6, 7]
