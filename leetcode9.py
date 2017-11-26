@@ -72,6 +72,30 @@ class TreeNode(object):
         self.right = None
 
 
+class Codec:
+    def __init__(self):
+        self.cache = {}
+        self.n = 0
+
+    def encode(self, longUrl):
+        """Encodes a URL to a shortened URL.
+
+        :type longUrl: str
+        :rtype: str
+        """
+        self.cache[self.n] = longUrl
+        self.n += 1
+        return str(self.n - 1)
+
+    def decode(self, shortUrl):
+        """Decodes a shortened URL to its original URL.
+
+        :type shortUrl: str
+        :rtype: str
+        """
+        return self.cache[int(shortUrl)]
+
+
 class Solution(object):
     def copyRandomList(slf, head: RandomListNode):
         """
@@ -630,12 +654,130 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
+        # 516
+        cache = [[-1] * (len(s) + 1) for _ in range(len(s))]
+
+        def dp(i, j):
+            if i > j:
+                return 0
+            if i == j:
+                return 1
+            if cache[i][j] != -1:
+                return cache[i][j]
+            if s[i] == s[j]:
+                return dp(i + 1, j - 1) + 2
+            r = max(dp(i + 1, j), dp(i, j - 1))
+            cache[i][j] = r
+            return r
+
+        return dp(0, len(s) - 1)
+
+    def findDiagonalOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        # 498
+        if not matrix: return []
+        m, n = len(matrix), len(matrix[0])
+        ans = []
+        for i in range(m + n - 1):
+            if i % 2 == 0:
+                row = i if i <= m - 1 else m - 1
+                col = 0 if i <= m - 1 else i - (m - 1)
+                while col < n and row >= 0:
+                    ans.append(matrix[row][col])
+                    row -= 1
+                    col += 1
+            else:
+                row = 0 if i <= n - 1 else i - (n - 1)
+                col = i if i <= n - 1 else n - 1
+                while col >= 0 and row < m:
+                    ans.append(matrix[row][col])
+                    row += 1
+                    col -= 1
+        return ans
+
+    def findWords(self, words):
+        """
+        :type words: List[str]
+        :rtype: List[str]
+        """
+        d = {'a': 1, 'b': 2, 'c': 2, 'd': 1, 'e': 0, 'f': 1, 'g': 1, 'h': 1, 'i': 0, 'j': 1, 'k': 1, 'l': 1, 'm': 2,
+             'n': 2, 'o': 0, 'p': 0, 'q': 0, 'r': 0, 's': 1, 't': 0, 'u': 0, 'v': 2, 'w': 0, 'x': 2, 'y': 0, 'z': 2, }
+        ret = []
+        for word in words:
+            s = -1
+            f = True
+            for i in word:
+                i = i.lower()
+                if s == -1:
+                    s = d[i]
+                if d[i] != s:
+                    f = False
+                    break
+            if f:
+                ret.append(word)
+        return ret
+
+    def nextGreaterElements_2(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        # 503
+        stack = []
+        Len = len(nums)
+        ret = [-1] * Len
+        for i in range(Len * 2):
+            n = nums[i % Len]
+            while stack and nums[stack[-1]] < n:
+                ret[stack.pop()] = n
+            if i < Len:
+                stack.append(i)
+        return ret
+
+    def findLUSlength(self, a, b):
+        """
+        :type a: str
+        :type b: str
+        :rtype: int
+        """
+        return -1 if a == b else max(len(a), len(b))
+
+    def complexNumberMultiply(self, n1, n2):
+        """
+        :type a: str
+        :type b: str
+        :rtype: str
+        """
+        tokens = n1.split('+')
+        a = int(tokens[0])
+        b = int(tokens[1][:-1])
+        tokens = n2.split('+')
+        c = int(tokens[0])
+        d = int(tokens[1][:-1])
+        A = a * c - b * d
+        B = (a * d + c * b)
+        return "{}+{}i".format(A, B)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
-    print(sol.nextGreaterElement([2, 4], [1, 2, 3, 4]))
+    print(sol.complexNumberMultiply('1+1i', '1+1i'))
+    # print(sol.findLUSlength("aba", "cdc"))
+    # print(sol.nextGreaterElements_2([100, 1, 11, 1, 120, 111, 123, 1, -1, -100]))
+    # print(sol.findWords(["Hello", "Alaska", "Dad", "Peace"]))
+    # print(sol.findDiagonalOrder([
+    #     [1, 2, 3],
+    #     [4, 5, 6],
+    #     [7, 8, 9]
+    # ])
+    # )
+
+    # print(sol.longestPalindromeSubseq("bbbab"))
+    # print(sol.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
+    # print(sol.nextGreaterElement([2, 4], [1, 2, 3, 4]))
     # print(sol.findPoisonedDuration([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1))
     # print(sol.findPoisonedDuration([1, 2], 2))
     # print(sol.findPoisonedDuration([1, 4], 2))
