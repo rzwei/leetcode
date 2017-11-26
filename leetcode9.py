@@ -761,10 +761,32 @@ class Solution(object):
         B = (a * d + c * b)
         return "{}+{}i".format(A, B)
 
+    def findMaxLength(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        # 525
+        Len = len(nums)
+        for i in range(Len):
+            if nums[i] == 0:
+                nums[i] = -1
+        d = {0: -1}
+        s = 0
+        m = 0
+        for i in range(Len):
+            s += nums[i]
+            if s in d:
+                m = max(m, i - d[s])
+            else:
+                d[s] = i
+        return m
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.complexNumberMultiply('1+1i', '1+1i'))
+    print(sol.findMaxLength([1, 0, 0, 1]))
+    # print(sol.complexNumberMultiply('1+1i', '1+1i'))
     # print(sol.findLUSlength("aba", "cdc"))
     # print(sol.nextGreaterElements_2([100, 1, 11, 1, 120, 111, 123, 1, -1, -100]))
     # print(sol.findWords(["Hello", "Alaska", "Dad", "Peace"]))
