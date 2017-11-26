@@ -493,28 +493,31 @@ class Solution(object):
         :rtype: bool
         """
         # 475
+        if not nums or len(nums) < 4:
+            return False
         nums.sort(reverse=True)
         sums = sum(nums)
         if sums % 4 != 0:
             return False
         L = sums / 4
-        vis = [0 for _ in range(len(nums))]
+        for i in nums:
+            if i > L:
+                return False
 
-        def dfs(vis, n, l):
-            if n == 0 and l == 0:
-                return True
-            if l == 0:
-                n -= 1
-                l = L
-            for i in range(len(vis)):
-                if vis[i] == 0 and nums[i] <= l:
-                    vis[i] = 1
-                    if dfs(vis, n, l - nums[i]):
-                        return True
-                    vis[i] = 0
+        def dfs(sums, n, target):
+            if n == len(nums):
+                return sums[0] == target and sums[1] == target and sums[2] == target
+            # print(sums, n)
+            for i in range(4):
+                if sums[i] + nums[n] > target:
+                    continue
+                sums[i] += nums[n]
+                if dfs(sums, n + 1, target):
+                    return True
+                sums[i] -= nums[n]
             return False
 
-        return dfs(vis, 4, L)
+        return dfs([0, 0, 0, 0], 0, L)
 
 
 def binarysearch(nums, target):
@@ -531,7 +534,7 @@ def binarysearch(nums, target):
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.makesquare([1, 1, 2, 2, 2]))
+    print(sol.makesquare([3, 1, 3, 3, 10, 7, 10, 3, 6, 9, 10, 3, 7, 6, 7]))
     # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
     # print(sol.findRightInterval(intervals))
     # nums = [1, 2, 3, 4, 5, 6, 7]
