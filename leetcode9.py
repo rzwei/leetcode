@@ -782,10 +782,98 @@ class Solution(object):
                 d[s] = i
         return m
 
+    def findMinDifference(self, timePoints):
+        """
+        :type timePoints: List[str]
+        :rtype: int
+        """
+        # 539
+        timeStamp = []
+        for timepoint in timePoints:
+            tokens = timepoint.split(':')
+            h = int(tokens[0])
+            m = int(tokens[1])
+            timeStamp.append(h * 60 + m)
+        timeStamp.sort()
+        timeStamp.append(timeStamp[0] + 24 * 60)
+        print(timeStamp)
+        res = 24 * 60
+        for i in range(len(timeStamp) - 1):
+            res = min(res, timeStamp[i + 1] - timeStamp[i])
+        return res
+
+    def optimalDivision(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: str
+        """
+        # 553
+        Len = len(nums)
+        if Len == 1:
+            return str(nums[0])
+        ans = ''
+        ans = str(nums[0])
+        if Len == 2:
+            return ans + '/' + str(nums[1])
+
+        ans += '/(' + str(nums[1])
+        for i in range(2, Len):
+            ans += '/' + str(nums[i])
+        ans += ')'
+        return ans
+
+    def arrayPairSum(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        # 561
+        nums.sort()
+        Len = len(nums)
+        res = 0
+        for i in range(0, Len, 2):
+            res += nums[i]
+        return res
+
+    def validSquare(self, p1, p2, p3, p4):
+        """
+        :type p1: List[int]
+        :type p2: List[int]
+        :type p3: List[int]
+        :type p4: List[int]
+        :rtype: bool
+        """
+        # 593
+        # [1,1]
+        # [5,3]
+        # [3,5]
+        # [7,7]
+        distence = lambda x, y: (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2
+        nums = [p1, p2, p3, p4]
+        nums.sort()
+        p0 = nums[0]
+        p1 = nums[1]
+        p2 = nums[2]
+        p3 = nums[3]
+        L = distence(p0, p1)
+        if L == 0:
+            return False
+        v0 = [p1[0] - p0[0], p1[1] - p0[1]]
+        v1 = [p2[0] - p0[0], p2[1] - p0[1]]
+        if v0[0] * v1[0] + v0[1] * v1[1] != 0:
+            return False
+        if distence(p0, p2) != L or distence(p3, p2) != L or distence(p3, p1) != L:
+            return False
+        return True
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findMaxLength([1, 0, 0, 1]))
+    print(sol.validSquare([1, 1], [5, 3], [3, 5], [7, 7]))
+    # print(sol.validSquare([0, 0], [1, 1], [1, 0], [0, 1]))
+    # print(sol.optimalDivision([1, 2, 3]))
+    # print(sol.findMinDifference(["23:59", "00:00"]))
+    # print(sol.findMaxLength([1, 0, 0, 1]))
     # print(sol.complexNumberMultiply('1+1i', '1+1i'))
     # print(sol.findLUSlength("aba", "cdc"))
     # print(sol.nextGreaterElements_2([100, 1, 11, 1, 120, 111, 123, 1, -1, -100]))
