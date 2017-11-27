@@ -17,6 +17,58 @@ class ListNode(object):
         self.next = None
 
 
+class Node:
+    def __init__(self, c):
+        self.next = {}
+        self.c = c
+        self.v = 0
+
+    def __str__(self):
+        return str(self.v) + ' ' + str(self.c)
+
+
+class MapSum:
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node('-')
+
+    def insert(self, key, val):
+        """
+        :type key: str
+        :type val: int
+        :rtype: void
+        """
+        cur = self.root
+        for ki in key:
+            if ki not in cur.next:
+                cur.next[ki] = Node(ki)
+            cur = cur.next[ki]
+        cur.v = val
+
+    def _sum(self, p):
+        if not p:
+            return 0
+        r = p.v
+        for s in p.next.values():
+            r += self._sum(s)
+        return r
+
+    def sum(self, prefix):
+        """
+        :type prefix: str
+        :rtype: int
+        """
+        cur = self.root
+        for pi in prefix:
+            if pi in cur.next:
+                cur = cur.next[pi]
+            else:
+                return 0
+        return self._sum(cur)
+
+
 def binarysearch(nums, target):
     i = 0
     j = len(nums) - 1
@@ -866,10 +918,65 @@ class Solution(object):
             return False
         return True
 
+    def selfDividingNumbers(self, left, right):
+        """
+        :type left: int
+        :type right: int
+        :rtype: List[int]
+        """
+
+        # 728
+        def isValid(n):
+            if n == 0:
+                return False
+            t = n
+            while n:
+                i = n % 10
+                if i == 0:
+                    return False
+                if t % i != 0:
+                    return False
+                n //= 10
+            return True
+
+        ret = []
+        for i in range(left, right + 1):
+            if isValid(i):
+                ret.append(i)
+        return ret
+
+    def pivotIndex(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        # 724
+        Len = len(nums)
+        sums = [0] * (Len + 1)
+        s = 0
+        for i in range(Len):
+            s += nums[+i]
+            sums[i + 1] = s
+        ret = -1
+        for i in range(Len):
+            if sums[i] == sums[Len] - sums[i + 1]:
+                ret = i
+                break
+        return ret
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.validSquare([1, 1], [5, 3], [3, 5], [7, 7]))
+    # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
+    print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
+    # m = MapSum()
+    # m.insert('apple', 3)
+    # print(m.sum('ap'))
+    # m.insert('app', 2)
+    # print(m.sum('ap'))
+
+    # print(sol.selfDividingNumbers(1, 22))
+    # print(sol.validSquare([1, 1], [5, 3], [3, 5], [7, 7]))
     # print(sol.validSquare([0, 0], [1, 1], [1, 0], [0, 1]))
     # print(sol.optimalDivision([1, 2, 3]))
     # print(sol.findMinDifference(["23:59", "00:00"]))
