@@ -964,11 +964,24 @@ class Solution(object):
                 break
         return ret
 
+    def distributeCandies(self, candies: list):
+        """
+        :type candies: List[int]
+        :rtype: int
+        """
+        # 575
+        Len = len(set(candies))
+        if Len >= len(candies) // 2:
+            return len(candies) // 2
+        else:
+            return Len
+
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.distributeCandies([1, 1, 1, 3]))
     # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
-    print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
+    # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
     # m = MapSum()
     # m.insert('apple', 3)
     # print(m.sum('ap'))
