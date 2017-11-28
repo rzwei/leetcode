@@ -1018,10 +1018,39 @@ class Solution(object):
                 if s == Len:
                     return False
 
+    def calPoints(self, ops):
+        """
+        :type ops: List[str]
+        :rtype: int
+        """
+        # 682
+        s = []
+        res = 0
+        while ops:
+            n = ops.pop(0)
+            if n[0] == '-' or n.isdigit():
+                s.append(int(n))
+                res += int(n)
+            elif n == 'C':
+                res -= s[-1]
+                s.pop()
+            elif n == 'D':
+                v1 = s[-1]
+                s.append(v1 + v1)
+                res += v1 + v1
+            elif n == '+':
+                v1 = s[-1]
+                v1 += s[-2]
+                s.append(v1)
+                res += v1
+        return res
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.isOneBitCharacter([1, 0, 1,0]))
+    print(sol.calPoints(["5", "2", "C", "D", "+"]))
+    print(sol.calPoints(["5", "-2", "4", "C", "D", "9", "+", "+"]))
+    # print(sol.isOneBitCharacter([1, 0, 1, 0]))
     # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
     # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
     # m = MapSum()
