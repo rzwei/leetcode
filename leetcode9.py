@@ -1001,11 +1001,29 @@ class Solution(object):
         else:
             return Len
 
+    def isOneBitCharacter(self, bits):
+        """
+        :type bits: List[int]
+        :rtype: bool
+        """
+        s = 0
+        Len = len(bits)
+        while s < Len:
+            if bits[s] == 0:
+                s += 1
+                if s == Len:
+                    return True
+            else:
+                s += 2
+                if s == Len:
+                    return False
+
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.isOneBitCharacter([1, 0, 1,0]))
     # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
-    print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
+    # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
     # m = MapSum()
     # m.insert('apple', 3)
     # print(m.sum('ap'))
