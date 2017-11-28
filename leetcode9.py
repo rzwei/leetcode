@@ -964,6 +964,31 @@ class Solution(object):
                 break
         return ret
 
+    def trimBST(self, root: TreeNode, L, R):
+        """
+        :type root: TreeNode
+        :type L: int
+        :type R: int
+        :rtype: TreeNode
+        """
+        # 669
+        if not root:
+            return None
+
+        if L <= root.val <= R:
+            root.left = self.trimBST(root.left, L, R)
+            root.right = self.trimBST(root.right, L, R)
+            return root
+        else:
+            left = self.trimBST(root.left, L, R)
+            if left:
+                return left
+            right = self.trimBST(root.right, L, R)
+            if right:
+                return right
+
+        return None
+
     def distributeCandies(self, candies: list):
         """
         :type candies: List[int]
@@ -979,9 +1004,8 @@ class Solution(object):
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.distributeCandies([1, 1, 1, 3]))
     # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
-    # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
+    print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
     # m = MapSum()
     # m.insert('apple', 3)
     # print(m.sum('ap'))
