@@ -1,3 +1,4 @@
+import collections
 import heapq
 import random
 
@@ -980,14 +981,10 @@ class Solution(object):
             root.right = self.trimBST(root.right, L, R)
             return root
         else:
-            left = self.trimBST(root.left, L, R)
-            if left:
-                return left
-            right = self.trimBST(root.right, L, R)
-            if right:
-                return right
-
-        return None
+            if root.val > R:
+                return self.trimBST(root.left, L, R)
+            else:
+                return self.trimBST(root.right, L, R)
 
     def distributeCandies(self, candies: list):
         """
@@ -1045,11 +1042,41 @@ class Solution(object):
                 res += v1
         return res
 
+    def leastBricks(self, wall):
+        """
+        :type wall: List[List[int]]
+        :rtype: int
+        """
+        # 554
+        m = 0
+        sums = collections.defaultdict(int)
+        width = sum(wall[0])
+        for row in wall:
+            s = 0
+            for b in row:
+                s += b
+                if s == width:
+                    continue
+                sums[s] += 1
+
+                if sums[m] < sums[s]:
+                    m = s
+        return len(wall) - sums[m]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.calPoints(["5", "2", "C", "D", "+"]))
-    print(sol.calPoints(["5", "-2", "4", "C", "D", "9", "+", "+"]))
+    #
+    # wall = [[1, 2, 2, 1],
+    #         [3, 1, 2],
+    #         [1, 3, 2],
+    #         [2, 4],
+    #         [3, 1, 2],
+    #         [1, 3, 1, 1]]
+    # wall = [[1, 1], [2], [1, 1]]
+    # print(sol.leastBricks(wall))
+    # print(sol.calPoints(["5", "2", "C", "D", "+"]))
+    # print(sol.calPoints(["5", "-2", "4", "C", "D", "9", "+", "+"]))
     # print(sol.isOneBitCharacter([1, 0, 1, 0]))
     # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
     # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
