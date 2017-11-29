@@ -1063,10 +1063,47 @@ class Solution(object):
                     m = s
         return len(wall) - sums[m]
 
+    def checkInclusion(self, s1, s2):
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: bool
+        """
+        # 567. Permutation in String
+        Len = len(s1)
+        Len2 = len(s2)
+        if Len > Len2:
+            return False
+
+        t = {}
+        for i in s1:
+            t[i] = t.get(i, 0) + 1
+
+        s = 0
+        e = 0
+        while e < Len2:
+            t[s2[e]] = t.get(s2[e], 0) - 1
+            e += 1
+            if e - s == Len:
+                f = 1
+                for i in t.values():
+                    if i != 0:
+                        f = 0
+                        break
+                if f:
+                    return True
+                t[s2[s]] += 1
+                s += 1
+        return False
+
 
 if __name__ == '__main__':
     sol = Solution()
-    #
+    print(sol.checkInclusion("hello", "ooolleoooleh"))
+    print(sol.checkInclusion("hello", "ooolleooolehello"))
+    print(sol.checkInclusion("adc", "dcdax"))
+    print(sol.checkInclusion('ab', 'eidbxaoo'))
+    print(sol.checkInclusion('a', 'ab'))
     # wall = [[1, 2, 2, 1],
     #         [3, 1, 2],
     #         [1, 3, 2],
