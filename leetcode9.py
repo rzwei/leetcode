@@ -1154,6 +1154,26 @@ class Solution(object):
         # return dfs(N, [0] * (N + 1))
         return [1, 2, 3, 8, 10, 36, 41, 132, 250, 700, 750, 4010, 4237, 10680, 24679, ][N - 1]
 
+    def fractionAddition(self, expression):
+        """
+        :type expression: str
+        :rtype: str
+        """
+
+        # 592. Fraction Addition and Subtraction
+
+        def gcd(a, b):
+            if a < b:
+                a, b = b, a
+            while b:
+                t = a
+                a = b
+                b = t % a
+            return a
+
+        def lcm(a, b):
+            return a * b // gcd(a, b)
+
 
 if __name__ == '__main__':
     sol = Solution()
