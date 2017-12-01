@@ -124,6 +124,9 @@ class TreeNode(object):
         self.left = None
         self.right = None
 
+    def __str__(self):
+        return "val:{}".format(self.val)
+
 
 class Codec:
     def __init__(self):
@@ -147,6 +150,22 @@ class Codec:
         :rtype: str
         """
         return self.cache[int(shortUrl)]
+
+
+def travel_bfs(root: TreeNode):
+    q = [root]
+    while q:
+        p = []
+        while q:
+            i = q.pop()
+            print(i.val, end=' ')
+            if i.left:
+                p.append(i.left)
+            if i.right:
+                p.append(i.right)
+        print()
+        q = p
+    print()
 
 
 class Solution(object):
@@ -1154,144 +1173,213 @@ class Solution(object):
         # return dfs(N, [0] * (N + 1))
         return [1, 2, 3, 8, 10, 36, 41, 132, 250, 700, 750, 4010, 4237, 10680, 24679, ][N - 1]
 
-    def fractionAddition(self, expression):
+    def maxCount(self, m, n, ops):
         """
-        :type expression: str
-        :rtype: str
+        :type m: int
+        :type n: int
+        :type ops: List[List[int]]
+        :rtype: int
         """
+        # 598
+        x = m
+        y = n
+        for nx, ny in ops:
+            if nx < x:
+                x = nx
+            if ny < y:
+                y = ny
+        return x * y
 
-        # 592. Fraction Addition and Subtraction
+    def leastInterval(self, tasks, n):
+        """
+        :type tasks: List[str]
+        :type n: int
+        :rtype: int
+        """
+        # 621
+        d = {}
+        for task in tasks:
+            d[task] = d.get(task, 0) + 1
+        stack = [-i for i in d.values()]
+        heapq.heapify(stack)
+        L = []
+        res = 0
+        while stack:
+            t = n + 1
+            L.clear()
+            while stack and t:
+                v = -heapq.heappop(stack)
+                L.append(v - 1)
+                t -= 1
+                res += 1
+            for l in L:
+                if l > 0:
+                    heapq.heappush(stack, -l)
+            if not stack:
+                break
+            res += t
+        return res
 
-        def gcd(a, b):
-            if a < b:
-                a, b = b, a
-            while b:
-                t = a
-                a = b
-                b = t % a
-            return a
-
-        def lcm(a, b):
-            return a * b // gcd(a, b)
+    def addOneRow(self, root: TreeNode, v, d):
+        """
+        :type root: TreeNode
+        :type v: int
+        :type d: int
+        :rtype: TreeNode
+        """
+        # 623. Add One Row to Tree
+        if d == 1:
+            newroot = TreeNode(v)
+            newroot.left = root
+            return newroot
+        q = [root]
+        dep = d - 2
+        while q and dep:
+            L = []
+            while q:
+                cur = q.pop()
+                if cur.left:
+                    L.append(cur.left)
+                if cur.right:
+                    L.append(cur.right)
+            dep -= 1
+            q = L
+        for node in q:
+            new = TreeNode(v)
+            new.left = node.left
+            node.left = new
+            new = TreeNode(v)
+            new.right = node.right
+            node.right = new
+        return root
 
 
 if __name__ == '__main__':
     sol = Solution()
-    for i in range(1, 16):
-        print("{},".format(sol.countArrangement(i)))
-        # print(sol.countArrangement(3))
-        # board = [['E', 'E', 'E', 'E', 'E'],
-        #          ['E', 'E', 'M', 'E', 'E'],
-        #          ['E', 'E', 'E', 'E', 'E'],
-        #          ['E', 'E', 'E', 'E', 'E']]
+    root = TreeNode(1)
+    root.left = TreeNode(2)
+    root.right = TreeNode(3)
+    root2 = sol.addOneRow(root, 1, 3)
+    travel_bfs(root2)
+    # print(sol.leastInterval(["A
+    # ", "A", "A", "B", "B", "B", 'B'], 2))
+    # M = [[0, 0, 0],
+    #      [0, 0, 0],
+    #      [0, 0, 0]]
+    # print(sol.maxCount(3, 3, [[2, 2], [3, 3]]))
 
-        # board = [['B', '1', 'E', '1', 'B'],
-        #          ['B', '1', 'M', '1', 'B'],
-        #          ['B', '1', '1', '1', 'B'],
-        #          ['B', 'B', 'B', 'B', 'B']]
-        # board = sol.updateBoard(board, [1, 2])
-        # for i in board:
-        #     print(i)
-        # print()
-        # print(sol.checkInclusion("hello", "ooolleoooleh"))
-        # print(sol.checkInclusion("hello", "ooolleooolehello"))
-        # print(sol.checkInclusion("adc", "dcdax"))
-        # print(sol.checkInclusion('ab', 'eidbxaoo'))
-        # print(sol.checkInclusion('a', 'ab'))
-        # wall = [[1, 2, 2, 1],
-        #         [3, 1, 2],
-        #         [1, 3, 2],
-        #         [2, 4],
-        #         [3, 1, 2],
-        #         [1, 3, 1, 1]]
-        # wall = [[1, 1], [2], [1, 1]]
-        # print(sol.leastBricks(wall))
-        # print(sol.calPoints(["5", "2", "C", "D", "+"]))
-        # print(sol.calPoints(["5", "-2", "4", "C", "D", "9", "+", "+"]))
-        # print(sol.isOneBitCharacter([1, 0, 1, 0]))
-        # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
-        # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
-        # m = MapSum()
-        # m.insert('apple', 3)
-        # print(m.sum('ap'))
-        # m.insert('app', 2)
-        # print(m.sum('ap'))
-
-        # print(sol.selfDividingNumbers(1, 22))
-        # print(sol.validSquare([1, 1], [5, 3], [3, 5], [7, 7]))
-        # print(sol.validSquare([0, 0], [1, 1], [1, 0], [0, 1]))
-        # print(sol.optimalDivision([1, 2, 3]))
-        # print(sol.findMinDifference(["23:59", "00:00"]))
-        # print(sol.findMaxLength([1, 0, 0, 1]))
-        # print(sol.complexNumberMultiply('1+1i', '1+1i'))
-        # print(sol.findLUSlength("aba", "cdc"))
-        # print(sol.nextGreaterElements_2([100, 1, 11, 1, 120, 111, 123, 1, -1, -100]))
-        # print(sol.findWords(["Hello", "Alaska", "Dad", "Peace"]))
-        # print(sol.findDiagonalOrder([
-        #     [1, 2, 3],
-        #     [4, 5, 6],
-        #     [7, 8, 9]
-        # ])
-        # )
-
-        # print(sol.longestPalindromeSubseq("bbbab"))
-        # print(sol.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
-        # print(sol.nextGreaterElement([2, 4], [1, 2, 3, 4]))
-        # print(sol.findPoisonedDuration([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1))
-        # print(sol.findPoisonedDuration([1, 2], 2))
-        # print(sol.findPoisonedDuration([1, 4], 2))
-        # print(sol.findPoisonedDuration([1, 2, 3, 4, 5], 5))
-        # print(sol.PredictTheWinner([1, 5, 233, 7]))
-        # print(sol.licenseKeyFormatting('2-4A0r7-4k', 3))
-        # print(sol.makesquare([3, 1, 3, 3, 10, 7, 10, 3, 6, 9, 10, 3, 7, 6, 7]))
-        # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
-        # print(sol.findRightInterval(intervals))
-        # nums = [1, 2, 3, 4, 5, 6, 7]
-        # dummy = RandomListNode(-1)
-        # pd = dummy
-        # for i in nums:
-        #     pd.next = RandomListNode(i)
-        #     pd = pd.next
-        # pd = dummy
-        # pd.next.next.next.next.next.random = pd.next.next.next
-        # t = sol.copyRandomList(dummy.next)
-        # print(sol.compareVersion('1.2', '1.1'))
-        # print(sol.findRepeatedDnaSequences('AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT'))
-        # print(sol.findRepeatedDnaSequences("AAAAAAAAAAA"))
-        # print(sol.findKthLargest([3, 2, 1, 5, 6, 4], 2))
-        # print(sol.findKthLargest([-1, -1], 2))
-        # nums = [12, 321, 312, 312, 31, 23, 123, 12, 312, 3, 123, 123, 12, 312, 3]
-        # headpSort(nums)
-        # print(nums)
-        # print(sol.isAnagram('ab', 'a'))
-        # matrix = [
-        #     [1, 4, 7, 11, 15],
-        #     [2, 5, 8, 12, 19],
-        #     [3, 6, 9, 16, 22],
-        #     [10, 13, 14, 17, 24],
-        #     [18, 21, 23, 26, 30]
-        # ]
-        # print(sol.searchMatrix(matrix, 5))
-        # matrix = [
-        #     ['1', '0', '1', '0', '0'],
-        #     ['1', '0', '1', '1', '1'],
-        #     ['1', '1', '1', '1', '1'],
-        #     ['1', '0', '0', '1', '0'],
-        # ]
-        # print(sol.maximalSquare(matrix))
-        # print(sol.computeArea(-3, 0, 3, 4, 0, -1, 9, 2))
-        # print(sol.computeArea(0, 0, 0, 0, -1, -1, 1, 1))
-        # print(sol.computeArea(-2,
-        #                       -2,
-        #                       2,
-        #                       2,
-        #                       -3,
-        #                       -3,
-        #                       3,
-        #                       -1, ))
-        # print(sol.increasing([1, 3, 54, 3, 2, 54, 7]))
-        # print(sol.intersect([1, 2, 2, 1], [2, 2]))
-        # print(sol.getMoneyAmount(4))
-        # print(sol.readBinaryWatch(2))
-        # print(sol.originalDigits('owoztneoer'))
-        # print(sol.originalDigits('fviefurofour'))
+    # for i in range(1, 16):
+    #     print("{},".format(sol.countArrangement(i)))
+    # print(sol.countArrangement(3))
+    # board = [['E', 'E', 'E', 'E', 'E'],
+    #          ['E', 'E', 'M', 'E', 'E'],
+    #          ['E', 'E', 'E', 'E', 'E'],
+    #          ['E', 'E', 'E', 'E', 'E']]
+    # board = [['B', '1', 'E', '1', 'B'],
+    #          ['B', '1', 'M', '1', 'B'],
+    #          ['B', '1', '1', '1', 'B'],
+    #          ['B', 'B', 'B', 'B', 'B']]
+    # board = sol.updateBoard(board, [1, 2])
+    # for i in board:
+    #     print(i)
+    # print()
+    # print(sol.checkInclusion("hello", "ooolleoooleh"))
+    # print(sol.checkInclusion("hello", "ooolleooolehello"))
+    # print(sol.checkInclusion("adc", "dcdax"))
+    # print(sol.checkInclusion('ab', 'eidbxaoo'))
+    # print(sol.checkInclusion('a', 'ab'))
+    # wall = [[1, 2, 2, 1],
+    #         [3, 1, 2],
+    #         [1, 3, 2],
+    #         [2, 4],
+    #         [3, 1, 2],
+    #         [1, 3, 1, 1]]
+    # wall = [[1, 1], [2], [1, 1]]
+    # print(sol.leastBricks(wall))
+    # print(sol.calPoints(["5", "2", "C", "D", "+"]))
+    # print(sol.calPoints(["5", "-2", "4", "C", "D", "9", "+", "+"]))
+    # print(sol.isOneBitCharacter([1, 0, 1, 0]))
+    # print(sol.pivotIndex([1, 7, 3, 6, 5, 6]))
+    # print(sol.pivotIndex([-1, -7, -3, -6, -5, -6]))
+    # m = MapSum()
+    # m.insert('apple', 3)
+    # print(m.sum('ap'))
+    # m.insert('app', 2)
+    # print(m.sum('ap'))
+    # print(sol.selfDividingNumbers(1, 22))
+    # print(sol.validSquare([1, 1], [5, 3], [3, 5], [7, 7]))
+    # print(sol.validSquare([0, 0], [1, 1], [1, 0], [0, 1]))
+    # print(sol.optimalDivision([1, 2, 3]))
+    # print(sol.findMinDifference(["23:59", "00:00"]))
+    # print(sol.findMaxLength([1, 0, 0, 1]))
+    # print(sol.complexNumberMultiply('1+1i', '1+1i'))
+    # print(sol.findLUSlength("aba", "cdc"))
+    # print(sol.nextGreaterElements_2([100, 1, 11, 1, 120, 111, 123, 1, -1, -100]))
+    # print(sol.findWords(["Hello", "Alaska", "Dad", "Peace"]))
+    # print(sol.findDiagonalOrder([
+    #     [1, 2, 3],
+    #     [4, 5, 6],
+    #     [7, 8, 9]
+    # ])
+    # )
+    # print(sol.longestPalindromeSubseq("bbbab"))
+    # print(sol.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
+    # print(sol.nextGreaterElement([2, 4], [1, 2, 3, 4]))
+    # print(sol.findPoisonedDuration([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1))
+    # print(sol.findPoisonedDuration([1, 2], 2))
+    # print(sol.findPoisonedDuration([1, 4], 2))
+    # print(sol.findPoisonedDuration([1, 2, 3, 4, 5], 5))
+    # print(sol.PredictTheWinner([1, 5, 233, 7]))
+    # print(sol.licenseKeyFormatting('2-4A0r7-4k', 3))
+    # print(sol.makesquare([3, 1, 3, 3, 10, 7, 10, 3, 6, 9, 10, 3, 7, 6, 7]))
+    # intervals = [Interval(1, 4), Interval(2, 3), Interval(3, 4)]
+    # print(sol.findRightInterval(intervals))
+    # nums = [1, 2, 3, 4, 5, 6, 7]
+    # dummy = RandomListNode(-1)
+    # pd = dummy
+    # for i in nums:
+    #     pd.next = RandomListNode(i)
+    #     pd = pd.next
+    # pd = dummy
+    # pd.next.next.next.next.next.random = pd.next.next.next
+    # t = sol.copyRandomList(dummy.next)
+    # print(sol.compareVersion('1.2', '1.1'))
+    # print(sol.findRepeatedDnaSequences('AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT'))
+    # print(sol.findRepeatedDnaSequences("AAAAAAAAAAA"))
+    # print(sol.findKthLargest([3, 2, 1, 5, 6, 4], 2))
+    # print(sol.findKthLargest([-1, -1], 2))
+    # nums = [12, 321, 312, 312, 31, 23, 123, 12, 312, 3, 123, 123, 12, 312, 3]
+    # headpSort(nums)
+    # print(nums)
+    # print(sol.isAnagram('ab', 'a'))
+    # matrix = [
+    #     [1, 4, 7, 11, 15],
+    #     [2, 5, 8, 12, 19],
+    #     [3, 6, 9, 16, 22],
+    #     [10, 13, 14, 17, 24],
+    #     [18, 21, 23, 26, 30]
+    # ]
+    # print(sol.searchMatrix(matrix, 5))
+    # matrix = [
+    #     ['1', '0', '1', '0', '0'],
+    #     ['1', '0', '1', '1', '1'],
+    #     ['1', '1', '1', '1', '1'],
+    #     ['1', '0', '0', '1', '0'],
+    # ]
+    # print(sol.maximalSquare(matrix))
+    # print(sol.computeArea(-3, 0, 3, 4, 0, -1, 9, 2))
+    # print(sol.computeArea(0, 0, 0, 0, -1, -1, 1, 1))
+    # print(sol.computeArea(-2,
+    #                       -2,
+    #                       2,
+    #                       2,
+    #                       -3,
+    #                       -3,
+    #                       3,
+    #                       -1, ))
+    # print(sol.increasing([1, 3, 54, 3, 2, 54, 7]))
+    # print(sol.intersect([1, 2, 2, 1], [2, 2]))
+    # print(sol.getMoneyAmount(4))
+    # print(sol.readBinaryWatch(2))
+    # print(sol.originalDigits('owoztneoer'))
+    # print(sol.originalDigits('fviefurofour'))
