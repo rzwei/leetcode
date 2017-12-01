@@ -1253,14 +1253,46 @@ class Solution(object):
             node.right = new
         return root
 
+    def exclusiveTime(self, n, logs):
+        """
+        :type n: int
+        :type logs: List[str]
+        :rtype: List[int]
+        """
+        # 636. Exclusive Time of Functions
+        stack = []
+        res = [0] * n
+        for s in logs:
+            tokens = s.split(':')
+            ID = int(tokens[0])
+            t = int(tokens[2])
+
+            if tokens[1] == 'start':
+                stack.append([ID, 0, t])
+            else:
+                if stack and stack[-1][0] == ID:
+                    offset = stack[-1][1]
+                    v = t - stack[-1][2] + 1 - offset
+                    res[ID] += v
+                    offset += v
+                    stack.pop()
+                    if stack:
+                        stack[-1][1] += offset
+                else:
+                    print(s)
+        return res
+
 
 if __name__ == '__main__':
     sol = Solution()
-    root = TreeNode(1)
-    root.left = TreeNode(2)
-    root.right = TreeNode(3)
-    root2 = sol.addOneRow(root, 1, 3)
-    travel_bfs(root2)
+    print(sol.exclusiveTime(1,
+                            ["0:start:0", "0:start:2", "0:end:5", "0:start:6", "0:end:6", "0:end:7"]
+                            ))
+    # root = TreeNode(1)
+    # root.left = TreeNode(2)
+    # root.right = TreeNode(3)
+    # root2 = sol.addOneRow(root, 1, 3)
+    # travel_bfs(root2)
     # print(sol.leastInterval(["A
     # ", "A", "A", "B", "B", "B", 'B'], 2))
     # M = [[0, 0, 0],
