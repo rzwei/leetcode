@@ -1296,7 +1296,7 @@ class Solution(object):
         dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         q = [(sr, sc)]
         color = image[sr][sc]
-        if newColor==color:
+        if newColor == color:
             return image
         while q:
             x, y = q.pop()
@@ -1309,10 +1309,42 @@ class Solution(object):
                     q.append((nx, ny))
         return image
 
+    def minimumDeleteSum(self, s1, s2):
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: int
+        """
+
+        Len1 = len(s1)
+        Len2 = len(s2)
+        dp = [[0 for __ in range(Len2 + 1)] for _ in range(Len1 + 1)]
+
+        s = 0
+        for i in range(Len2):
+            s += ord(s2[i])
+            dp[0][i + 1] = s
+        s = 0
+        for i in range(Len1):
+            s += ord(s1[i])
+            dp[i + 1][0] = s
+
+        for i in range(1, Len1 + 1):
+            for j in range(1, Len2 + 1):
+                if s1[i - 1] == s2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = min(dp[i - 1][j] + ord(s1[i - 1]), dp[i][j - 1] + ord(s2[j - 1]))
+        # for i in dp:
+        #     print(i)
+
+        return dp[-1][-1]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.floodFill([[1, 1, 1], [1, 1, 0], [1, 0, 1]], 1, 1, 2))
+    print(sol.minimumDeleteSum('sea', 'eat'))
+    # print(sol.floodFill([[1, 1, 1], [1, 1, 0], [1, 0, 1]], 1, 1, 2))
     # print(sol.exclusiveTime(1,
     #                         ["0:start:0", "0:start:2", "0:end:5", "0:start:6", "0:end:6", "0:end:7"]
     #                         ))
