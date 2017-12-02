@@ -1282,12 +1282,40 @@ class Solution(object):
                     print(s)
         return res
 
+    def floodFill(self, image, sr, sc, newColor):
+        """
+        :type image: List[List[int]]
+        :type sr: int
+        :type sc: int
+        :type newColor: int
+        :rtype: List[List[int]]
+        """
+        # 733. Flood Fill
+        m = len(image)
+        n = len(image[0])
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        q = [(sr, sc)]
+        color = image[sr][sc]
+        if newColor==color:
+            return image
+        while q:
+            x, y = q.pop()
+            image[x][y] = newColor
+
+            for dx, dy in dirs:
+                nx = x + dx
+                ny = y + dy
+                if 0 <= nx < m and 0 <= ny < n and image[nx][ny] == color:
+                    q.append((nx, ny))
+        return image
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.exclusiveTime(1,
-                            ["0:start:0", "0:start:2", "0:end:5", "0:start:6", "0:end:6", "0:end:7"]
-                            ))
+    print(sol.floodFill([[1, 1, 1], [1, 1, 0], [1, 0, 1]], 1, 1, 2))
+    # print(sol.exclusiveTime(1,
+    #                         ["0:start:0", "0:start:2", "0:end:5", "0:start:6", "0:end:6", "0:end:7"]
+    #                         ))
     # root = TreeNode(1)
     # root.left = TreeNode(2)
     # root.right = TreeNode(3)
