@@ -1,3 +1,21 @@
+class MyCalendar:
+    def __init__(self):
+        self.times = {}
+
+    def book(self, start, end):
+        """
+        :type start: int
+        :type end: int
+        :rtype: bool
+        """
+        for k, v in self.times.items():
+            if end <= k or start >= v:
+                continue
+            return False
+        self.times[start] = end
+        return True
+
+
 class Solution:
     def areSentencesSimilar(self, words1, words2, pairs):
         """
@@ -28,5 +46,10 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.areSentencesSimilar(['great', 'acting', 'skills'], ['fine', 'drama', 'talent'],
-                                  [["great", "fine"], ["acting", "drama"], ["skills", "talent"]]))
+    # print(sol.areSentencesSimilar(['great', 'acting', 'skills'], ['fine', 'drama', 'talent'],
+    #                               [["great", "fine"], ["acting", "drama"], ["skills", "talent"]]))
+    calendar = MyCalendar()
+    for v1, v2 in [[97, 100], [33, 51], [89, 100], [83, 100], [75, 92], [76, 95], [19, 30], [53, 63], [8, 23], [18, 37],
+                   [87, 100], [83, 100], [54, 67], [35, 48], [58, 75], [70, 89], [13, 32], [44, 63], [51, 62], [2, 15]]:
+        print(calendar.book(v1, v2))
+    print(calendar.times.items())

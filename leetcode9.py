@@ -1315,7 +1315,6 @@ class Solution(object):
         :type s2: str
         :rtype: int
         """
-
         Len1 = len(s1)
         Len2 = len(s2)
         dp = [[0 for __ in range(Len2 + 1)] for _ in range(Len1 + 1)]
@@ -1335,8 +1334,6 @@ class Solution(object):
                     dp[i][j] = dp[i - 1][j - 1]
                 else:
                     dp[i][j] = min(dp[i - 1][j] + ord(s1[i - 1]), dp[i][j - 1] + ord(s2[j - 1]))
-        # for i in dp:
-        #     print(i)
 
         return dp[-1][-1]
 
