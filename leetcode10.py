@@ -160,11 +160,37 @@ class Solution:
             last[v] = i
         return min(last[v] - first[v] + 1 for v in c if c[v] == degree)
 
+    def dailyTemperatures(self, temperatures):
+        """
+        :type temperatures: List[int]
+        :rtype: List[int]
+        """
+        # 739. Daily Temperatures
+        stack = []
+        d = {}
+        for i, v in enumerate(temperatures):
+            while stack and temperatures[stack[-1]] < v:
+                top = stack.pop()
+                d[top] = i - top
+            stack.append(i)
+        ret = [0] * len(temperatures)
+        for i in range(len(temperatures)):
+            ret[i] = d.get(i, 0)
+        return ret
+
+    def monotoneIncreasingDigits(self, N):
+        """
+        :type N: int
+        :rtype: int
+        """
+        # 738. Monotone Increasing Digits
+
 
 if __name__ == '__main__':
     sol = Solution()
     # print(sol.areSentencesSimilarTwo(["great", "acting", "skills"],
     #                                  ["fine", "painting", "talent"],
     #                                  [["great", "fine"], ["drama", "acting"], ["skills", "talent"]]))
-    print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
-    print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
+    # print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
+    # print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
+    print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))

@@ -4,9 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/leetcode6.py" line="880" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ccd1792-7d20-4e90-a057-4adb15228c1d" name="Default" comment="distributeCandies">
+    <list default="true" id="8ccd1792-7d20-4e90-a057-4adb15228c1d" name="Default" comment="leastBricks">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/leetcode9.py" afterPath="$PROJECT_DIR$/leetcode9.py" />
+      <change beforePath="$PROJECT_DIR$/leetcode10.py" afterPath="$PROJECT_DIR$/leetcode10.py" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,16 +18,28 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/rzwei_leetcode$leetcode9.coverage" NAME="leetcode9 Coverage Results" MODIFIED="1512231989609" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/rzwei_leetcode$GameOfLife.coverage" NAME="GameOfLife Coverage Results" MODIFIED="1512146491741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/coder$leetcode10.coverage" NAME="leetcode10 Coverage Results" MODIFIED="1512387344274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/coder$leetcode9.coverage" NAME="leetcode9 Coverage Results" MODIFIED="1512290695373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="leetcode9.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/leetcode9.py">
+      <file leaf-file-name="leetcode10.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/leetcode10.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="1337" column="22" lean-forward="true" selection-start-line="1337" selection-start-column="22" selection-end-line="1337" selection-end-column="22" />
+            <state relative-caret-position="473">
+              <caret line="186" column="0" lean-forward="true" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://D:/library/venv/Lib/collections/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-937">
+              <caret line="467" column="6" lean-forward="false" selection-start-line="467" selection-start-column="6" selection-end-line="467" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -100,6 +113,8 @@
         <option value="$PROJECT_DIR$/randompick.py" />
         <option value="$PROJECT_DIR$/temp.py" />
         <option value="$PROJECT_DIR$/leetcode9.py" />
+        <option value="$PROJECT_DIR$/.idea/MyCalendar.java" />
+        <option value="$PROJECT_DIR$/leetcode10.py" />
       </list>
     </option>
   </component>
@@ -110,10 +125,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="367" />
-    <option name="y" value="-11" />
-    <option name="width" value="1137" />
-    <option name="height" value="688" />
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1369" />
+    <option name="height" value="857" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -149,21 +164,21 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="rzwei-leetcode" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rzwei-leetcode" type="462c0819:PsiDirectoryNode" />
+              <item name="coder" type="b2602c69:ProjectViewProjectNode" />
+              <item name="coder" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -195,7 +210,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.leetcode9">
+  <component name="RunManager" selected="Python.leetcode10">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -256,7 +271,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="leetcode8" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="leetcode10" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -269,7 +284,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="coder" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/leetcode8.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/leetcode10.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -374,15 +389,16 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.GameOfLife" />
-      <item index="1" class="java.lang.String" itemvalue="Python.leetcode8" />
-      <item index="2" class="java.lang.String" itemvalue="Python.leetcode9" />
-      <item index="3" class="java.lang.String" itemvalue="Python.randompick" />
-      <item index="4" class="java.lang.String" itemvalue="Python.temp" />
+      <item index="1" class="java.lang.String" itemvalue="Python.leetcode9" />
+      <item index="2" class="java.lang.String" itemvalue="Python.randompick" />
+      <item index="3" class="java.lang.String" itemvalue="Python.temp" />
+      <item index="4" class="java.lang.String" itemvalue="Python.leetcode10" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.leetcode9" />
-        <item index="1" class="java.lang.String" itemvalue="Python.GameOfLife" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.leetcode10" />
+        <item index="1" class="java.lang.String" itemvalue="Python.leetcode9" />
+        <item index="2" class="java.lang.String" itemvalue="Python.GameOfLife" />
       </list>
     </recent_temporary>
   </component>
@@ -485,20 +501,26 @@
       <workItem from="1510978256411" duration="4216000" />
       <workItem from="1510990487434" duration="1300000" />
       <workItem from="1511166467047" duration="2311000" />
-      <workItem from="1511402808973" duration="2718000" />
-      <workItem from="1511579474921" duration="1670000" />
-      <workItem from="1511622736513" duration="607000" />
-      <workItem from="1511682290945" duration="8293000" />
-      <workItem from="1511793882787" duration="681000" />
-      <workItem from="1511795022610" duration="552000" />
-      <workItem from="1511881425917" duration="1955000" />
-      <workItem from="1511967081768" duration="4051000" />
-      <workItem from="1512052614681" duration="893000" />
-      <workItem from="1512139931381" duration="3236000" />
-      <workItem from="1512143633056" duration="196000" />
-      <workItem from="1512143954615" duration="2099000" />
-      <workItem from="1512146131411" duration="388000" />
-      <workItem from="1512228555072" duration="3182000" />
+      <workItem from="1511402808973" duration="7186000" />
+      <workItem from="1511490176669" duration="10351000" />
+      <workItem from="1511595545187" duration="4131000" />
+      <workItem from="1511660650243" duration="14882000" />
+      <workItem from="1511747117881" duration="91000" />
+      <workItem from="1511749136009" duration="9815000" />
+      <workItem from="1511790219495" duration="1503000" />
+      <workItem from="1511861897392" duration="4525000" />
+      <workItem from="1511877440790" duration="1033000" />
+      <workItem from="1511943888413" duration="6585000" />
+      <workItem from="1512006426244" duration="5735000" />
+      <workItem from="1512095778278" duration="9184000" />
+      <workItem from="1512115346880" duration="1574000" />
+      <workItem from="1512268169658" duration="960000" />
+      <workItem from="1512269470521" duration="589000" />
+      <workItem from="1512270149886" duration="2077000" />
+      <workItem from="1512288876300" duration="5083000" />
+      <workItem from="1512304390914" duration="612000" />
+      <workItem from="1512356283960" duration="11418000" />
+      <workItem from="1512382671786" duration="4670000" />
     </task>
     <task id="LOCAL-00001" summary="git ignore">
       <created>1511166549447</created>
@@ -528,77 +550,119 @@
       <option name="project" value="LOCAL" />
       <updated>1511406915010</updated>
     </task>
-    <task id="LOCAL-00005" summary="473">
-      <created>1511580471272</created>
+    <task id="LOCAL-00005" summary="450 delete node in bst">
+      <created>1511428094292</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1511580471272</updated>
+      <updated>1511428094292</updated>
     </task>
-    <task id="LOCAL-00006" summary="many problems">
-      <created>1511689840238</created>
+    <task id="LOCAL-00006" summary="443 compress string">
+      <created>1511492914545</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1511689840238</updated>
+      <updated>1511492914545</updated>
     </task>
-    <task id="LOCAL-00007" summary="distributeCandies">
-      <created>1511881936380</created>
+    <task id="LOCAL-00007" summary="443 compress string">
+      <created>1511501796647</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1511881936380</updated>
+      <updated>1511501796647</updated>
     </task>
-    <task id="LOCAL-00008" summary="distributeCandies">
-      <created>1511882299974</created>
+    <task id="LOCAL-00008" summary="makesquare">
+      <created>1511660784449</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1511882299974</updated>
+      <updated>1511660784449</updated>
     </task>
-    <task id="LOCAL-00009" summary="calPoints">
-      <created>1511883385558</created>
+    <task id="LOCAL-00009" summary="PredictTheWinner">
+      <created>1511675832328</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1511883385558</updated>
+      <updated>1511675832328</updated>
     </task>
-    <task id="LOCAL-00010" summary="# 567. Permutation in String">
-      <created>1511971153262</created>
+    <task id="LOCAL-00010" summary="findMaxLength">
+      <created>1511700753515</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1511971153262</updated>
+      <updated>1511700753515</updated>
     </task>
-    <task id="LOCAL-00011" summary=" 49 98&#10;&#10;Add to List&#10;592. Fraction Addition and Subtraction">
-      <created>1512054314723</created>
+    <task id="LOCAL-00011" summary="some problems">
+      <created>1511774227058</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1512054314724</updated>
+      <updated>1511774227058</updated>
     </task>
-    <task id="LOCAL-00012" summary="636. Exclusive Time of Functions">
-      <created>1512142492290</created>
+    <task id="LOCAL-00012" summary="water problems">
+      <created>1511780577128</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1512142492292</updated>
+      <updated>1511780577128</updated>
     </task>
-    <task id="LOCAL-00013" summary="733 Flood Fill">
-      <created>1512230350978</created>
+    <task id="LOCAL-00013" summary="Trim a Binary Search Tree">
+      <created>1511866354822</created>
       <option name="number" value="00013" />
       <option name="presentableId" value="LOCAL-00013" />
       <option name="project" value="LOCAL" />
-      <updated>1512230350978</updated>
+      <updated>1511866354822</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="leastBricks">
+      <created>1511965537001</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1511965537002</updated>
+    </task>
+    <task id="LOCAL-00015" summary="# 529. minesweeper">
+      <created>1512012739813</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1512012739813</updated>
+    </task>
+    <task id="LOCAL-00016" summary="623 Add One Row to Tree">
+      <created>1512107619883</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1512107619883</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Calendar I">
+      <created>1512291965336</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1512291965336</updated>
+    </task>
+    <task id="LOCAL-00018" summary="737 Sentence Similarity II">
+      <created>1512363109232</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1512363109232</updated>
+    </task>
+    <task id="LOCAL-00019" summary="697. Degree of an Array">
+      <created>1512383613256</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1512383613256</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="548023000" />
+    <option name="totallyTimeSpent" value="619506000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -606,15 +670,14 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.96511626" sideWeight="0.51979166" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18042813" sideWeight="0.51979166" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14626865" sideWeight="0.48229167" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15576324" sideWeight="0.48229167" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15086646" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24668436" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1515625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -622,14 +685,15 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42089552" sideWeight="0.49166667" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.51104975" sideWeight="0.49166667" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -671,42 +735,55 @@
     <MESSAGE value="git ignore" />
     <MESSAGE value="423 v1" />
     <MESSAGE value="423 v2" />
+    <MESSAGE value="450 delete node in bst" />
     <MESSAGE value="443 compress string" />
-    <MESSAGE value="473" />
-    <MESSAGE value="many problems" />
-    <MESSAGE value="distributeCandies" />
-    <MESSAGE value="calPoints" />
-    <MESSAGE value="# 567. Permutation in String" />
-    <MESSAGE value=" 49 98&#10;&#10;Add to List&#10;592. Fraction Addition and Subtraction" />
-    <MESSAGE value="636. Exclusive Time of Functions" />
-    <MESSAGE value="733 Flood Fill" />
-    <option name="LAST_COMMIT_MESSAGE" value="733 Flood Fill" />
+    <MESSAGE value="makesquare" />
+    <MESSAGE value="PredictTheWinner" />
+    <MESSAGE value="findMaxLength" />
+    <MESSAGE value="some problems" />
+    <MESSAGE value="water problems" />
+    <MESSAGE value="Trim a Binary Search Tree" />
+    <MESSAGE value="leastBricks" />
+    <MESSAGE value="# 529. minesweeper" />
+    <MESSAGE value="623 Add One Row to Tree" />
+    <MESSAGE value="Calendar I" />
+    <MESSAGE value="737 Sentence Similarity II" />
+    <MESSAGE value="697. Degree of an Array" />
+    <option name="LAST_COMMIT_MESSAGE" value="697. Degree of an Array" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="133" />
+      <option name="time" value="166" />
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="s2[e]" />
-      </configuration>
-    </watches-manager>
+    <watches-manager />
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>d['vyrvelteblnqaabc']</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>d['qnjidlmwmxxjgntez']</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>d['narvuaqmmkqhd']</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/test.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/contrib/keras/python/keras/layers/core.py" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/mnist.py" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/tensorflow_1.py" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/autoencoder.py" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/autoencoder.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Temp/dataimagepng;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFpCAYAAACBNaNRAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+AAAIABJREFUe.URL" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/gan.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/python/layers/convolutional.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/python/ops/array_ops.py" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/dcgan_.py" />
-    <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/gan_.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/python/ops/math_ops.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/__init__.py" />
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="20" column="56" lean-forward="false" selection-start-line="20" selection-start-column="56" selection-end-line="20" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/demo_pytorch_feedback.py" />
     <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/demo_pytorch_linear.py" />
     <entry file="file://$APPLICATION_PLUGINS_DIR$/python/helpers/pydev/_pydev_imps/_pydev_execfile.py">
@@ -716,24 +793,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/contrib/learn/python/learn/datasets/mnist.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/contrib/learn/python/learn/datasets/base.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/optim/sgd.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/optim/optimizer.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/nn/modules/loss.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/nn/modules/linear.py" />
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/contrib/learn/python/learn/datasets/mnist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5698">
+          <caret line="270" column="57" lean-forward="false" selection-start-line="270" selection-start-column="47" selection-end-line="270" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/tensorflow/contrib/learn/python/learn/datasets/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="36" column="67" lean-forward="false" selection-start-line="36" selection-start-column="57" selection-end-line="36" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/optim/sgd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="28" lean-forward="false" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/optim/optimizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="10" column="6" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/nn/modules/loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5104">
+          <caret line="237" column="6" lean-forward="false" selection-start-line="237" selection-start-column="6" selection-end-line="237" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/nn/modules/linear.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="18" column="42" lean-forward="false" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/torch/_C/__init__.py" />
     <entry file="file://D:/ProgramData/Miniconda3/Lib/heapq.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2948">
           <caret line="134" column="4" lean-forward="false" selection-start-line="134" selection-start-column="4" selection-end-line="134" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/leetcode6.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26664">
-          <caret line="1212" column="0" lean-forward="false" selection-start-line="1212" selection-start-column="0" selection-end-line="1218" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -744,36 +850,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="79904">
-          <caret line="3632" column="8" lean-forward="false" selection-start-line="3632" selection-start-column="8" selection-end-line="3632" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/builtins.py" />
     <entry file="file://$PROJECT_DIR$/tree.txt" />
-    <entry file="file://$PROJECT_DIR$/leetcode7.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28666">
-          <caret line="1303" column="0" lean-forward="false" selection-start-line="1303" selection-start-column="0" selection-end-line="1303" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/time.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5016">
-          <caret line="228" column="4" lean-forward="false" selection-start-line="228" selection-start-column="4" selection-end-line="228" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/time.py" />
     <entry file="file://$PROJECT_DIR$/tree_.txt" />
-    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/_collections.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1914">
-          <caret line="87" column="8" lean-forward="false" selection-start-line="87" selection-start-column="8" selection-end-line="87" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/_collections.py" />
     <entry file="file://D:/ProgramData/Miniconda3/Lib/queue.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4642">
@@ -781,9 +862,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/numpy/random/__init__.py" />
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/numpy/random/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2200">
+          <caret line="105" column="37" lean-forward="false" selection-start-line="105" selection-start-column="37" selection-end-line="105" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/2102562378/numpy/random/mtrand.py" />
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/matplotlib/animation.py" />
+    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/matplotlib/animation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32164">
+          <caret line="1472" column="68" lean-forward="false" selection-start-line="1472" selection-start-column="63" selection-end-line="1472" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://D:/ProgramData/Miniconda3/Lib/random.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4554">
@@ -795,13 +888,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3696">
           <caret line="170" column="40" lean-forward="false" selection-start-line="170" selection-start-column="40" selection-end-line="170" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/leetcode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3608">
-          <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="206" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -820,18 +906,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/library/venv/Lib/random.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="215" column="8" lean-forward="false" selection-start-line="215" selection-start-column="8" selection-end-line="215" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/temp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/-1737608462/builtins.py" />
+    <entry file="file://C:/Program Files/Python/Python36/Lib/queue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode4.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode6.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="906">
+          <caret line="1212" column="0" lean-forward="false" selection-start-line="1212" selection-start-column="0" selection-end-line="1218" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode7.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="906">
+          <caret line="1303" column="0" lean-forward="false" selection-start-line="1303" selection-start-column="0" selection-end-line="1303" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/leetcode8.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="1287" column="24" lean-forward="true" selection-start-line="1287" selection-start-column="24" selection-end-line="1287" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/library/venv/Lib/random.py" />
-    <entry file="file://$PROJECT_DIR$/GameOfLife.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="24" column="27" lean-forward="true" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -842,26 +978,87 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Program Files/Python/Python36/Lib/queue.py" />
-    <entry file="file://$PROJECT_DIR$/temp.py">
+    <entry file="file://$USER_HOME$/.IntelliJIdea2017.2/system/python_stubs/-1737608462/_collections.py" />
+    <entry file="file://$PROJECT_DIR$/leetcode/leetcode/leetcode.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        <state relative-caret-position="220">
+          <caret line="166" column="5" lean-forward="true" selection-start-line="166" selection-start-column="5" selection-end-line="166" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode/leetcode/backpack.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode0.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/library/venv/Lib/heapq.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3894">
+          <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameOfLife.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="24" column="27" lean-forward="false" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3608">
+          <caret line="164" column="0" lean-forward="false" selection-start-line="164" selection-start-column="0" selection-end-line="206" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/leetcode5.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2080">
-          <caret line="1066" column="60" lean-forward="false" selection-start-line="1066" selection-start-column="60" selection-end-line="1066" selection-end-column="60" />
+        <state relative-caret-position="425">
+          <caret line="959" column="0" lean-forward="true" selection-start-line="959" selection-start-column="0" selection-end-line="959" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/MyCalendar.java" />
+    <entry file="file://D:/library/venv/Lib/collections/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-937">
+          <caret line="467" column="6" lean-forward="false" selection-start-line="467" selection-start-column="6" selection-end-line="467" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/leetcode9.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="1337" column="22" lean-forward="true" selection-start-line="1337" selection-start-column="22" selection-end-line="1337" selection-end-column="22" />
+        <state relative-caret-position="121">
+          <caret line="708" column="31" lean-forward="false" selection-start-line="708" selection-start-column="31" selection-end-line="708" selection-end-column="31" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/leetcode10.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="473">
+          <caret line="186" column="0" lean-forward="true" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -894,7 +1091,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>Python 3.6.3 (D:\ProgramData\Miniconda3\python.exe) interpreter library</last-edited>
+          <last-edited>Python 3.6.2 virtualenv at D:\library\venv interpreter library</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -906,7 +1103,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.8</last-edited>
+          <last-edited>Python 3.6 (coder)</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
