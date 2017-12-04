@@ -1,3 +1,4 @@
+import collections
 import heapq
 
 
@@ -148,34 +149,16 @@ class Solution:
         :rtype: int
         """
         # 697. Degree of an Array
-        s, t = 0, 0
-        Len = len(nums)
-        d = {}
-        Level = -1
-        for i in nums:
-            d[i] = d.get(i, 0) + 1
-            if d[i] > Level:
-                Level = d[i]
-
-        d.clear()
-        ret = Len
-
-        def level():
-            if d.values():
-                return max(d.values())
-            return 0
-
-        while t < Len:
-            if level() < Level:
-                d[nums[t]] = d.get(nums[t], 0) + 1
-            if level() == Level:
-                while level() == Level:
-                    ret = min(ret, t - s + 1)
-                    d[nums[s]] -= 1
-                    s += 1
-            t += 1
-
-        return ret
+        c = collections.Counter(nums)
+        degree = max(c.values())
+        if degree == 1:
+            return 1
+        first, last = {}, {}
+        for i, v in enumerate(nums):
+            if v not in first:
+                first[v] = i
+            last[v] = i
+        return min(last[v] - first[v] + 1 for v in c if c[v] == degree)
 
 
 if __name__ == '__main__':
