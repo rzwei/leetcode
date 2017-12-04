@@ -1,42 +1,55 @@
 import collections
 import heapq
+from typing import List
 
 
-class TreeNode:
-    def __init__(self, s, e):
-        self.start = s
-        self.end = e
-        self.right = None
-        self.left = None
+# Employee info
+# class Employee(object):
+#     def __init__(self, id, importance, subordinates):
+#         # It's the unique id of each node.
+#         # unique id of this employee
+#         self.id = id
+#         # the importance value of this employee
+#         self.importance = importance
+#         # the id of direct subordinates
+#         self.subordinates = subordinates
+#
 
-
-class MyCalendar:
-    def __init__(self):
-        self.times = {}
-        self.books = TreeNode(-1, -1)
-
-    def search(self, p, s, e):
-        if p.start >= e:
-            if not p.left:
-                p.left = TreeNode(s, e)
-                return True
-            else:
-                return self.search(p.left, s, e)
-        if p.end <= s:
-            if not p.right:
-                p.right = TreeNode(s, e)
-                return True
-            else:
-                return self.search(p.right, s, e)
-        return False
-
-    def book(self, start, end):
-        """
-        :type start: int
-        :type end: int
-        :rtype: bool
-        """
-        return self.search(self.books, start, end)
+# class TreeNode:
+#     def __init__(self, s, e):
+#         self.start = s
+#         self.end = e
+#         self.right = None
+#         self.left = None
+#
+#
+# class MyCalendar:
+#     def __init__(self):
+#         self.times = {}
+#         self.books = TreeNode(-1, -1)
+#
+#     def search(self, p, s, e):
+#         if p.start >= e:
+#             if not p.left:
+#                 p.left = TreeNode(s, e)
+#                 return True
+#             else:
+#                 return self.search(p.left, s, e)
+#         if p.end <= s:
+#             if not p.right:
+#                 p.right = TreeNode(s, e)
+#                 return True
+#             else:
+#                 return self.search(p.right, s, e)
+#         return False
+#
+#     def book(self, start, end):
+#         """
+#         :type start: int
+#         :type end: int
+#         :rtype: bool
+#         """
+#         return self.search(self.books, start, end)
 
 
 # class MyCalendar:
@@ -178,12 +191,39 @@ class Solution:
             ret[i] = d.get(i, 0)
         return ret
 
-    def monotoneIncreasingDigits(self, N):
+    # def getImportance(self, employees: List[Employee], id) -> int:
+    #     """
+    #     :type employees: Employee
+    #     :type id: int
+    #     :rtype: int
+    #     """
+    #     # 690. Employee Importance
+    #     d = {}
+    #     for employee in employees:
+    #         d[employee.id] = employee
+    #     s = [id]
+    #     res = 0
+    #     while s:
+    #         cur = d[s.pop()]
+    #         res += cur.importance
+    #         for sub in cur.subordinates:
+    #             s.append(sub)
+    #     return res
+
+    def hasAlternatingBits(self, n: int) -> bool:
         """
-        :type N: int
-        :rtype: int
+        :type n: int
+        :rtype: bool
         """
-        # 738. Monotone Increasing Digits
+        # 693. Binary Number with Alternating Bits
+        f = n & 1
+        n >>= 1
+        while n:
+            if not f ^ (n & 1):
+                return False
+            f = n & 1
+            n >>= 1
+        return True
 
 
 if __name__ == '__main__':
@@ -193,4 +233,6 @@ if __name__ == '__main__':
     #                                  [["great", "fine"], ["drama", "acting"], ["skills", "talent"]]))
     # print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
     # print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
-    print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
+    # print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
+    print(sol.hasAlternatingBits(4))
+    print(sol.hasAlternatingBits(5))
