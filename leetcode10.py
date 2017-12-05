@@ -1,6 +1,5 @@
 import collections
 import heapq
-from typing import List
 
 
 # Employee info
@@ -225,6 +224,40 @@ class Solution:
             n >>= 1
         return True
 
+    def knightProbability(self, N, K, r, c):
+        """
+        :type N: int
+        :type K: int
+        :type r: int
+        :type c: int
+        :rtype: float
+        """
+        # 688. Knight Probability in Chessboard
+        # dirs = [(-2, -1), (-1, -2), (-2, 1), (-1, 2), (1, 2), (2, 1), (-1, 2), (1, -2)]
+        dirs = [(2, 1), (-2, 1), (2, -1), (-2, -1), (1, 2), (-1, 2), (1, -2), (-1, -2), ]
+        Map = set()
+
+        res = [0, 0]
+
+        def dfs(x, y, K):
+            if not (0 <= x < N and 0 <= y < N):
+                res[0] += 1
+                return
+            if (x, y) in Map:
+                return
+            if K == 0:
+                res[1] += 1
+                return
+            # r = 0
+            for dx, dy in dirs:
+                nx = x + dx
+                ny = y + dy
+                dfs(nx, ny, K - 1)
+            Map.add((x, y))
+
+        dfs(r, c, K)
+        return res[1] / (res[0] + res[1])
+
 
 if __name__ == '__main__':
     sol = Solution()
@@ -234,5 +267,6 @@ if __name__ == '__main__':
     # print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
     # print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
     # print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
-    print(sol.hasAlternatingBits(4))
-    print(sol.hasAlternatingBits(5))
+    # print(sol.hasAlternatingBits(4))
+    # print(sol.hasAlternatingBits(5))
+    print(sol.knightProbability(3, 2, 0, 0))
