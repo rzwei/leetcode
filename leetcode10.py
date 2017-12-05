@@ -225,6 +225,24 @@ class Solution:
             n >>= 1
         return True
 
+    def findLength(self, A: List[int], B: List[int]) -> int:
+        """
+        :type A: List[int]
+        :type B: List[int]
+        :rtype: int
+        """
+        # 718. Maximum Length of Repeated Subarray
+        LenA = len(A)
+        LenB = len(B)
+        dp = [[0] * (LenA + 1) for _ in range(LenB+1)]
+        ret = 0
+        for i in range(1, LenA + 1):
+            for j in range(1, LenB + 1):
+                if A[i - 1] == B[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                    ret = max(ret, dp[i][j])
+        return ret
+
 
 if __name__ == '__main__':
     sol = Solution()
@@ -234,5 +252,6 @@ if __name__ == '__main__':
     # print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
     # print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
     # print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
-    print(sol.hasAlternatingBits(4))
-    print(sol.hasAlternatingBits(5))
+    # print(sol.hasAlternatingBits(4))
+    # print(sol.hasAlternatingBits(5))
+    print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
