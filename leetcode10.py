@@ -265,8 +265,26 @@ class Solution:
         :rtype: float
         """
         # 688. Knight Probability in Chessboard
-        # dirs = [(-2, -1), (-1, -2), (-2, 1), (-1, 2), (1, 2), (2, 1), (-1, 2), (1, -2)]
-        # not finished!
+        dirs = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
+        cache = {}
+
+        def dp(x, y, k):
+            if not (0 <= x < N and 0 <= y < N):
+                return 0
+            if (x, y, k) in cache:
+                return cache[x, y, k]
+            if k == 0:
+                return 1
+            r = 0
+            for dx, dy in dirs:
+                nx = x + dx
+                ny = y + dy
+                r += dp(nx, ny, k - 1)
+            cache[(x, y, k)] = r
+            return r
+
+        r = dp(r, c, K)
+        return r / (8 ** K)
 
 
 if __name__ == '__main__':
@@ -285,4 +303,4 @@ if __name__ == '__main__':
     # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
     # print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
     # print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
-    print(sol.knightProbability(3, 2, 0, 0))
+    print(sol.knightProbability(3, 2, 1, 2))
