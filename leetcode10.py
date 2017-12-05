@@ -234,7 +234,7 @@ class Solution:
         # 718. Maximum Length of Repeated Subarray
         LenA = len(A)
         LenB = len(B)
-        dp = [[0] * (LenA + 1) for _ in range(LenB+1)]
+        dp = [[0] * (LenA + 1) for _ in range(LenB + 1)]
         ret = 0
         for i in range(1, LenA + 1):
             for j in range(1, LenB + 1):
@@ -242,6 +242,19 @@ class Solution:
                     dp[i][j] = dp[i - 1][j - 1] + 1
                     ret = max(ret, dp[i][j])
         return ret
+
+    def topKFrequent(self, words, k):
+        """
+        :type words: List[str]
+        :type k: int
+        :rtype: List[str]
+        """
+        d = {}
+        for word in words:
+            d[word] = d.get(word, 0) + 1
+        q = [(-v, word) for word, v in d.items()]
+        heapq.heapify(q)
+        return [heapq.heappop(q)[1] for _ in range(k)]
 
     def knightProbability(self, N, K, r, c):
         """
@@ -253,29 +266,7 @@ class Solution:
         """
         # 688. Knight Probability in Chessboard
         # dirs = [(-2, -1), (-1, -2), (-2, 1), (-1, 2), (1, 2), (2, 1), (-1, 2), (1, -2)]
-        dirs = [(2, 1), (-2, 1), (2, -1), (-2, -1), (1, 2), (-1, 2), (1, -2), (-1, -2), ]
-        Map = set()
-
-        res = [0, 0]
-
-        def dfs(x, y, K):
-            if not (0 <= x < N and 0 <= y < N):
-                res[0] += 1
-                return
-            if (x, y) in Map:
-                return
-            if K == 0:
-                res[1] += 1
-                return
-            # r = 0
-            for dx, dy in dirs:
-                nx = x + dx
-                ny = y + dy
-                dfs(nx, ny, K - 1)
-            Map.add((x, y))
-
-        dfs(r, c, K)
-        return res[1] / (res[0] + res[1])
+        # not finished!
 
 
 if __name__ == '__main__':
@@ -288,7 +279,10 @@ if __name__ == '__main__':
     # print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
     # print(sol.hasAlternatingBits(4))
     # print(sol.hasAlternatingBits(5))
-    print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
+    # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
     # print(sol.hasAlternatingBits(4))
     # print(sol.hasAlternatingBits(5))
+    # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
+    # print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
+    # print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
     print(sol.knightProbability(3, 2, 0, 0))
