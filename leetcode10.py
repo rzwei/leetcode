@@ -1,7 +1,10 @@
 import collections
 import heapq
 from typing import List
-
+class ListNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.next = None
 
 # Employee info
 # class Employee(object):
@@ -440,6 +443,14 @@ class Solution:
         dfs(0, 0)
         # return board
 
+    def reverseKGroup(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        # 25. Reverse Nodes in k-Group
+
 
 if __name__ == '__main__':
     sol = Solution()
@@ -471,11 +482,11 @@ if __name__ == '__main__':
     # print(sol.isValidSudoku(board))
     # print(sol.knightProbability(3, 2, 1, 2))
     # print(sol.convert("PAYPALISHIRING", 3))
-    board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
-             [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
-             [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
-             [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
-             [".", ".", ".", "2", "7", "5", "9", ".", "."]]
-    sol.solveSudoku(board)
-    for line in board:
-        print(line)
+    # board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
+    #          [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
+    #          [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
+    #          [".", ".", ".", "2", "7", "5", "9", ".", "."]]
+    # sol.solveSudoku(board)
+    # for line in board:
+    #     print(line)
