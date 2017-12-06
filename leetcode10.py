@@ -284,8 +284,30 @@ class Solution:
             return r
 
         r = dp(r, c, K)
-        print(cache)
         return r / (8 ** K)
+
+    def convert(self, s, numRows):
+        """
+        :type s: str
+        :type numRows: int
+        :rtype: str
+        """
+        # 6. ZigZag Conversion
+        if numRows == 1 or numRows >= len(s):
+            return s
+
+        L = [''] * numRows
+        index, step = 0, 1
+
+        for x in s:
+            L[index] += x
+            if index == 0:
+                step = 1
+            elif index == numRows - 1:
+                step = -1
+            index += step
+
+        return ''.join(L)
 
     def isValidSudoku(self, board: List[List[str]]):
         """
@@ -314,6 +336,110 @@ class Solution:
                     L3[k][n] = 1
         return True
 
+    #     def valid(r, c):
+    #         L = [0] * 10
+    #         for i in range(3):
+    #             for j in range(3):
+    #                 nx = r + i
+    #                 ny = j + c
+    #                 #print(nx, ny)
+    #                 if board[nx][ny] != '.':
+    #                     n = int(board[nx][ny])
+    #                     if L[n] == 1:
+    #                         return False
+    #                     L[n] = 1
+    #         return True
+    #
+    #     for i in range(9):
+    #         L1 = [0] * 10
+    #         L2 = [0] * 10
+    #         for j in range(9):
+    #             if board[i][j] != '.':
+    #                 n = int(board[i][j])
+    #                 if L1[n] == 1:
+    #                     return False
+    #
+    #                 L1[n] = 1
+    #             if board[j][i]!='.':
+    #                 n = int(board[j][i])
+    #                 if L2[n] == 1:
+    #                     return False
+    #                 L2[n] = 1
+    #     for i in range(3):
+    #         for j in range(3):
+    #             if not valid(i, j):
+    #                 return False
+    #     return True
+
+    def solveSudoku(self, board: List[List[str]]):
+        """
+        :type board: List[List[str]]
+        :rtype: void Do not return anything, modify board in-place instead.
+        """
+
+        # 37. Sudoku Solver
+
+        def valid(i, j, v):
+            v = str(v)
+            for k in range(9):
+                if board[i][k] == v:
+                    return False
+
+                if board[k][j] == v:
+                    return False
+
+                nx = i // 3 * 3 + k // 3
+                ny = j // 3 * 3 + k % 3
+                if board[nx][ny] == v:
+                    return False
+
+            return True
+
+        def dfs(x, y):
+            if x == 9 and y == 0:
+                return True
+
+            if board[x][y] != '.':
+                if x == 8 and y == 8:
+                    return True
+                if y + 1 == 9:
+                    return dfs(x + 1, 0)
+                else:
+                    return dfs(x, y + 1)
+
+            L = [0] * 9
+            for i in range(9):
+                if board[x][i] != '.':
+                    n = int(board[x][i]) - 1
+                    L[n] = 1
+                if board[i][y] != '.':
+                    n = int(board[i][y]) - 1
+                    L[n] = 1
+                nx = x // 3 * 3 + i // 3
+                ny = y // 3 * 3 + i % 3
+                if board[nx][ny] != '.':
+                    n = int(board[nx][ny]) - 1
+                    L[n] = 1
+            for i, li in enumerate(L):
+                if li == 0:
+                    if not valid(x, y, i + 1):
+                        continue
+                    board[x][y] = str(i + 1)
+                    nx = x
+                    ny = y + 1
+                    if ny == 9:
+                        nx += 1
+                        ny = 0
+
+                    if dfs(nx, ny):
+                        return True
+
+                    board[x][y] = '.'
+            return False
+
+        dfs(0, 0)
+        # return board
+
 
 if __name__ == '__main__':
     sol = Solution()
@@ -332,14 +458,24 @@ if __name__ == '__main__':
     # print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
     # print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
     # print(sol.knightProbability(8, 30, 6, 4))
-    board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
-             [".", ".", ".", ".", ".", ".", "3", ".", "."],
-             [".", ".", ".", "1", "8", ".", ".", ".", "."],
-             [".", ".", ".", "7", ".", ".", ".", ".", "."],
-             [".", ".", ".", ".", "1", ".", "9", "7", "."],
-             [".", ".", ".", ".", ".", ".", ".", ".", "."],
-             [".", ".", ".", "3", "6", ".", "1", ".", "."],
-             [".", ".", ".", ".", ".", ".", ".", ".", "."],
-             [".", ".", ".", ".", ".", ".", ".", "2", "."]
-             ]
-    print(sol.isValidSudoku(board))
+    # board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", ".", ".", ".", "3", ".", "."],
+    #          [".", ".", ".", "1", "8", ".", ".", ".", "."],
+    #          [".", ".", ".", "7", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", ".", "1", ".", "9", "7", "."],
+    #          [".", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", "3", "6", ".", "1", ".", "."],
+    #          [".", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", ".", ".", ".", ".", "2", "."]
+    #          ]
+    # print(sol.isValidSudoku(board))
+    # print(sol.knightProbability(3, 2, 1, 2))
+    # print(sol.convert("PAYPALISHIRING", 3))
+    board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+             [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
+             [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
+             [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
+             [".", ".", ".", "2", "7", "5", "9", ".", "."]]
+    sol.solveSudoku(board)
+    for line in board:
+        print(line)
