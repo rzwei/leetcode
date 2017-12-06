@@ -284,7 +284,35 @@ class Solution:
             return r
 
         r = dp(r, c, K)
+        print(cache)
         return r / (8 ** K)
+
+    def isValidSudoku(self, board: List[List[str]]):
+        """
+        :type board: List[List[str]]
+        :rtype: bool
+        """
+        # 36. Valid Sudoku
+        L1 = [[0] * 10 for _ in range(10)]
+        L2 = [[0] * 10 for _ in range(10)]
+        L3 = [[0] * 10 for _ in range(10)]
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != '.':
+                    n = int(board[i][j])
+                    if L1[i][n] == 1:
+                        return False
+                    L1[i][n] = 1
+
+                    if L2[j][n] == 1:
+                        return False
+                    L2[j][n] = 1
+                    k = i // 3 * 3 + j // 3
+
+                    if L3[k][n] == 1:
+                        return False
+                    L3[k][n] = 1
+        return True
 
 
 if __name__ == '__main__':
@@ -303,4 +331,15 @@ if __name__ == '__main__':
     # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
     # print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
     # print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
-    print(sol.knightProbability(3, 2, 1, 2))
+    # print(sol.knightProbability(8, 30, 6, 4))
+    board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
+             [".", ".", ".", ".", ".", ".", "3", ".", "."],
+             [".", ".", ".", "1", "8", ".", ".", ".", "."],
+             [".", ".", ".", "7", ".", ".", ".", ".", "."],
+             [".", ".", ".", ".", "1", ".", "9", "7", "."],
+             [".", ".", ".", ".", ".", ".", ".", ".", "."],
+             [".", ".", ".", "3", "6", ".", "1", ".", "."],
+             [".", ".", ".", ".", ".", ".", ".", ".", "."],
+             [".", ".", ".", ".", ".", ".", ".", "2", "."]
+             ]
+    print(sol.isValidSudoku(board))
