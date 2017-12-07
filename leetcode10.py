@@ -1,10 +1,13 @@
 import collections
 import heapq
 from typing import List
+
+
 class ListNode(object):
     def __init__(self, x):
         self.val = x
         self.next = None
+
 
 # Employee info
 # class Employee(object):
@@ -68,6 +71,22 @@ class ListNode(object):
 #             self.end.index(i, end)
 #             return True
 #         return False
+
+
+def buildList(nums: List):
+    dummy = ListNode(-1)
+    p = dummy
+    for i in nums:
+        p.next = ListNode(i)
+        p = p.next
+    return dummy.next
+
+
+def showList(head: ListNode):
+    while head:
+        print(head.val, end='->')
+        head = head.next
+    print()
 
 
 class Solution:
@@ -443,50 +462,180 @@ class Solution:
         dfs(0, 0)
         # return board
 
-    def reverseKGroup(self, head, k):
+    def reverseKGroup(self, head: ListNode, k):
         """
         :type head: ListNode
         :type k: int
         :rtype: ListNode
         """
+
         # 25. Reverse Nodes in k-Group
+
+        def work(p, K):
+            if not p:
+                return
+
+            k = K
+            h = p
+            tail = None
+            while k and p:
+                tail = p
+                p = p.next
+                k -= 1
+            if k != 0:
+                return h
+
+            pre = work(tail.next, K)
+            k = K
+            p = h
+            while k:
+                t = p.next
+                p.next = pre
+                pre = p
+                p = t
+                k -= 1
+            return pre
+
+        return work(head, k)
+
+    def firstMissingPositive(self, A):
+        """
+        :type A: List[int]
+        :rtype: int
+        """
+        # 41. First Missing Positive
+
+        Len = len(A)
+
+        for i in range(Len):
+            while 0 < A[i] <= Len and A[A[i] - 1] != A[i]:
+                t = A[A[i] - 1]
+                A[A[i] - 1] = A[i]
+                A[i] = t
+                # A[i], A[A[i] - 1] = A[A[i] - 1], A[i]
+
+        for i in range(Len):
+            if i + 1 != A[i]:
+                return i + 1
+        return Len + 1
+
+    def trap(self, height: List[int]):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        # 42. Trapping Rain Water
+
+        i = 0
+        j = len(height) - 1
+        maxLeft = 0
+        maxRight = 0
+        res = 0
+        while i <= j:
+            if height[i] <= height[j]:
+                if height[i] >= maxLeft:
+                    maxLeft = height[i]
+                else:
+                    res += maxLeft - height[i]
+                i += 1
+            else:
+                if height[j] >= maxRight:
+                    maxRight = height[j]
+                else:
+                    res += maxRight - height[j]
+                j -= 1
+        return res
+
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        # 44. Wildcard Matching
+        sLen = len(s)
+        pLen = len(p)
+
+        def match(i, j):
+            # if i == sLen and j == pLen:
+            #     return True
+
+            # if i >= sLen and j == pLen - 1 and p[j] == '*':
+            #     return True
+            # if j >= pLen:
+            #     return False
+
+            if i >= sLen and j >= pLen:
+                return True
+            if i >= sLen or j >= pLen:
+                return False
+
+
+            if p[j] == '*':
+                return match(i, j + 1) or match(i + 1, j)
+            elif p[j] == '?':
+                return match(i + 1, j + 1)
+            else:
+                if s[i] == p[j]:
+                    return match(i + 1, j + 1)
+                else:
+                    return False
+
+        return match(0, 0)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    # print(sol.areSentencesSimilarTwo(["great", "acting", "skills"],
-    #                                  ["fine", "painting", "talent"],
-    #                                  [["great", "fine"], ["drama", "acting"], ["skills", "talent"]]))
-    # print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
-    # print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
-    # print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
-    # print(sol.hasAlternatingBits(4))
-    # print(sol.hasAlternatingBits(5))
-    # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
-    # print(sol.hasAlternatingBits(4))
-    # print(sol.hasAlternatingBits(5))
-    # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
-    # print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
-    # print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
-    # print(sol.knightProbability(8, 30, 6, 4))
-    # board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
-    #          [".", ".", ".", ".", ".", ".", "3", ".", "."],
-    #          [".", ".", ".", "1", "8", ".", ".", ".", "."],
-    #          [".", ".", ".", "7", ".", ".", ".", ".", "."],
-    #          [".", ".", ".", ".", "1", ".", "9", "7", "."],
-    #          [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    #          [".", ".", ".", "3", "6", ".", "1", ".", "."],
-    #          [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    #          [".", ".", ".", ".", ".", ".", ".", "2", "."]
-    #          ]
-    # print(sol.isValidSudoku(board))
-    # print(sol.knightProbability(3, 2, 1, 2))
-    # print(sol.convert("PAYPALISHIRING", 3))
-    # board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
-    #          [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
-    #          [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
-    #          [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
-    #          [".", ".", ".", "2", "7", "5", "9", ".", "."]]
-    # sol.solveSudoku(board)
-    # for line in board:
-    #     print(line)
+    print(sol.isMatch("aa", "a"))
+    print(sol.isMatch("a", "aa"))
+    print(sol.isMatch("aa", "aa"))
+    print(sol.isMatch("aa", "*"))
+    print(sol.isMatch("aa", "a*"))
+    print(sol.isMatch("ab", "?*"))
+    print(sol.isMatch("aab", "c*a*b"))
+    print(sol.isMatch("abefcdgiescdfimde", "ab*cd?i*de"))
+    print(sol.isMatch("ho", "ho**"))
+
+# print(sol.areSentencesSimilarTwo(["great", "acting", "skills"],
+#                                  ["fine", "painting", "talent"],
+#                                  [["great", "fine"], ["drama", "acting"], ["skills", "talent"]]))
+# print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
+# print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
+# print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
+# print(sol.hasAlternatingBits(4))
+# print(sol.hasAlternatingBits(5))
+# print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
+# print(sol.hasAlternatingBits(4))
+# print(sol.hasAlternatingBits(5))
+# print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
+# print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
+# print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
+# print(sol.knightProbability(8, 30, 6, 4))
+# board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
+#          [".", ".", ".", ".", ".", ".", "3", ".", "."],
+#          [".", ".", ".", "1", "8", ".", ".", ".", "."],
+#          [".", ".", ".", "7", ".", ".", ".", ".", "."],
+#          [".", ".", ".", ".", "1", ".", "9", "7", "."],
+#          [".", ".", ".", ".", ".", ".", ".", ".", "."],
+#          [".", ".", ".", "3", "6", ".", "1", ".", "."],
+#          [".", ".", ".", ".", ".", ".", ".", ".", "."],
+#          [".", ".", ".", ".", ".", ".", ".", "2", "."]
+#          ]
+# print(sol.isValidSudoku(board))
+# print(sol.knightProbability(3, 2, 1, 2))
+# print(sol.convert("PAYPALISHIRING", 3))
+# board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+#          [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
+#          [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
+#          [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
+#          [".", ".", ".", "2", "7", "5", "9", ".", "."]]
+# sol.solveSudoku(board)
+# for line in board:
+#     print(line)
+# head = buildList([1, 2, 3, 4, 5])
+# r = sol.reverseKGroup(head, 3)
+# showList(r)
+# print(sol.firstMissingPositive([1, 2, 0]))
+# print(sol.firstMissingPositive([3, 4, -1, 1]))
+# print(sol.firstMissingPositive([1]))
+# print(sol.trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
