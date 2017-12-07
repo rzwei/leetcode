@@ -693,10 +693,36 @@ class Solution:
                     start, end = i, j
         return s[start:end]
 
+    def largestRectangleArea(self, heights):
+        """
+        :type heights: List[int]
+        :rtype: int
+        84. Largest Rectangle in Histogram
+        """
+        heights.append(0)
+        ret = 0
+        s = [0]
+        for i, hi in enumerate(heights):
+            while s and heights[s[-1]] > hi:
+                h = heights[s.pop()]
+                w = i if not s else i - s[-1] - 1
+                ret = max(ret, h * w)
+            s.append(i)
+        return ret
+
+    def maximalRectangle(self, matrix):
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        85. Maximal Rectangle
+        """
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.minWindow('ADOBECODEBANC', 'ABC'))
+    print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
+    # print(sol.largestRectangleArea([1]))
+    # print(sol.minWindow('ADOBECODEBANC', 'ABC'))
     # print(sol.totalNQueens(8))
     # print(sol.isMatch("abbbbbbbaabbabaabaa", "*****a*ab"))
     # print(sol.isMatch("aa", "a"))
