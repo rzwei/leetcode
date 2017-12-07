@@ -643,10 +643,61 @@ class Solution:
         r = dfs(path, 0)
         return r
 
+    def minWindow(self, s: str, t: str) -> str:
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        # 76. Minimum Window Substring
+        """
+        # if len(s) < len(t):
+        #     return ''
+        # d = {}
+        # for i in t:
+        #     d[i] = d.get(i, 0) + 1
+        # l = 0
+        # r = 0
+        # Len = len(s)
+        # t = {}
+        #
+        # def valid(t):
+        #     for k, v in d.items():
+        #         if v > t.get(k, 0):
+        #             return False
+        #     return True
+        #
+        # ret = ""
+        # while r < Len:
+        #     t[s[r]] = t.get(s[r], 0) + 1
+        #     while valid(t):
+        #         m = s[l:r + 1]
+        #         if not ret or len(m) < len(ret):
+        #             ret = m
+        #         t[s[l]] -= 1
+        #         l += 1
+        #     r += 1
+        # return ret
+        mapT = collections.defaultdict(int)
+        for char in t:
+            mapT[char] += 1
+        missing = len(t)
+        i = start = end = 0
+        for j, c in enumerate(s, 1):
+            missing -= mapT[c] > 0
+            mapT[c] -= 1
+            if not missing:
+                while start < j and mapT[s[i]] < 0:
+                    mapT[s[i]] += 1
+                    i += 1
+                if end == 0 or j - i <= end - start:
+                    start, end = i, j
+        return s[start:end]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.totalNQueens(8))
+    print(sol.minWindow('ADOBECODEBANC', 'ABC'))
+    # print(sol.totalNQueens(8))
     # print(sol.isMatch("abbbbbbbaabbabaabaa", "*****a*ab"))
     # print(sol.isMatch("aa", "a"))
     # print(sol.isMatch("a", "aa"))
