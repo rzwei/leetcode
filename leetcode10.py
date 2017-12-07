@@ -616,10 +616,38 @@ class Solution:
 
         return pi == len(p)
 
+    def totalNQueens(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        # 52. N-Queens II
+        path = [-1] * n
+
+        def judge(path, n, v):
+            for i in range(n):
+                if path[i] == v or i + path[i] == v + n or i - path[i] == n - v:
+                    return False
+            return True
+
+        def dfs(path, ni):
+            if ni == n:
+                return 1
+            r = 0
+            for i in range(n):
+                if judge(path, ni, i):
+                    path[ni] = i
+                    r += dfs(path, ni + 1)
+            return r
+
+        r = dfs(path, 0)
+        return r
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.isMatch("abbbbbbbaabbabaabaa", "*****a*ab"))
+    print(sol.totalNQueens(8))
+    # print(sol.isMatch("abbbbbbbaabbabaabaa", "*****a*ab"))
     # print(sol.isMatch("aa", "a"))
     # print(sol.isMatch("a", "aa"))
     # print(sol.isMatch("aa", "aa"))
