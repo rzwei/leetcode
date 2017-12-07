@@ -553,89 +553,123 @@ class Solution:
         :rtype: bool
         """
         # 44. Wildcard Matching
-        sLen = len(s)
-        pLen = len(p)
+        # sLen = len(s)
+        # pLen = len(p)
+        # cache = set()
+        #
+        # def match(i, j):
+        #     # if i == sLen and j == pLen:
+        #     #     return True
+        #
+        #     # if i >= sLen and j == pLen - 1 and p[j] == '*':
+        #     #     return True
+        #     # if j >= pLen:
+        #     #     return False
+        #
+        #     if i == sLen and j == pLen:
+        #         return True
+        #
+        #     if i > sLen or j >= pLen:
+        #         return False
+        #
+        #     if (i, j) in cache:
+        #         return False
+        #     if p[j] == '*':
+        #         r = match(i, j + 1) or match(i + 1, j)
+        #     elif p[j] == '?':
+        #         r = match(i + 1, j + 1)
+        #     else:
+        #         if i == sLen:
+        #             r = False
+        #         elif s[i] == p[j]:
+        #             r = match(i + 1, j + 1)
+        #         else:
+        #             r = False
+        #     if r:
+        #         return True
+        #     else:
+        #         cache.add((i, j))
+        #         return False
+        #
+        # return match(0, 0)
+        si = 0
+        pi = 0
+        last_match = 0
+        last_star = -1
 
-        def match(i, j):
-            # if i == sLen and j == pLen:
-            #     return True
-
-            # if i >= sLen and j == pLen - 1 and p[j] == '*':
-            #     return True
-            # if j >= pLen:
-            #     return False
-
-            if i >= sLen and j >= pLen:
-                return True
-            if i >= sLen or j >= pLen:
-                return False
-
-
-            if p[j] == '*':
-                return match(i, j + 1) or match(i + 1, j)
-            elif p[j] == '?':
-                return match(i + 1, j + 1)
+        while si < len(s):
+            if pi < len(p) and (s[si] == p[pi] or p[pi] == '?'):
+                si += 1
+                pi += 1
+            elif pi < len(p) and p[pi] == '*':
+                last_match = si
+                last_star = pi
+                pi += 1
+            elif last_star != -1:
+                pi = last_star + 1
+                si = last_match + 1
+                last_match += 1
             else:
-                if s[i] == p[j]:
-                    return match(i + 1, j + 1)
-                else:
-                    return False
+                return False
+        while pi < len(p) and p[pi] == '*':
+            pi += 1
 
-        return match(0, 0)
+        return pi == len(p)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.isMatch("aa", "a"))
-    print(sol.isMatch("a", "aa"))
-    print(sol.isMatch("aa", "aa"))
-    print(sol.isMatch("aa", "*"))
-    print(sol.isMatch("aa", "a*"))
-    print(sol.isMatch("ab", "?*"))
-    print(sol.isMatch("aab", "c*a*b"))
-    print(sol.isMatch("abefcdgiescdfimde", "ab*cd?i*de"))
-    print(sol.isMatch("ho", "ho**"))
+    print(sol.isMatch("abbbbbbbaabbabaabaa", "*****a*ab"))
+    # print(sol.isMatch("aa", "a"))
+    # print(sol.isMatch("a", "aa"))
+    # print(sol.isMatch("aa", "aa"))
+    # print(sol.isMatch("aa", "*"))
+    # print(sol.isMatch("aa", "a*"))
+    # print(sol.isMatch("ab", "?*"))
+    # print(sol.isMatch("aab", "c*a*b"))
+    # print(sol.isMatch("abefcdgiescdfimde", "ab*cd?i*de"))
+    # print(sol.isMatch("ho", "ho**"))
 
-# print(sol.areSentencesSimilarTwo(["great", "acting", "skills"],
-#                                  ["fine", "painting", "talent"],
-#                                  [["great", "fine"], ["drama", "acting"], ["skills", "talent"]]))
-# print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
-# print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
-# print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
-# print(sol.hasAlternatingBits(4))
-# print(sol.hasAlternatingBits(5))
-# print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
-# print(sol.hasAlternatingBits(4))
-# print(sol.hasAlternatingBits(5))
-# print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
-# print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
-# print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
-# print(sol.knightProbability(8, 30, 6, 4))
-# board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
-#          [".", ".", ".", ".", ".", ".", "3", ".", "."],
-#          [".", ".", ".", "1", "8", ".", ".", ".", "."],
-#          [".", ".", ".", "7", ".", ".", ".", ".", "."],
-#          [".", ".", ".", ".", "1", ".", "9", "7", "."],
-#          [".", ".", ".", ".", ".", ".", ".", ".", "."],
-#          [".", ".", ".", "3", "6", ".", "1", ".", "."],
-#          [".", ".", ".", ".", ".", ".", ".", ".", "."],
-#          [".", ".", ".", ".", ".", ".", ".", "2", "."]
-#          ]
-# print(sol.isValidSudoku(board))
-# print(sol.knightProbability(3, 2, 1, 2))
-# print(sol.convert("PAYPALISHIRING", 3))
-# board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
-#          [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
-#          [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
-#          [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
-#          [".", ".", ".", "2", "7", "5", "9", ".", "."]]
-# sol.solveSudoku(board)
-# for line in board:
-#     print(line)
-# head = buildList([1, 2, 3, 4, 5])
-# r = sol.reverseKGroup(head, 3)
-# showList(r)
-# print(sol.firstMissingPositive([1, 2, 0]))
-# print(sol.firstMissingPositive([3, 4, -1, 1]))
-# print(sol.firstMissingPositive([1]))
-# print(sol.trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
+    # print(sol.areSentencesSimilarTwo(["great", "acting", "skills"],
+    #                                  ["fine", "painting", "talent"],
+    #                                  [["great", "fine"], ["drama", "acting"], ["skills", "talent"]]))
+    # print(sol.findShortestSubArray([1, 2, 2, 3, 1]))
+    # print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))
+    # print(sol.dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73]))
+    # print(sol.hasAlternatingBits(4))
+    # print(sol.hasAlternatingBits(5))
+    # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
+    # print(sol.hasAlternatingBits(4))
+    # print(sol.hasAlternatingBits(5))
+    # print(sol.findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]))
+    # print(sol.topKFrequent(["i", "love", "leetcode", "i", "love", "coding"], 2))
+    # print(sol.topKFrequent(["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], 4))
+    # print(sol.knightProbability(8, 30, 6, 4))
+    # board = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", ".", ".", ".", "3", ".", "."],
+    #          [".", ".", ".", "1", "8", ".", ".", ".", "."],
+    #          [".", ".", ".", "7", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", ".", "1", ".", "9", "7", "."],
+    #          [".", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", "3", "6", ".", "1", ".", "."],
+    #          [".", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", ".", ".", ".", ".", ".", ".", "2", "."]
+    #          ]
+    # print(sol.isValidSudoku(board))
+    # print(sol.knightProbability(3, 2, 1, 2))
+    # print(sol.convert("PAYPALISHIRING", 3))
+    # board = [[".", ".", "9", "7", "4", "8", ".", ".", "."], ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+    #          [".", "2", ".", "1", ".", "9", ".", ".", "."], [".", ".", "7", ".", ".", ".", "2", "4", "."],
+    #          [".", "6", "4", ".", "1", ".", "5", "9", "."], [".", "9", "8", ".", ".", ".", "3", ".", "."],
+    #          [".", ".", ".", "8", ".", "3", ".", "2", "."], [".", ".", ".", ".", ".", ".", ".", ".", "6"],
+    #          [".", ".", ".", "2", "7", "5", "9", ".", "."]]
+    # sol.solveSudoku(board)
+    # for line in board:
+    #     print(line)
+    # head = buildList([1, 2, 3, 4, 5])
+    # r = sol.reverseKGroup(head, 3)
+    # showList(r)
+    # print(sol.firstMissingPositive([1, 2, 0]))
+    # print(sol.firstMissingPositive([3, 4, -1, 1]))
+    # print(sol.firstMissingPositive([1]))
+    # print(sol.trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
