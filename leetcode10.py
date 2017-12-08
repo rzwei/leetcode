@@ -814,26 +814,78 @@ class Solution:
         :rtype: void Do not return anything, modify root in-place instead.
         99. Recover Binary Search Tree
         """
+        self.first = None
+        self.second = None
+        self.prev = TreeNode(-2147483648)
+
+        def traverse(p):
+            if not p:
+                return
+            traverse(p.left)
+            if not self.first and self.prev.val >= p.val:
+                self.first = self.prev
+            if self.first and self.prev.val >= p.val:
+                self.second = p
+            self.prev = p
+            traverse(p.right)
+
+        traverse(root)
+        self.first.val, self.second.val = self.second.val, self.first.val
+
+    def postorderTraversal(self, root: TreeNode):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        145. Binary Tree Postorder Traversal
+        """
+        s = collections.deque([(root, 0)])
+        ret = []
+        while s:
+            cur, f = s.pop()
+            if not cur:
+                continue
+            if f == 0:
+                s.append((cur, 1))
+                if cur.left:
+                    s.append((cur.right, 0))
+                if cur.right:
+                    s.append((cur.left, 0))
+            else:
+                ret.append(cur.val)
+        return ret
+
+    def deleteAndEarn(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        740. Delete and Earn
+        """
 
 
 if __name__ == '__main__':
-    sol = Solution()
-    matrix = [
-        [1, 0, 1, 0, 0],
-        [1, 0, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-        [1, 0, 0, 1, 0]
-    ]
-    print(sol.maximalRectangle(matrix))
+    # sol = Solution()
+    # root = TreeNode(0)
+    # root.left = TreeNode(1)
+    # root.right = TreeNode(2)
+    # print(root.val)
+    # print(root.left.val)
+    # print(root.right.val)
+    # sol.recoverTree(root)
+    # print(root.val)
+    # print(root.left.val)
+    # print(root.right.val)
+    # matrix = [
+    #     [1, 0, 1, 0, 0],
+    #     [1, 0, 1, 1, 1],
+    #     [1, 1, 1, 1, 1],
+    #     [1, 0, 0, 1, 0]
+    # ]
+    # print(sol.maximalRectangle(matrix))
     # print(sol.isScramble('abc', 'bca'))
     # print(sol.isScramble("dbdac", "abcdd"))
     # print(sol.isInterleave('aabcc', 'dbbca', 'aadbbcbcac'))
     # print(sol.isInterleave('aabcc', 'dbbca', 'aadbbbaccc'))
-    # print(sol.isInterleave(
-    #     "bbbbbabbbbabaababaaaabbababbaaabbabbaaabaaaaababbbababbbbbabbbbababbabaabababbbaabababababbbaaababaa",
-    #     "babaaaabbababbbabbbbaabaabbaabbbbaabaaabaababaaaabaaabbaaabaaaabaabaabbbbbbbbbbbabaaabbababbabbabaab",
-    #     "babbbabbbaaabbababbbbababaabbabaabaaabbbbabbbaaabbbaaaaabbbbaabbaaabababbaaaaaabababbababaababbababbbababbbbaaaabaabbabbaaaaabbabbaaaabbbaabaaabaababaababbaaabbbbbabbbbaabbabaabbbbabaaabbababbabbabbab"))
-    print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
+    # print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
     # print(sol.largestRectangleArea([1]))
     # print(sol.minWindow('ADOBECODEBANC', 'ABC'))
     # print(sol.totalNQueens(8))
