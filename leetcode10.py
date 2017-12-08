@@ -710,6 +710,69 @@ class Solution:
             s.append(i)
         return ret
 
+    def isInterleave(self, s1, s2, s3):
+        """
+        :type s1: str
+        :type s2: str
+        :type s3: str
+        :rtype: bool
+        97. Interleaving String
+        """
+        if len(s1) + len(s2) != len(s3):
+            return False
+
+        Len1 = len(s1)
+        Len2 = len(s2)
+        Len3 = len(s3)
+        cache = set()
+
+        def dfs(i, j, k):
+
+            if i == Len1 and j == Len2 and k == Len3:
+                return True
+
+            if (i, j, k) in cache:
+                return False
+
+            if i < Len1 and k < Len3 and s1[i] == s3[k]:
+                if dfs(i + 1, j, k + 1):
+                    return True
+
+            if j < Len2 and k < Len3 and s2[j] == s3[k]:
+                if dfs(i, j + 1, k + 1):
+                    return True
+            cache.add((i, j, k))
+            return False
+
+        return dfs(0, 0, 0)
+
+    def isScramble(self, s1, s2):
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: bool
+        87. Scramble String
+        """
+
+        if s1 == s2:
+            return True
+
+        count = [0] * 26
+        for i, j in zip(s1, s2):
+            count[ord(i) - ord('a')] += 1
+            count[ord(j) - ord('a')] -= 1
+        for i in count:
+            if i != 0:
+                return False
+        Len = len(s1)
+        for i in range(1, Len):
+            if self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:], s2[i:]):
+                return True
+            if self.isScramble(s1[:i], s2[-i:]) and self.isScramble(s1[i - Len:], s2[:Len - i]):
+                return True
+
+        return False
+
     def maximalRectangle(self, matrix):
         """
         :type matrix: List[List[str]]
@@ -720,7 +783,15 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
+    print(sol.isScramble('abc', 'bca'))
+    # print(sol.isScramble("dbdac", "abcdd"))
+    # print(sol.isInterleave('aabcc', 'dbbca', 'aadbbcbcac'))
+    # print(sol.isInterleave('aabcc', 'dbbca', 'aadbbbaccc'))
+    # print(sol.isInterleave(
+    #     "bbbbbabbbbabaababaaaabbababbaaabbabbaaabaaaaababbbababbbbbabbbbababbabaabababbbaabababababbbaaababaa",
+    #     "babaaaabbababbbabbbbaabaabbaabbbbaabaaabaababaaaabaaabbaaabaaaabaabaabbbbbbbbbbbabaaabbababbabbabaab",
+    #     "babbbabbbaaabbababbbbababaabbabaabaaabbbbabbbaaabbbaaaaabbbbaabbaaabababbaaaaaabababbababaababbababbbababbbbaaaabaabbabbaaaaabbabbaaaabbbaabaaabaababaababbaaabbbbbabbbbaabbabaabbbbabaaabbababbabbabbab"))
+    # print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
     # print(sol.largestRectangleArea([1]))
     # print(sol.minWindow('ADOBECODEBANC', 'ABC'))
     # print(sol.totalNQueens(8))
