@@ -3,6 +3,13 @@ import heapq
 from typing import List
 
 
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+
 class ListNode(object):
     def __init__(self, x):
         self.val = x
@@ -701,7 +708,7 @@ class Solution:
         """
         heights.append(0)
         ret = 0
-        s = [0]
+        s = []
         for i, hi in enumerate(heights):
             while s and heights[s[-1]] > hi:
                 h = heights[s.pop()]
@@ -779,11 +786,46 @@ class Solution:
         :rtype: int
         85. Maximal Rectangle
         """
+        if not matrix:
+            return 0
+        m, n = len(matrix), len(matrix[0])
+        h = [0] * (n + 1)
+        ret = 0
+        s = [0]
+        for row in range(m):
+            for j in range(n):
+                if matrix[row][j] == 1:
+                    h[j] += 1
+                else:
+                    h[j] = 0
+            s.clear()
+            s.append(0)
+            for i, hi in enumerate(h):
+                while s and h[s[-1]] > hi:
+                    H = h[s.pop()]
+                    W = i - 1 - s[-1] if s else i
+                    ret = max(ret, W * H)
+                s.append(i)
+        return ret
+
+    def recoverTree(self, root: TreeNode):
+        """
+        :type root: TreeNode
+        :rtype: void Do not return anything, modify root in-place instead.
+        99. Recover Binary Search Tree
+        """
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.isScramble('abc', 'bca'))
+    matrix = [
+        [1, 0, 1, 0, 0],
+        [1, 0, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 1, 0]
+    ]
+    print(sol.maximalRectangle(matrix))
+    # print(sol.isScramble('abc', 'bca'))
     # print(sol.isScramble("dbdac", "abcdd"))
     # print(sol.isInterleave('aabcc', 'dbbca', 'aadbbcbcac'))
     # print(sol.isInterleave('aabcc', 'dbbca', 'aadbbbaccc'))
@@ -791,7 +833,7 @@ if __name__ == '__main__':
     #     "bbbbbabbbbabaababaaaabbababbaaabbabbaaabaaaaababbbababbbbbabbbbababbabaabababbbaabababababbbaaababaa",
     #     "babaaaabbababbbabbbbaabaabbaabbbbaabaaabaababaaaabaaabbaaabaaaabaabaabbbbbbbbbbbabaaabbababbabbabaab",
     #     "babbbabbbaaabbababbbbababaabbabaabaaabbbbabbbaaabbbaaaaabbbbaabbaaabababbaaaaaabababbababaababbababbbababbbbaaaabaabbabbaaaaabbabbaaaabbbaabaaabaababaababbaaabbbbbabbbbaabbabaabbbbabaaabbababbabbabbab"))
-    # print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
+    print(sol.largestRectangleArea([2, 1, 5, 6, 2, 3]))
     # print(sol.largestRectangleArea([1]))
     # print(sol.minWindow('ADOBECODEBANC', 'ABC'))
     # print(sol.totalNQueens(8))
