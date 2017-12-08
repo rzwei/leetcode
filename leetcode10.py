@@ -863,7 +863,7 @@ class Solution:
 
 
 if __name__ == '__main__':
-    # sol = Solution()
+    sol = Solution()
     # root = TreeNode(0)
     # root.left = TreeNode(1)
     # root.right = TreeNode(2)
