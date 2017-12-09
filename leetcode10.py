@@ -872,9 +872,34 @@ class Solution:
             dp[i] = max(dp[i - 2] + d[i], dp[i - 1])
         return dp[10000]
 
+    def findMin(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        154. Find Minimum in Rotated Sorted Array II
+        """
+        if nums[-1] > nums[0]:
+            return nums[0]
+        i = 0
+        j = len(nums) - 1
+        while i < j:
+            mid = (i + j) // 2
+            if nums[mid] > nums[j]:
+                i = mid + 1
+            elif nums[mid] < nums[j]:
+                j = mid
+            else:
+                j -= 1
+
+        return nums[i]
+
+
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.deleteAndEarn([3, 4, 2]))
+    # print(sol.findMin([4, 5, 6, 7, 0, 1, 2]))
+    # print(sol.findMin([3, 1, 3]))
+    print(sol.findMin([10, 1, 10, 10, 10]))
+    # print(sol.deleteAndEarn([3, 4, 2]))
     # root = TreeNode(0)
     # root.left = TreeNode(1)
     # root.right = TreeNode(2)
