@@ -861,9 +861,20 @@ class Solution:
         740. Delete and Earn
         """
 
+        d = [0] * 10003
+        for i in nums:
+            d[i] += i
+        dp = [0] * 10003
+        dp[1] = d[1]
+        dp[2] = max(d[1], d[2])
+
+        for i in range(3, 10001):
+            dp[i] = max(dp[i - 2] + d[i], dp[i - 1])
+        return dp[10000]
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.deleteAndEarn([3, 4, 2]))
     # root = TreeNode(0)
     # root.left = TreeNode(1)
     # root.right = TreeNode(2)
