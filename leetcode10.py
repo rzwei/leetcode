@@ -1043,11 +1043,92 @@ class Solution:
 
         return dp[-1][-1]
 
+    def ladderLength(self, beginWord, endWord, wordList: List):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: int
+        127. Word Ladder
+        """
+        # M = {}
+        #
+        # def valid(w1, w2):
+        #     r = 0
+        #     for wi, wj in zip(w1, w2):
+        #         if wi != wj:
+        #             r += 1
+        #         if r > 1:
+        #             break
+        #     return r == 1
+        #
+        # wordList.append(beginWord)
+        # for i in range(len(wordList)):
+        #     for j in range(i + 1, len(wordList)):
+        #         if valid(wordList[i], wordList[j]):
+        #             if wordList[i] not in M:
+        #                 M[wordList[i]] = set()
+        #             M[wordList[i]].add(wordList[j])
+        #             if wordList[j] not in M:
+        #                 M[wordList[j]] = set()
+        #             M[wordList[j]].add(wordList[i])
+        #
+        # def dfs(vis, cur, dep, target):
+        #     if cur == target:
+        #         return dep +1
+        #     r = 2147483647
+        #     for n in M.get(cur, []):
+        #         if n not in vis:
+        #             vis.add(n)
+        #             r = min(dfs(vis, n, dep + 1, target), r)
+        #             vis.remove(n)
+        #     return r
+        #
+        # ret = 2147483647
+        # for wi in wordList:
+        #     if valid(wi, beginWord):
+        #         ret = min(ret, dfs(set(), wi, 1, endWord))
+        #
+        # return ret if ret != 2147483647 else 0
+        wordList = set(wordList)
+        if endWord not in wordList:
+            return 0
+        beginSet = {beginWord}
+        endSet = {endWord}
+        ret = 1
+        Len = len(beginWord)
+        visited = set()
+        # visited.add(endWord)
+        while beginSet and endSet:
+            if len(beginSet) > len(endSet):
+                beginSet, endSet = endSet, beginSet
+            print(beginSet, endSet)
+            temp = set()
+            for word in beginSet:
+                word = list(word)
+                for i in range(Len):
+                    for c in range(26):
+                        old = word[i]
+                        word[i] = chr(c + ord('a'))
+                        target = ''.join(word)
+                        if target in endSet:
+                            print(target)
+                            return ret + 1
+                        if target not in visited and target in wordList:
+                            temp.add(target)
+                            visited.add(target)
+                        word[i] = old
+            beginSet = temp
+            ret += 1
+        return 0
+
 
 if __name__ == '__main__':
     sol = Solution()
+    # print(sol.ladderLength('hit', 'cxx', ["hot", "dot", "dog", "lot", "log", "cog"]))
+    print(sol.ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log"]))
     # print(sol.numDistinct('ccccc', 'c'))
-    print(sol.numDistinct('aabb', 'ab'))
+    # print(sol.numDistinct('aabb', 'ab'))
     # board = [
     #     ['o', 'a', 'a', 'n'],
     #     ['e', 't', 'a', 'e'],
