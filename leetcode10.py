@@ -16,6 +16,13 @@ class ListNode(object):
         self.next = None
 
 
+class TrieNode:
+    def __init__(self, v):
+        self.v = v
+        self.isWord = False
+        self.next = {}
+
+
 # Employee info
 # class Employee(object):
 #     def __init__(self, id, importance, subordinates):
@@ -893,12 +900,117 @@ class Solution:
 
         return nums[i]
 
+    def findWords(self, board, words):
+        """
+        :type board: List[List[str]]
+        :type words: List[str]
+        :rtype: List[str]
+        212. Word Search II
+        """
+
+        # dfs
+        # directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        #
+        # m = len(board)
+        #
+        #
+        #
+        # n = len(board[0])
+        #
+        # startDict = {}
+        #
+        # for i in range(m):
+        #     for j in range(n):
+        #         if board[i][j] not in startDict:
+        #             startDict[board[i][j]] = []
+        #         startDict[board[i][j]].append((i, j))
+        #
+        # cache = set()
+        #
+        # def dfs(i, j, word, k):
+        #     if i < 0 or i >= m or j < 0 or j >= n:
+        #         return False
+        #
+        #     if board[i][j] != word[k]:
+        #         return False
+        #
+        #     if (i, j) in cache:
+        #         return False
+        #     if k >= len(word) - 1:
+        #         return True
+        #
+        #     cache.add((i, j))
+        #     for d in directions:
+        #         x = i + d[0]
+        #         y = j + d[1]
+        #         if (x, y) not in cache and dfs(x, y, word, k + 1):
+        #             cache.remove((i, j))
+        #             return True
+        #     cache.remove((i, j))
+        #     return False
+        #
+        # ans = []
+        # for word in words:
+        #     # cache.clear()
+        #     for i, j in startDict.get(word[0], []):
+        #         if dfs(i, j, word, 0) and word not in ans:
+        #             ans.append(word)
+        # return ans
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        m = len(board)
+        n = len(board[0])
+        ret = []
+
+        root = TrieNode('')
+
+        for word in words:
+            cur = root
+            for wi in word:
+                if wi not in cur.next:
+                    cur.next[wi] = TrieNode(wi)
+                cur = cur.next[wi]
+            cur.isWord = True
+
+        def dfs(i, j, node, word, path):
+
+            if (i, j) in path:
+                return
+
+            if word not in ret and node.isWord:
+                ret.append(word)
+
+            path.add((i, j))
+            for dx, dy in directions:
+                x = i + dx
+                y = j + dy
+                if 0 <= x < m and 0 <= y < n and board[x][y] in node.next:
+                    new = word + board[x][y]
+                    if dfs(x, y, node.next[board[x][y]], new, path):
+                        ret.append(word + board)
+            path.remove((i, j))
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] in root.next:
+                    dfs(i, j, root.next[board[i][j]], board[i][j], set())
+        return ret
+
 
 if __name__ == '__main__':
     sol = Solution()
+    # board = [
+    #     ['o', 'a', 'a', 'n'],
+    #     ['e', 't', 'a', 'e'],
+    #     ['i', 'h', 'k', 'r'],
+    #     ['i', 'f', 'l', 'v']
+    # ]
+    # print(sol.findWords([["a", "a"]], ["aaa"]))
+    # print(sol.findWords(board, ["oath", "pea", "eat", "rain"]))
+    # print(sol.findWords(board, ['a']))
     # print(sol.findMin([4, 5, 6, 7, 0, 1, 2]))
     # print(sol.findMin([3, 1, 3]))
-    print(sol.findMin([10, 1, 10, 10, 10]))
+    # print(sol.findMin([10, 1, 10, 10, 10]))
     # print(sol.deleteAndEarn([3, 4, 2]))
     # root = TreeNode(0)
     # root.left = TreeNode(1)
