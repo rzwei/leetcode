@@ -996,9 +996,58 @@ class Solution:
                     dfs(i, j, root.next[board[i][j]], board[i][j], set())
         return ret
 
+    def numDistinct(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: int
+        115. Distinct Subsequences
+        """
+        # import sys
+        # sys.setrecursionlimit(10000)
+        # cache = {}
+        #
+        # def dfs(si, pi):
+        #     if si < 0 or pi < 0:
+        #         return 0
+        #     if pi == 0 and t[pi] == s[si]:
+        #         r = max(1, 1 + dfs(si - 1, pi))
+        #         cache[(si, pi)] = r
+        #         return r
+        #     if (si, pi) in cache:
+        #         return cache[(si, pi)]
+        #     r = 0
+        #     if s[si] == t[pi]:
+        #         r += dfs(si - 1, pi - 1) + dfs(si - 1, pi)
+        #     else:
+        #         r += dfs(si - 1, pi)
+        #     cache[(si, pi)] = r
+        #     return r
+        #
+        # return dfs(len(s) - 1, len(t) - 1)
+        sLen = len(s)
+        tLen = len(t)
+        if sLen < tLen:
+            return 0
+        dp = [[0] * (tLen + 1) for _ in range(sLen + 1)]
+
+        for i in range(sLen):
+            dp[i][0] = 1
+
+        for j in range(1, tLen + 1):
+            for i in range(1, sLen + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = dp[i - 1][j]
+
+        return dp[-1][-1]
+
 
 if __name__ == '__main__':
     sol = Solution()
+    # print(sol.numDistinct('ccccc', 'c'))
+    print(sol.numDistinct('aabb', 'ab'))
     # board = [
     #     ['o', 'a', 'a', 'n'],
     #     ['e', 't', 'a', 'e'],
