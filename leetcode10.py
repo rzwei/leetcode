@@ -853,9 +853,9 @@ class Solution:
                 continue
             if f == 0:
                 s.append((cur, 1))
-                if cur.left:
-                    s.append((cur.right, 0))
                 if cur.right:
+                    s.append((cur.right, 0))
+                if cur.left:
                     s.append((cur.left, 0))
             else:
                 ret.append(cur.val)
