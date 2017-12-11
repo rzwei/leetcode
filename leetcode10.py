@@ -1122,11 +1122,80 @@ class Solution:
             ret += 1
         return 0
 
+    def findLadders(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: List[List[str]]
+        126. Word Ladder II
+        """
+        wordList = set(wordList)
+        if endWord not in wordList:
+            return 0
+        beginSet = {beginWord}
+        endSet = {endWord}
+        ret = 1
+        Len = len(beginWord)
+        visited = set()
+        # visited.add(endWord)
+        while beginSet and endSet:
+            if len(beginSet) > len(endSet):
+                beginSet, endSet = endSet, beginSet
+            print(beginSet, endSet)
+            temp = set()
+            for word in beginSet:
+                word = list(word)
+                for i in range(Len):
+                    for c in range(26):
+                        old = word[i]
+                        word[i] = chr(c + ord('a'))
+                        target = ''.join(word)
+                        if target in endSet:
+                            print(target)
+                            return ret + 1
+                        if target not in visited and target in wordList:
+                            temp.add(target)
+                            visited.add(target)
+                        word[i] = old
+            beginSet = temp
+            ret += 1
+        return 0
+
+    def nextGreatestLetter(self, letters, target):
+        """
+        :type letters: List[str]
+        :type target: str
+        :rtype: str
+        744. Find Smallest Letter Greater Than Target
+        """
+        i = 0
+        j = len(letters) - 1
+
+        while i < j:
+            mid = (i + j) // 2
+            if letters[mid] <= target:
+                i = mid + 1
+            else:
+                j = mid
+        if target >= letters[j]:
+            return letters[0]
+        return letters[j]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    # print(sol.ladderLength('hit', 'cxx', ["hot", "dot", "dog", "lot", "log", "cog"]))
-    print(sol.ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log"]))
+    print(sol.nextGreatestLetter(['a', 'b'], 'z'))
+    print(sol.nextGreatestLetter(["c", "f", "j"], 'a'))
+    print(sol.nextGreatestLetter(["c", "f", "j"], 'c'))
+    print(sol.nextGreatestLetter(["c", "f", "j"], 'k'))
+    # r=sol.findLadders('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"])
+    # r = sol.findLadders('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"])
+    # for i in r:
+    #     print(i)
+    # print(sol.findLadders('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"]))
+    # print(sol.ladderLength('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"]))
+    # print(sol.findLadders("hit", "cog", ["hot", "dot", "dog", "lot", "log"]))
     # print(sol.numDistinct('ccccc', 'c'))
     # print(sol.numDistinct('aabb', 'ab'))
     # board = [
