@@ -1162,6 +1162,28 @@ class Solution:
             ret += 1
         return 0
 
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]):
+        """
+        :type gas: List[int]
+        :type cost: List[int]
+        :rtype: int
+        134. Gas Station
+        """
+        Len = len(gas)
+        start = 0
+        total = 0
+        tank = 0
+        for i in range(Len):
+            tank += gas[i] - cost[i]
+            if tank < 0:
+                start = i + 1
+                total += tank
+                tank = 0
+        if total + tank < 0:
+            return -1
+        else:
+            return start
+
     def nextGreatestLetter(self, letters, target):
         """
         :type letters: List[str]
@@ -1182,13 +1204,35 @@ class Solution:
             return letters[0]
         return letters[j]
 
+    def minCut(self, s):
+        """
+        :type s: str
+        :rtype: int
+        132. Palindrome Partitioning II
+        """
+        Len = len(s)
+        dp = [0] * (Len + 1)
+        for i in range(Len + 1):
+            dp[i] = i - 1
+        for i in range(Len):
+            j = 0
+            while i - j >= 0 and i + j < Len and s[i - j] == s[i + j]:
+                dp[i + j + 1] = min(dp[i + j + 1], 1 + dp[i - j])
+                j += 1
+            j = 1
+            while i - j + 1 >= 0 and i + j < Len and s[i - j + 1] == s[i + j]:
+                dp[i + j + 1] = min(dp[i + j + 1], 1 + dp[i - j + 1])
+                j += 1
+        return dp[Len]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.nextGreatestLetter(['a', 'b'], 'z'))
-    print(sol.nextGreatestLetter(["c", "f", "j"], 'a'))
-    print(sol.nextGreatestLetter(["c", "f", "j"], 'c'))
-    print(sol.nextGreatestLetter(["c", "f", "j"], 'k'))
+    print(sol.minCut('aab'))
+    # print(sol.nextGreatestLetter(['a', 'b'], 'z'))
+    # print(sol.nextGreatestLetter(["c", "f", "j"], 'a'))
+    # print(sol.nextGreatestLetter(["c", "f", "j"], 'c'))
+    # print(sol.nextGreatestLetter(["c", "f", "j"], 'k'))
     # r=sol.findLadders('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"])
     # r = sol.findLadders('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"])
     # for i in r:
