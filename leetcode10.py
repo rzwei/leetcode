@@ -1,5 +1,6 @@
 import collections
 import heapq
+import math
 from typing import List
 
 
@@ -1167,7 +1168,7 @@ class Solution:
         :type gas: List[int]
         :type cost: List[int]
         :rtype: int
-        134. Gas Station
+        134. Gas Station————————————————————————————————————————————————————————————————————————————————
         """
         Len = len(gas)
         start = 0
@@ -1208,7 +1209,7 @@ class Solution:
         """
         :type s: str
         :rtype: int
-        132. Palindrome Partitioning II
+        132. Palindrome Partitioning II——————————————————————————————————————————————————
         """
         Len = len(s)
         dp = [0] * (Len + 1)
@@ -1225,10 +1226,51 @@ class Solution:
                 j += 1
         return dp[Len]
 
+    def maximumGap(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        164. Maximum Gap
+        """
+        if not nums or len(nums) < 2:
+            return 0
+        Len = len(nums)
+        INT_MIN = -2147483648
+        INT_MAX = 2147483647
+
+        Max = INT_MIN
+        Min = INT_MAX
+        for i in nums:
+            Max = max(i, Max)
+            Min = min(i, Min)
+        gap = int(math.ceil((Max - Min) / (Len - 1)))
+        Maxs = [INT_MIN] * Len
+        Mins = [INT_MAX] * Len
+        for i in nums:
+            if i == Max or i == Min:
+                continue
+            idx = int((i - Min) / gap)
+            Maxs[idx] = max(Maxs[idx], i)
+            Mins[idx] = min(Mins[idx], i)
+        # print(Maxs)
+        # print(Mins)
+        maxGap = INT_MIN
+        prev = Min
+        for i in range(Len - 1):
+            if Mins[i] == INT_MAX and Maxs[i] == INT_MIN:
+                continue
+            maxGap = max(Mins[i] - prev, maxGap)
+            prev = Maxs[i]
+        maxGap = max(maxGap, Max - prev)
+
+        return maxGap
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.minCut('aab'))
+    print(sol.maximumGap([2, 3, 5, 7, 8, 4, 3]))
+    print(sol.maximumGap([1, 10000000]))
+    # print(sol.minCut('aab'))
     # print(sol.nextGreatestLetter(['a', 'b'], 'z'))
     # print(sol.nextGreatestLetter(["c", "f", "j"], 'a'))
     # print(sol.nextGreatestLetter(["c", "f", "j"], 'c'))
