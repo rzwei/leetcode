@@ -1265,11 +1265,89 @@ class Solution:
 
         return maxGap
 
+    def calculateMinimumHP(self, dungeon):
+        """
+        :type dungeon: List[List[int]]
+        :rtype: int
+        174. Dungeon Game
+        """
+        # m = len(dungeon)
+        # n = len(dungeon[0])
+        # cache = {}
+        #
+        # def dp(i, j, v):
+        #     if (i, j) in cache:
+        #         return cache[(i, j)]
+        #     health = dungeon[i][j]
+        #     cur = health + v
+        #     need = 0
+        #     r = 2147483647
+        #     if i + 1 < m:
+        #         r = min(r, dp(i + 1, j, v))
+        #     if j + 1 < n:
+        #         r = min(r, dp(i, j + 1, v))
+        #     if i == m - 1 and j == n - 1:
+        #         if cur < 1:
+        #             return -cur + 1
+        #         else:
+        #             return 1
+        #     if cur < 1:
+        #         need += -cur + r
+        #     else:
+        #         need += r - cur if cur - r < 0 else 0
+        #     cache[(i, j)] = need
+        #     return need
+        #
+        # return dp(0, 0, 0)
+        m = len(dungeon)
+        n = len(dungeon[0])
+        dp = [[(1 << 31) - 1] * (n + 1) for _ in range(m + 1)]
+        dp[m - 1][n] = 1
+        dp[m][n - 1] = 1
+        for i in reversed(range(m)):
+            for j in reversed(range(n)):
+                need = min(dp[i][j + 1], dp[i + 1][j]) - dungeon[i][j]
+                if need <= 0:
+                    dp[i][j] = 1
+                else:
+                    dp[i][j] = need
+        return dp[0][0]
+
+    def shortestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        214. Shortest Palindrome
+        """
+        Len = len(s)
+        dp = [[0] * (Len + 1) for _ in range(Len + 1)]
+        for i in range(Len):
+            dp[i][i] = 1
+        L = 0
+        R = 0
+        M = 0
+        Idx = [0] * Len
+
+        for l in range(2, Len + 1):
+            for i in range(Len - l + 1):
+                l = i
+                r = i + l - 1
+                if dp[l + 1][r - 1] and s[l] == s[r]:
+                    dp[l][r] = 1
+                    if l == 0:
+                        Idx[r] = 1
+        
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.maximumGap([2, 3, 5, 7, 8, 4, 3]))
-    print(sol.maximumGap([1, 10000000]))
+    dungeon = [
+        [-2, -3, 3],
+        [-5, -10, 1],
+        [10, 30, -5]
+    ]
+    print(sol.calculateMinimumHP(dungeon))
+    # print(sol.maximumGap([2, 3, 5, 7, 8, 4, 3]))
+    # print(sol.maximumGap([1, 10000000]))
     # print(sol.minCut('aab'))
     # print(sol.nextGreatestLetter(['a', 'b'], 'z'))
     # print(sol.nextGreatestLetter(["c", "f", "j"], 'a'))
