@@ -1252,8 +1252,6 @@ class Solution:
             idx = int((i - Min) / gap)
             Maxs[idx] = max(Maxs[idx], i)
             Mins[idx] = min(Mins[idx], i)
-        # print(Maxs)
-        # print(Mins)
         maxGap = INT_MIN
         prev = Min
         for i in range(Len - 1):
@@ -1319,33 +1317,60 @@ class Solution:
         :rtype: str
         214. Shortest Palindrome
         """
+        # Len = len(s)
+        # dp = [1] * (Len + 1)
+        # ret = 0
+        # for i in reversed(range(Len // 2 + 1)):
+        #     l = 0
+        #     r = i + i
+        #     n1 = 0
+        #     if r < Len:
+        #         n1 = 1
+        #         while l < r and s[l] == s[r]:
+        #             l += 1
+        #             r -= 1
+        #             n1 += 2
+        #         if l != r:
+        #             n1 = 0
+        #     l = 0
+        #     r = i + i + 1
+        #     n2 = 0
+        #     if r < Len:
+        #         n2 = 0
+        #         while l < r and s[l] == s[r]:
+        #             n2 += 2
+        #             l += 1
+        #             r -= 1
+        #         if l <= r:
+        #             n2 = 0
+        #     dp[i] = max(n1, n2)
+        #     if ret < dp[i]:
+        #         ret = dp[i]
+        #         break
+        #     ret = max(ret, dp[i])
+        # S = s
+        # for i in range(ret, Len):
+        #     S = s[i] + S
+        # return S
         Len = len(s)
-        dp = [[0] * (Len + 1) for _ in range(Len + 1)]
-        for i in range(Len):
-            dp[i][i] = 1
-        L = 0
-        R = 0
-        M = 0
-        Idx = [0] * Len
+        r = s[::-1]
+        for i in range(Len+1):
+            if s.startswith(r[i:]):
+                return r[:i] + s
 
-        for l in range(2, Len + 1):
-            for i in range(Len - l + 1):
-                l = i
-                r = i + l - 1
-                if dp[l + 1][r - 1] and s[l] == s[r]:
-                    dp[l][r] = 1
-                    if l == 0:
-                        Idx[r] = 1
-        
 
 if __name__ == '__main__':
     sol = Solution()
-    dungeon = [
-        [-2, -3, 3],
-        [-5, -10, 1],
-        [10, 30, -5]
-    ]
-    print(sol.calculateMinimumHP(dungeon))
+    print(sol.shortestPalindrome('a' * 4005))
+    # print(sol.shortestPalindrome('bbcd'))
+    # print(sol.shortestPalindrome('aacecaaa'))
+    # print(sol.shortestPalindrome('aaccaaa'))
+    # dungeon = [
+    #     [-2, -3, 3],
+    #     [-5, -10, 1],
+    #     [10, 30, -5]
+    # ]
+    # print(sol.calculateMinimumHP(dungeon))
     # print(sol.maximumGap([2, 3, 5, 7, 8, 4, 3]))
     # print(sol.maximumGap([1, 10000000]))
     # print(sol.minCut('aab'))
