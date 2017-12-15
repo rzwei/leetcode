@@ -302,7 +302,8 @@ class Solution:
         :rtype: float
         """
         # 688. Knight Probability in Chessboard
-        dirs = [(1, 2), (-1, 2), (1, -2), (-1, -2), (2, 1), (-2, 1), (2, -1), (-2, -1)]
+        dirs = [(1, 2), (-1, 2), (1, -2), (-1, -2),
+                (2, 1), (-2, 1), (2, -1), (-2, -1)]
         cache = {}
 
         def dp(x, y, k):
@@ -1359,21 +1360,21 @@ class Solution:
         #         return r[:i] + s
         if not s:
             return ''
-        j=0
-        Len=len(s)
+        j = 0
+        Len = len(s)
         for i in reversed(range(Len)):
-            if s[i]==s[j]:
-                j+=1
-        if j==n:
+            if s[i] == s[j]:
+                j += 1
+        if j == Len:
             return s
-        suffix=s[j:]
-        return suffix[::-1]+self.shortestPalindrome(s[:j])+suffix
-
+        suffix = s[j:]
+        # print(suffix[::-1], self.shortestPalindrome(s[:j]), suffix)
+        return suffix[::-1] + self.shortestPalindrome(s[:j]) + suffix
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.shortestPalindrome('a' * 4005))
+    # print(sol.shortestPalindrome('a' * 4005))
     # print(sol.shortestPalindrome('bbcd'))
     # print(sol.shortestPalindrome('aacecaaa'))
     # print(sol.shortestPalindrome('aaccaaa'))
