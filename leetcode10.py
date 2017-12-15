@@ -1352,11 +1352,23 @@ class Solution:
         # for i in range(ret, Len):
         #     S = s[i] + S
         # return S
-        Len = len(s)
-        r = s[::-1]
-        for i in range(Len+1):
-            if s.startswith(r[i:]):
-                return r[:i] + s
+        # Len = len(s)
+        # r = s[::-1]
+        # for i in range(Len+1):
+        #     if s.startswith(r[i:]):
+        #         return r[:i] + s
+        if not s:
+            return ''
+        j=0
+        Len=len(s)
+        for i in reversed(range(Len)):
+            if s[i]==s[j]:
+                j+=1
+        if j==n:
+            return s
+        suffix=s[j:]
+        return suffix[::-1]+self.shortestPalindrome(s[:j])+suffix
+
 
 
 if __name__ == '__main__':
