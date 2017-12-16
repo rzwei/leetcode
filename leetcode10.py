@@ -1377,6 +1377,13 @@ class Solution:
         218. The Skyline Problem
         """
 
+    def maximalSquare(self, matrix):
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        221. Maximal Square
+        """
+
 
 if __name__ == '__main__':
     sol = Solution()
