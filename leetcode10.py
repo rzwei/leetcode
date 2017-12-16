@@ -1370,23 +1370,41 @@ class Solution:
         suffix = s[j:]
         return suffix[::-1] + self.shortestPalindrome(s[:j]) + suffix
 
-    def getSkyline(self, buildings):
-        """
-        :type buildings: List[List[int]]
-        :rtype: List[List[int]]
-        218. The Skyline Problem
-        """
-
     def maximalSquare(self, matrix):
         """
         :type matrix: List[List[str]]
         :rtype: int
         221. Maximal Square
         """
+        m = len(matrix)
+        if not m:
+            return 0
+        n = len(matrix[0])
+        dp = [[0] * n for _ in range(m)]
+        maxsize = 0
+        for j in range(n):
+            dp[0][j] = ord(matrix[0][j]) - ord('0')
+            maxsize = max(maxsize, dp[0][j])
+        for i in range(1, m):
+            dp[i][0] = ord(matrix[i][0]) - ord('0')
+            maxsize = max(maxsize, dp[i][0])
+        for i in range(1, m):
+            for j in range(1, n):
+                if matrix[i][j] == '1':
+                    dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1
+                    maxsize = max(maxsize, dp[i][j])
+        return maxsize * maxsize
 
 
 if __name__ == '__main__':
     sol = Solution()
+    matrix = [
+        ['1','0','1','0','0'],
+        ['1','0','1','1','1'],
+        ['1','1','1','1','1'],
+        ['1','0','0','1','0']
+    ]
+    print(sol.maximalSquare(matrix))
     # print(sol.shortestPalindrome('a' * 4005))
     # print(sol.shortestPalindrome('bbcd'))
     # print(sol.shortestPalindrome('aacecaaa'))
