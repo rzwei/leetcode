@@ -205,10 +205,52 @@ class Solution:
             ret += i
         return ret
 
+    def numberToWords(self, num):
+        """
+        :type num: int
+        :rtype: str
+        273. Integer to English Words
+        """
+        LESS_20 = [
+            "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+            "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        TENS = ["", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        THOUSANDS = ["", "Thousand", "Million", "Billion"]
+
+        def threeNum(n):
+            ret = ''
+            if n // 100 != 0:
+                ret += LESS_20[n // 100] + ' Hundred'
+            if n % 100 == 0:
+                return ret
+            if ret:
+                ret += ' '
+            if 0 < n % 100 < 20:
+                ret += LESS_20[n % 100]
+            else:
+                ret += TENS[n // 10 % 10]
+                if n % 10 != 0:
+                    ret += ' ' + LESS_20[n % 10]
+            return ret
+
+        if num == 0:
+            return 'Zero'
+        thousand = 0
+        ret = ''
+        while num:
+            if num % 1000:
+                n = threeNum(num % 1000)
+                n += ' ' + THOUSANDS[thousand]
+                ret = n + ' ' + ret
+            num //= 1000
+            thousand += 1
+        return ret.strip()
+
 
 if __name__ == '__main__':
     sol = Solution()
     # lines = [[2, 9, 10], [3, 7, 15], [5, 12, 12], [15, 20, 10], [19, 24, 8]]
     # print(sol.getSkyline(lines))
-    expression = '1+2+3*2/4+5-3'
-    print(sol.calculate2(expression), eval(expression.replace('/', '//')))
+    # expression = '1+2+3*2/4+5-3'
+    # print(sol.calculate2(expression), eval(expression.replace('/', '//')))
+    print(sol.numberToWords(1000))
