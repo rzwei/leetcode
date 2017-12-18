@@ -422,12 +422,34 @@ class Solution:
         :rtype: List[str]
         301. Remove Invalid Parentheses
         """
+        ans = []
+
+        def dfs(S, lasti, lastj, par):
+            stack = 0
+            for i in range(lasti, len(S)):
+                if S[i] == par[0]: stack += 1
+                if S[i] == par[1]: stack -= 1
+                if stack >= 0:
+                    continue
+                for j in range(lastj, i + 1):
+                    if S[j] == par[1] and (j == lastj or S[j - 1] != par[1]):
+                        dfs(S[:j] + S[j + 1:], i, j, par)
+                return
+            S2 = S[::-1]
+            if par[0] == '(':
+                dfs(S2, 0, 0, [')', '('])
+            else:
+                ans.append(S2)
+
+        dfs(s, 0, 0, ['(', ')'])
+        return ans
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]))
-    print(sol.shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]))
+    print(sol.removeInvalidParentheses('()())()'))
+    # print(sol.shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]))
+    # print(sol.shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]))
     # print(sol.minCostClimbingStairs([10, 15, 20]))
     # print(sol.minCostClimbingStairs([1, 100, 1, 1, 1, 100, 1, 1, 100, 1]))
     # matrix = [
