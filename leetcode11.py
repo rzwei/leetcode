@@ -2,6 +2,40 @@ import heapq
 from typing import List
 
 
+class NumMatrix(object):
+    # 304. Range Sum Query 2D - Immutable
+    def __init__(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        """
+        m = len(matrix)
+        if m == 0:
+            self.sums = []
+            return
+        n = len(matrix[0])
+        self.sums = [[0] * (n + 1) for _ in range(m + 1)]
+        sums = self.sums
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                sums[i][j] = matrix[i - 1][j - 1] + sums[i - 1][j] + sums[i][j - 1] - sums[i - 1][j - 1]
+
+    def sumRegion(self, row1, col1, row2, col2):
+        """
+        :type row1: int
+        :type col1: int
+        :type row2: int
+        :type col2: int
+        :rtype: int
+        """
+        sums = self.sums
+
+        r = sums[row2 + 1][col2 + 1]
+        r -= sums[row2 + 1][col1]
+        r -= sums[row1][col2 + 1]
+        r += sums[row1][col1]
+        return r
+
+
 class Solution:
     def getSkyline(self, buildings):
         """
@@ -294,45 +328,76 @@ class Solution:
         282. Expression Add Operators
         """
         Len = len(num)
+        ret = []
 
-        def calc(expression):
-            stack = []
-            number = 0
-            sign = '+'
-            for i, c in enumerate(expression):
-                if c.isdigit():
-                    number = number * 10 + int(c)
-                if not c.isdigit() or i == len(expression) - 1:
-                    if sign == '+':
-                        stack.append(number)
-                    elif sign == '-':
-                        stack.append(-number)
-                    elif sign == '*':
-                        stack.append(stack.pop() * number)
-                    sign = c
-                    number = 0
-            return sum(stack)
-
-        def dfs(expression, i, f):
+        def dfs(expression, i, eval, multed):
             print(expression)
-
-            if f==1:
-                for j in range()
-
             if i == Len:
-                if calc(expression) == target:
-                    print(expression)
+                if eval == target:
+                    ret.append(expression)
                 return
-            for c in '+-*':
-                for j in reversed(range(i + 1, Len)):
-                    cur = expression + c + num[i:j]
-                    dfs(cur, j)
+            for j in range(i + 1, Len + 1):
+                if num[i] == '0' and j > i + 1:
+                    break
+                cur = num[i:j]
+                if i == 0:
+                    dfs(expression + cur, j, int(cur), int(cur))
+                else:
+                    dfs(expression + '+' + cur, j, eval + int(cur), int(cur))
+                    dfs(expression + '-' + cur, j, eval - int(cur), -int(cur))
+                    dfs(expression + '*' + cur, j, eval - multed + int(cur) * multed, int(cur) * multed)
 
+        dfs('', 0, 0, 0)
+        return ret
+        # Len = len(num)
+        # res = []
+        #
+        # def dfs(path, pos, eval, multed):
+        #     if pos == Len:
+        #         if eval == target:
+        #             res.append(path)
+        #         return
+        #     for i in range(pos, Len):
+        #         if i != pos and num[pos] == '0':
+        #             break
+        #         cur = int(num[pos:i + 1])
+        #         if pos == 0:
+        #             dfs(path + num[pos:i + 1], i + 1, cur, cur)
+        #         else:
+        #             dfs(path + '+' + num[pos:i + 1], i + 1, eval + cur, cur)
+        #             dfs(path + '-' + num[pos:i + 1], i + 1, eval - cur, -cur)
+        #             dfs(path + '*' + num[pos:i + 1], i + 1, eval - multed + multed * cur, multed * cur)
+        #
+        # dfs('', 0, 0, 0)
+        # return res
+
+    def removeInvalidParentheses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        301. Remove Invalid Parentheses
+        """
 
 
 if __name__ == '__main__':
     sol = Solution()
-    sol.addOperators('123', 6)
+    # matrix = [
+    #     [3, 0, 1, 4, 2],
+    #     [5, 6, 3, 2, 1],
+    #     [1, 2, 0, 1, 5],
+    #     [4, 1, 0, 1, 7],
+    #     [1, 0, 3, 0, 5]
+    # ]
+    # n = NumMatrix(matrix)
+    # print(n.sumRegion(2, 1, 4, 3))
+    # print(n.sumRegion(1, 1, 2, 2))
+    # print(n.sumRegion(1, 2, 2, 4))
+
+    # sol.addOperators("3456237490", 9191)
+    # print(sol.addOperators('123', 6))
+    # print(sol.addOperators('2320', 8))
+    # print(sol.addOperators("3456", 45))
+    # print(sol.addOperators("105", 5))
     # print(sol.hIndex([0, 1, 3, 5, 6]))
     # print(sol.hIndex([1, 2, 3, 4, 5, 6, 7]))
     # print(sol.hIndex([0]))
