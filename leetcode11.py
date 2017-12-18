@@ -1,4 +1,5 @@
 import heapq
+from typing import List
 
 
 class Solution:
@@ -246,11 +247,61 @@ class Solution:
             thousand += 1
         return ret.strip()
 
+    def hIndex(self, citations: List[int]):
+        """
+        :type citations: List[int]
+        :rtype: int
+        274. H-Index
+        """
+        # 275. H-Index II
+        # if not citations:
+        #     return 0
+        # # citations.sort()
+        # Len = len(citations)
+        # i = 0
+        # j = Len - 1
+        # while i < j:
+        #     mid = (i + j) // 2
+        #     if citations[mid] < Len - mid:
+        #         i = mid + 1
+        #     else:
+        #         j = mid
+        # if i == j and citations[i] < Len - i:
+        #     return 0
+        # return Len - j
+        # 275. H - Index II
+        Len = len(citations)
+        if Len == 0:
+            return 0
+        bucket = [0] * (Len + 1)
+        for i in range(Len):
+            if citations[i] > Len:
+                bucket[Len] += 1
+            else:
+                bucket[citations[i]] += 1
+        t = 0
+        for i in reversed(range(Len + 1)):
+            t += bucket[i]
+            if t >= i:
+                return i
+        return 0
+
+    def addOperators(self, num, target):
+        """
+        :type num: str
+        :type target: int
+        :rtype: List[str]
+        282. Expression Add Operators
+        """
+
 
 if __name__ == '__main__':
     sol = Solution()
+    # print(sol.hIndex([0, 1, 3, 5, 6]))
+    # print(sol.hIndex([1, 2, 3, 4, 5, 6, 7]))
+    # print(sol.hIndex([0]))
     # lines = [[2, 9, 10], [3, 7, 15], [5, 12, 12], [15, 20, 10], [19, 24, 8]]
     # print(sol.getSkyline(lines))
     # expression = '1+2+3*2/4+5-3'
     # print(sol.calculate2(expression), eval(expression.replace('/', '//')))
-    print(sol.numberToWords(1000))
+    # print(sol.numberToWords(1000))
