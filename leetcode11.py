@@ -293,10 +293,46 @@ class Solution:
         :rtype: List[str]
         282. Expression Add Operators
         """
+        Len = len(num)
+
+        def calc(expression):
+            stack = []
+            number = 0
+            sign = '+'
+            for i, c in enumerate(expression):
+                if c.isdigit():
+                    number = number * 10 + int(c)
+                if not c.isdigit() or i == len(expression) - 1:
+                    if sign == '+':
+                        stack.append(number)
+                    elif sign == '-':
+                        stack.append(-number)
+                    elif sign == '*':
+                        stack.append(stack.pop() * number)
+                    sign = c
+                    number = 0
+            return sum(stack)
+
+        def dfs(expression, i, f):
+            print(expression)
+
+            if f==1:
+                for j in range()
+
+            if i == Len:
+                if calc(expression) == target:
+                    print(expression)
+                return
+            for c in '+-*':
+                for j in reversed(range(i + 1, Len)):
+                    cur = expression + c + num[i:j]
+                    dfs(cur, j)
+
 
 
 if __name__ == '__main__':
     sol = Solution()
+    sol.addOperators('123', 6)
     # print(sol.hIndex([0, 1, 3, 5, 6]))
     # print(sol.hIndex([1, 2, 3, 4, 5, 6, 7]))
     # print(sol.hIndex([0]))
