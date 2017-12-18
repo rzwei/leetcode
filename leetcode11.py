@@ -371,6 +371,51 @@ class Solution:
         # dfs('', 0, 0, 0)
         # return res
 
+    def minCostClimbingStairs(self, cost):
+        """
+        :type cost: List[int]
+        :rtype: int
+        746. Min Cost Climbing Stairs
+        """
+        Len = len(cost)
+        dp = [0] * Len
+        dp[0] = cost[0]
+        dp[1] = cost[1]
+        for i in range(2, Len):
+            dp[i] = min(dp[i - 1], dp[i - 2]) + cost[i]
+        return min(dp[-1], dp[-2])
+
+    def shortestCompletingWord(self, licensePlate, words):
+        """
+        :type licensePlate: str
+        :type words: List[str]
+        :rtype: str
+        748. Shortest Completing Word
+        """
+        d = {}
+        for i in licensePlate:
+            if i.isalpha():
+                d[i.lower()] = d.get(i.lower(), 0) + 1
+        ret = None
+        for word in words:
+            t = {}
+            for i in word:
+                if i.isalpha():
+                    i = i.lower()
+                    t[i] = t.get(i, 0) + 1
+            f = 1
+            for k, v in d.items():
+                if k not in t or v > t[k]:
+                    f = 0
+                    break
+            if f:
+                if not ret:
+                    ret = word
+                elif len(ret) > len(word):
+                    ret = word
+
+        return ret
+
     def removeInvalidParentheses(self, s):
         """
         :type s: str
@@ -381,6 +426,10 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]))
+    print(sol.shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]))
+    # print(sol.minCostClimbingStairs([10, 15, 20]))
+    # print(sol.minCostClimbingStairs([1, 100, 1, 1, 1, 100, 1, 1, 100, 1]))
     # matrix = [
     #     [3, 0, 1, 4, 2],
     #     [5, 6, 3, 2, 1],
