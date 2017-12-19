@@ -174,8 +174,8 @@ class Solution:
         """
         :type nums: List[List[int]]
         :rtype: List[int]
-        """
         # 632. Smallest Range
+        """
         pq = [(row[0], i, 0) for i, row in enumerate(nums)]
         heapq.heapify(pq)
 

@@ -444,10 +444,33 @@ class Solution:
         dfs(s, 0, 0, ['(', ')'])
         return ans
 
+    def maxCoins(self, numbers: List):
+        """
+        :type nums: List[int]
+        :rtype: int
+        312. Burst Balloons
+        """
+        nums = [1] * (len(numbers) + 2)
+        Len = 1
+        for i in numbers:
+            if i > 0:
+                nums[Len] = i
+                Len += 1
+        Len += 1
+        dp = [[0] * Len for _ in range(Len)]
+        for l in range(2, Len):
+            for i in range(Len - l):
+                j = i + l
+                for k in range(i + 1, j):
+                    dp[i][j] = max(dp[i][j], nums[k] * nums[i] * nums[j] + dp[i][k] + dp[k][j])
+                    # dp[i][j] = max(dp[i][j], nums[k] * nums[i] * nums[j] + dp[i][k] + dp[k][j])
+        return dp[0][Len - 1]
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.removeInvalidParentheses('()())()'))
+    print(sol.maxCoins([3, 1, 5, 8]))
+    # print(sol.removeInvalidParentheses('()())()'))
     # print(sol.shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]))
     # print(sol.shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]))
     # print(sol.minCostClimbingStairs([10, 15, 20]))
