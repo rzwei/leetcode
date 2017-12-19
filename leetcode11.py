@@ -466,10 +466,50 @@ class Solution:
                     # dp[i][j] = max(dp[i][j], nums[k] * nums[i] * nums[j] + dp[i][k] + dp[k][j])
         return dp[0][Len - 1]
 
+    def countSmaller(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        315. Count of Smaller Numbers After Self
+        """
+        L = []
+
+        def binarySearch(t):
+            i = 0
+            j = len(L)
+            while i < j:
+                mid = (i + j) // 2
+                if t > L[mid]:
+                    i = mid + 1
+                else:
+                    j = mid
+            return j
+
+        ret = [0] * len(nums)
+        for i in reversed(range(len(nums))):
+            ret[i] = binarySearch(nums[i])
+            L.insert(ret[i], nums[i])
+        return ret
+        # L = []
+        # ret = [0] * len(nums)
+        # for i in reversed(range(len(nums))):
+        #     ret[i] = bisect.bisect_left(L, nums[i])
+        #     bisect.insort_left(L, nums[i])
+        # return ret
+
+    def removeDuplicateLetters(self, s):
+        """
+        :type s: str
+        :rtype: str
+        316. Remove Duplicate Letters
+        """
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.maxCoins([3, 1, 5, 8]))
+    # print(sol.maxCoins([3, 1, 5, 8]))
+    # print(sol.countSmaller([5, 2, 6, 1]))
+    # tfun([1, 2, 34, 5, 6, 3, 5])
     # print(sol.removeInvalidParentheses('()())()'))
     # print(sol.shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]))
     # print(sol.shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]))
