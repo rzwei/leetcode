@@ -503,10 +503,64 @@ class Solution:
         :rtype: str
         316. Remove Duplicate Letters
         """
+        if not s:
+            return ''
+        d = {}
+        for i in s:
+            d[i] = d.get(i, 0) + 1
+        pos = 0
+        for i in range(len(s)):
+            if s[pos] > s[i]:
+                pos = i
+            d[s[i]] -= 1
+            if d[s[i]] == 0:
+                break
+        return s[pos] + self.removeDuplicateLetters(s[pos + 1:].replace(s[pos], ''))
+
+    def countNumbersWithUniqueDigits(self, n):
+        """
+        :type n: int
+        :rtype: int
+        357. Count Numbers with Unique Digits
+        """
+        if n == 0:
+            return 1
+        res = 10
+        uniqueNumber = 9
+        availableNumber = 9
+        while n > 1 and availableNumber > 0:
+            uniqueNumber = availableNumber * uniqueNumber
+            res += uniqueNumber
+            availableNumber -= 1
+            n -= 1
+        return res
+
+    def countRangeSum(self, nums, lower, upper):
+        """
+        :type nums: List[int]
+        :type lower: int
+        :type upper: int
+        :rtype: int
+        327. Count of Range Sum not ac tle
+        """
+        Len = len(nums)
+        sums = [0] * (Len + 1)
+        for i in range(Len):
+            sums[i + 1] = sums[i] + nums[i]
+        ans = 0
+        for i in range(Len):
+            for j in range(i + 1, Len + 1):
+                if lower <= sums[j] - sums[i] <= upper:
+                    ans += 1
+        return ans
 
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.countNumbersWithUniqueDigits(2))
+    # print(sol.countRangeSum([-2, 5, -1], -2, 2))
+    # print(sol.countRangeSum([-2, 5, 1],1,1))
+    # print(sol.removeDuplicateLetters('bcabc'))
     # print(sol.maxCoins([3, 1, 5, 8]))
     # print(sol.countSmaller([5, 2, 6, 1]))
     # tfun([1, 2, 34, 5, 6, 3, 5])
