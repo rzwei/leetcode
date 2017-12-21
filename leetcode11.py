@@ -2,6 +2,57 @@ import heapq
 from typing import List
 
 
+class Interval:
+    def __init__(self, s=0, e=0):
+        self.start = s
+        self.end = e
+
+    def __repr__(self):
+        return f'I[{self.start},{self.end}]'
+
+
+class SummaryRanges:
+    # 352. Data Stream as Disjoint Intervals
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.intervals = []
+
+    def left(self, intervals, t):
+        l = 0
+        r = len(intervals)
+        while l < r:
+            m = (l + r) // 2
+            if t > intervals[m].end:
+                l = m + 1
+            else:
+                r = m
+        return l
+
+    def addNum(self, val):
+        """
+        :type val: int
+        :rtype: void
+        """
+        idx = self.left(self.intervals, val)
+        s = val
+        e = val
+        if idx > 0 and self.intervals[idx - 1].end + 1 >= val:
+            idx -= 1
+        while idx < len(self.intervals) and val + 1 >= self.intervals[idx].start and val - 1 <= self.intervals[idx].end:
+            s = min(s, self.intervals[idx].start)
+            e = max(e, self.intervals[idx].end)
+            del self.intervals[idx]
+        self.intervals.insert(idx, Interval(s, e))
+
+    def getIntervals(self):
+        """
+        :rtype: List[Interval]
+        """
+        return self.intervals
+
+
 class NumMatrix(object):
     # 304. Range Sum Query 2D - Immutable
     def __init__(self, matrix):
@@ -525,13 +576,13 @@ class Solution:
         """
         if n == 0:
             return 1
+        available = 9
+        unique = 9
         res = 10
-        uniqueNumber = 9
-        availableNumber = 9
-        while n > 1 and availableNumber > 0:
-            uniqueNumber = availableNumber * uniqueNumber
-            res += uniqueNumber
-            availableNumber -= 1
+        while n > 1:
+            unique *= available
+            res += unique
+            available -= 1
             n -= 1
         return res
 
@@ -543,21 +594,77 @@ class Solution:
         :rtype: int
         327. Count of Range Sum not ac tle
         """
+        # Len = len(nums)
+        # sums = [0] * (Len + 1)
+        # for i in range(Len):
+        #     sums[i + 1] = sums[i] + nums[i]
+        # ans = 0
+        # for i in range(Len):
+        #     for j in range(i + 1, Len + 1):
+        #         if lower <= sums[j] - sums[i] <= upper:
+        #             ans += 1
+        # return ans
         Len = len(nums)
         sums = [0] * (Len + 1)
         for i in range(Len):
             sums[i + 1] = sums[i] + nums[i]
-        ans = 0
-        for i in range(Len):
-            for j in range(i + 1, Len + 1):
-                if lower <= sums[j] - sums[i] <= upper:
-                    ans += 1
-        return ans
+
+        def sort(lo, hi):
+            mid = (lo + hi) // 2
+            if mid == lo:
+                return 0
+            count = sort(lo, mid) + sort(mid, hi)
+            i = j = mid
+            for left in sums[lo:mid]:
+                while i < hi and sums[i] - left < lower: i += 1
+                while j < hi and sums[j] - left <= upper: j += 1
+                count += j - i
+            sums[lo:hi] = sorted(sums[lo:hi])
+            return count
+
+        return sort(0, len(sums))
+
+    def minPatches(self, nums, n):
+        """
+        :type nums: List[int]
+        :type n: int
+        :rtype: int
+        330. Patching Array
+        """
+        miss = 1
+        res = 0
+        i = 0
+        Len = len(nums)
+        while miss <= n:
+            if i < Len and nums[i] <= miss:
+                miss += nums[i]
+                i += 1
+            else:
+                miss += miss
+                res += 1
+        return res
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.countNumbersWithUniqueDigits(2))
+    s = SummaryRanges()
+    s.addNum(1)
+    print(s.getIntervals())
+    s.addNum(3)
+    print(s.getIntervals())
+    s.addNum(7)
+    print(s.getIntervals())
+    s.addNum(2)
+    print(s.getIntervals())
+    s.addNum(6)
+    print(s.getIntervals())
+
+    # print(sol.minPatches([1, 5, 10], 20))
+    # print(sol.countNumbersWithUniqueDigits(10))
+    # print(sol.countNumbersWithUniqueDigits(2))
+    # print(sol.countNumbersWithUniqueDigits(3))
+    # print(sol.countRangeSum([-2, 5, -1], -2, 2))
+    # print(sol.countNumbersWithUniqueDigits(2))
     # print(sol.countRangeSum([-2, 5, -1], -2, 2))
     # print(sol.countRangeSum([-2, 5, 1],1,1))
     # print(sol.removeDuplicateLetters('bcabc'))
