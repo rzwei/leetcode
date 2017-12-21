@@ -1,3 +1,4 @@
+import bisect
 import heapq
 from typing import List
 
@@ -644,21 +645,61 @@ class Solution:
                 res += 1
         return res
 
+    def maxEnvelopes(self, envelopes: List[List[int]]):
+        """
+        :type envelopes: List[List[int]]
+        :rtype: int
+        354. Russian Doll Envelopes
+        """
+        Len = len(envelopes)
+        if Len == 0:
+            return 0
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+        dp = [0] * Len
+        l = 0
+        for i in range(Len):
+            idx = bisect.bisect_left(dp, envelopes[i][1], 0, l)
+            dp[idx] = envelopes[i][1]
+            if idx == l:
+                l += 1
+        return l
+
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        300. Longest Increasing Subsequence
+        """
+        Len = len(nums)
+        if Len == 0:
+            return 0
+        # nums.sort()
+        dp = [0] * Len
+        l = 0
+        for i in nums:
+            idx = bisect.bisect_left(dp, i, 0, l)
+            dp[idx] = i
+            if idx == l:
+                l += 1
+            print(dp)
+        return l
+
 
 if __name__ == '__main__':
     sol = Solution()
-    s = SummaryRanges()
-    s.addNum(1)
-    print(s.getIntervals())
-    s.addNum(3)
-    print(s.getIntervals())
-    s.addNum(7)
-    print(s.getIntervals())
-    s.addNum(2)
-    print(s.getIntervals())
-    s.addNum(6)
-    print(s.getIntervals())
-
+    print(sol.lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
+    # print(sol.maxEnvelopes([[4, 5], [4, 6], [6, 7], [2, 3], [1, 1]]))
+    # s = SummaryRanges()
+    # s.addNum(1)
+    # print(s.getIntervals())
+    # s.addNum(3)
+    # print(s.getIntervals())
+    # s.addNum(7)
+    # print(s.getIntervals())
+    # s.addNum(2)
+    # print(s.getIntervals())
+    # s.addNum(6)
+    # print(s.getIntervals())
     # print(sol.minPatches([1, 5, 10], 20))
     # print(sol.countNumbersWithUniqueDigits(10))
     # print(sol.countNumbersWithUniqueDigits(2))
