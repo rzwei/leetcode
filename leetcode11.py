@@ -684,10 +684,54 @@ class Solution:
             print(dp)
         return l
 
+    def trapRainWater(self, heightMap: List[List[int]]):
+        """
+        :type heightMap: List[List[int]]
+        :rtype: int
+        407. Trapping Rain Water II
+        """
+        row = len(heightMap)
+        if row < 2:
+            return 0
+        col = len(heightMap[0])
+        if col < 2:
+            return 0
+        h = []
+        visited = [[0] * col for _ in range(row)]
+
+        for i in range(row):
+            heapq.heappush(h, [heightMap[i][0], i, 0])
+            heapq.heappush(h, [heightMap[i][col - 1], i, col - 1])
+            visited[i][0] = 1
+            visited[i][col - 1] = 1
+        for i in range(col):
+            heapq.heappush(h, [heightMap[0][i], 0, i])
+            heapq.heappush(h, [heightMap[row - 1][i], row - 1, i])
+            visited[0][i] = 1
+            visited[row - 1][i] = 1
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        res = 0
+        while h:
+            height, x, y = heapq.heappop(h)
+            for dx, dy in dirs:
+                nx = x + dx
+                ny = y + dy
+                if 0 <= nx < row and 0 <= ny < col and not visited[nx][ny]:
+                    visited[nx][ny] = 1
+                    res += max(0, height - heightMap[nx][ny])
+                    heapq.heappush(h, [max(heightMap[nx][ny], height), nx, ny])
+        return res
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
+    heightMap = [
+        [1, 4, 3, 1, 3, 2],
+        [3, 2, 1, 3, 2, 4],
+        [2, 3, 3, 2, 3, 1]
+    ]
+    print(sol.trapRainWater(heightMap))
+    # print(sol.lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
     # print(sol.maxEnvelopes([[4, 5], [4, 6], [6, 7], [2, 3], [1, 1]]))
     # s = SummaryRanges()
     # s.addNum(1)
