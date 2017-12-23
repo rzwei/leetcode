@@ -19,7 +19,7 @@ public:
 		if (matrix.empty())
 			return 0;
 		int row = matrix.size(), col = matrix[0].size();
-		int res = -2147483648;
+		int res = -2147483647;
 		for (int l = 0; l < col; l++)
 		{
 			vector<int>sums(row, 0);
@@ -28,7 +28,7 @@ public:
 					sums[i] += matrix[i][r];
 				set<int>accSet;
 				accSet.insert(0);
-				int curMax = -2147483648, curSum = 0;
+				int curMax = -2147483647, curSum = 0;
 				for (int sum : sums)
 				{
 					curSum += sum;
@@ -42,11 +42,40 @@ public:
 		}
 		return res;
 	}
+	int longestSubstring(string s, int k) {
+		return dv_longestSubstring(s, 0, s.length(), k);
+	}
+	int dv_longestSubstring(string &S, int start, int end, int k)
+	{
+		if (end - start < k)
+			return 0;
+		int m[26] = { 0 };
+		for (int i = start; i < end; i++)
+			m[S[i] - 'a']++;
 
+		for (int i = start; i < end;)
+		{
+			while (i < end && m[S[i] - 'a'] < k)
+				i++;
+			if (i == end)
+				return 0;
+
+			int j = i;
+			while (j < end && m[S[j] - 'a'] >= k)
+				j++;
+
+			if (j == end)
+				return j - i + 1;
+			return max(dv_longestSubstring(S, start, i, k), dv_longestSubstring(S, i + 1, end, k));
+		}
+		return end - start;
+	}
 };
 
 
 int main()
 {
+	Solution sol;
+	cout << sol.longestSubstring("bbaaacbd", 3) << endl;
 	return 0;
 }

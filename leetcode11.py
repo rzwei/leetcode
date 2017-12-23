@@ -722,15 +722,41 @@ class Solution:
                     heapq.heappush(h, [max(heightMap[nx][ny], height), nx, ny])
         return res
 
+    def longestSubstring(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: int
+        395. Longest Substring with At Least K Repeating Characters
+        """
+        def dv(start, end):
+            if end - start < k:
+                return 0
+            d = [0] * 26
+            for i in s[start:end]:
+                d[ord(i) - ord('a')] += 1
+            for i in range(start, end):
+                if 0 < d[ord(s[i]) - ord('a')] < k:
+                    return max(dv(start, i), dv(i + 1, end))
+            return end - start
+
+        return dv(0, len(s))
+
+
 
 if __name__ == '__main__':
     sol = Solution()
-    heightMap = [
-        [1, 4, 3, 1, 3, 2],
-        [3, 2, 1, 3, 2, 4],
-        [2, 3, 3, 2, 3, 1]
-    ]
-    print(sol.trapRainWater(heightMap))
+    print(sol.longestSubstring("bbaaacbd", 3))
+    # print(sol.longestSubstring('ababacb', 3))
+    # print(sol.longestSubstring('aaabb', 3))
+    # print(sol.longestSubstring('ababbc', 2))
+    # print(sol.longestSubstring('aaabbb', 3))
+    # heightMap = [
+    #     [1, 4, 3, 1, 3, 2],
+    #     [3, 2, 1, 3, 2, 4],
+    #     [2, 3, 3, 2, 3, 1]
+    # ]
+    # print(sol.trapRainWater(heightMap))
     # print(sol.lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
     # print(sol.maxEnvelopes([[4, 5], [4, 6], [6, 7], [2, 3], [1, 1]]))
     # s = SummaryRanges()
