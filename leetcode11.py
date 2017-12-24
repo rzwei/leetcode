@@ -932,14 +932,46 @@ class Solution:
     #             visited.add(node)
     #             q.extend(successors(node))
     #     return -1
+    def crackSafe(self, n, k):
+        """
+        :type n: int
+        :type k: int
+        :rtype: str
+        753. Cracking the Safe
+        """
+        target = 1
+        for i in range(n):
+            target *= k
+
+        def dfs(nums, k, visited):
+            if len(visited) == target:
+                return nums
+            visited.add(''.join(nums[-n:]))
+            for i in range(k):
+                nums.append(str(i))
+                tk = ''.join(nums[-n:])
+                if tk not in visited:
+                    visited.add(tk)
+                    r = dfs(nums, k, visited)
+                    if r:
+                        return r
+                    visited.remove(tk)
+                nums.pop()
+            return None
+
+        r = dfs(['0'] * n, k, set())
+        return ''.join(r)
 
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.crackSafe(2, 10))
+    # print(sol.crackSafe(1, 2))
+    # print(sol.crackSafe(2, 2))
     # print(sol.ipToCIDR("255.0.0.7", 10))
-    print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
-    print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
-    print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "0000"))
+    # print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
+    # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
+    # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "0000"))
     # print(sol.openLock(["8888"], '0009'))
     # sol.ipToCIDR('0.0.0.0', 10)
     # print(sol.dominantIndex([3, 6, 1, 0]))
