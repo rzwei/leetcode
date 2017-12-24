@@ -792,41 +792,41 @@ class Solution:
         :type ip: str
         :type n: int
         :rtype: List[str]
-        751. IP to CIDR
+        751. IP to CIDR not ac
         """
-        tokens = ip.split('.')
-        num = 0
-        s = 1
-        for token in reversed(tokens):
-            num += int(token) * s
-            s <<= 8
-
-        def fun(ip_num):
-            ret = []
-            mask = 0xff
-            for i in range(4):
-                ret.append(str(ip_num & mask))
-                ip_num >>= 8
-            return '.'.join(reversed(ret))
-
-        upper = num + n
-        cur = upper - 1
-        ret = []
-        while cur >= num:
-            m = 0
-            k = 0
-            t = cur
-            while t & 1 == 0:
-                m = (m << 1) | 1
-                k += 1
-                t >>= 1
-            if cur + m < upper:
-                ret.append("%s/%d" % (fun(cur), 32 - k))
-                cur -= m + 1
-            else:
-                ret.append("%s/%d" % (fun(cur), 32))
-                cur -= 1
-        return ret
+        # tokens = ip.split('.')
+        # num = 0
+        # s = 1
+        # for token in reversed(tokens):
+        #     num += int(token) * s
+        #     s <<= 8
+        #
+        # def fun(ip_num):
+        #     ret = []
+        #     mask = 0xff
+        #     for i in range(4):
+        #         ret.append(str(ip_num & mask))
+        #         ip_num >>= 8
+        #     return '.'.join(reversed(ret))
+        #
+        # upper = num + n
+        # cur = upper - 1
+        # ret = []
+        # while cur >= num:
+        #     m = 0
+        #     k = 0
+        #     t = cur
+        #     while t & 1 == 0:
+        #         m = (m << 1) | 1
+        #         k += 1
+        #         t >>= 1
+        #     if cur + m < upper:
+        #         ret.append("%s/%d" % (fun(cur), 32 - k))
+        #         cur -= m + 1
+        #     else:
+        #         ret.append("%s/%d" % (fun(cur), 32))
+        #         cur -= 1
+        # return ret
 
     def openLock(self, deadends, target):
         """
@@ -937,9 +937,9 @@ class Solution:
 if __name__ == '__main__':
     sol = Solution()
     # print(sol.ipToCIDR("255.0.0.7", 10))
-    print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
-    print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
-    print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "0000"))
+    # print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
+    # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
+    # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "0000"))
     # print(sol.openLock(["8888"], '0009'))
     # sol.ipToCIDR('0.0.0.0', 10)
     # print(sol.dominantIndex([3, 6, 1, 0]))
