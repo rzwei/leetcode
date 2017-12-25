@@ -804,6 +804,7 @@ class Solution:
         :rtype: List[str]
         751. IP to CIDR
         """
+
         def ip2number(ip):
             numbers = list(map(int, ip.split(".")))
             n = (numbers[0] << 24) + (numbers[1] << 16) + (numbers[2] << 8) + numbers[3]
@@ -834,12 +835,6 @@ class Solution:
         return result
 
         # def ipToCIDR(self, ip, n):
-        """
-        :type ip: str
-        :type n: int
-        :rtype: List[str]
-        751. IP to CIDR not ac
-        """
         # tokens = ip.split('.')
         # num = 0
         # s = 1
