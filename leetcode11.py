@@ -1134,6 +1134,41 @@ class Solution:
         :rtype: int
         546. Remove Boxes
         """
+        memo = {}
+        Len = len(boxes)
+
+        def dp(i, j):
+            if i == j:
+                return 1
+            if (i, j) in memo:
+                return memo[(i, j)]
+            v = boxes[i]
+            for k in range(i, j + 1):
+                if boxes[i] != v:
+                    v = None
+                    break
+            if v:
+                r = (j - i + 1) * (j - i + 1)
+                memo[(i, j)] = r
+                return r
+            l = i
+            r = i
+            ret = 0
+            while r <= j:
+                if boxes[r] == boxes[l]:
+                    r += 1
+                else:
+                    t=dp(i, l - 1) + dp(r, j) + (r - l) ** 2
+                    if l-1>=i and r<=j and boxes[l-1]==boxes[r]:
+                        t+=2*(l-i)
+
+                    ret = max()
+
+                    l = r
+            memo[(i, j)] = ret
+            return ret
+
+        return dp(0, Len - 1)
 
 
 if __name__ == '__main__':
