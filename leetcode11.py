@@ -942,6 +942,35 @@ class Solution:
     #             visited.add(node)
     #             q.extend(successors(node))
     #     return -1
+    def crackSafe(self, n, k):
+        """
+        :type n: int
+        :type k: int
+        :rtype: str
+        753. Cracking the Safe
+        """
+        target = 1
+        for i in range(n):
+            target *= k
+
+        def dfs(nums, k, visited):
+            if len(visited) == target:
+                return nums
+            visited.add(''.join(nums[-n:]))
+            for i in range(k):
+                nums.append(str(i))
+                tk = ''.join(nums[-n:])
+                if tk not in visited:
+                    visited.add(tk)
+                    r = dfs(nums, k, visited)
+                    if r:
+                        return r
+                    visited.remove(tk)
+                nums.pop()
+            return None
+
+        r = dfs(['0'] * n, k, set())
+        return ''.join(r)
     def findAllConcatenatedWordsInADict(self, words):
         """
         :type words: List[str]
@@ -1030,6 +1059,9 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.crackSafe(2, 10))
+    # print(sol.crackSafe(1, 2))
+    # print(sol.crackSafe(2, 2))
     print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
     # print(sol.findAllConcatenatedWordsInADict([""]))
     print(sol.findAllConcatenatedWordsInADict(
