@@ -802,6 +802,42 @@ class Solution:
         :type ip: str
         :type n: int
         :rtype: List[str]
+        751. IP to CIDR
+        """
+        def ip2number(ip):
+            numbers = list(map(int, ip.split(".")))
+            n = (numbers[0] << 24) + (numbers[1] << 16) + (numbers[2] << 8) + numbers[3]
+            return n
+
+        def number2ip(n):
+            return ".".join([str(n >> 24 & 255), str(n >> 16 & 255), str(n >> 8 & 255), str(n & 255)])
+
+        def ilowbit(x):
+            for i in range(32):
+                if (x & (1 << i)):
+                    return i
+
+        def lowbit(x):
+            return 1 << ilowbit(x)
+
+        number = ip2number(ip)
+        result = []
+        while n > 0:
+            lb = lowbit(number)
+            while lb > n:
+                lb = lb // 2
+
+            n = n - lb
+
+            result.append(number2ip(number) + "/" + str(32 - ilowbit(lb)))
+            number = number + lb
+        return result
+
+        # def ipToCIDR(self, ip, n):
+        """
+        :type ip: str
+        :type n: int
+        :rtype: List[str]
         751. IP to CIDR not ac
         """
         # tokens = ip.split('.')
@@ -971,6 +1007,7 @@ class Solution:
 
         r = dfs(['0'] * n, k, set())
         return ''.join(r)
+
     def findAllConcatenatedWordsInADict(self, words):
         """
         :type words: List[str]
@@ -1059,7 +1096,7 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
-    # print(sol.crackSafe(2, 10))
+    print(sol.crackSafe(3, 10))
     # print(sol.crackSafe(1, 2))
     # print(sol.crackSafe(2, 2))
     # print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
