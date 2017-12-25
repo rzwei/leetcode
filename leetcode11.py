@@ -1059,13 +1059,13 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.crackSafe(2, 10))
+    # print(sol.crackSafe(2, 10))
     # print(sol.crackSafe(1, 2))
     # print(sol.crackSafe(2, 2))
-    print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
+    # print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
     # print(sol.findAllConcatenatedWordsInADict([""]))
-    print(sol.findAllConcatenatedWordsInADict(
-        ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"]))
+    # print(sol.findAllConcatenatedWordsInADict(
+    #     ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"]))
     # print(sol.ipToCIDR("255.0.0.7", 10))
     # print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
     # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
