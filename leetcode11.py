@@ -1128,6 +1128,13 @@ class Solution:
 
         return dp(0, 1)
 
+    def removeBoxes(self, boxes):
+        """
+        :type boxes: List[int]
+        :rtype: int
+        546. Remove Boxes
+        """
+
 
 if __name__ == '__main__':
     sol = Solution()
@@ -1135,6 +1142,8 @@ if __name__ == '__main__':
     # print(sol.canCross([0, 1, 2, 3, 4, 8, 9, 11]))
     # print(sol.canCross([0, 1, 3, 5, 6, 8, 12, 17]))
     # print(sol.crackSafe(3, 8))
+    # print(sol.crackSafe(3, 6))
+    # print(sol.crackSafe(2, 10))
     # print(sol.crackSafe(1, 2))
     # print(sol.crackSafe(2, 2))
     # print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
@@ -1142,11 +1151,11 @@ if __name__ == '__main__':
     # print(sol.findAllConcatenatedWordsInADict(
     #     ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"]))
     # print(sol.ipToCIDR("255.0.0.7", 10))
-    print(sol.openLock_(["0201", "0101", "0102", "1212", "2002"], '0202'))
-    print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "1200"))
-    print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "0000"))
-    print(sol.openLock_(["8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"], "8888"))
-    print(sol.openLock_(["0000"], "8888"))
+    # print(sol.openLock_(["0201", "0101", "0102", "1212", "2002"], '0202'))
+    # print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "1200"))
+    # print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "0000"))
+    # print(sol.openLock_(["8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"], "8888"))
+    # print(sol.openLock_(["0000"], "8888"))
     # sol.ipToCIDR('0.0.0.0', 10)
     # print(sol.dominantIndex([3, 6, 1, 0]))
     # print(sol.dominantIndex([1, 2, 3, 4]))
