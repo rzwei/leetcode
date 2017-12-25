@@ -1144,7 +1144,7 @@ class Solution:
         while beginSet and endSet:
             if len(beginSet) > len(endSet):
                 beginSet, endSet = endSet, beginSet
-            print(beginSet, endSet)
+            # print(beginSet, endSet)
             temp = set()
             for word in beginSet:
                 word = list(word)
@@ -1154,7 +1154,7 @@ class Solution:
                         word[i] = chr(c + ord('a'))
                         target = ''.join(word)
                         if target in endSet:
-                            print(target)
+                            # print(target)
                             return ret + 1
                         if target not in visited and target in wordList:
                             temp.add(target)

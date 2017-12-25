@@ -903,48 +903,57 @@ class Solution:
             dep += 1
         return -1
 
-        # if target == '0000':
-        #     return 0
-        # visited = {'0000'}
-        # for i in deadends:
-        #     visited.add(i)
-        # leftSet = {'0000'}
-        # rightSet = {target}
-        # res = 0
-        # while leftSet or rightSet:
-        #     if len(leftSet) > len(rightSet):
-        #         leftSet, rightSet = rightSet, leftSet
-        #     print(leftSet, rightSet)
-        #     temp = leftSet
-        #     L = set()
-        #     for one in temp:
-        #         visited.add(one)
-        #         tokens = list(one)
-        #         for i in range(4):
-        #             u = chr((ord(tokens[i]) - ord('0') + 1) % 10 + ord('0'))
-        #             l = chr((ord(tokens[i]) - ord('0') - 1) % 10 + ord('0'))
-        #             old = tokens[i]
-        #
-        #             tokens[i] = u
-        #
-        #             k = ''.join(tokens)
-        #             if k not in visited:
-        #                 if k in rightSet:
-        #                     return res + 1
-        #                 L.add(k)
-        #
-        #             tokens[i] = l
-        #
-        #             k = ''.join(tokens)
-        #             if k not in visited:
-        #                 if k in rightSet:
-        #                     return res + 1
-        #                 L.add(k)
-        #
-        #             tokens[i] = old
-        #     leftSet = L
-        #     res += 1
-        # return res
+    def openLock_(self, deadends, target):
+        '''
+        :param deadends: List[str]
+        :param target: int
+        :return: int
+        752. Open the Lock double bfs
+        '''
+        if target == '0000':
+            return 0
+        if '0000' in deadends:
+            return -1
+        visited = set()
+        for i in deadends:
+            visited.add(i)
+        leftSet = {'0000'}
+        rightSet = {target}
+        res = 1
+        while leftSet and rightSet:
+            if len(leftSet) > len(rightSet):
+                leftSet, rightSet = rightSet, leftSet
+            # print(leftSet, rightSet)
+            temp = leftSet
+            L = set()
+            for one in temp:
+                visited.add(one)
+                tokens = list(one)
+                for i in range(4):
+                    u = chr((ord(tokens[i]) - ord('0') + 1) % 10 + ord('0'))
+                    l = chr((ord(tokens[i]) - ord('0') - 1) % 10 + ord('0'))
+                    old = tokens[i]
+
+                    tokens[i] = u
+
+                    k = ''.join(tokens)
+                    if k not in visited:
+                        if k in rightSet:
+                            return res
+                        L.add(k)
+
+                    tokens[i] = l
+
+                    k = ''.join(tokens)
+                    if k not in visited:
+                        if k in rightSet:
+                            return res
+                        L.add(k)
+
+                    tokens[i] = old
+            leftSet = L
+            res += 1
+        return -1
 
     # def openLock(self, deadends, target):
     #     marker, depth = 'x', 0
@@ -1122,7 +1131,7 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.canCross([0, 2]))
+    # print(sol.canCross([0, 2]))
     # print(sol.canCross([0, 1, 2, 3, 4, 8, 9, 11]))
     # print(sol.canCross([0, 1, 3, 5, 6, 8, 12, 17]))
     # print(sol.crackSafe(3, 8))
@@ -1133,10 +1142,11 @@ if __name__ == '__main__':
     # print(sol.findAllConcatenatedWordsInADict(
     #     ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"]))
     # print(sol.ipToCIDR("255.0.0.7", 10))
-    # print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
-    # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
-    # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "0000"))
-    # print(sol.openLock(["8888"], '0009'))
+    print(sol.openLock_(["0201", "0101", "0102", "1212", "2002"], '0202'))
+    print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "1200"))
+    print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "0000"))
+    print(sol.openLock_(["8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"], "8888"))
+    print(sol.openLock_(["0000"], "8888"))
     # sol.ipToCIDR('0.0.0.0', 10)
     # print(sol.dominantIndex([3, 6, 1, 0]))
     # print(sol.dominantIndex([1, 2, 3, 4]))
