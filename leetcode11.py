@@ -815,7 +815,7 @@ class Solution:
 
         def ilowbit(x):
             for i in range(32):
-                if (x & (1 << i)):
+                if x & (1 << i):
                     return i
 
         def lowbit(x):
@@ -1088,10 +1088,44 @@ class Solution:
 
         return res
 
+    def canCross(self, stones: List[int]):
+        """
+        :type stones: List[int]
+        :rtype: bool
+        403. Frog Jump
+        """
+        Len = len(stones)
+        idx = {}
+        for i, v in enumerate(stones):
+            idx[v] = i
+        memo = set()
+        if stones[1] - stones[0] > 1:
+            return False
+
+        def dp(i, k):
+            print(i, k)
+            if (i, k) in memo:
+                return False
+            if i == Len - 1:
+                return True
+            for di in range(-1, 2):
+                if di + k <= 0:
+                    continue
+                step = di + k
+                if stones[i] + step in idx and dp(idx[stones[i] + step], step):
+                    return True
+            memo.add((i, k))
+            return False
+
+        return dp(0, 1)
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.crackSafe(3, 10))
+    print(sol.canCross([0, 2]))
+    # print(sol.canCross([0, 1, 2, 3, 4, 8, 9, 11]))
+    # print(sol.canCross([0, 1, 3, 5, 6, 8, 12, 17]))
+    # print(sol.crackSafe(3, 8))
     # print(sol.crackSafe(1, 2))
     # print(sol.crackSafe(2, 2))
     # print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
