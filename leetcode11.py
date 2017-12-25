@@ -4,6 +4,16 @@ import heapq
 from typing import List
 
 
+class Trie:
+    def __init__(self, word):
+        self.word = word
+        self.isword = False
+        self.next = {}
+
+    def __repr__(self):
+        return f'{self.word},{self.isword}'
+
+
 class Interval:
     def __init__(self, s=0, e=0):
         self.start = s
@@ -932,10 +942,98 @@ class Solution:
     #             visited.add(node)
     #             q.extend(successors(node))
     #     return -1
+    def findAllConcatenatedWordsInADict(self, words):
+        """
+        :type words: List[str]
+        :rtype: List[str]
+        472. Concatenated Words
+        """
+        # root = Trie(-1)
+        # for word in words:
+        #     cur = root
+        #     for i in word:
+        #         if i not in cur.next:
+        #             cur.next[i] = Trie(i)
+        #         cur = cur.next[i]
+        #     cur.isword = True
+        #
+        # def dfs(word, cur: Trie, wi, n):
+        #     if wi == len(word) - 1 and cur.isword and n > 1:
+        #         return True
+        #
+        #     for i in range(wi, len(word)):
+        #         if cur.isword:
+        #             if i == len(word) - 1 and n > 1:
+        #                 return True
+        #             if i + 1 < len(word) and word[i + 1] in root.next:
+        #                 if dfs(word, root.next[word[i + 1]], i + 1, n + 1):
+        #                     return True
+        #         if i + 1 >= len(word):
+        #             break
+        #         if word[i + 1] in cur.next:
+        #             cur = cur.next[word[i + 1]]
+        #         else:
+        #             return False
+        #
+        #     return False
+        #
+        # ret = []
+        # for word in words:
+        #     if not word:
+        #         continue
+        #     if dfs(word, root.next[word[0]], 0, 1):
+        #         ret.append(word)
+        # return ret
+        # d = {}
+        # for word in words:
+        #     L = len(word)
+        #     if L not in d:
+        #         d[L] = {word}
+        #     else:
+        #         d[L].add(word)
+        #
+        # def dfs(word, wi, n):
+        #     print(word, wi, n)
+        #     if wi == len(word) and n > 2:
+        #         return True
+        #     for i in range(wi + 1, len(word) + 1):
+        #         L = i - wi
+        #         if L in d and word[wi:i] in d[L]:
+        #             if dfs(word, i, n + 1):
+        #                 return True
+        #     return False
+        #
+        # ret = []
+        # for word in words:
+        #     if dfs(word, 0, 1):
+        #         ret.append(word)
+        # return ret
+        res = []
+        words_set = set(words)
+
+        def check(word):
+            if word in words_set:
+                return True
+            for i in reversed(range(1, len(word) + 1)):
+                if word[:i] in words_set and check(word[i:]):
+                    return True
+            return False
+
+        for word in words:
+            words_set.remove(word)
+            if check(word):
+                res.append(word)
+            words_set.add(word)
+
+        return res
 
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.findAllConcatenatedWordsInADict(['a', 'aaaa']))
+    # print(sol.findAllConcatenatedWordsInADict([""]))
+    print(sol.findAllConcatenatedWordsInADict(
+        ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"]))
     # print(sol.ipToCIDR("255.0.0.7", 10))
     # print(sol.openLock(["0201", "0101", "0102", "1212", "2002"], '0202'))
     # print(sol.openLock(["1002", "1220", "0122", "0112", "0121"], "1200"))
