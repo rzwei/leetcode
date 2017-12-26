@@ -1128,13 +1128,6 @@ class Solution:
 
         return dp(0, 1)
 
-    def removeBoxes(self, boxes):
-        """
-        :type boxes: List[int]
-        :rtype: int
-        546. Remove Boxes
-        """
-
     def arrayNesting(self, nums):
         """
         :type nums: List[int]
@@ -1155,7 +1148,7 @@ class Solution:
             res = max(res, n)
         return res
 
-    def findPaths(self, m, n, N, i, j):
+    def findPaths(self, m, n, N, srci, srcj):
         """
         :type m: int
         :type n: int
@@ -1166,13 +1159,30 @@ class Solution:
         576. Out of Boundary Paths
         """
 
-        def dp(i, j, k):
-            pass
+        MOD = 1e9 + 7
+        count = [[0] * n for _ in range(m)]
+        count[srci][srcj] = 1
+        res = 0
+        for i in range(N):
+            temp = [[0] * n for _ in range(m)]
+            for i in range(m):
+                for j in range(n):
+                    for x, y in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
+                        if x < 0 or x >= m or y < 0 or y >= n:
+                            res = (res + count[i][j]) % MOD
+                        else:
+                            temp[x][y] = (temp[x][y] + count[i][j]) % MOD
+            count = temp
+        return int(res)
+
+
+
 
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.arrayNesting([5, 4, 0, 3, 1, 6, 2]))
+    print(sol.findPaths(2, 2, 2, 0, 0))
+    # print(sol.arrayNesting([5, 4, 0, 3, 1, 6, 2]))
     # print(sol.removeBoxes([1, 2, 1]))
     # print(sol.removeBoxes([1, 1, 2, 2, 2, 3, 4, 3, 1]))
     # print(sol.canCross([0, 2]))
@@ -1188,6 +1198,12 @@ if __name__ == '__main__':
     # print(sol.findAllConcatenatedWordsInADict(
     #     ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"]))
     # print(sol.ipToCIDR("255.0.0.7", 10))
+    # print(sol.openLock_(["0201", "0101", "0102", "1212", "2002"], '0202'))
+    # print(sol.openLock_([], '5555'))
+    # print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "1200"))
+    # print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "0000"))
+    # print(sol.openLock_(["8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"], "8888"))
+    # print(sol.openLock_(["0000"], "8888"))
     # print(sol.openLock_(["0201", "0101", "0102", "1212", "2002"], '0202'))
     # print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "1200"))
     # print(sol.openLock_(["1002", "1220", "0122", "0112", "0121"], "0000"))
