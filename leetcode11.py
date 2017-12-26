@@ -1134,45 +1134,33 @@ class Solution:
         :rtype: int
         546. Remove Boxes
         """
-        memo = {}
-        Len = len(boxes)
 
-        def dp(i, j):
-            if i == j:
-                return 1
-            if (i, j) in memo:
-                return memo[(i, j)]
-            v = boxes[i]
-            for k in range(i, j + 1):
-                if boxes[i] != v:
-                    v = None
-                    break
-            if v:
-                r = (j - i + 1) * (j - i + 1)
-                memo[(i, j)] = r
-                return r
-            l = i
-            r = i
-            ret = 0
-            while r <= j:
-                if boxes[r] == boxes[l]:
-                    r += 1
-                else:
-                    t=dp(i, l - 1) + dp(r, j) + (r - l) ** 2
-                    if l-1>=i and r<=j and boxes[l-1]==boxes[r]:
-                        t+=2*(l-i)
-
-                    ret = max()
-
-                    l = r
-            memo[(i, j)] = ret
-            return ret
-
-        return dp(0, Len - 1)
+    def arrayNesting(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        565. Array Nesting
+        """
+        res = 0
+        vis = [False] * (len(nums) + 1)
+        for i in nums:
+            if vis[i]:
+                continue
+            cur = i
+            n = 0
+            while not vis[cur]:
+                n += 1
+                vis[cur] = True
+                cur = nums[cur]
+            res = max(res, n)
+        return res
 
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.arrayNesting([5, 4, 0, 3, 1, 6, 2]))
+    # print(sol.removeBoxes([1, 2, 1]))
+    # print(sol.removeBoxes([1, 1, 2, 2, 2, 3, 4, 3, 1]))
     # print(sol.canCross([0, 2]))
     # print(sol.canCross([0, 1, 2, 3, 4, 8, 9, 11]))
     # print(sol.canCross([0, 1, 3, 5, 6, 8, 12, 17]))
