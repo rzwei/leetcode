@@ -1155,6 +1155,20 @@ class Solution:
             res = max(res, n)
         return res
 
+    def findPaths(self, m, n, N, i, j):
+        """
+        :type m: int
+        :type n: int
+        :type N: int
+        :type i: int
+        :type j: int
+        :rtype: int
+        576. Out of Boundary Paths
+        """
+
+        def dp(i, j, k):
+            pass
+
 
 if __name__ == '__main__':
     sol = Solution()
