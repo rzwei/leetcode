@@ -1292,10 +1292,36 @@ class Solution:
 
         return res
 
+    def findDuplicate(self, paths: List[str]):
+        """
+        :type paths: List[str]
+        :rtype: List[List[str]]
+        609. Find Duplicate File in System
+        """
+        d = {}
+        for one in paths:
+            tokens = one.split(' ')
+            path = tokens[0]
+            for file in tokens[1:]:
+                idx = file.index('(')
+                name = file[:idx]
+                content = file[idx:-1]
+                if content not in d:
+                    d[content] = [path + '/' + name]
+                else:
+                    d[content].append(path + '/' + name)
+        ret = []
+        for v in d.values():
+            if len(v) > 1:
+                ret.append(v)
+        return ret
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findIntegers(5))
+    print(sol.findDuplicate(
+        ["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root/c/d 4.txt(efgh)", "root 4.txt(efgh)"]))
+    # print(sol.findIntegers(5))
     # print(sol.checkRecord(93573))
     # print(sol.findPaths(2, 2, 2, 0, 0))
     # print(sol.arrayNesting([5, 4, 0, 3, 1, 6, 2]))
