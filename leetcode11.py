@@ -14,6 +14,12 @@ class Trie:
         return f'{self.word},{self.isword}'
 
 
+class Point(object):
+    def __init__(self, a=0, b=0):
+        self.x = a
+        self.y = b
+
+
 class Interval:
     def __init__(self, s=0, e=0):
         self.start = s
@@ -1159,7 +1165,7 @@ class Solution:
         576. Out of Boundary Paths
         """
 
-        MOD = 1e9 + 7
+        MOD = 10 ** 9 + 7
         count = [[0] * n for _ in range(m)]
         count[srci][srcj] = 1
         res = 0
@@ -1173,15 +1179,96 @@ class Solution:
                         else:
                             temp[x][y] = (temp[x][y] + count[i][j]) % MOD
             count = temp
-        return int(res)
+        return res
 
+    def checkRecord(self, n):
+        """
+        :type n: int
+        :rtype: int
+        552. Student Attendance Record II
+        """
+        if n == 1:
+            return 3
+        if n == 2:
+            return 8
+        MOD = 10 ** 9 + 7
+        A = [0] * n
+        P = [0] * n
+        L = [0] * n
 
+        P[0] = 1
 
+        L[0] = 1
+        L[1] = 3
 
+        A[0] = 1
+        A[1] = 2
+        A[2] = 4
+        for i in range(1, n):
+            A[i - 1] %= MOD
+            P[i - 1] %= MOD
+            L[i - 1] %= MOD
+            P[i] = A[i - 1] + P[i - 1] + L[i - 1]
+            if i > 1:
+                L[i] = A[i - 1] + P[i - 1] + A[i - 2] + P[i - 2]
+            if i > 2:
+                A[i] = A[i - 1] + A[i - 2] + A[i - 3]
+        return (A[n - 1] + P[n - 1] + L[n - 1]) % MOD
+
+    def outerTrees(self, points: List[Point]):
+        """
+        :type points: List[Point]
+        :rtype: List[Point]
+        587. Erect the Fence
+        """
+        """Computes the convex hull of a set of 2D points.
+
+        Input: an iterable sequence of (x, y) pairs representing the points.
+        Output: a list of vertices of the convex hull in counter-clockwise order,
+          starting from the vertex with the lexicographically smallest coordinates.
+        Implements Andrew's monotone chain algorithm. O(n log n) complexity.
+        """
+
+        # Sort the points lexicographically (tuples are compared lexicographically).
+        # Remove duplicates to detect the case we have just one unique point.
+        # points = sorted(set(points))
+        points = sorted(points, key=lambda p: (p.x, p.y))
+
+        # Boring case: no points or a single point, possibly repeated multiple times.
+        if len(points) <= 1:
+            return points
+
+        # 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
+        # Returns a positive value, if OAB makes a counter-clockwise turn,
+        # negative for clockwise turn, and zero if the points are collinear.
+        def cross(o, a, b):
+            # return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+            return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
+
+        # Build lower hull
+        lower = []
+        for p in points:
+            while len(lower) >= 2 and cross(lower[-2], lower[-1], p) < 0:
+                lower.pop()
+            lower.append(p)
+
+        # Build upper hull
+        upper = []
+        for p in reversed(points):
+            while len(upper) >= 2 and cross(upper[-2], upper[-1], p) < 0:
+                upper.pop()
+            upper.append(p)
+
+        # Concatenation of the lower and upper hulls gives the convex hull.
+        # Last point of each list is omitted because it is repeated at the
+        # beginning of the other list.
+        # return lower[:-1] + upper[:-1]
+        return list(set(lower[:-1] + upper[:-1]))
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findPaths(2, 2, 2, 0, 0))
+    print(sol.checkRecord(93573))
+    # print(sol.findPaths(2, 2, 2, 0, 0))
     # print(sol.arrayNesting([5, 4, 0, 3, 1, 6, 2]))
     # print(sol.removeBoxes([1, 2, 1]))
     # print(sol.removeBoxes([1, 1, 2, 2, 2, 3, 4, 3, 1]))
