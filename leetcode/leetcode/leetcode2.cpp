@@ -146,88 +146,10 @@ public:
 		}
 		return res;
 	}
-	int dfs_openlock(string cur, int n, set<string> &visited, string &target)
-	{
-		if (cur == target)
-			return n;
-		if (visited.find(cur) != visited.end())
-			return -1;
-		cout << cur << endl;
-		visited.insert(cur);
-		int ret = -1;
-		for (int i = 0; i < 4; i++)
-		{
-			char old = cur[i];
-			char u = ((cur[i] - '0') + 1 + 10) % 10 + '0';
-			char l = ((cur[i] - '0') - 1 + 10) % 10 + '0';
 
-			cur[i] = u;
-			int r = dfs_openlock(cur, n + 1, visited, target);
-			if (r != -1)
-			{
-				if (ret == -1)
-					ret = r;
-				else
-					ret = min(ret, r);
-			}
-			cur[i] = l;
-			r = dfs_openlock(cur, n + 1, visited, target);
-			if (r != -1)
-			{
-				if (ret == -1)
-					ret = r;
-				else
-					ret = min(ret, r);
-			}
-		}
-		return ret;
-	}
-	int openLock(vector<string>& deadends, string target) {
-		//set<string> visited;
-		//for (auto i : deadends)
-		//	visited.insert(i);
-		//return dfs_openlock("0000", 0, visited, target);
+	int findIntegers(int num) {
+		//600. Non-negative Integers without Consecutive Ones 
 
-		set<string> deads;
-		for (auto i : deadends)
-			deads.insert(i);
-		queue<string> q;
-		set<string> visited;
-		q.push("0000");
-		int res = 0;
-		while (!q.empty())
-		{
-			queue<string> p;
-			int size = q.size();
-			while (size-- > 0)
-			{
-				string cur = q.front();
-				q.pop();
-				visited.insert(cur);
-				if (cur == target)
-					return res;
-				for (int i = 0; i < 4; i++)
-				{
-
-					char u = ((cur[i] - '0') + 1 + 10) % 10 + '0';
-					char l = ((cur[i] - '0') - 1 + 10) % 10 + '0';
-
-					char old = cur[i];
-
-					cur[i] = u;
-					if (deads.find(cur) == deads.end() && visited.find(cur) == visited.end())
-						q.push(cur);
-
-					cur[i] = l;
-					if (deads.find(cur) == deads.end() && visited.find(cur) == visited.end())
-						q.push(cur);
-
-					cur[i] = old;
-				}
-			}
-			res++;
-		}
-		return -1;
 	}
 
 };
@@ -236,9 +158,6 @@ public:
 int main()
 {
 	Solution sol;
-	vector<string> deads{ "0201","0101","0102","1212","2002" };
-	cout << sol.openLock(deads, "0000") << endl;
-	cout << sol.openLock(deads, "0202") << endl;
 	//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
 	//Solution sol;
 	//vector<vector<int>> nums(4, vector<int>());

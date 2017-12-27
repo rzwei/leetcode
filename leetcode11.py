@@ -1265,9 +1265,38 @@ class Solution:
         # return lower[:-1] + upper[:-1]
         return list(set(lower[:-1] + upper[:-1]))
 
+    def findIntegers(self, num):
+        """
+        :type num: int
+        :rtype: int
+        600. Non-negative Integers without Consecutive Ones
+        """
+        P0 = [0] * 34
+        P1 = [0] * 34
+        P0[0] = 1
+        P1[0] = 1
+        for i in range(1, 34):
+            P1[i] = P0[i - 1]
+            P0[i] = P1[i - 1] + P0[i - 1]
+        n = 0
+        t = num
+        while t:
+            t >>= 1
+            n += 1
+        res = P0[n - 1] + P1[n - 1]
+        for i in reversed(range(n - 1)):
+            if (num >> i) & 1 and (num >> (i + 1)) & 1:
+                break
+            if (num >> i) & 1 == 0 and (num >> (i + 1)) & 1 == 0:
+                res -= P1[i]
+
+        return res
+
+
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.checkRecord(93573))
+    print(sol.findIntegers(5))
+    # print(sol.checkRecord(93573))
     # print(sol.findPaths(2, 2, 2, 0, 0))
     # print(sol.arrayNesting([5, 4, 0, 3, 1, 6, 2]))
     # print(sol.removeBoxes([1, 2, 1]))
