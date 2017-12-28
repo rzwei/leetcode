@@ -261,4 +261,4 @@ __pycache__/
 *.pyc
 .idea/
 coder.iml
-./leetcode-clion/cmake-build-debug/
+leetcode-clion/cmake-build-debug/

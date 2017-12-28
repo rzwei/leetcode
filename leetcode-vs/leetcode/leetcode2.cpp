@@ -108,10 +108,6 @@ public:
 		}
 		return res;
 	}
-	vector<double> medianSlidingWindow(vector<int>& nums, int k) {
-		// 480. Sliding Window Median
-		multiset<int> window();
-	}
 };
 
 

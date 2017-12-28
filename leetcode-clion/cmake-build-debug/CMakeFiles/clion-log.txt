@@ -1,4 +1,4 @@
-C:\Users\rzhon\.CLion2017.2\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /cygdrive/e/Users/rzhon/CLionProjects/clion01
+C:\Users\rzhon\.CLion2017.3\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /cygdrive/d/projects/coder/leetcode-clion
 -- Configuring done
 -- Generating done
--- Build files have been written to: /cygdrive/e/Users/rzhon/CLionProjects/clion01/cmake-build-debug
+-- Build files have been written to: /cygdrive/d/projects/coder/leetcode-clion/cmake-build-debug
