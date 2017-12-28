@@ -91,6 +91,11 @@ public:
         }
         return dfs_findRotateSteps(ring, key, 0, 0, memo, idx);
     }
+
+    //493. Reverse Pairs
+    int reversePairs(vector<int> &nums) {
+
+    }
 };
 
 int main() {
