@@ -94,13 +94,27 @@ public:
 
     //493. Reverse Pairs
     int reversePairs(vector<int> &nums) {
-
+        int ans = 0, len = nums.size();
+        vector<int64_t> vs;
+        multiset<int64_t> prev;
+        for (int i = 0; i < len; i++) {
+            int64_t v = (int64_t) nums[i] * 2;
+            auto it = upper_bound(vs.begin(), vs.end(), v);
+            ans += vs.end() - it;
+            vs.insert(lower_bound(vs.begin(), vs.end(), nums[i]), nums[i]);
+        }
+        return ans;
     }
 };
 
 int main() {
     Solution sol;
-    cout << sol.findRotateSteps_dfs("godding", "gd") << endl;
+//    vector<int> nums{1, 3, 2, 3, 1};
+//    vector<int> nums{2, 4, 3, 5, 1};
+//    vector<int> nums{1, 1, 1, 1, 1, 1, 1};
+    vector<int> nums{2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647};
+    cout << sol.reversePairs(nums) << endl;
+//    cout << sol.findRotateSteps_dfs("godding", "gd") << endl;
 //    vector<int> nums{1, 3, -1, -3, 5, 3, 6, 7};
 //    auto r = sol.medianSlidingWindow(nums, 3);
 //    for (double i:r) {
