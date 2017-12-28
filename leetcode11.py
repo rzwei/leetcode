@@ -1363,11 +1363,30 @@ class Solution:
 
         return False
 
+    def findMinMoves(self, machines):
+        """
+        :type machines: List[int]
+        :rtype: int
+        517. Super Washing Machines
+        """
+        Len = len(machines)
+        s = sum(machines)
+        if s % Len != 0:
+            return -1
+        res = 0
+        avg = s // Len
+        cnt = 0
+        for i in machines:
+            cnt += i - avg
+            res = max(res, abs(cnt), i - avg)
+        return res
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.checkSubarraySum([0, 0], -1))
-    print(sol.checkSubarraySum([0], 0))
+    print(sol.findMinMoves([1, 0, 5]))
+    # print(sol.checkSubarraySum([0, 0], -1))
+    # print(sol.checkSubarraySum([0], 0))
     # print(sol.checkSubarraySum([23, 2, 4, 6, 7], 6))
     # print(sol.checkSubarraySum([23, 2, 6, 4, 7], 6))
     # print(sol.findDuplicate(
