@@ -1316,11 +1316,62 @@ class Solution:
                 ret.append(v)
         return ret
 
+    def checkSubarraySum(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: bool
+        523. Continuous Subarray Sum
+        """
+        # Len = len(nums)
+        # if Len == 0:
+        #     return False
+        #
+        # if k == 0:
+        #     if Len <= 1:
+        #         return False
+        #     for i in nums:
+        #         if i != 0:
+        #             return False
+        #     return True
+        #
+        # sums = [0] * (Len + 1)
+        # d = {0: -1}
+        # for i in range(Len):
+        #     sums[i + 1] = (sums[i] + nums[i]) % k
+        #     v = sums[i + 1]
+        #     if v not in d:
+        #         d[v] = i + 1
+        #     else:
+        #         if i + 1 - d[v] >= 2:
+        #             return True
+        # return False
+
+        # dict will be {modulus, key}
+        dict = {0: -1}
+        cumSum = 0
+
+        for i in range(len(nums)):
+            cumSum += nums[i]
+            if k != 0:
+                cumSum = cumSum % k
+
+            if cumSum not in dict:
+                dict[cumSum] = i
+            elif i - dict[cumSum] >= 2:
+                return True
+
+        return False
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findDuplicate(
-        ["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root/c/d 4.txt(efgh)", "root 4.txt(efgh)"]))
+    print(sol.checkSubarraySum([0, 0], -1))
+    print(sol.checkSubarraySum([0], 0))
+    # print(sol.checkSubarraySum([23, 2, 4, 6, 7], 6))
+    # print(sol.checkSubarraySum([23, 2, 6, 4, 7], 6))
+    # print(sol.findDuplicate(
+    #     ["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root/c/d 4.txt(efgh)", "root 4.txt(efgh)"]))
     # print(sol.findIntegers(5))
     # print(sol.checkRecord(93573))
     # print(sol.findPaths(2, 2, 2, 0, 0))
