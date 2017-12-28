@@ -8,9 +8,10 @@ using namespace std;
 class Solution {
 public:
     vector<double> medianSlidingWindow(vector<int> &nums, int k) {
+        //480. Sliding Window Median
         multiset<int> window(nums.begin(), nums.begin() + k);
         auto mid = next(window.begin(), k / 2);
-        vector<double> medians  ;
+        vector<double> medians;
         for (int i = k;; i++) {
             medians.push_back((double(*mid) + *prev(mid, 1 - k % 2)) / 2);
             if (i == nums.size())
@@ -22,6 +23,10 @@ public:
                 mid++;
             window.erase(window.lower_bound(nums[i - k]));
         }
+    }
+
+    int findRotateSteps(string ring, string key) {
+
     }
 };
 
