@@ -88,7 +88,6 @@ public:
 		int res = 0;
 		while (left <= right)
 		{
-			cout << left << " " << leftMax << " " << right << " " << rightMax << endl;
 
 			if (leftMax < rightMax)
 			{
@@ -109,49 +108,10 @@ public:
 		}
 		return res;
 	}
-	int trapRainWater(vector<vector<int>>& heightMap) {
-		if (heightMap.size() == 0)
-			return 0;
-		int row = heightMap.size(), col = heightMap[0].size(), res = 0;
-		if (row <= 3)
-			return 0;
-		for (int k = 1; k < row - 1; k++)
-		{
-			int l = 0, r = col - 1, h1 = heightMap[k][l], h2 = heightMap[k][r];
-			while (l <= r)
-			{
-				if (h1 < h2)
-				{
-					int h = min(h1, heightMap[k - 1][l]);
-					h = min(h, heightMap[k + 1][l]);
-
-					cout << max(0, h - heightMap[k][l]) << endl;
-
-					res += max(0, h - heightMap[k][l]);
-
-					h1 = max(h1, heightMap[k][l]);
-					l++;
-				}
-				else {
-					int h = min(h2, heightMap[k - 1][r]);
-					h = min(h, heightMap[k + 1][r]);
-
-					cout << max(0, h - heightMap[k][r]) << endl;
-
-					res += max(0, h - heightMap[k][r]);
-					h2 = max(h2, heightMap[k][r]);
-					r--;
-				}
-			}
-		}
-		return res;
+	vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+		// 480. Sliding Window Median
+		multiset<int> window();
 	}
-
-	int findIntegers(int num) {
-		//600. Non-negative Integers without Consecutive Ones 
-
-	}
-
 };
 
 
