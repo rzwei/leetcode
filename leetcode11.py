@@ -1381,10 +1381,26 @@ class Solution:
             res = max(res, abs(cnt), i - avg)
         return res
 
+    def reversePairs(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        493. Reverse Pairs
+        """
+        prev = []
+        ans = 0
+        for i in nums:
+            ans += len(prev) - bisect.bisect_right(prev, i + i)
+            bisect.insort_left(prev, i)
+        return ans
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findMinMoves([1, 0, 5]))
+    print(sol.reversePairs([1, 3, 2, 3, 1]))
+    print(sol.reversePairs([1, 1, 1, 1, 1, 1]))
+    print(sol.reversePairs([2, 4, 3, 5, 1]))
+    # print(sol.findMinMoves([1, 0, 5]))
     # print(sol.checkSubarraySum([0, 0], -1))
     # print(sol.checkSubarraySum([0], 0))
     # print(sol.checkSubarraySum([23, 2, 4, 6, 7], 6))

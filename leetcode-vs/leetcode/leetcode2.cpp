@@ -108,12 +108,91 @@ public:
 		}
 		return res;
 	}
+	//int reversePairs(vector<int> &nums) {
+	//	//        int ans = 0, len = nums.size();
+	//	//        vector<int64_t> vs;
+	//	//        multiset<int64_t> prev;
+	//	//        for (int i = 0; i < len; i++) {
+	//	//            int64_t v = (int64_t) nums[i] * 2;
+	//	//            auto it = upper_bound(vs.begin(), vs.end(), v);
+	//	//            ans += vs.end() - it;
+	//	//            vs.insert(lower_bound(vs.begin(), vs.end(), nums[i]), nums[i]);
+	//	//        }
+	//	//        return ans;
+	//	return merge_reversePairs(nums, 0, nums.size() - 1);
+	//}
+
+	//int merge_reversePairs(vector<int> nums, int s, int e) {
+	//	if (s >= e)
+	//		return 0;
+	//	int mid = (s + e) / 2;
+	//	int count = merge_reversePairs(nums, s, mid) + merge_reversePairs(nums, mid + 1, e);
+	//	int i = s, j = mid + 1, p = mid + 1, k = 0;
+	//	vector<int> merge(e - s + 1, 0);
+	//	while (i <= mid) {
+	//		while (p <= e && nums[i] > 2 * nums[p])p++;
+	//		count += p - mid - 1;
+	//		while (j <= e && nums[i] >= nums[j])
+	//			merge[k++] = nums[j++];
+	//		merge[k++] = nums[i++];
+	//	}
+	//	while (j <= e) merge[k++] = nums[j++];
+	//	for (i = s; i <= e; i++)
+	//		nums[i] = merge[i - s];
+	//	for (auto i : nums)
+	//		cout << i << " ";
+	//	cout << endl;
+	//	return count;
+	//}
+	//493. Reverse Pairs
+	int reversePairs(vector<int> &nums) {
+
+		vector<int> cache(nums.size(), 0);
+		return merge_reversePairs(nums.begin(), nums.end());
+	}
+
+	//    int merge_reversePairs(vector<int> &nums, int s, int e, vector<int> &merge) {
+	//        if (s >= e)
+	//            return 0;
+	//        int mid = (s + e) / 2;
+	//        int count = merge_reversePairs(nums, s, mid, merge) + merge_reversePairs(nums, mid + 1, e, merge);
+	//        int i = s, j = mid + 1, p = mid + 1, k = 0;
+	//        while (i <= mid) {
+	//            while (p <= e && nums[i] > 2L * nums[p])p++;
+	//            count += p - mid - 1;
+	//            while (j <= e && nums[i] >= nums[j])
+	//                merge[k++] = nums[j++];
+	//            merge[k++] = nums[i++];
+	//        }
+	//        while (j <= e) merge[k++] = nums[j++];
+	//        for (i = s; i <= e; i++)
+	//            nums[i] = merge[i - s];
+	//        return count;
+	//    }
+	int merge_reversePairs(vector<int>::iterator begin, vector<int>::iterator end) {
+		if (end - begin <= 1)
+			return 0;
+		auto mid = begin + (end - begin) / 2;
+		int count = merge_reversePairs(begin, mid) + merge_reversePairs(mid, end);
+		auto i = begin, p = mid;
+		while (i < mid) {
+			while (p < end && *i > 2L * *p) p++;
+			count += p - mid;
+			i++;
+		}
+		inplace_merge(begin, mid, end);
+		return count;
+	}
 };
 
 
 int main()
 {
 	Solution sol;
+	vector<int> nums{ 1, 3, 2, 3, 1 };
+
+	//vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
+	cout << sol.reversePairs(nums) << endl;
 	//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
 	//Solution sol;
 	//vector<vector<int>> nums(4, vector<int>());
