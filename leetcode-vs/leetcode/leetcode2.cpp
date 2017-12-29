@@ -88,6 +88,7 @@ public:
 		int res = 0;
 		while (left <= right)
 		{
+			cout << left << " " << leftMax << " " << right << " " << rightMax << endl;
 
 			if (leftMax < rightMax)
 			{
