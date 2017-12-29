@@ -1394,6 +1394,34 @@ class Solution:
             bisect.insort_left(prev, i)
         return ans
 
+    def findLUSlength(self, A):
+        """
+        :type : List[str]
+        :rtype: int
+        522. Longest Uncommon Subsequence II
+        """
+
+        # def issubsequence(s, t):
+        #     t = iter(t)
+        #     return all(c in t for c in s)
+        #
+        # for s in sorted(strs, key=len, reverse=True):
+        #     if sum(issubsequence(s, t) for t in strs) == 1:
+        #         return len(s)
+        # return -1
+        def subseq(w1, w2):
+            i = 0
+            for c in w2:
+                if i < len(w1) and w1[i] == c:
+                    i += 1
+            return i == len(w1)
+
+        A.sort(key=len, reverse=True)
+        for i, word1 in enumerate(A):
+            if all(not subseq(word1, word2) for j, word2 in enumerate(A) if i != j):
+                return len(word1)
+        return -1
+
 
 if __name__ == '__main__':
     sol = Solution()
