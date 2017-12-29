@@ -245,10 +245,10 @@ public:
 int main() {
     Solution sol;
 //    vector<int> nums{1, 3, 2, 3, 1};
-    vector<int> nums{2, 4, 3, 5, 1};
+//    vector<int> nums{2, 4, 3, 5, 1};
 //    vector<int> nums{1, 1, 1, 1, 1, 1, 1};
-//    vector<int> nums{2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647};
-    cout << sol.reversePairs(nums) << endl;
+    vector<int> nums{2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647};
+    cout << sol.reversePairs_bit(nums) << endl;
 //    cout << sol.findRotateSteps_dfs("godding", "gd") << endl;
 //    vector<int> nums{1, 3, -1, -3, 5, 3, 6, 7};
 //    auto r = sol.medianSlidingWindow(nums, 3);

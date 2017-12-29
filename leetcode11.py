@@ -1425,9 +1425,9 @@ class Solution:
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.reversePairs([1, 3, 2, 3, 1]))
-    print(sol.reversePairs([1, 1, 1, 1, 1, 1]))
-    print(sol.reversePairs([2, 4, 3, 5, 1]))
+    # print(sol.reversePairs([1, 3, 2, 3, 1]))
+    # print(sol.reversePairs([1, 1, 1, 1, 1, 1]))
+    # print(sol.reversePairs([2, 4, 3, 5, 1]))
     # print(sol.findMinMoves([1, 0, 5]))
     # print(sol.checkSubarraySum([0, 0], -1))
     # print(sol.checkSubarraySum([0], 0))

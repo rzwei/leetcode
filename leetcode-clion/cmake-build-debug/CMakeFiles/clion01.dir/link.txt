@@ -1,1 +1,0 @@
-/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/clion01.dir/leetcode.cpp.o  -o clion01.exe -Wl,--out-implib,libclion01.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
