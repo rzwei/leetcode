@@ -2,7 +2,10 @@
 // Created by rzhon on 17/12/28.
 //
 //#include <bits/stdc++.h>
+#ifdef WINVER
 #include "stdafx.h"
+#endif
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -56,7 +59,7 @@ public:
 
 class BIT {
 public:
-    static int search(vector<int> bit, int i) {
+    static int search(vector<int> &bit, int i) {
         int s = 0;
         while (i < bit.size()) {
             s += bit[i];
@@ -65,14 +68,14 @@ public:
         return s;
     }
 
-    static void insert(vector<int> bit, int i) {
+    static void insert(vector<int> &bit, int i) {
         while (i > 0) {
             bit[i] += 1;
             i -= i & -i;
         }
     }
 
-    static int index(vector<int> arr, long val) {
+    static int index(vector<int> &arr, long val) {
         int l = 0, r = arr.size() - 1, m = 0;
         while (l <= r) {
             m = (l + r) / 2;
@@ -245,7 +248,7 @@ int main() {
     vector<int> nums{2, 4, 3, 5, 1};
 //    vector<int> nums{1, 1, 1, 1, 1, 1, 1};
 //    vector<int> nums{2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647};
-    cout << sol.reversePairs_bit(nums) << endl;
+    cout << sol.reversePairs(nums) << endl;
 //    cout << sol.findRotateSteps_dfs("godding", "gd") << endl;
 //    vector<int> nums{1, 3, -1, -3, 5, 3, 6, 7};
 //    auto r = sol.medianSlidingWindow(nums, 3);
