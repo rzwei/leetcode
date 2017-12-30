@@ -2,7 +2,10 @@
 // Created by rzhon on 17/12/28.
 //
 //#include <bits/stdc++.h>
+#ifdef WINVER
 #include "stdafx.h"
+#endif
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -56,7 +59,7 @@ public:
 
 class BIT {
 public:
-    static int search(vector<int> bit, int i) {
+    static int search(vector<int> &bit, int i) {
         int s = 0;
         while (i < bit.size()) {
             s += bit[i];
@@ -65,14 +68,14 @@ public:
         return s;
     }
 
-    static void insert(vector<int> bit, int i) {
+    static void insert(vector<int> &bit, int i) {
         while (i > 0) {
             bit[i] += 1;
             i -= i & -i;
         }
     }
 
-    static int index(vector<int> arr, long val) {
+    static int index(vector<int> &arr, long val) {
         int l = 0, r = arr.size() - 1, m = 0;
         while (l <= r) {
             m = (l + r) / 2;
@@ -85,6 +88,32 @@ public:
         return l + 1;
     }
 };
+
+int binary_lower(vector<int> &nums, int target) {
+    int i = 0, j = nums.size(), m;
+    while (i < j) {
+        m = (i + j) / 2;
+        if (nums[m] < target) {
+            i = m + 1;
+        } else {
+            j = m;
+        }
+    }
+    return i;
+}
+
+int binary_upper(vector<int> &nums, int target) {
+    int i = 0, j = nums.size(), m;
+    while (i < j) {
+        m = (i + j) / 2;
+        if (target < nums[m]) {
+            j = m;
+        } else {
+            i = m + 1;
+        }
+    }
+    return i;
+}
 
 class Solution {
 public:
@@ -237,15 +266,80 @@ public:
         return ans;
     }
 
+    //658. Find K Closest Elements
+    vector<int> findClosestElements(vector<int> &arr, int k, int x) {
+//        int max_diff = 0;
+//
+//        max_diff = max(max(max_diff, abs(x - arr[0])), abs(x - arr[arr.size() - 1]));
+//
+//        int l = 0, r = max_diff;
+//        while (l < r) {
+//            int m = (l + r) / 2;
+//            int n = upper_bound(arr.begin(), arr.end(), x + m) - lower_bound(arr.begin(), arr.end(), x - m);
+//            if (n >= k) {
+//                r = m;
+//            } else {
+//                l = m + 1;
+//            }
+//        }
+//        cout << r << endl;
+//        int lidx = lower_bound(arr.begin(), arr.end(), x - r) - arr.begin(), uidx =
+//                upper_bound(arr.begin(), arr.end(), x + r) - arr.begin();
+//        uidx -= 1;
+//        while (uidx - lidx + 1 > k) {
+//            if (abs(arr[uidx] - x) >= abs(arr[lidx] - x)) {
+//                uidx--;
+//            } else {
+//                lidx++;
+//            }
+//        }
+//
+//        vector<int> ret(arr.begin() + lidx, arr.begin() + uidx + 1);
+//        return ret;
+        int lo = 0, hi = arr.size() - k, m;
+        while (lo < hi) {
+            m = (lo + hi) / 2;
+            if (x - arr[m] > arr[m + k] - x) {
+                lo = m + 1;
+            } else {
+                hi = m;
+            }
+        }
+        return vector<int>(arr.begin() + lo, arr.begin() + lo + k);
+    }
+
+    //667. Beautiful Arrangement II
+    vector<int> constructArray(int n, int k) {
+        vector<int> res;
+        for (int i = 1, j = n; i <= j;) {
+            if (k > 1) {
+                res.push_back(k-- % 2 ? i++ : j--);
+            } else {
+                res.push_back(i++);
+            }
+        }
+        return res;
+    }
 };
 
 int main() {
     Solution sol;
+    vector<int> nums{1, 2, 3, 4, 5};
+//    vector<int> nums{0, 1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7, 9, 9, 10, 10, 11, 11, 12, 13, 14, 14, 15, 17, 19, 19, 22, 24,
+//                     24, 25, 25, 27, 27, 29, 30, 32, 32, 33, 33, 35, 36, 38, 39, 41, 42, 43, 44, 44, 46, 47, 48, 49, 52,
+//                     53, 53, 54, 54, 57, 57, 58, 59, 59, 59, 60, 60, 60, 61, 61, 62, 64, 66, 68, 68, 70, 72, 72, 74, 74,
+//                     74, 75, 76, 76, 77, 77, 80, 80, 82, 83, 85, 86, 87, 87, 92, 93, 94, 96, 96, 97, 98, 99};
+    auto r = sol.findClosestElements(nums, 4, 3);
+//    auto r = sol.findClosestElements(nums, 25, 90);
+//    for (auto i:r) {
+//        cout << i << " ";
+//    }
+//    cout << endl;
 //    vector<int> nums{1, 3, 2, 3, 1};
-    vector<int> nums{2, 4, 3, 5, 1};
+//    vector<int> nums{2, 4, 3, 5, 1};
 //    vector<int> nums{1, 1, 1, 1, 1, 1, 1};
 //    vector<int> nums{2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647};
-    cout << sol.reversePairs_bit(nums) << endl;
+//    cout << sol.reversePairs_bit(nums) << endl;
 //    cout << sol.findRotateSteps_dfs("godding", "gd") << endl;
 //    vector<int> nums{1, 3, -1, -3, 5, 3, 6, 7};
 //    auto r = sol.medianSlidingWindow(nums, 3);
