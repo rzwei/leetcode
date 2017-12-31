@@ -494,6 +494,12 @@ public:
 
         return ans;
     }
+
+    //664. Strange Printer
+    int strangePrinter(string s) {
+
+        return 0;
+    }
 };
 
 int main() {
