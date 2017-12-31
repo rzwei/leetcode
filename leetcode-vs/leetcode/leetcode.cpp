@@ -2,19 +2,18 @@
 // Created by rzhon on 17/12/28.
 //
 //#include <bits/stdc++.h>
-#ifdef WINVER
+//#ifdef WINVER
 #include "stdafx.h"
-#endif
+//#endif
 
 #include <functional>
 #include <iostream>
 #include <list>
+#include <stack>
 #include <vector>
-#include <cmath>
 #include <map>
 #include <set>
 #include <queue>
-#include <algorithm>
 
 using namespace std;
 
@@ -388,7 +387,7 @@ public:
     //757. Pyramid Transition Matrix not ac tle
     bool dfs_pyramidTransition(string &prev, int previ, string &bottom, set<string> &allowed,
                                set<pair<string, string>> &memo) {
-        cout << prev << "," << previ << "," << bottom << endl;
+        //        cout << prev << "," << previ << "," << bottom << endl;
         if (prev.length() == 1) {
             return true;
         }
@@ -446,61 +445,92 @@ public:
 
     //759. Set Intersection Size At Least Two
     int intersectionSizeTwo(vector<vector<int>> &intervals) {
-        sort(intervals.begin(), intervals.end(), [](vector<int> &x, vector<int> &y) {
-            if (x[1] == y[1]) {
-                return y[0] - x[0];
-            } else {
-                return x[1] - y[1];
+        sort(intervals.begin(), intervals.end(), [](vector<int> &a, vector<int> &b) {
+            if (a[0] == b[0]) {
+                return a[1] > b[1];
             }
+            return a[0] < b[0];
         });
-        for (auto &i:intervals) {
-            cout << i[0] << " " << i[1] << ",";
-        }
-        cout << endl;
-        int s = intervals[0][0], e = intervals[0][1];
-        for (int i = 1; i < intervals.size(); ++i) {
-            if (e <= intervals[i][0]) {
-                e = min(intervals[i][0] + 1, intervals[i][1]);
-            } else if (s >= intervals[i][1]) {
-                s = min(intervals[i][0], intervals[i][1] - 1);
+//        for (auto &i : intervals) {
+//            cout << i[0] << " " << i[1] << ",";
+//        }
+//        cout << endl;
+
+        stack<vector<int>> st;
+
+        for (auto &i : intervals) {
+            while (!st.empty() && st.top()[1] >= i[1]) {
+                st.pop();
             }
-            cout << s << " " << e << endl;
+            st.push(i);
         }
-        return e - s + 1;
+        int n = st.size();
+
+        vector<vector<int>> a(n, vector<int>(2));
+        for (int i = n - 1; i >= 0; --i) {
+            a[i][0] = st.top()[0];
+            a[i][1] = st.top()[1];
+            st.pop();
+        }
+
+        int ans = 2;
+
+        int p1 = a[0][1] - 1, p2 = a[0][1];
+
+        for (int i = 1; i < n; ++i) {
+            bool bo1 = (p1 >= a[i][0] && p1 <= a[i][1]), bo2 = (p2 >= a[i][0] && p2 <= a[i][1]);
+            if (bo1 && bo2)
+                continue;
+            if (bo2) {
+                p1 = p2;
+                p2 = a[i][1];
+                ans++;
+                continue;
+            }
+            p1 = a[i][1] - 1;
+            p2 = a[i][1];
+            ans += 2;
+        }
+
+        return ans;
     }
 };
 
 int main() {
     Solution sol;
-    vector<int> nums{1, 2, 3, 3, 3, 2, 2, 2, 3, 3, 4, 5, 6};
-    sort(nums.begin(), nums.end(), [](int a, int b) { return b - a; });
-    for (int i = 0; i < nums.size(); ++i) {
-        cout << nums[i] << " ";
-    }
-    cout << endl;
+    //vector<int> nums{ 1, 2, 3, 3, 3, 2, 2, 2, 3, 3, 4, 5, 6 };
+    //sort(nums.begin(), nums.end(), [](const int &a, const int &b) {return a < b; });
+    //for (int i = 0; i < nums.size(); ++i) {
+    //	cout << nums[i] << " ";
+    //}
+    //cout << endl;
     vector<vector<int>> intervals{{1, 3},
                                   {1, 4},
                                   {2, 5},
                                   {3, 5}};
-    cout << sol.intersectionSizeTwo(intervals) << endl;
-//    vector<string> allowed = {"XYD", "YZE", "DEA", "FFF"};
-//    vector<string> allowed = {"XXX", "XXY", "XYX", "XYY", "YXZ"};
-//    vector<string> allowed = {"ACC", "ACB", "ACA", "AAC", "ACD", "BCD", "BCC", "BAB", "CAC", "CCD", "CCA", "CCB", "DAD",
-//                              "DAC", "CAD", "ABB", "ABC", "ABD", "BDB", "BBD", "BBC", "BBB", "ADD", "ADB", "ADA", "CDB",
-//                              "DDA", "CDD", "CBC", "CDA", "CBD", "DBD"};
-//    cout << sol.pyramidTransition("XYZ", allowed) << endl;
-//    cout << sol.pyramidTransition("DBDBCBCDAB", allowed) << endl;
-//    vector<int> height{1, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, 2, 1};
-//    vector<int> height{1, 2, 3, 4};
-//    auto r = sol.pourWater(height, 10, 2);
-//    for (int i : r) {
-//        cout << i << " ";
-//    }
+
+//    for (auto &i : intervals)
+//        cout << i[0] << " " << i[1] << ",";
 //    cout << endl;
-//    vector<int> boxes{1, 3, 2, 2, 2, 3, 4, 3, 1};
+    cout << sol.intersectionSizeTwo(intervals) << endl;
+    //    vector<string> allowed = {"XYD", "YZE", "DEA", "FFF"};
+    //    vector<string> allowed = {"XXX", "XXY", "XYX", "XYY", "YXZ"};
+    //    vector<string> allowed = {"ACC", "ACB", "ACA", "AAC", "ACD", "BCD", "BCC", "BAB", "CAC", "CCD", "CCA", "CCB", "DAD",
+    //                              "DAC", "CAD", "ABB", "ABC", "ABD", "BDB", "BBD", "BBC", "BBB", "ADD", "ADB", "ADA", "CDB",
+    //                              "DDA", "CDD", "CBC", "CDA", "CBD", "DBD"};
+    //    cout << sol.pyramidTransition("XYZ", allowed) << endl;
+    //    cout << sol.pyramidTransition("DBDBCBCDAB", allowed) << endl;
+    //    vector<int> height{1, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, 2, 1};
+    //    vector<int> height{1, 2, 3, 4};
+    //    auto r = sol.pourWater(height, 10, 2);
+    //    for (int i : r) {
+    //        cout << i << " ";
+    //    }
+    //    cout << endl;
+    //    vector<int> boxes{1, 3, 2, 2, 2, 3, 4, 3, 1};
     //vector<int>boxes{ 3, 8, 8, 5, 5, 3, 9, 2, 4, 4, 6, 5, 8, 4, 8, 6, 9, 6, 2, 8, 6, 4, 1, 9, 5, 3, 10, 5, 3, 3, 9, 8, 8, 6, 5, 3, 7, 4, 9, 6, 3, 9, 4, 3, 5, 10, 7, 6, 10, 7 };
 
-//    cout << sol.removeBoxes(boxes) << endl;
+    //    cout << sol.removeBoxes(boxes) << endl;
     //vector<int> nums{ 1, 2, 3, 4, 5 };
     //    vector<int> nums{0, 1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7, 9, 9, 10, 10, 11, 11, 12, 13, 14, 14, 15, 17, 19, 19, 22, 24,
     //                     24, 25, 25, 27, 27, 29, 30, 32, 32, 33, 33, 35, 36, 38, 39, 41, 42, 43, 44, 44, 46, 47, 48, 49, 52,
