@@ -519,16 +519,18 @@ public:
 //        return remove(boxes, 0, len - 1, 0, dp);
 //    }
 
-    int subproblem_printer(string &s, int i, int j, int k, vector<vector<vector<int>>> &dp) {
+    int subproblem_printer(string &s, int i, int j, int k, map<pair<int, pair<int, int>>, int> &dp) {
         if (i > j) {
-            return INT_MAX;
+            return 0;
         }
-
-        int &res = dp[i][j][k];
+        auto key = make_pair(i, make_pair(j, k));
+        if (dp.find(key) != dp.end()) {
+            return dp[key];
+        }
+        int &res = dp[key];
         if (res > 0) {
             return res;
         }
-
         for (; i + 1 <= j && s[i] == s[i + 1]; i++, k++);
         res = 1 + subproblem_printer(s, i + 1, j, 0, dp);
 
@@ -543,14 +545,18 @@ public:
     //664. Strange Printer
     int strangePrinter(string s) {
         int n = s.length();
-        vector<vector<vector<int>>> dp(n, vector<vector<int>>(n, vector<int>(n)));
-
-        return 0;
+        map<pair<int, pair<int, int>>, int> dp;
+        return subproblem_printer(s, 0, s.length() - 1, 0, dp);
     }
 };
 
 int main() {
     Solution sol;
+//    cout << sol.strangePrinter("aaabbb") << endl;
+//    cout << sol.strangePrinter("abcba") << endl;
+    cout << sol.strangePrinter(
+            "dvdamcpqesjzyzhgfpkgodvctchzukuvqrrpectqmnqhunnkuwoyomhxtyylmuprgrjfiprjqrizrjgnvnwfjztshqairnierpvw")
+         << endl;
     //vector<int> nums{ 1, 2, 3, 3, 3, 2, 2, 2, 3, 3, 4, 5, 6 };
     //sort(nums.begin(), nums.end(), [](const int &a, const int &b) {return a < b; });
     //for (int i = 0; i < nums.size(); ++i) {
@@ -580,10 +586,10 @@ int main() {
     //        cout << i << " ";
     //    }
     //    cout << endl;
-    vector<int> boxes{1, 3, 2, 2, 2, 3, 4, 3, 1};
+//    vector<int> boxes{1, 3, 2, 2, 2, 3, 4, 3, 1};
 //    vector<int> boxes{3, 8, 8, 5, 5, 3, 9, 2, 4, 4, 6, 5, 8, 4, 8, 6, 9, 6, 2, 8, 6, 4, 1, 9, 5, 3, 10, 5, 3, 3, 9, 8,
 //                      8, 6, 5, 3, 7, 4, 9, 6, 3, 9, 4, 3, 5, 10, 7, 6, 10, 7};
-    cout << sol.removeBoxes(boxes) << endl;
+//    cout << sol.removeBoxes(boxes) << endl;
     //vector<int> nums{ 1, 2, 3, 4, 5 };
     //    vector<int> nums{0, 1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7, 9, 9, 10, 10, 11, 11, 12, 13, 14, 14, 15, 17, 19, 19, 22, 24,
     //                     24, 25, 25, 27, 27, 29, 30, 32, 32, 33, 33, 35, 36, 38, 39, 41, 42, 43, 44, 44, 46, 47, 48, 49, 52,
