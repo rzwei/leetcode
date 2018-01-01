@@ -118,6 +118,48 @@ int binary_upper(vector<int> &nums, int target) {
     return i;
 }
 
+class MagicDictionary {
+public:
+    unordered_set<string> words;
+    unordered_set<string> added;
+
+    /** Initialize your data structure here. */
+    MagicDictionary() {
+
+    }
+
+    /** Build a dictionary through a list of words */
+    void buildDict(vector<string> dict) {
+
+        for (auto i : dict) {
+            added.insert(i);
+            words.insert(i);
+            for (int j = 0; j < i.length(); j++) {
+                string t(i);
+                t[j] = '*';
+                words.insert(t);
+            }
+        }
+    }
+
+    /** Returns if there is any word in the trie that equals to the given word after modifying exactly one character */
+    bool search(string word) {
+        if (added.find(word) != added.end()) {
+            return false;
+        }
+        for (int i = 0; i < word.length(); ++i) {
+            char t = word[i];
+            word[i] = '*';
+            if (words.find(word) != words.end()) {
+                return true;
+            }
+            word[i] = t;
+        }
+        return false;
+    }
+
+};
+
 class Solution {
 public:
     vector<double> medianSlidingWindow(vector<int> &nums, int k) {
@@ -642,13 +684,45 @@ public:
         }
         return res;
     }
+
+    //686. Repeated String Match
+    int repeatedStringMatch(string A, string B) {
+        int an = A.length(), bn = B.length(), ans = 0;
+        string tmp = A + A;
+
+        int idx = tmp.find(B.substr(0, A.length()));
+        if (idx == string::npos) {
+            return -1;
+        }
+        int j = 0, s = idx;
+        ans = 1;
+        while (j < bn && A[s] == B[j]) {
+            s++;
+            j++;
+            if (j == bn) {
+                return ans;
+            }
+            if (s == an) {
+                s -= an;
+                ans++;
+            }
+        }
+        return -1;
+    }
 };
 
 int main() {
     Solution sol;
-    vector<int> nums{1, 2, 3, 3};
-
-    cout << sol.isPossible(nums) << endl;
+//    vector<string> words{"leetcode", "hello"};
+//    MagicDictionary dict;
+//    dict.buildDict(words);
+//    cout << dict.search("hello") << endl;
+//    cout << dict.search("hella") << endl;
+//    cout << dict.search("hhllo") << endl;
+//    cout << sol.repeatedStringMatch("abcd", "cdabcdab") << endl;
+//    cout << sol.repeatedStringMatch("abcd", "abcd") << endl;
+//    vector<int> nums{1, 2, 3, 3};
+//    cout << sol.isPossible(nums) << endl;
 //    cout << sol.strangePrinter("aaabbb") << endl;
 //    cout << sol.strangePrinter("abcba") << endl;
 //    cout << sol.strangePrinter(
