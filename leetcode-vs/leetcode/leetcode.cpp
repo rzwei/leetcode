@@ -566,26 +566,25 @@ public:
 
     //664. Strange Printer
     int strangePrinter(string s) {
-        const int MAXN = 105;
-        int dp[MAXN][MAXN];
         int n = s.length();
-        if (!n)
-            return 0;
-        for (int len = 1; len <= n; len++) {
-            for (int start = 0; start < n; start++) {
-                int end = start + len - 1;
-                if (end >= n)
-                    break;
-                if (start == end)
-                    dp[start][end] = 1;
-                else
-                    dp[start][end] = INT_MAX;
-                dp[start][end] = min(dp[start][end], dp[start + 1][end] + 1);
-                for (int k = start + 1; k <= end; k++) {
-                    if (s[start] == s[k]) {
-                        dp[start][end] = min(dp[start][end], dp[start + 1][k - 1] + dp[k][end]);
-                        //break;
-                    }
+//        map<pair<int, pair<int, int>>, int> dp;
+        map<pair<int, int>, int> dp;
+//        return subproblem_printer(s, 0, s.length() - 1, 0, dp);
+        return subproblem_printer2(s, 0, s.length() - 1, dp);
+    }
+
+    int strangePrinter_(string s) {
+        int n = s.size();
+        if (n == 0)return 0;
+        vector<vector<int> > dp(n, vector<int>(n, 0));
+        dp[0][0] = 1;
+        for (int k = 1; k <= n; k++) {
+            for (int i = 0; i < n; i++) {
+                int last = i + k - 1;
+                if (last >= n) continue;
+                if (last > 0) dp[i][last] = dp[i][last - 1] + 1;
+                for (int j = i; j < last; j++) {
+                    if (s[j] == s[last]) dp[i][last] = min(dp[i][last], dp[i][j] + dp[j + 1][last - 1]);
                 }
             }
         }
