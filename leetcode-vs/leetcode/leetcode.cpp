@@ -3,9 +3,9 @@
 //
 //#include <bits/stdc++.h>
 //#ifdef WINVER
-#include "stdafx.h"
+//#include "stdafx.h"
 //#endif
-
+#include <cmath>
 #include <functional>
 #include <iostream>
 #include <list>
@@ -14,6 +14,7 @@
 #include <map>
 #include <set>
 #include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -527,6 +528,7 @@ public:
         if (dp.find(key) != dp.end()) {
             return dp[key];
         }
+        dp[key] = 0;
         int &res = dp[key];
         if (res > 0) {
             return res;
@@ -542,11 +544,52 @@ public:
         return res;
     }
 
+    int subproblem_printer2(string &s, int i, int j, map<pair<int, int>, int> &dp) {
+        if (i > j) {
+            return 0;
+        }
+        auto key = make_pair(i, j);
+        if (dp.find(key) != dp.end()) {
+            return dp[key];
+        }
+
+        dp[key] = 0;
+        int &res = dp[key];
+        res = subproblem_printer2(s, i + 1, j, dp) + 1;
+        for (int k = i + 1; k <= j; ++k) {
+            if (s[k] == s[i]) {
+                res = min(res, subproblem_printer2(s, i, k - 1, dp) + subproblem_printer2(s, k + 1, j, dp));
+            }
+        }
+        return res;
+    }
+
     //664. Strange Printer
     int strangePrinter(string s) {
+        const int MAXN = 105;
+        int dp[MAXN][MAXN];
         int n = s.length();
-        map<pair<int, pair<int, int>>, int> dp;
-        return subproblem_printer(s, 0, s.length() - 1, 0, dp);
+        if (!n)
+            return 0;
+        for (int len = 1; len <= n; len++) {
+            for (int start = 0; start < n; start++) {
+                int end = start + len - 1;
+                if (end >= n)
+                    break;
+                if (start == end)
+                    dp[start][end] = 1;
+                else
+                    dp[start][end] = INT_MAX;
+                dp[start][end] = min(dp[start][end], dp[start + 1][end] + 1);
+                for (int k = start + 1; k <= end; k++) {
+                    if (s[start] == s[k]) {
+                        dp[start][end] = min(dp[start][end], dp[start + 1][k - 1] + dp[k][end]);
+                        //break;
+                    }
+                }
+            }
+        }
+        return dp[0][n - 1];
     }
 };
 
