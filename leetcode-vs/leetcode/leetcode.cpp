@@ -12,6 +12,7 @@
 #include <stack>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <queue>
 #include <algorithm>
@@ -590,15 +591,54 @@ public:
         }
         return dp[0][n - 1];
     }
+
+    //672. Bulb Switcher II
+    int flipLights(int n, int m) {
+        if (m == 0) return 1;
+        if (n == 1) return 2;
+        if (n == 2 && m == 1) return 3;
+        if (n == 2) return 4;
+        if (m == 1) return 4;
+        if (m == 2) return 7;
+        if (m >= 3) return 8;
+        return 8;
+    }
+
+    //659. Split Array into Consecutive Subsequences
+    bool isPossible(vector<int> &nums) {
+        unordered_map<int, int> dict, temp;
+        for (auto &ele: nums) dict[ele]++;
+        for (auto &ele: nums) {
+            if (dict[ele] == 0)   //if the ele is already used in some sequence
+                continue;
+            else if (temp[ele] > 0) {  //if the ele can be added in the last consecutive sequence
+                dict[ele]--;
+                temp[ele]--;
+                temp[ele + 1]++;
+
+            } else if (dict[ele + 1] > 0 && dict[ele + 2] > 0) {
+                //this ele should form a consecutive sequence by itself since it cannot be appended to a previous sequence
+                dict[ele]--;
+                dict[ele + 1]--;
+                dict[ele + 2]--;
+                temp[ele + 3]++;
+            } else //doesn't belong to any consecutive sequence
+                return false;
+        }
+        return true;
+    }
 };
 
 int main() {
     Solution sol;
+    vector<int> nums{1, 2, 3, 3};
+
+    cout << sol.isPossible(nums) << endl;
 //    cout << sol.strangePrinter("aaabbb") << endl;
 //    cout << sol.strangePrinter("abcba") << endl;
-    cout << sol.strangePrinter(
-            "dvdamcpqesjzyzhgfpkgodvctchzukuvqrrpectqmnqhunnkuwoyomhxtyylmuprgrjfiprjqrizrjgnvnwfjztshqairnierpvw")
-         << endl;
+//    cout << sol.strangePrinter(
+//            "dvdamcpqesjzyzhgfpkgodvctchzukuvqrrpectqmnqhunnkuwoyomhxtyylmuprgrjfiprjqrizrjgnvnwfjztshqairnierpvw")
+//         << endl;
     //vector<int> nums{ 1, 2, 3, 3, 3, 2, 2, 2, 3, 3, 4, 5, 6 };
     //sort(nums.begin(), nums.end(), [](const int &a, const int &b) {return a < b; });
     //for (int i = 0; i < nums.size(); ++i) {
