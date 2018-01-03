@@ -1066,51 +1066,41 @@ public:
         }
     }
 
-    int divide_conquer(vector<int> &nums, int i, int j, int K) {
-        if (i > j) {
-            return 0;
-        }
-        if (i == j) {
-            return nums[i] < K ? 1 : 0;
-        }
-        int m = (i + j) / 2, count = divide_conquer(nums, i, m, K) + divide_conquer(nums, m + 1, j, K);
-        int l = m, r = m + 1, s = 1;
-        while (l >= i && s < K) {
-            s *= nums[l--];
-        }
-        s = 1;
-        while (r <= j && s < K) {
-            s *= nums[r++];
-        }
-        for (int t = l + 1; t < r; t++) {
-            s = 1;
-            for (int tt = t; tt < r; tt++) {
-                s *= nums[tt];
-                if (s < K) {
-                    count++;
-                } else {
-                    break;
-                }
-            }
-        }
-        cout << i << " " << j << " " << count << endl;
-        return count;
-    }
+//    int divide_conquer(vector<int> &nums, int i, int j, int K) {
+//        if (i > j) {
+//            return 0;
+//        }
+//        if (i == j) {
+//            return nums[i] < K ? 1 : 0;
+//        }
+//        int m = (i + j) / 2, count = divide_conquer(nums, i, m, K) + divide_conquer(nums, m + 1, j, K);
+//        int left = 1, s = 0;
+//
+//        for (int l = m; l >= i; --l) {
+//            left *= nums[l];
+//            if (left >= K)
+//                break;
+//            s = left;
+//            for (int k = m + 1; k <= j; ++k) {
+//                s *= nums[k];
+//                if (s < K) {
+//                    count++;
+//                } else {
+//                    break;
+//                }
+//            }
+//        }
+//        return count;
+//    }
 
     //713. Subarray Product Less Than K
     int numSubarrayProductLessThanK(vector<int> &nums, int k) {
-        return divide_conquer(nums, 0, nums.size() - 1, k);
-        int n = nums.size(), ans = 0;
+        if(k<=1) return 0;
+        int ans = 0, left = 0, s = 1, n = nums.size();
         for (int i = 0; i < n; ++i) {
-            int s = 1;
-            for (int j = i; j < n; j++) {
-                s *= nums[j];
-                if (s < k) {
-                    ans++;
-                } else {
-                    break;
-                }
-            }
+            s *= nums[i];
+            while (s>=k) s /= nums[left++];
+            ans += i - left + 1;
         }
         return ans;
     }
@@ -1119,6 +1109,7 @@ public:
 int main() {
     Solution sol;
     vector<int> nums{10, 5, 2, 6};
+//    vector<int> nums{1, 1, 1, 1};
     cout << sol.numSubarrayProductLessThanK(nums, 100) << endl;
 //    auto edge = vector<vector<int>>{{1, 2},
 //                                    {2, 3},
