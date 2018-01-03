@@ -3,7 +3,7 @@
 //
 //#include <bits/stdc++.h>
 //#ifdef WINVER
-#include "stdafx.h"
+//#include "stdafx.h"
 //#endif
 #include <cmath>
 #include <functional>
@@ -20,6 +20,8 @@
 #include <algorithm>
 
 using namespace std;
+const int MAXN = int(1e8 + 10);
+
 
 struct TreeNode {
     int val;
@@ -1005,15 +1007,51 @@ public:
         for (pair<string, int> p : cnts) counts[p.first] += p.second * times;
     }
 
+
     //699. Falling Squares
     vector<int> fallingSquares(vector<pair<int, int>> &positions) {
-
+        vector<int> ans;
+        map<pair<int, int>, int> mp;
+        mp[{0, 100000000}] = 0;
+        int mx = 0;
+        for (auto &p:positions) {
+            int a = p.first, b = p.first + p.second, h = 0, len = p.second;
+            vector<vector<int>> add;
+            auto s = mp.upper_bound({a, a});
+            if (s != mp.begin() && (--s)->first.second <= a) s++;
+            while (s != mp.end() && s->first.first < b) {
+                if (a > s->first.first) {
+                    add.push_back({s->first.first, a, s->second});
+                }
+                if (b < s->first.second) {
+                    add.push_back({b, s->first.second, s->second});
+                }
+                h = max(h, s->second);
+                s = mp.erase(s);
+            }
+            mp[{a, b}] = h + len;
+            for (auto &i:add) {
+                mp[{i[0], i[1]}] = i[2];
+            }
+            mx = max(mx, h + len);
+            ans.push_back(mx);
+        }
+        return ans;
     }
 };
 
 int main() {
     Solution sol;
-    //cout << sol.countOfAtoms("ch2(a1)2") << endl;
+    auto positions = vector<pair<int, int>>{{1, 2},
+                                            {2, 3},
+                                            {6, 1}};
+    auto r = sol.fallingSquares(positions);
+
+    for (auto i: r) {
+        cout << i << " ";
+    }
+    cout << endl;
+//    cout << sol.countOfAtoms("ch2(a1)2") << endl;
 //	cout << sol.countOfAtoms("K4(ON(SO3)2)2") << endl;
 
 //    cout << sol.solveEquation("00x=0") << endl;
