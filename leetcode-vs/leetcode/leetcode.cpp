@@ -1095,14 +1095,19 @@ public:
 
     //713. Subarray Product Less Than K
     int numSubarrayProductLessThanK(vector<int> &nums, int k) {
-        if(k<=1) return 0;
+        if (k <= 1) return 0;
         int ans = 0, left = 0, s = 1, n = nums.size();
         for (int i = 0; i < n; ++i) {
             s *= nums[i];
-            while (s>=k) s /= nums[left++];
+            while (s >= k) s /= nums[left++];
             ans += i - left + 1;
         }
         return ans;
+    }
+
+    //691. Stickers to Spell Word
+    int minStickers(vector<string> &stickers, string target) {
+
     }
 };
 
