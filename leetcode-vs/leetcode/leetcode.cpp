@@ -8,15 +8,12 @@
 #include <cmath>
 #include <functional>
 #include <iostream>
-#include <list>
 #include <stack>
 #include <vector>
-#include <string>
 #include <map>
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
-#include <queue>
 #include <algorithm>
 
 using namespace std;
@@ -1038,19 +1035,59 @@ public:
         }
         return ans;
     }
+
+    int father(int i, int A[]) {
+        while (i != A[i]) {
+            i = A[i];
+        }
+        return i;
+    }
+
+    int union_set(int i, int j, int A[]) {
+        int fi = father(i, A);
+        int fj = father(j, A);
+        A[fi] = A[fj];
+    }
+
+    //684. Redundant Connection
+    vector<int> findRedundantConnection(vector<vector<int>> &edges) {
+        int A[1010];
+        int n = edges.size();
+        for (int i = 0; i < n; i++) {
+            A[i] = i;
+        }
+        for (auto &i: edges) {
+            int l = i[0], r = i[1];
+            int fl = father(l, A), fr = father(r, A);
+            if (fl == fr) {
+                return {l, r};
+            }
+            union_set(l, r, A);
+        }
+    }
 };
 
 int main() {
     Solution sol;
-    auto positions = vector<pair<int, int>>{{1, 2},
-                                            {2, 3},
-                                            {6, 1}};
-    auto r = sol.fallingSquares(positions);
-
-    for (auto i: r) {
-        cout << i << " ";
-    }
-    cout << endl;
+    auto edge = vector<vector<int>>{{1, 2},
+                                    {2, 3},
+                                    {3, 4},
+                                    {1, 4},
+                                    {1, 5}};
+//    auto edge = vector<vector<int>>{{1, 2},
+//                                    {1, 3},
+//                                    {2, 3}};
+    auto r = sol.findRedundantConnection(edge);
+    cout << r[0] << " " << r[1] << endl;
+//    auto positions = vector<pair<int, int>>{{1, 2},
+//                                            {2, 3},
+//                                            {6, 1}};
+//    auto r = sol.fallingSquares(positions);
+//
+//    for (auto i: r) {
+//        cout << i << " ";
+//    }
+//    cout << endl;
 //    cout << sol.countOfAtoms("ch2(a1)2") << endl;
 //	cout << sol.countOfAtoms("K4(ON(SO3)2)2") << endl;
 
