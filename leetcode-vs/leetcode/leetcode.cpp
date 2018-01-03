@@ -1065,20 +1065,71 @@ public:
             union_set(l, r, A);
         }
     }
+
+    int divide_conquer(vector<int> &nums, int i, int j, int K) {
+        if (i > j) {
+            return 0;
+        }
+        if (i == j) {
+            return nums[i] < K ? 1 : 0;
+        }
+        int m = (i + j) / 2, count = divide_conquer(nums, i, m, K) + divide_conquer(nums, m + 1, j, K);
+        int l = m, r = m + 1, s = 1;
+        while (l >= i && s < K) {
+            s *= nums[l--];
+        }
+        s = 1;
+        while (r <= j && s < K) {
+            s *= nums[r++];
+        }
+        for (int t = l + 1; t < r; t++) {
+            s = 1;
+            for (int tt = t; tt < r; tt++) {
+                s *= nums[tt];
+                if (s < K) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+        }
+        cout << i << " " << j << " " << count << endl;
+        return count;
+    }
+
+    //713. Subarray Product Less Than K
+    int numSubarrayProductLessThanK(vector<int> &nums, int k) {
+        return divide_conquer(nums, 0, nums.size() - 1, k);
+        int n = nums.size(), ans = 0;
+        for (int i = 0; i < n; ++i) {
+            int s = 1;
+            for (int j = i; j < n; j++) {
+                s *= nums[j];
+                if (s < k) {
+                    ans++;
+                } else {
+                    break;
+                }
+            }
+        }
+        return ans;
+    }
 };
 
 int main() {
     Solution sol;
-    auto edge = vector<vector<int>>{{1, 2},
-                                    {2, 3},
-                                    {3, 4},
-                                    {1, 4},
-                                    {1, 5}};
+    vector<int> nums{10, 5, 2, 6};
+    cout << sol.numSubarrayProductLessThanK(nums, 100) << endl;
+//    auto edge = vector<vector<int>>{{1, 2},
+//                                    {2, 3},
+//                                    {3, 4},
+//                                    {1, 4},
+//                                    {1, 5}};
 //    auto edge = vector<vector<int>>{{1, 2},
 //                                    {1, 3},
 //                                    {2, 3}};
-    auto r = sol.findRedundantConnection(edge);
-    cout << r[0] << " " << r[1] << endl;
+//    auto r = sol.findRedundantConnection(edge);
+//    cout << r[0] << " " << r[1] << endl;
 //    auto positions = vector<pair<int, int>>{{1, 2},
 //                                            {2, 3},
 //                                            {6, 1}};
