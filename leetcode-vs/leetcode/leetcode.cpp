@@ -145,6 +145,12 @@ void show(vector<ListNode *> node) {
     }
 }
 
+void showVector(const vector<int> &nums) {
+    for (int i: nums)
+        cout << i << " ";
+    cout << endl;
+}
+
 ListNode *build(vector<int> nums) {
     ListNode *dummy = new ListNode(-1);
     ListNode *p = dummy;
@@ -1194,20 +1200,45 @@ public:
         }
         return s;
     }
+
+    //38. Count and Say
+    string countAndSay(int n) {
+        string s = "1";
+        string cur;
+        while (--n) {
+            cur.clear();
+            int i = 0;
+            while (i < s.size()) {
+                char last = s[i];
+                int k = 0;
+                while (i < s.size() && s[i] == last) {
+                    k++;
+                    i++;
+                }
+                cur.push_back(k + '0');
+                cur.push_back(s[i - 1]);
+            }
+            s = move(cur);
+        }
+        return s;
+    }
 };
 
 int main() {
     Solution sol;
+//    cout << sol.countAndSay(4) << endl;
+    cout << sol.countAndSay(5) << endl;
 //    vector<int> nums{5, 10, -5};
-    vector<int> nums{10, 2, -5};
+//    vector<int> nums;
+//    nums = {10, 2, -5};
 //    vector<int> nums{8, -8};
 //    vector<int> nums{-2, -1, 1, 2};
 //    auto r = sol.asteroidCollision(nums);
-    auto r = sol.asteroidCollision(nums);
-    for (int i: r) {
-        cout << i << " ";
-    }
-    cout << endl;
+//    auto r = sol.asteroidCollision(nums);
+//    for (int i: r) {
+//        cout << i << " ";
+//    }
+//    cout << endl;
 //	MyCalendarTwo calendar;
 //	cout << calendar.book(10, 20) << endl;
 //	cout << calendar.book(50, 60) << endl;
