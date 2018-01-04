@@ -1,6 +1,5 @@
 //#include "stdafx.h"
 #include <sstream>
-#include <math.h>
 #include <cmath>
 #include <iostream>
 #include <unordered_map>
@@ -183,13 +182,58 @@ public:
 
     //736. Parse Lisp Expression
     int evaluate(string expression) {
+        unordered_map<string, int> myMap;
+        return help_evaluate(expression, myMap);
+    }
 
+    int help_evaluate(string expression, unordered_map<string, int> myMap) {
+        if ((expression[0] == '-') || (expression[0] >= '0' && expression[0] <= '9'))
+            return stoi(expression);
+        else if (expression[0] != '(')
+            return myMap[expression];
+        //to get rid of the first '(' and the last ')'
+        string s = expression.substr(1, expression.size() - 2);
+        int start = 0;
+        string word = parse_evaluate(s, start);
+        if (word == "let") {
+            while (true) {
+                string variable = parse_evaluate(s, start);
+                //if there is no more expression, simply evaluate the variable
+                if (start > s.size())
+                    return help_evaluate(variable, myMap);
+                string temp = parse_evaluate(s, start);
+                myMap[variable] = help_evaluate(temp, myMap);
+            }
+        } else if (word == "add")
+            return help_evaluate(parse_evaluate(s, start), myMap) + help_evaluate(parse_evaluate(s, start), myMap);
+        else if (word == "mult")
+            return help_evaluate(parse_evaluate(s, start), myMap) * help_evaluate(parse_evaluate(s, start), myMap);
+    }
+
+    //function to seperate each expression
+    string parse_evaluate(string &s, int &start) {
+        int end = start + 1, temp = start, count = 1;
+        if (s[start] == '(') {
+            while (count != 0) {
+                if (s[end] == '(')
+                    count++;
+                else if (s[end] == ')')
+                    count--;
+                end++;
+            }
+        } else {
+            while (end < s.size() && s[end] != ' ')
+                end++;
+        }
+        start = end + 1;
+        return s.substr(temp, end - temp);
     }
 };
 
 
 int main() {
     Solution sol;
+    cout << sol.evaluate("(add 1 2)") << endl;
 //    vector<int> nums{1, 3, 2, 3, 1};
 
     //vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
