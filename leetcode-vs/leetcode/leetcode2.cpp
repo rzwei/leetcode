@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <sstream>
 #include <math.h>
 #include <cmath>
@@ -180,15 +180,20 @@ public:
         inplace_merge(begin, mid, end);
         return count;
     }
+
+    //736. Parse Lisp Expression
+    int evaluate(string expression) {
+
+    }
 };
 
 
 int main() {
     Solution sol;
-    vector<int> nums{1, 3, 2, 3, 1};
+//    vector<int> nums{1, 3, 2, 3, 1};
 
     //vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
-    cout << sol.reversePairs(nums) << endl;
+//    cout << sol.reversePairs(nums) << endl;
     //cout << sol.longestSubstring("bbaaacbd", 3) << endl;
     //Solution sol;
     //vector<vector<int>> nums(4, vector<int>());
