@@ -26,10 +26,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="leetcode.cpp">
+    <ClCompile Include="backpack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="backpack.cpp">
+    <ClCompile Include="leetcode2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

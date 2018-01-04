@@ -3,7 +3,7 @@
 //
 //#include <bits/stdc++.h>
 //#ifdef WINVER
-//#include "stdafx.h"
+#include "stdafx.h"
 //#endif
 #include <cmath>
 #include <functional>
