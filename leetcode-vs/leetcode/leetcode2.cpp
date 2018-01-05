@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <sstream>
+#include <functional>
 #include <cmath>
 #include <iostream>
 #include <unordered_map>
@@ -259,6 +260,7 @@ public:
 
 	bool dfs_pyramid(string &bottom, string &cur, int idx, set<string> &invalid, map<string, vector<char>> &allowed)
 	{
+		cout << bottom << " " << cur << " " << idx << endl;
 		if (bottom.size() < 2)
 			return true;
 		if (idx == cur.size())
@@ -274,7 +276,7 @@ public:
 			{
 				key[0] = bottom[i];
 				key[1] = bottom[i + 1];
-				if (allowed.find(key) == allowed.end() || allowed[key].empty())
+				if (allowed.find(key) == allowed.end())
 				{
 					invalid.insert(bottom);
 					return false;
@@ -304,20 +306,26 @@ public:
 		string cur(bottom.size() - 1, 'A');
 		return dfs_pyramid(bottom, cur, 0, invalid, states);
 	}
+	//502. IPO
+	int findMaximizedCapital(int k, int W, vector<int>& Profits, vector<int>& Capital) {
+
+	}
+
 };
 
 
 int main() {
 	Solution sol;
-	vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
-
-	allowed = { "XXX", "XXY", "XYX", "XYY", "YXZ" };
-	cout << sol.pyramidTransition("XXYX", allowed) << endl;
+	vector<int > P, C;
+	P = { 1,2,3 }; C = { 0,1,1 };
+	cout << sol.findMaximizedCapital(2, 0, P, C) << endl;
+	//vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
+	//allowed = { "XXX", "XXY", "XYX", "XYY", "YXZ" };
+	//cout << sol.pyramidTransition("XXYX", allowed) << endl;
 	//cout << sol.pyramidTransition("XYZ", allowed) << endl;
 	//cout << sol.monotoneIncreasingDigits(110) << endl;
 	//cout << sol.evaluate("(add 1 2)") << endl;
 	//    vector<int> nums{1, 3, 2, 3, 1};
-
 		//vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
 	//    cout << sol.reversePairs(nums) << endl;
 		//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
