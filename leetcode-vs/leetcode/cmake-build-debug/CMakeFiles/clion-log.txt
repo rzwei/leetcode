@@ -1,0 +1,4 @@
+C:\Users\rzhon\.CLion2017.3\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=D:/library/cygwin64/bin/gcc.exe -DCMAKE_CXX_COMPILER=D:/library/cygwin64/bin/g++.exe -G "CodeBlocks - Unix Makefiles" /cygdrive/d/projects/coder/leetcode-vs/leetcode
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /cygdrive/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug

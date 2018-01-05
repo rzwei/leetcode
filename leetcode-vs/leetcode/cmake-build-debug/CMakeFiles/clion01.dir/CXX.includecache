@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/d/projects/coder/leetcode-vs/leetcode/leetcode.cpp
+stdafx.h
+/cygdrive/d/projects/coder/leetcode-vs/leetcode/stdafx.h
+cmath
+-
+functional
+-
+iostream
+-
+stack
+-
+vector
+-
+map
+-
+unordered_map
+-
+set
+-
+unordered_set
+-
+algorithm
+-
+string
+-
+

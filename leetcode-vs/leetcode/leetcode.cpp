@@ -1173,7 +1173,7 @@ public:
 	//        return count;
 	//    }
 
-		//713. Subarray Product Less Than K
+	//713. Subarray Product Less Than K
 	int numSubarrayProductLessThanK(vector<int> &nums, int k) {
 		if (k <= 1) return 0;
 		int ans = 0, left = 0, s = 1, n = nums.size();
