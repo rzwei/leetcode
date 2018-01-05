@@ -52,40 +52,46 @@ class Solution:
         :rtype: int
         638. Shopping Offers
         """
-        Len = len(needs)
-        if not any(needs):
-            return 0
-        mini = []
-        minv = -1
+        d = {}
 
-        for spi, sp in enumerate(special):
-            f = 1
-            for i in range(Len):
-                if sp[i] <= needs[i]:
-                    continue
-                f = 0
-                break
-            if f:
-                t = 0
+        def dfs(needs):
+            if tuple(needs) in d:
+                return d[tuple(needs)]
+
+            Len = len(needs)
+            if not any(needs):
+                return 0
+            mini = []
+
+            for spi, sp in enumerate(special):
+                f = 1
+
                 for i in range(Len):
-                    t += sp[i] * price[i]
-                if t < sp[-1]:
-                    continue
-                minv = 1
-                mini.append(spi)
-        res = 0
-        for i in range(Len):
-            res += price[i] * needs[i]
+                    if sp[i] <= needs[i]:
+                        continue
+                    f = 0
+                    break
+                if f:
+                    t = 0
+                    for i in range(Len):
+                        t += sp[i] * price[i]
+                    if t < sp[-1]:
+                        continue
+                    mini.append(spi)
+            res = 0
+            for i in range(Len):
+                res += price[i] * needs[i]
 
-        if minv != -1:
             for i in mini:
                 for j in range(Len):
                     needs[j] -= special[i][j]
                 res = min(res, self.shoppingOffers(price, special, needs) + special[i][-1])
                 for j in range(Len):
                     needs[j] += special[i][j]
+            d[tuple(needs)] = res
             return res
-        return res
+
+        return dfs(needs)
 
 
 if __name__ == '__main__':
