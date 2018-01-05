@@ -256,12 +256,65 @@ public:
 			s[i] = '9';
 		return stoi(s);
 	}
+
+	bool dfs_pyramid(string &bottom, string &cur, int idx, set<string> &invalid, map<string, vector<char>> &allowed)
+	{
+		if (bottom.size() < 2)
+			return true;
+		if (idx == cur.size())
+		{
+			string n(cur.size() - 1, 'A');
+			return dfs_pyramid(cur, n, 0, invalid, allowed);
+		}
+
+		if (idx == 0)
+		{
+			string key(2, 'A');
+			for (int i = 0; i < bottom.size() - 1; i++)
+			{
+				key[0] = bottom[i];
+				key[1] = bottom[i + 1];
+				if (allowed.find(key) == allowed.end() || allowed[key].empty())
+				{
+					invalid.insert(bottom);
+					return false;
+				}
+			}
+		}
+		string key(2, 'A');
+		key[0] = bottom[idx];
+		key[1] = bottom[idx + 1];
+		for (char c : allowed[key])
+		{
+			cur[idx] = c;
+			if (dfs_pyramid(bottom, cur, idx + 1, invalid, allowed))
+				return true;
+		}
+		invalid.insert(bottom);
+		return false;
+	}
+
+
+	//756. Pyramid Transition Matrix
+	bool pyramidTransition(string bottom, vector<string>& allowed) {
+		map<string, vector<char>> states;
+		for (auto &i : allowed)
+			states[i.substr(0, 2)].push_back(i[2]);
+		set<string> invalid;
+		string cur(bottom.size() - 1, 'A');
+		return dfs_pyramid(bottom, cur, 0, invalid, states);
+	}
 };
 
 
 int main() {
 	Solution sol;
-	cout << sol.monotoneIncreasingDigits(110) << endl;
+	vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
+
+	allowed = { "XXX", "XXY", "XYX", "XYY", "YXZ" };
+	cout << sol.pyramidTransition("XXYX", allowed) << endl;
+	//cout << sol.pyramidTransition("XYZ", allowed) << endl;
+	//cout << sol.monotoneIncreasingDigits(110) << endl;
 	//cout << sol.evaluate("(add 1 2)") << endl;
 	//    vector<int> nums{1, 3, 2, 3, 1};
 
