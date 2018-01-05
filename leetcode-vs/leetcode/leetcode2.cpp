@@ -296,7 +296,6 @@ public:
 		return false;
 	}
 
-
 	//756. Pyramid Transition Matrix
 	bool pyramidTransition(string bottom, vector<string>& allowed) {
 		map<string, vector<char>> states;
@@ -306,9 +305,48 @@ public:
 		string cur(bottom.size() - 1, 'A');
 		return dfs_pyramid(bottom, cur, 0, invalid, states);
 	}
-	//502. IPO
-	int findMaximizedCapital(int k, int W, vector<int>& Profits, vector<int>& Capital) {
+	//12. Integer to Roman
+	string intToRoman(int num) {
+		char* c[4][10] = {
+		{ "","I","II","III","IV","V","VI","VII","VIII","IX" },
+		{ "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC" },
+		{ "","C","CC","CCC","CD","D","DC","DCC","DCCC","CM" },
+		{ "","M","MM","MMM" }
+		};
+		string roman;
+		roman.append(c[3][num / 1000 % 10]);
+		roman.append(c[2][num / 100 % 10]);
+		roman.append(c[1][num / 10 % 10]);
+		roman.append(c[0][num % 10]);
 
+		return roman;
+	}
+	//13. Roman to Integer
+	int romanToInt(string s) {
+		unordered_map<char, int> T = {
+			{ 'I' , 1 },
+		{ 'V' , 5 },
+		{ 'X' , 10 },
+		{ 'L' , 50 },
+		{ 'C' , 100 },
+		{ 'D' , 500 },
+		{ 'M' , 1000 } 
+		};
+
+		int sum = T[s.back()];
+		for (int i = s.length() - 2; i >= 0; --i)
+		{
+			if (T[s[i]] < T[s[i + 1]])
+			{
+				sum -= T[s[i]];
+			}
+			else
+			{
+				sum += T[s[i]];
+			}
+		}
+
+		return sum;
 	}
 
 };
@@ -316,9 +354,6 @@ public:
 
 int main() {
 	Solution sol;
-	vector<int > P, C;
-	P = { 1,2,3 }; C = { 0,1,1 };
-	cout << sol.findMaximizedCapital(2, 0, P, C) << endl;
 	//vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
 	//allowed = { "XXX", "XXY", "XYX", "XYY", "YXZ" };
 	//cout << sol.pyramidTransition("XXYX", allowed) << endl;
