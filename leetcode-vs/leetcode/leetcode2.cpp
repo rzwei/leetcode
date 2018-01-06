@@ -240,8 +240,7 @@ public:
 		string s = move(to_string(N));
 		int n = s.length(), idx = -1, v;
 		for (int i = 0; i < n - 1; i++)
-			if (s[i] > s[i + 1])
-			{
+			if (s[i] > s[i + 1]) {
 				idx = i;
 				v = s[i];
 				break;
@@ -258,26 +257,21 @@ public:
 		return stoi(s);
 	}
 
-	bool dfs_pyramid(string &bottom, string &cur, int idx, set<string> &invalid, map<string, vector<char>> &allowed)
-	{
+	bool dfs_pyramid(string &bottom, string &cur, int idx, set<string> &invalid, map<string, vector<char>> &allowed) {
 		cout << bottom << " " << cur << " " << idx << endl;
 		if (bottom.size() < 2)
 			return true;
-		if (idx == cur.size())
-		{
+		if (idx == cur.size()) {
 			string n(cur.size() - 1, 'A');
 			return dfs_pyramid(cur, n, 0, invalid, allowed);
 		}
 
-		if (idx == 0)
-		{
+		if (idx == 0) {
 			string key(2, 'A');
-			for (int i = 0; i < bottom.size() - 1; i++)
-			{
+			for (int i = 0; i < bottom.size() - 1; i++) {
 				key[0] = bottom[i];
 				key[1] = bottom[i + 1];
-				if (allowed.find(key) == allowed.end())
-				{
+				if (allowed.find(key) == allowed.end()) {
 					invalid.insert(bottom);
 					return false;
 				}
@@ -286,8 +280,7 @@ public:
 		string key(2, 'A');
 		key[0] = bottom[idx];
 		key[1] = bottom[idx + 1];
-		for (char c : allowed[key])
-		{
+		for (char c : allowed[key]) {
 			cur[idx] = c;
 			if (dfs_pyramid(bottom, cur, idx + 1, invalid, allowed))
 				return true;
@@ -297,7 +290,7 @@ public:
 	}
 
 	//756. Pyramid Transition Matrix
-	bool pyramidTransition(string bottom, vector<string>& allowed) {
+	bool pyramidTransition(string bottom, vector<string> &allowed) {
 		map<string, vector<char>> states;
 		for (auto &i : allowed)
 			states[i.substr(0, 2)].push_back(i[2]);
@@ -305,13 +298,14 @@ public:
 		string cur(bottom.size() - 1, 'A');
 		return dfs_pyramid(bottom, cur, 0, invalid, states);
 	}
+
 	//12. Integer to Roman
 	string intToRoman(int num) {
-		char* c[4][10] = {
-		{ "","I","II","III","IV","V","VI","VII","VIII","IX" },
-		{ "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC" },
-		{ "","C","CC","CCC","CD","D","DC","DCC","DCCC","CM" },
-		{ "","M","MM","MMM" }
+		char *c[4][10] = {
+				{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"},
+				{"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"},
+				{"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"},
+				{"", "M", "MM", "MMM"}
 		};
 		string roman;
 		roman.append(c[3][num / 1000 % 10]);
@@ -321,27 +315,25 @@ public:
 
 		return roman;
 	}
+
 	//13. Roman to Integer
 	int romanToInt(string s) {
 		unordered_map<char, int> T = {
-			{ 'I' , 1 },
-		{ 'V' , 5 },
-		{ 'X' , 10 },
-		{ 'L' , 50 },
-		{ 'C' , 100 },
-		{ 'D' , 500 },
-		{ 'M' , 1000 }
+				{'I', 1},
+				{'V', 5},
+				{'X', 10},
+				{'L', 50},
+				{'C', 100},
+				{'D', 500},
+				{'M', 1000}
 		};
 
 		int sum = T[s.back()];
-		for (int i = s.length() - 2; i >= 0; --i)
-		{
-			if (T[s[i]] < T[s[i + 1]])
-			{
+		for (int i = s.length() - 2; i >= 0; --i) {
+			if (T[s[i]] < T[s[i + 1]]) {
 				sum -= T[s[i]];
 			}
-			else
-			{
+			else {
 				sum += T[s[i]];
 			}
 		}
@@ -404,12 +396,14 @@ public:
 		for (int i = 0, fin = input.size(); i < fin; ++i) {
 			//find which level
 			while (input[i] == '\t') {
-				++ln; ++i;
+				++ln;
+				++i;
 			}
 			//read file name
-			while (input[i] != '\n'&&i < fin) {
+			while (input[i] != '\n' && i < fin) {
 				if (input[i] == '.')isFile = true;
-				++count; ++i;
+				++count;
+				++i;
 			}
 			//calculate
 			if (isFile) {
@@ -419,16 +413,97 @@ public:
 				level[ln] = level[ln - 1] + count + 1;// 1 means '/'
 			}
 			//reset
-			count = 0; ln = 1; isFile = false;
+			count = 0;
+			ln = 1;
+			isFile = false;
 		}
 		return maxi;
+	}
+
+	//121. Best Time to Buy and Sell Stock
+	int maxProfit(vector<int> &prices) {
+		priority_queue<int> pq;
+		int ans = 0;
+		for (int i = prices.size() - 1; i >= 0; i--) {
+			if (!pq.empty() && pq.top() > prices[i])
+				ans = max(ans, pq.top() - prices[i]);
+			else
+				pq.push(prices[i]);
+		}
+		return ans;
+	}
+
+	//122. Best Time to Buy and Sell Stock II
+	int maxProfit_two(vector<int> &prices) {
+		int ans = 0, N = prices.size();
+		for (int i = 1; i < N; i++)
+			ans += max(prices[i] - prices[i - 1], 0);
+		return ans;
+	}
+
+
+
+	//123. Best Time to Buy and Sell Stock III
+	int maxProfit_three(vector<int> &prices) {
+		int hold1 = INT_MIN, hold2 = INT_MIN;
+		int release1 = 0, release2 = 0;
+		for (int i : prices) {                              // Assume we only have 0 money at first
+			release2 = max(release2, hold2 + i);     // The maximum if we've just sold 2nd stock so far.
+			hold2 = max(hold2, release1 - i);  // The maximum if we've just buy  2nd stock so far.
+			release1 = max(release1, hold1 + i);     // The maximum if we've just sold 1nd stock so far.
+			hold1 = max(hold1, -i);          // The maximum if we've just buy  1st stock so far. 
+		}
+		return release2; ///Since release1 is initiated as 0, so release2 will always higher than release1.
+	}
+
+	//int dfs_maxProfit(int i, int j, vector<int> &prices, map<pair<int, int>, int> &memo) {
+	//	if (i == 0 || j == 0)
+	//		return 0;
+
+	//	if (memo.find({ i, j }) != memo.end())
+	//		return memo[{i, j}];
+	//	int ans = dfs_maxProfit(i, j - 1, prices, memo);
+	//	for (int k = 0; k < j; k++)
+	//		ans = max(ans, prices[j] - prices[k] + dfs_maxProfit(i - 1, k, prices, memo));
+	//	memo[{i, j}] = ans;
+	//	return ans;
+	//}
+
+	//188. Best Time to Buy and Sell Stock IV
+	int maxProfit(int k, vector<int>& prices) {
+		int N = prices.size();
+		if (k >= prices.size() / 2)
+		{
+			int ans = 0;
+			for (int i = 1; i < prices.size(); i++)
+				ans += max(prices[i] - prices[i - 1], 0);
+			return ans;
+		}
+
+		vector<vector<int> > dp(k + 1, vector<int>(N + 1, 0));
+		for (int i = 1; i <= k; i++)
+		{
+			int tmp = -prices[0];
+			for (int j = 1; j < N; j++)
+			{
+				dp[i][j] = max(dp[i][j - 1], prices[j] + tmp);
+				tmp = max(tmp, dp[i - 1][j - 1] - prices[j]);
+			}
+		}
+		return dp[k][N - 1];
+		//map<pair<int, int>, int>memo;
+		//return dfs_maxProfit(k, prices.size() - 1, prices, memo);
 	}
 };
 
 
 int main() {
 	Solution sol;
-	cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
+	vector<int> prices{ 3,3,5,0,0,3,1,4 };
+	//prices = { 1,2,4 };
+	cout << sol.maxProfit(3, prices) << endl;
+	//cout << sol.maxProfit_two(prices) << endl;
+	//cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
 	//cout << sol.lengthLongestPath("a") << endl;
 	//vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
 	//allowed = { "XXX", "XXY", "XYX", "XYY", "Y1XZ" };
@@ -437,19 +512,19 @@ int main() {
 	//cout << sol.monotoneIncreasingDigits(110) << endl;
 	//cout << sol.evaluate("(add 1 2)") << endl;
 	//    vector<int> nums{1, 3, 2, 3, 1};
-		//vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
+	//vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
 	//    cout << sol.reversePairs(nums) << endl;
-		//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
-		//Solution sol;
-		//vector<vector<int>> nums(4, vector<int>());
-		//nums[0] = vector<int>{ 1,4,3,1,3,2 };
-		//nums[1] = vector<int>{ 3,2,1,3,2,4 };
-		//nums[2] = vector<int>{ 2,3,3,2,3,1 };
-		//cout << sol.trapRainWater(nums) << endl;
+	//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
+	//Solution sol;
+	//vector<vector<int>> nums(4, vector<int>());
+	//nums[0] = vector<int>{ 1,4,3,1,3,2 };
+	//nums[1] = vector<int>{ 3,2,1,3,2,4 };
+	//nums[2] = vector<int>{ 2,3,3,2,3,1 };
+	//cout << sol.trapRainWater(nums) << endl;
 
 
-		//vector<int>nums{ 0,1,0,2,1,0,1,3,2,1,2,1 };
-		//vector<int>nums{ 3,2,1,3,2,4 };
-		//cout << sol.trap(nums) << endl;
+	//vector<int>nums{ 0,1,0,2,1,0,1,3,2,1,2,1 };
+	//vector<int>nums{ 3,2,1,3,2,4 };
+	//cout << sol.trap(nums) << endl;
 	return 0;
 }
