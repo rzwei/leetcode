@@ -422,13 +422,21 @@ public:
 
 	//121. Best Time to Buy and Sell Stock
 	int maxProfit(vector<int> &prices) {
-		priority_queue<int> pq;
-		int ans = 0;
-		for (int i = prices.size() - 1; i >= 0; i--) {
-			if (!pq.empty() && pq.top() > prices[i])
-				ans = max(ans, pq.top() - prices[i]);
-			else
-				pq.push(prices[i]);
+		//priority_queue<int> pq;
+		//int ans = 0;
+		//for (int i = prices.size() - 1; i >= 0; i--) {
+		//	if (!pq.empty() && pq.top() > prices[i])
+		//		ans = max(ans, pq.top() - prices[i]);
+		//	else
+		//		pq.push(prices[i]);
+		//}
+		if (prices.size() <= 1)
+			return 0;
+		int v = prices[0], ans, N = prices.size();
+		for (int i = 0; i < N; i++)
+		{
+			ans = max(ans, prices[i] - v);
+			v = min(v, prices[i]);
 		}
 		return ans;
 	}
@@ -440,8 +448,6 @@ public:
 			ans += max(prices[i] - prices[i - 1], 0);
 		return ans;
 	}
-
-
 
 	//123. Best Time to Buy and Sell Stock III
 	int maxProfit_three(vector<int> &prices) {
@@ -497,7 +503,7 @@ public:
 
 	//714. Best Time to Buy and Sell Stock with Transaction Fee
 	int maxProfit(vector<int>& prices, int fee) {
-		int s0 = 0, s1 = INT_MIN,tmp=0;
+		int s0 = 0, s1 = INT_MIN, tmp = 0;
 		for (int p : prices)
 		{
 			tmp = s0;
@@ -513,8 +519,8 @@ int main() {
 	Solution sol;
 	vector<int> prices{ 3,3,5,0,0,3,1,4 };
 	//prices = { 1,2,4 };
-	prices = { 1, 3, 2, 8, 4, 9 };
-	cout << sol.maxProfit(prices, 2) << endl;
+	prices = { 7,1,5,3,6,4 };
+	cout << sol.maxProfit(prices) << endl;
 	//cout << sol.maxProfit_two(prices) << endl;
 	//cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
 	//cout << sol.lengthLongestPath("a") << endl;
