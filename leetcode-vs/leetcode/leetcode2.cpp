@@ -330,7 +330,7 @@ public:
 		{ 'L' , 50 },
 		{ 'C' , 100 },
 		{ 'D' , 500 },
-		{ 'M' , 1000 } 
+		{ 'M' , 1000 }
 		};
 
 		int sum = T[s.back()];
@@ -349,13 +349,89 @@ public:
 		return sum;
 	}
 
+	//388. Longest Absolute File Path
+	int lengthLongestPath(string input) {
+		//string cur;
+		//int level = -1, Len = input.size(), i = 0, ans = 0, curLen = 0, n = 0;
+		//vector<string > path;
+		//while (i <= Len)
+		//{
+		//	if (i < Len &&input[i] != '\n' && input[i] != '\t')
+		//		cur.push_back(input[i++]);
+		//	else {
+		//		if (n - level == 1 || level == -1)
+		//		{
+		//			curLen += cur.length();
+		//			path.push_back(cur);
+		//			if (cur.find('.') != string::npos)
+		//				ans = max(ans, curLen + n);
+		//			cur.clear();
+		//			level++;
+		//		}
+		//		else {
+		//			while (level >= n)
+		//			{
+		//				curLen -= path.back().length();
+		//				path.pop_back();
+		//				level--;
+		//			}
+		//			path.push_back(cur);
+		//			curLen += cur.length();
+		//			if (cur.find('.') != string::npos)
+		//				ans = max(ans, curLen + n);
+		//			cur.clear();
+		//			level++;
+		//		}
+		//		//for (auto &i : path)
+		//		//	cout << i << " ";
+		//		//cout << endl;
+		//		if (i == Len)
+		//			break;
+		//		if (i < Len && input[i] == '\n')
+		//		{
+		//			n = 0;
+		//			while (i < Len && input[++i] == '\t')
+		//				n++;
+		//		}
+
+		//	}
+		//}
+		//return ans;
+		int maxi = 0, count = 0, ln = 1;
+		bool isFile = false;
+		vector<int> level(200);
+		level[0] = 0;
+		for (int i = 0, fin = input.size(); i < fin; ++i) {
+			//find which level
+			while (input[i] == '\t') {
+				++ln; ++i;
+			}
+			//read file name
+			while (input[i] != '\n'&&i < fin) {
+				if (input[i] == '.')isFile = true;
+				++count; ++i;
+			}
+			//calculate
+			if (isFile) {
+				maxi = max(maxi, level[ln - 1] + count);
+			}
+			else {
+				level[ln] = level[ln - 1] + count + 1;// 1 means '/'
+			}
+			//reset
+			count = 0; ln = 1; isFile = false;
+		}
+		return maxi;
+	}
 };
 
 
 int main() {
 	Solution sol;
+	cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
+	//cout << sol.lengthLongestPath("a") << endl;
 	//vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
-	//allowed = { "XXX", "XXY", "XYX", "XYY", "YXZ" };
+	//allowed = { "XXX", "XXY", "XYX", "XYY", "Y1XZ" };
 	//cout << sol.pyramidTransition("XXYX", allowed) << endl;
 	//cout << sol.pyramidTransition("XYZ", allowed) << endl;
 	//cout << sol.monotoneIncreasingDigits(110) << endl;
