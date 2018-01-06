@@ -93,11 +93,35 @@ class Solution:
 
         return dfs(needs)
 
+    def maxProfit(self, prices, fee):
+        """
+        :type prices: List[int]
+        :type fee: int
+        :rtype: int
+        714. Best Time to Buy and Sell Stock with Transaction Fee
+        """
+        h = []
+        l = []
+        Len = len(prices)
+        dp = [0] * (Len)
+        for i in range(Len):
+            if i > 0:
+                dp[i] = dp[i - 1]
+            while h and prices[i] - h[0][0] > fee:
+                v, idx = heapq.heappop(h)
+                dp[i] = max(dp[i], dp[idx] + prices[i] - v - fee)
+                l.append((v, idx))
+            for v, idx in l:
+                heapq.heappush(h, (v, idx))
+            heapq.heappush(h, (prices[i], i))
+        return dp[-1]
+
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.maxProfit([1, 3, 2, 8, 4, 9], fee=2))
     # print(sol.shoppingOffers([2, 5], [[3, 0, 5], [1, 2, 10]], [3, 2]))
-    print(sol.shoppingOffers([2, 3, 4], [[1, 1, 0, 4], [2, 2, 1, 9]], [1, 2, 1]))
+    # print(sol.shoppingOffers([2, 3, 4], [[1, 1, 0, 4], [2, 2, 1, 9]], [1, 2, 1]))
     # print(sol.findMaximizedCapital(2, 0, [1, 2, 3], [0, 1, 1]))
     # nums = [[1, 3], [1, 4], [2, 5], [3, 5]]
     # nums = [[2, 10], [3, 7], [3, 15], [4, 11], [6, 12], [6, 16], [7, 8], [7, 11], [7, 15], [11, 12]]

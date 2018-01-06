@@ -494,6 +494,18 @@ public:
 		//map<pair<int, int>, int>memo;
 		//return dfs_maxProfit(k, prices.size() - 1, prices, memo);
 	}
+
+	//714. Best Time to Buy and Sell Stock with Transaction Fee
+	int maxProfit(vector<int>& prices, int fee) {
+		int s0 = 0, s1 = INT_MIN,tmp=0;
+		for (int p : prices)
+		{
+			tmp = s0;
+			s0 = max(s0, s1 + p);
+			s1 = max(s1, tmp - p - fee);
+		}
+		return s0;
+	}
 };
 
 
@@ -501,7 +513,8 @@ int main() {
 	Solution sol;
 	vector<int> prices{ 3,3,5,0,0,3,1,4 };
 	//prices = { 1,2,4 };
-	cout << sol.maxProfit(3, prices) << endl;
+	prices = { 1, 3, 2, 8, 4, 9 };
+	cout << sol.maxProfit(prices, 2) << endl;
 	//cout << sol.maxProfit_two(prices) << endl;
 	//cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
 	//cout << sol.lengthLongestPath("a") << endl;
