@@ -555,6 +555,55 @@ public:
         return ans;
     }
 
+//    int findMinStep(string board, string hand) {
+//        int result = INT_MAX;
+//        unordered_map<int, int> dict;
+//        for (auto ch : hand)
+//            ++dict[ch];
+//
+//        result = search(board, dict);
+//        return result == INT_MAX ? -1 : result;
+//
+//    }
+//
+//    int search(string board, unordered_map<int, int> &dict) {
+//        // check the consequence after the last insertion and removal
+//        board = remove(board);
+//        if (board.empty()) {
+//            return 0;
+//        }
+//
+//        int cnt = INT_MAX, j = 0;
+//        // important, i must equal to n to include last char
+//        for (int i = 0; i <= board.size(); ++i) {
+//            if (i < board.size() && board[i] == board[j])
+//                continue;
+//            int need = 3 - (i - j);
+//            if (dict[board[j]] >= need) {
+//                // put a ball only when it can remove balls
+//                dict[board[j]] -= need;
+//                int t = search(board.substr(0, j) + board.substr(i), dict);
+//                if (t != INT_MAX) // important
+//                    cnt = min(t + need, cnt);
+//                dict[board[j]] += need;
+//            }
+//            j = i;
+//        }
+//        return cnt;
+//    }
+//
+//    string remove(string board) {
+//        // check 3 consecutive balls
+//        // after put a ball and erase 3 consecutive balls, check if there are more consecutive balls afterwards
+//        for (int i = 0, j = 0; i <= board.size(); ++i) {
+//            if (i < board.size() && board[i] == board[j])
+//                continue;
+//            if (i - j >= 3)
+//                return remove(board.substr(0, j) + board.substr(i));
+//            else j = i;
+//        }
+//        return board;
+//    }
 
     int dfs_zumagame(vector<char> board, map<char, int> &hands, int v) {
         int flag = 1;
@@ -635,6 +684,7 @@ public:
         }
         return dfs_zumagame(boards, hands, 0);
     }
+
 
 };
 
