@@ -534,15 +534,57 @@ public:
 		map[s].push_back(node);
 		return s;
 	}
+	//758. Bold Words in String 
+	string boldWords(vector<string>& words, string S) {
+		int N = S.length();
+		vector<int > hit(N + 1);
+		for (auto &word : words)
+		{
+			for (int i = 0; i <= N - word.length(); i++)
+				if (S.substr(i, word.length()) == word)
+				{
+					hit[i]++;
+					hit[i + word.length()]--;
+				}
+
+		}
+		for (auto i : hit)
+			cout << i << " ";
+		cout << endl;
+		for (int i = 0; i < N; i++)
+			hit[i + 1] += hit[i];
+		for (auto i : hit)
+			cout << i << " ";
+		cout << endl;
+		string ans;
+		for (int i = 0; i < N; i++)
+		{
+			if (hit[i] > 0)
+			{
+				ans += "<b>";
+				while (i < N&&hit[i]>0)
+					ans.push_back(S[i++]);
+				i--;
+				ans += "</b>";
+			}
+			else
+				ans.push_back(S[i]);
+		}
+		return ans;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	vector<int> prices{ 3,3,5,0,0,3,1,4 };
+	vector<string> words;
+	//words = { "ab","bc","cd" };
+	//cout << sol.boldWords(words, "aabcd") << endl;
+	//cout << sol.boldWords(words, "aabcd") << endl;
+	//vector<int> prices{ 3,3,5,0,0,3,1,4 };
 	//prices = { 1,2,4 };
-	prices = { 7,1,5,3,6,4 };
-	cout << sol.maxProfit(prices) << endl;
+	//prices = { 7,1,5,3,6,4 };
+	//cout << sol.maxProfit(prices) << endl;
 	//cout << sol.maxProfit_two(prices) << endl;
 	//cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
 	//cout << sol.lengthLongestPath("a") << endl;

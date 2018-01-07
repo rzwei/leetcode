@@ -4,6 +4,23 @@ import collections
 import heapq
 
 
+class Interval:
+    def __init__(self, s=0, e=0):
+        self.start = s
+        self.end = e
+
+    def __repr__(self):
+        ''.format()
+        return f'[{self.start} {self.end}]'
+
+
+def buildIntervals(inters: List[List[int]]):
+    ans = []
+    for s, e in inters:
+        ans.append(Interval(s, e))
+    return ans
+
+
 class Solution:
     def intersectionSizeTwo(self, intervals):
         """
@@ -116,10 +133,86 @@ class Solution:
             heapq.heappush(h, (prices[i], i))
         return dp[-1]
 
+    def anagramMappings(self, A, B):
+        """
+        :type A: List[int]
+        :type B: List[int]
+        :rtype: List[int]
+        760. Find Anagram Mappings
+        """
+        d = {}
+        for i, v in enumerate(B):
+            if v not in d:
+                d[v] = [i]
+            else:
+                d[v].append(i)
+        ans = []
+        for i in A:
+            ans.append(d[i].pop())
+
+        return ans
+
+    def boldWords(self, words, S):
+        """
+        :type words: List[str]
+        :type S: str
+        :rtype: str
+        758. Bold Words in String
+        """
+        Len = len(S)
+        hit = [0] * (Len + 1)
+        for word in words:
+            for i in range(Len - len(word) + 1):
+                if S[i:i + len(word)] == word:
+                    hit[i] += 1
+                    hit[i + len(word)] -= 1
+        for i in range(Len):
+            hit[i + 1] += hit[i]
+        ans = ''
+        i = 0
+        while i < Len:
+            if hit[i] > 0:
+                ans += '<b>'
+                while i < Len and hit[i] > 0:
+                    ans += S[i]
+                    i += 1
+                i -= 1
+                ans += '</b>'
+            else:
+                ans += S[i]
+            i += 1
+        return ans
+
+    def employeeFreeTime(self, avails: List[List[Interval]]):
+        """
+        :type avails: List[List[Interval]]
+        :rtype: List[Interval]
+        759. Employee Free Time
+        """
+        if not avails:
+            return []
+        intervals = []
+        for i in avails:
+            intervals.extend(i)
+        intervals.sort(key=lambda x: (x.start, x.end))
+        prev = intervals[0].end
+        ans = []
+        for inter in intervals:
+            if prev >= inter.end:
+                continue
+            if inter.start > prev:
+                ans.append(Interval(prev, inter.start))
+            prev = inter.end
+        return ans
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.maxProfit([1, 3, 2, 8, 4, 9], fee=2))
+    r = buildIntervals([[1, 2], [5, 6], [1, 3], [4, 10]])
+    # r = buildIntervals([[1, 3], [6, 7], [2, 4], [2, 5], [9, 12]])
+    print(sol.employeeFreeTime([r]))
+    # print(sol.boldWords(['ab', 'bc'], "aabc"))
+    # print(sol.maxProfit([1, 3, 2, 8, 4, 9], fee=2))
     # print(sol.shoppingOffers([2, 5], [[3, 0, 5], [1, 2, 10]], [3, 2]))
     # print(sol.shoppingOffers([2, 3, 4], [[1, 1, 0, 4], [2, 2, 1, 9]], [1, 2, 1]))
     # print(sol.findMaximizedCapital(2, 0, [1, 2, 3], [0, 1, 1]))
