@@ -10,6 +10,7 @@
 #include <map>
 #include <queue>
 #include <climits>
+#include <stack>
 
 using namespace std;
 
@@ -685,17 +686,40 @@ public:
         return dfs_zumagame(boards, hands, 0);
     }
 
-
+    //402. Remove K Digits
+    string removeKdigits(string num, int k) {
+        string ret;
+        int len = num.length(), top = 0, i = 0;
+        vector<char> st(len);
+        for (int i = 0; i < len; i++) {
+            char c = num[i];
+            while (top > 0 && st[top - 1] > c && k) {
+                top--;
+                k--;
+            }
+            st[top++] = c;
+        }
+        while (i < top && st[i] == '0') {
+            i++;
+        }
+        for (; i < top - k; i++) {
+            ret.push_back(st[i]);
+        }
+        return ret.empty() ? "0" : ret;
+    }
 };
 
 
 int main() {
     Solution sol;
     vector<string> words;
-    cout << sol.findMinStep("WBYGWYYGGB", "WR") << endl;
+    cout << sol.removeKdigits("1432219", 3) << endl;
+    cout << sol.removeKdigits("10", 1) << endl;
+    cout << sol.removeKdigits("112", 1) << endl;
+//    cout << sol.findMinStep("WBYGWYYGGB", "WR") << endl;
 //    cout << sol.findMinStep("WWRRBBWW", "WRBRW") << endl;
 //    cout << sol.findMinStep("G", "GGGG") << endl;
-    cout << sol.findMinStep("RBYYBBRRB", "YRBGB") << endl;
+//    cout << sol.findMinStep("RBYYBBRRB", "YRBGB") << endl;
     //words = { "ab","bc","cd" };
 //    cout << sol.boldWords(words, "aabcd") << endl;
     //cout << sol.boldWords(words, "aabcd") << endl;
