@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -21,6 +21,12 @@ struct TreeNode {
 
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
+
+void swap(int &a, int &b) {
+    a ^= b;
+    b ^= a;
+    a ^= b;
+}
 
 class Solution {
 public:
@@ -304,22 +310,22 @@ public:
         return dfs_pyramid(bottom, cur, 0, invalid, states);
     }
 
-//    //12. Integer to Roman
-//    string intToRoman(int num) {
-//        char *c[4][10] = {
-//                {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"},
-//                {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"},
-//                {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"},
-//                {"", "M", "MM", "MMM"}
-//        };
-//        string roman;
-//        roman.append(c[3][num / 1000 % 10]);
-//        roman.append(c[2][num / 100 % 10]);
-//        roman.append(c[1][num / 10 % 10]);
-//        roman.append(c[0][num % 10]);
-//
-//        return roman;
-//    }
+    //    //12. Integer to Roman
+    //    string intToRoman(int num) {
+    //        char *c[4][10] = {
+    //                {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"},
+    //                {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"},
+    //                {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"},
+    //                {"", "M", "MM", "MMM"}
+    //        };
+    //        string roman;
+    //        roman.append(c[3][num / 1000 % 10]);
+    //        roman.append(c[2][num / 100 % 10]);
+    //        roman.append(c[1][num / 10 % 10]);
+    //        roman.append(c[0][num % 10]);
+    //
+    //        return roman;
+    //    }
 
     //13. Roman to Integer
     int romanToInt(string s) {
@@ -556,55 +562,55 @@ public:
         return ans;
     }
 
-//    int findMinStep(string board, string hand) {
-//        int result = INT_MAX;
-//        unordered_map<int, int> dict;
-//        for (auto ch : hand)
-//            ++dict[ch];
-//
-//        result = search(board, dict);
-//        return result == INT_MAX ? -1 : result;
-//
-//    }
-//
-//    int search(string board, unordered_map<int, int> &dict) {
-//        // check the consequence after the last insertion and removal
-//        board = remove(board);
-//        if (board.empty()) {
-//            return 0;
-//        }
-//
-//        int cnt = INT_MAX, j = 0;
-//        // important, i must equal to n to include last char
-//        for (int i = 0; i <= board.size(); ++i) {
-//            if (i < board.size() && board[i] == board[j])
-//                continue;
-//            int need = 3 - (i - j);
-//            if (dict[board[j]] >= need) {
-//                // put a ball only when it can remove balls
-//                dict[board[j]] -= need;
-//                int t = search(board.substr(0, j) + board.substr(i), dict);
-//                if (t != INT_MAX) // important
-//                    cnt = min(t + need, cnt);
-//                dict[board[j]] += need;
-//            }
-//            j = i;
-//        }
-//        return cnt;
-//    }
-//
-//    string remove(string board) {
-//        // check 3 consecutive balls
-//        // after put a ball and erase 3 consecutive balls, check if there are more consecutive balls afterwards
-//        for (int i = 0, j = 0; i <= board.size(); ++i) {
-//            if (i < board.size() && board[i] == board[j])
-//                continue;
-//            if (i - j >= 3)
-//                return remove(board.substr(0, j) + board.substr(i));
-//            else j = i;
-//        }
-//        return board;
-//    }
+    //    int findMinStep(string board, string hand) {
+    //        int result = INT_MAX;
+    //        unordered_map<int, int> dict;
+    //        for (auto ch : hand)
+    //            ++dict[ch];
+    //
+    //        result = search(board, dict);
+    //        return result == INT_MAX ? -1 : result;
+    //
+    //    }
+    //
+    //    int search(string board, unordered_map<int, int> &dict) {
+    //        // check the consequence after the last insertion and removal
+    //        board = remove(board);
+    //        if (board.empty()) {
+    //            return 0;
+    //        }
+    //
+    //        int cnt = INT_MAX, j = 0;
+    //        // important, i must equal to n to include last char
+    //        for (int i = 0; i <= board.size(); ++i) {
+    //            if (i < board.size() && board[i] == board[j])
+    //                continue;
+    //            int need = 3 - (i - j);
+    //            if (dict[board[j]] >= need) {
+    //                // put a ball only when it can remove balls
+    //                dict[board[j]] -= need;
+    //                int t = search(board.substr(0, j) + board.substr(i), dict);
+    //                if (t != INT_MAX) // important
+    //                    cnt = min(t + need, cnt);
+    //                dict[board[j]] += need;
+    //            }
+    //            j = i;
+    //        }
+    //        return cnt;
+    //    }
+    //
+    //    string remove(string board) {
+    //        // check 3 consecutive balls
+    //        // after put a ball and erase 3 consecutive balls, check if there are more consecutive balls afterwards
+    //        for (int i = 0, j = 0; i <= board.size(); ++i) {
+    //            if (i < board.size() && board[i] == board[j])
+    //                continue;
+    //            if (i - j >= 3)
+    //                return remove(board.substr(0, j) + board.substr(i));
+    //            else j = i;
+    //        }
+    //        return board;
+    //    }
 
     int dfs_zumagame(vector<char> board, map<char, int> &hands, int v) {
         int flag = 1;
@@ -634,23 +640,23 @@ public:
             }
             board = newboard;
         }
-//        for (auto &i:newboard) {
-//            cout << i;
-//        }
-//        cout << endl;
+        //        for (auto &i:newboard) {
+        //            cout << i;
+        //        }
+        //        cout << endl;
         if (newboard.size() == 0) {
             return v;
         }
         int Len = newboard.size();
         int const BOUND = INT_MAX - 10000;
         int ans = BOUND;
-        for (auto &it:hands) {
+        for (auto &it : hands) {
             if (it.second > 0) {
                 int i = 0;
                 while (i < Len) {
                     if (newboard[i] == it.first) {
                         it.second--;
-//                        cout << "insert " << it.first << endl;
+                        //                        cout << "insert " << it.first << endl;
                         newboard.insert(newboard.begin() + i, it.first);
                         int r = dfs_zumagame(newboard, hands, v + 1);
                         if (r != -1) {
@@ -676,11 +682,11 @@ public:
     //488. Zuma Game
     int findMinStep(string board, string hand) {
         vector<char> boards;
-        for (auto i:board) {
+        for (auto i : board) {
             boards.push_back(i);
         }
         map<char, int> hands;
-        for (auto i:hand) {
+        for (auto i : hand) {
             hands[i]++;
         }
         return dfs_zumagame(boards, hands, 0);
@@ -707,21 +713,60 @@ public:
         }
         return ret.empty() ? "0" : ret;
     }
+
+    //29. Divide Two Integers
+    int divide(int dividend, int divisor) {
+        if (!divisor || (dividend == INT_MIN && divisor == -1))
+            return INT_MAX;
+        int sign = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1;
+        long long dvd = labs(dividend);
+        long long dvs = labs(divisor);
+        int res = 0;
+        while (dvd >= dvs) {
+            long long temp = dvs, multiple = 1;
+            while (dvd >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+            dvd -= temp;
+            res += multiple;
+        }
+        return sign == 1 ? res : -res;
+    }
+
+//    int divide_(int dividend, int divisor) {
+//        if (divisor == 0 || (dividend == INT_MIN && divisor == -1)) {
+//            return INT_MAX;
+//        }
+//        long long dvd = labs(dividend), dvs = labs(divisor);
+//        int ans = 0, sign = ((divisor > 0) ^ (dividend > 0)) ? -1 : 1;
+//        while (dvs <= dvd) {
+//            long long temp = dvs, multiple = 1;
+//            while (temp <= (dvd >> 1)) {
+//                temp <<= 1;
+//                multiple <<= 1;
+//            }
+//            dvd -= temp;
+//            ans += multiple;
+//        }
+//        return sign == 1 ? ans : -ans;
+//    }
 };
 
 
 int main() {
     Solution sol;
     vector<string> words;
-    cout << sol.removeKdigits("1432219", 3) << endl;
-    cout << sol.removeKdigits("10", 1) << endl;
-    cout << sol.removeKdigits("112", 1) << endl;
-//    cout << sol.findMinStep("WBYGWYYGGB", "WR") << endl;
-//    cout << sol.findMinStep("WWRRBBWW", "WRBRW") << endl;
-//    cout << sol.findMinStep("G", "GGGG") << endl;
-//    cout << sol.findMinStep("RBYYBBRRB", "YRBGB") << endl;
+    cout << sol.divide_(1230, 12) << endl;
+//	cout << sol.removeKdigits("1432219", 3) << endl;
+//	cout << sol.removeKdigits("10", 1) << endl;
+//	cout << sol.removeKdigits("112", 1) << endl;
+    //    cout << sol.findMinStep("WBYGWYYGGB", "WR") << endl;
+    //    cout << sol.findMinStep("WWRRBBWW", "WRBRW") << endl;
+    //    cout << sol.findMinStep("G", "GGGG") << endl;
+    //    cout << sol.findMinStep("RBYYBBRRB", "YRBGB") << endl;
     //words = { "ab","bc","cd" };
-//    cout << sol.boldWords(words, "aabcd") << endl;
+    //    cout << sol.boldWords(words, "aabcd") << endl;
     //cout << sol.boldWords(words, "aabcd") << endl;
     //vector<int> prices{ 3,3,5,0,0,3,1,4 };
     //prices = { 1,2,4 };
