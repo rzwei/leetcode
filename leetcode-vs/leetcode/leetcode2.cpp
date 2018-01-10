@@ -757,7 +757,7 @@ public:
 int main() {
     Solution sol;
     vector<string> words;
-    cout << sol.divide_(1230, 12) << endl;
+    cout << sol.divide(1230, 12) << endl;
 //	cout << sol.removeKdigits("1432219", 3) << endl;
 //	cout << sol.removeKdigits("10", 1) << endl;
 //	cout << sol.removeKdigits("112", 1) << endl;
