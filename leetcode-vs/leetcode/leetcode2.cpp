@@ -91,7 +91,10 @@ public:
 	void put(int key, int value) {
 		auto it = cache.find(key);
 		if (it != cache.end())
+		{
 			touch(it);
+			it->second.first = value;
+		}
 		else {
 			if (cache.size() == size)
 			{
@@ -99,8 +102,8 @@ public:
 				keys.pop_back();
 			}
 			keys.push_front(key);
+			cache[key] = { value,keys.begin() };
 		}
-		cache[key] = { value,keys.begin() };
 	}
 	void touch(cacheentry it)
 	{
@@ -854,15 +857,15 @@ public:
 
 int main() {
 	Solution sol;
-	LRUCache2 cache(2);
-	cache.put(1, 1);
-	cache.put(2, 2);
-	cout << cache.get(1) << endl;
-	cout << cache.get(2) << endl;
-	cache.put(2, 3);
-	cout << cache.get(1) << endl;
-	cout << cache.get(2) << endl;
-	cout << cache.get(3) << endl;
+	//LRUCache2 cache(2);
+	//cache.put(1, 1);
+	//cache.put(2, 2);
+	//cout << cache.get(1) << endl;
+	//cout << cache.get(2) << endl;
+	//cache.put(2, 3);
+	//cout << cache.get(1) << endl;
+	//cout << cache.get(2) << endl;
+	//cout << cache.get(3) << endl;
 
 	//    vector<int> rating;
 	//    rating = {1, 3, 4, 56, 3, 2};
