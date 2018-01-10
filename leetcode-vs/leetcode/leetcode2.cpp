@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -734,30 +734,39 @@ public:
         return sign == 1 ? res : -res;
     }
 
-//    int divide_(int dividend, int divisor) {
-//        if (divisor == 0 || (dividend == INT_MIN && divisor == -1)) {
-//            return INT_MAX;
-//        }
-//        long long dvd = labs(dividend), dvs = labs(divisor);
-//        int ans = 0, sign = ((divisor > 0) ^ (dividend > 0)) ? -1 : 1;
-//        while (dvs <= dvd) {
-//            long long temp = dvs, multiple = 1;
-//            while (temp <= (dvd >> 1)) {
-//                temp <<= 1;
-//                multiple <<= 1;
-//            }
-//            dvd -= temp;
-//            ans += multiple;
-//        }
-//        return sign == 1 ? ans : -ans;
-//    }
+    //135. Candy
+    int candy(vector<int> &ratings) {
+        int len = ratings.size(), ans = 0;
+        if (len <= 1) {
+            return len;
+        }
+        vector<int> dp(len, 1);
+        for (int i = 1; i < len; ++i) {
+            if (ratings[i] > ratings[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            }
+        }
+        for (int i = len - 1; i >= 1; i--) {
+            if (ratings[i - 1] > ratings[i]) {
+                dp[i - 1] = max(dp[i] + 1, dp[i - 1]);
+            }
+        }
+        for (auto i:dp) {
+            ans += i;
+        }
+        return ans;
+    }
+
 };
 
 
 int main() {
     Solution sol;
-    vector<string> words;
-    cout << sol.divide(1230, 12) << endl;
+    vector<int> rating;
+    rating = {1, 3, 4, 56, 3, 2};
+    cout << sol.candy(rating) << endl;
+//    vector<string> words;
+//    cout << sol.divide(1230, 12) << endl;
 //	cout << sol.removeKdigits("1432219", 3) << endl;
 //	cout << sol.removeKdigits("10", 1) << endl;
 //	cout << sol.removeKdigits("112", 1) << endl;
