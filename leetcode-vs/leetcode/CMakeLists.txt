@@ -3,4 +3,4 @@ project(leetcode)
 
 set(CMAKE_CXX_STANDARD 11)
 set(SOURCE_FILES leetcode2.cpp)
-add_executable(clion01 ${SOURCE_FILES})
+add_executable(leetcode ${SOURCE_FILES})
