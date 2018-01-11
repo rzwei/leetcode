@@ -4,8 +4,38 @@
     <bookmark url="file://$PROJECT_DIR$/leetcode6.py" line="880" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ccd1792-7d20-4e90-a057-4adb15228c1d" name="Default" comment="">
+    <list default="true" id="8ccd1792-7d20-4e90-a057-4adb15228c1d" name="Default" comment="576. Out of Boundary Paths">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeCache.txt" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeCache.txt" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeCCompiler.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeCCompiler.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeCXXCompiler.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeCXXCompiler.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeDetermineCompilerABI_C.bin" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeDetermineCompilerABI_C.bin" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeDetermineCompilerABI_CXX.bin" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeDetermineCompilerABI_CXX.bin" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeRCCompiler.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeRCCompiler.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeSystem.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CMakeSystem.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/3.9.6/CompilerIdC/a.exe" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/Makefile.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/Makefile.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/Makefile2" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/Makefile2" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/TargetDirectories.txt" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion-environment.txt" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion-environment.txt" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion-log.txt" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion-log.txt" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/CXX.includecache" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/CXX.includecache" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/DependInfo.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/DependInfo.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/build.make" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/build.make" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/cmake_clean.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/cmake_clean.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/depend.internal" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/depend.internal" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/depend.make" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/depend.make" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/flags.make" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/flags.make" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/leetcode.cpp.o" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/link.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/feature_tests.bin" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/feature_tests.bin" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/feature_tests.c" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/Makefile" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/Makefile" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/clion01.exe" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/clion01.exe" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/clion01.exe.stackdump" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/cmake_install.cmake" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/cmake_install.cmake" />
+      <change beforePath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/leetcode.cbp" afterPath="$PROJECT_DIR$/leetcode-vs/leetcode/cmake-build-debug/leetcode.cbp" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,7 +48,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/rzwei_leetcode$leetcode10.coverage" NAME="leetcode10 Coverage Results" MODIFIED="1514539868692" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/coder$leetcode12.coverage" NAME="leetcode12 Coverage Results" MODIFIED="1515159402414" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/rzwei_leetcode$leetcode12.coverage" NAME="leetcode12 Coverage Results" MODIFIED="1514539947777" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/rzwei_leetcode$leetcode12.coverage" NAME="leetcode12 Coverage Results" MODIFIED="1515302489840" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/rzwei_leetcode$leetcode8.coverage" NAME="leetcode8 Coverage Results" MODIFIED="1514539859895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
@@ -26,11 +56,21 @@
       <file leaf-file-name="leetcode12.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/leetcode12.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+            <state relative-caret-position="323">
+              <caret line="182" column="18" lean-forward="true" selection-start-line="182" selection-start-column="18" selection-end-line="182" selection-end-column="18" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="builtins.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.PyCharm2017.3/system/python_stubs/2102562378/builtins.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="4757" column="11" lean-forward="false" selection-start-line="4757" selection-start-column="11" selection-end-line="4757" selection-end-column="11" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -118,8 +158,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2167" />
-    <option name="y" value="186" />
+    <option name="x" value="316" />
+    <option name="y" value="357" />
     <option name="width" value="1089" />
     <option name="height" value="689" />
   </component>
@@ -158,8 +198,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -171,6 +209,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
@@ -249,12 +289,12 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="D:\projects\coder\pure\Scripts\python.exe" />
+      <option name="SDK_HOME" value="D:\ProgramData\Miniconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="coder" />
+      <module name="rzwei-leetcode" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/leetcode12.py" />
       <option name="PARAMETERS" value="" />
@@ -553,20 +593,6 @@
       <workItem from="1514538128388" duration="114000" />
       <workItem from="1514538255138" duration="114000" />
       <workItem from="1514647755898" duration="20000" />
-    </task>
-    <task id="LOCAL-00006" summary="many problems">
-      <created>1511689840238</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1511689840238</updated>
-    </task>
-    <task id="LOCAL-00007" summary="distributeCandies">
-      <created>1511881936380</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1511881936380</updated>
     </task>
     <task id="LOCAL-00008" summary="distributeCandies">
       <created>1511882299974</created>
@@ -890,35 +916,49 @@
       <option name="project" value="LOCAL" />
       <updated>1515159488130</updated>
     </task>
-    <task id="LOCAL-00054" summary="576. Out of Boundary Paths">
-      <created>1515159492342</created>
+    <task id="LOCAL-00054" summary="638. Shopping Offers">
+      <created>1515169511654</created>
       <option name="number" value="00054" />
       <option name="presentableId" value="LOCAL-00054" />
       <option name="project" value="LOCAL" />
-      <updated>1515159492342</updated>
+      <updated>1515169511662</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="638. Shopping Offers">
+      <created>1515169834771</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1515169834771</updated>
+    </task>
+    <task id="LOCAL-00056" summary="759. Employee Free Time">
+      <created>1515303172199</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1515303172200</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="696262000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2167" y="186" width="1089" height="689" extended-state="0" />
+    <frame x="316" y="357" width="1089" height="689" extended-state="0" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28955224" sideWeight="0.5248902" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.94474155" sideWeight="0.4823386" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4820144" sideWeight="0.47510982" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27304348" sideWeight="0.47510982" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15086646" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3476235" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24670571" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47975078" sideWeight="0.49166667" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41044775" sideWeight="0.49166667" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1012,8 +1052,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="145. Binary Tree Postorder Traversal" />
-    <MESSAGE value="740. Delete and Earn" />
     <MESSAGE value="154. Find Minimum in Rotated Sorted Array II" />
     <MESSAGE value="212. Word Search II" />
     <MESSAGE value="115. Distinct Subsequences" />
@@ -1034,14 +1072,16 @@
     <MESSAGE value="753. Cracking the Safe" />
     <MESSAGE value="546. Remove Boxes" />
     <MESSAGE value="565. Array Nesting" />
+    <MESSAGE value="576. Out of Boundary Paths" />
     <MESSAGE value="522. Longest Uncommon Subsequence II" />
     <MESSAGE value="502. IPO" />
-    <MESSAGE value="576. Out of Boundary Paths" />
-    <option name="LAST_COMMIT_MESSAGE" value="576. Out of Boundary Paths" />
+    <MESSAGE value="638. Shopping Offers" />
+    <MESSAGE value="759. Employee Free Time" />
+    <option name="LAST_COMMIT_MESSAGE" value="759. Employee Free Time" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="208" />
+      <option name="time" value="210" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1090,7 +1130,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/ProgramData/Miniconda3/Lib/site-packages/torch/__init__.py" />
     <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/demo_pytorch_feedback.py" />
     <entry file="file://$PROJECT_DIR$/learn_tensorflow/demos/demo_pytorch_linear.py" />
     <entry file="file://$APPLICATION_PLUGINS_DIR$/python/helpers/pydev/_pydev_imps/_pydev_execfile.py" />
@@ -1278,10 +1317,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2017.3/system/python_stubs/2102562378/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="4757" column="11" lean-forward="false" selection-start-line="4757" selection-start-column="11" selection-end-line="4757" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/leetcode12.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state relative-caret-position="323">
+          <caret line="182" column="18" lean-forward="true" selection-start-line="182" selection-start-column="18" selection-end-line="182" selection-end-column="18" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>

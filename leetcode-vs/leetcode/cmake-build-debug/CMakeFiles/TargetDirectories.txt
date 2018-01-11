@@ -1,3 +1,3 @@
-/cygdrive/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir
+F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir
+F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/rebuild_cache.dir

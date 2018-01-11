@@ -4,8 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/cygdrive/d/projects/coder/leetcode-vs/leetcode/leetcode.cpp" "/cygdrive/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/leetcode.cpp.o"
+  "F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/leetcode2.cpp" "F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/clion01.dir/leetcode2.cpp.obj"
   )
+set(CMAKE_CXX_COMPILER_ID "MSVC")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

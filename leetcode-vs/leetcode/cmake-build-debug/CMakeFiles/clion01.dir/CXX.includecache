@@ -6,22 +6,16 @@
 
 #IncludeRegexTransform: 
 
-/cygdrive/d/projects/coder/leetcode-vs/leetcode/leetcode.cpp
-stdafx.h
-/cygdrive/d/projects/coder/leetcode-vs/leetcode/stdafx.h
-cmath
+F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/leetcode2.cpp
+sstream
 -
 functional
 -
 iostream
 -
-stack
+unordered_map
 -
 vector
--
-map
--
-unordered_map
 -
 set
 -
@@ -29,6 +23,10 @@ unordered_set
 -
 algorithm
 -
-string
+map
+-
+queue
+-
+climits
 -
 

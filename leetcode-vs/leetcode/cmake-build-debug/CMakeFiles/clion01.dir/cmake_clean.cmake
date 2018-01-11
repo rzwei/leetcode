@@ -1,8 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/clion01.dir/leetcode.cpp.o"
+  "CMakeFiles/clion01.dir/leetcode2.cpp.obj"
   "clion01.pdb"
   "clion01.exe"
-  "libclion01.dll.a"
+  "clion01.exe.manifest"
+  "clion01.lib"
 )
 
 # Per-language clean rules from dependency scanning.

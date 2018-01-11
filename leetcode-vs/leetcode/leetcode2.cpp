@@ -891,7 +891,7 @@ public:
 	}
 	bool findnext(int i, long long  last, long long target, string &num)
 	{
-		//cout << i << " " << last << " " << target << endl;
+		cout << i << " " << last << " " << target << endl;
 		int len = num.length(), k = 0;
 		string ts = to_string(target);
 		//if (num[i] == '0')
@@ -935,14 +935,64 @@ public:
 		}
 		return false;
 	}
+
+	//321. Create Maximum Number
+	vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+		vector<int> ans;
+		int i = 0, j = 0, len1 = nums1.size(), len2 = nums2.size();
+		while (k)
+		{
+			int ii = i, maxii = i, jj = j, maxjj = j;
+			while (ii<len1 && len1 - ii + len2 - j > k)
+			{
+				if (nums1[maxii] < nums1[ii])
+					maxii = ii;
+				ii++;
+			}
+			while (jj<len2 && len1 - i + len2 - jj > k)
+			{
+				if (nums2[maxjj] < nums2[jj])
+					maxjj = jj;
+				jj++;
+			}
+			if (nums1[maxii] > nums2[maxjj])
+			{
+				ans.push_back(nums1[maxii]);
+				i = maxii + 1;
+			}
+			else if (nums1[maxii] < nums2[maxjj])
+			{
+				ans.push_back(nums2[maxjj]);
+				j = maxjj + 1;
+			}
+			else {
+				if (len1 - maxii > len2 - maxjj)
+				{
+					ans.push_back(nums1[maxii]);
+					i = maxii + 1;
+				}
+				else {
+					ans.push_back(nums2[maxjj]);
+					j = maxjj + 1;
+				}
+			}
+			k--;
+		}
+		return ans;
+	}
 };
 
 
 int main() {
 	Solution sol;
+	vector<int>nums1{ 3,4,6,5 }, nums2{ 9,1,2,5,8,3 };
+	auto r = sol.maxNumber(nums1, nums2, 5);
+	for (auto i : r)
+		cout << i << " ";
+	cout << endl;
 	//cout << sol.isAdditiveNumber("112358") << endl;
 	//cout << sol.isAdditiveNumber("1991001992") << endl;
-	cout << sol.isAdditiveNumber("121474836472147483648") << endl;
+	//cout << sol.isAdditiveNumber("121474836472147483648") << endl;
 	//LRUCache2 cache(2);
 	//cache.put(1, 1);
 	//cache.put(2, 2);
