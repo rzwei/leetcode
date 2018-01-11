@@ -20,6 +20,60 @@ def buildIntervals(inters: List[List[int]]):
         ans.append(Interval(s, e))
     return ans
 
+class Iterator(object):
+    def __init__(self, nums):
+        """
+        Initializes an iterator object to the beginning of a list.
+        :type nums: List[int]
+        """
+
+    def hasNext(self):
+        """
+        Returns true if the iteration has more elements.
+        :rtype: bool
+        """
+
+    def next(self):
+        """
+        Returns the next element in the iteration.
+        :rtype: int
+        """
+
+#284. Peeking Iterator
+class PeekingIterator(object):
+    def __init__(self, iterator):
+        """
+        Initialize your data structure here.
+        :type iterator: Iterator
+        """
+        self.iterator = iterator
+        self.cur = None
+        self.hasnext = False
+        if iterator.hasNext():
+            self.hasnext = True
+            self.cur = iterator.next()
+
+    def peek(self):
+        """
+        Returns the next element in the iteration without advancing the iterator.
+        :rtype: int
+        """
+        return self.cur
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        t = self.cur
+        self.hasnext = self.iterator.hasNext()
+        self.cur = self.iterator.next()
+        return t
+
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        return self.hasnext
 
 class Solution:
     def intersectionSizeTwo(self, intervals):
