@@ -851,12 +851,60 @@ public:
 		}
 		return ans;
 	}
-
+	bool findnext(int i, long long  last, long long target, string &num)
+	{
+		//cout << i << " " << last << " " << target << endl;
+		int len = num.length(), k = 0;
+		string ts = to_string(target);
+		//if (num[i] == '0')
+			//return false;
+		for (k = 0; i < len&&k < ts.length(); i++, k++)
+		{
+			if (num[i] == ts[k])
+				continue;
+			return false;
+		}
+		if (k == ts.length())
+		{
+			if (i == len)
+				return true;
+			else
+				return findnext(i, target, last + target, num);
+		}
+		return false;
+	}
+	//306. Additive Number
+	bool isAdditiveNumber(string num) {
+		int len = num.size();
+		if (len == 0)
+			return false;
+		long long left = 0, right;
+		for (int i = 0; i < len - 1; i++)
+		{
+			left = left * 10 + num[i] - '0';
+			if (num[0] == '0' && i > 0)
+				continue;
+			right = 0;
+			for (int j = i + 1; j < len; j++)
+			{
+				right = right * 10 + num[j] - '0';
+				//cout << left << " " << right << " " << left + right << endl;
+				if (num[i + 1] == '0'&&j > i + 1)
+					continue;
+				if (findnext(j + 1, right, left + right, num))
+					return true;
+			}
+		}
+		return false;
+	}
 };
 
 
 int main() {
 	Solution sol;
+	//cout << sol.isAdditiveNumber("112358") << endl;
+	//cout << sol.isAdditiveNumber("1991001992") << endl;
+	cout << sol.isAdditiveNumber("121474836472147483648") << endl;
 	//LRUCache2 cache(2);
 	//cache.put(1, 1);
 	//cache.put(2, 2);
