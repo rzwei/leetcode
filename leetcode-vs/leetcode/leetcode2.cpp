@@ -935,50 +935,86 @@ public:
 		}
 		return false;
 	}
-
-	//321. Create Maximum Number
-	vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
-		vector<int> ans;
-		int i = 0, j = 0, len1 = nums1.size(), len2 = nums2.size();
-		while (k)
+	int cmpVector(vector<int> &num1, vector<int> &num2) {
+		if (num1.size() == num2.size())
 		{
-			int ii = i, maxii = i, jj = j, maxjj = j;
-			while (ii<len1 && len1 - ii + len2 - j > k)
+			for (int i = 0; i < num1.size(); i++)
 			{
-				if (nums1[maxii] < nums1[ii])
-					maxii = ii;
-				ii++;
+				if (num1[i] != num2[i])
+				{
+					return num1[i] - num2[i];
+				}
 			}
-			while (jj<len2 && len1 - i + len2 - jj > k)
+			return 0;
+		}
+		return num1.size() > num2.size() ? 1 : -1;
+	}
+	vector<int> getNumber(int i, int j, int k, vector<int> &num1, vector<int>&num2, map<pair<int, pair<int, int>>, vector<int>*>&memo)
+	{
+		if (memo.find({ i,{j,k } }) != memo.end())
+		{
+			return *memo[{i, { j,k }}];
+		}
+		if (k == 0) return vector<int>();
+		int t = i, maxi = i, maxj = j, len1 = num1.size(), len2 = num2.size(), idxi = i, idxj = j;
+		vector<int> ans;
+		while (t < num1.size() && len1 - t + len2 - j >= k)
+		{
+			if (num1[t] > num1[maxi])
+				maxi = t;
+			t++;
+		}
+		t = j;
+		while (t < num2.size() && len1 - i + len2 - t >= k)
+		{
+			if (num2[t] > num2[maxj])
+				maxj = t;
+			t++;
+		}
+		if (maxi < len1&&maxj < len2) {
+			if (num1[maxi] > num2[maxj])
 			{
-				if (nums2[maxjj] < nums2[jj])
-					maxjj = jj;
-				jj++;
+				auto r = getNumber(maxi + 1, j, k - 1, num1, num2, memo);
+				r.insert(r.begin(), num1[maxi]);
+				ans = r;
 			}
-			if (nums1[maxii] > nums2[maxjj])
+			else if (num1[maxi] < num2[maxj])
 			{
-				ans.push_back(nums1[maxii]);
-				i = maxii + 1;
-			}
-			else if (nums1[maxii] < nums2[maxjj])
-			{
-				ans.push_back(nums2[maxjj]);
-				j = maxjj + 1;
+				auto r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
+				r.insert(r.begin(), num2[maxj]);
+				ans = r;
 			}
 			else {
-				if (len1 - maxii > len2 - maxjj)
+				auto l = getNumber(maxi + 1, j, k - 1, num1, num2, memo), r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
+				if (cmpVector(l, r) > 0)
 				{
-					ans.push_back(nums1[maxii]);
-					i = maxii + 1;
+					l.insert(l.begin(), num1[maxi]);
+					ans = l;
 				}
 				else {
-					ans.push_back(nums2[maxjj]);
-					j = maxjj + 1;
+					r.insert(r.begin(), num2[maxj]);
+					ans = r;
 				}
 			}
-			k--;
 		}
+		else if (maxi < len1) {
+			auto r = getNumber(maxi + 1, j, k - 1, num1, num2, memo);
+			r.insert(r.begin(), num1[maxi]);
+			ans = r;
+		}
+		else if (maxj < len2)
+		{
+			auto r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
+			r.insert(r.begin(), num2[maxj]);
+			ans = r;
+		}
+		memo[{i, { j,k }}] = &ans;
 		return ans;
+	}
+	//321. Create Maximum Number
+	vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+		map<pair<int, pair<int, int>>, vector<int>*>memo;
+		return getNumber(0, 0, k, nums1, nums2, memo);
 	}
 };
 
@@ -986,6 +1022,8 @@ public:
 int main() {
 	Solution sol;
 	vector<int>nums1{ 3,4,6,5 }, nums2{ 9,1,2,5,8,3 };
+	//nums2 = { 8,9 };
+	//nums2 = { 8,9 };
 	auto r = sol.maxNumber(nums1, nums2, 5);
 	for (auto i : r)
 		cout << i << " ";
