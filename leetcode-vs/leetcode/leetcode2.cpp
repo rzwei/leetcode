@@ -935,86 +935,123 @@ public:
 		}
 		return false;
 	}
-	int cmpVector(vector<int> &num1, vector<int> &num2) {
-		if (num1.size() == num2.size())
-		{
-			for (int i = 0; i < num1.size(); i++)
-			{
-				if (num1[i] != num2[i])
-				{
-					return num1[i] - num2[i];
-				}
-			}
-			return 0;
-		}
-		return num1.size() > num2.size() ? 1 : -1;
-	}
-	vector<int> getNumber(int i, int j, int k, vector<int> &num1, vector<int>&num2, map<pair<int, pair<int, int>>, vector<int>*>&memo)
+	//int cmpVector(vector<int> &num1, vector<int> &num2) {
+	//	if (num1.size() == num2.size())
+	//	{
+	//		for (int i = 0; i < num1.size(); i++)
+	//		{
+	//			if (num1[i] != num2[i])
+	//			{
+	//				return num1[i] - num2[i];
+	//			}
+	//		}
+	//		return 0;
+	//	}
+	//	return num1.size() > num2.size() ? 1 : -1;
+	//}
+	//vector<int> getNumber(int i, int j, int k, vector<int> &num1, vector<int>&num2, map<pair<int, pair<int, int>>, vector<int>*>&memo)
+	//{
+	//	if (memo.find({ i,{j,k } }) != memo.end())
+	//	{
+	//		return *memo[{i, { j,k }}];
+	//	}
+	//	if (k == 0) return vector<int>();
+	//	int t = i, maxi = i, maxj = j, len1 = num1.size(), len2 = num2.size(), idxi = i, idxj = j;
+	//	vector<int> ans;
+	//	while (t < num1.size() && len1 - t + len2 - j >= k)
+	//	{
+	//		if (num1[t] > num1[maxi])
+	//			maxi = t;
+	//		t++;
+	//	}
+	//	t = j;
+	//	while (t < num2.size() && len1 - i + len2 - t >= k)
+	//	{
+	//		if (num2[t] > num2[maxj])
+	//			maxj = t;
+	//		t++;
+	//	}
+	//	if (maxi < len1&&maxj < len2) {
+	//		if (num1[maxi] > num2[maxj])
+	//		{
+	//			auto r = getNumber(maxi + 1, j, k - 1, num1, num2, memo);
+	//			r.insert(r.begin(), num1[maxi]);
+	//			ans = r;
+	//		}
+	//		else if (num1[maxi] < num2[maxj])
+	//		{
+	//			auto r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
+	//			r.insert(r.begin(), num2[maxj]);
+	//			ans = r;
+	//		}
+	//		else {
+	//			auto l = getNumber(maxi + 1, j, k - 1, num1, num2, memo), r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
+	//			if (cmpVector(l, r) > 0)
+	//			{
+	//				l.insert(l.begin(), num1[maxi]);
+	//				ans = l;
+	//			}
+	//			else {
+	//				r.insert(r.begin(), num2[maxj]);
+	//				ans = r;
+	//			}
+	//		}
+	//	}
+	//	else if (maxi < len1) {
+	//		auto r = getNumber(maxi + 1, j, k - 1, num1, num2, memo);
+	//		r.insert(r.begin(), num1[maxi]);
+	//		ans = r;
+	//	}
+	//	else if (maxj < len2)
+	//	{
+	//		auto r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
+	//		r.insert(r.begin(), num2[maxj]);
+	//		ans = r;
+	//	}
+	//	memo[{i, { j,k }}] = &ans;
+	//	return ans;
+	//}
+	////321. Create Maximum Number
+	//vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+	//	map<pair<int, pair<int, int>>, vector<int>*>memo;
+	//	return getNumber(0, 0, k, nums1, nums2, memo);
+	//}
+	vector<int> getMaxNumber(vector<int> &nums, int k)
 	{
-		if (memo.find({ i,{j,k } }) != memo.end())
+		vector<int>ans;
+		int len = nums.size();
+		int drop = len - k;
+
+		for (int i = 0; i < len ; i++)
 		{
-			return *memo[{i, { j,k }}];
+			while (drop && !ans.empty() && ans.back() < nums[i])
+			{
+				ans.pop_back();
+				drop--;
+			}
+			ans.push_back(nums[i]);
 		}
-		if (k == 0) return vector<int>();
-		int t = i, maxi = i, maxj = j, len1 = num1.size(), len2 = num2.size(), idxi = i, idxj = j;
+		ans.resize(k);
+		return ans;
+	}
+	vector<int> getMaxNumber(vector<int>nums1, vector<int>nums2)
+	{
 		vector<int> ans;
-		while (t < num1.size() && len1 - t + len2 - j >= k)
+		while (nums1.size() + nums2.size())
 		{
-			if (num1[t] > num1[maxi])
-				maxi = t;
-			t++;
+			vector<int> &now = nums1 > nums2 ? nums1 : nums2;
+			ans.push_back(now[0]);
+			now.erase(now.begin());
 		}
-		t = j;
-		while (t < num2.size() && len1 - i + len2 - t >= k)
-		{
-			if (num2[t] > num2[maxj])
-				maxj = t;
-			t++;
-		}
-		if (maxi < len1&&maxj < len2) {
-			if (num1[maxi] > num2[maxj])
-			{
-				auto r = getNumber(maxi + 1, j, k - 1, num1, num2, memo);
-				r.insert(r.begin(), num1[maxi]);
-				ans = r;
-			}
-			else if (num1[maxi] < num2[maxj])
-			{
-				auto r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
-				r.insert(r.begin(), num2[maxj]);
-				ans = r;
-			}
-			else {
-				auto l = getNumber(maxi + 1, j, k - 1, num1, num2, memo), r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
-				if (cmpVector(l, r) > 0)
-				{
-					l.insert(l.begin(), num1[maxi]);
-					ans = l;
-				}
-				else {
-					r.insert(r.begin(), num2[maxj]);
-					ans = r;
-				}
-			}
-		}
-		else if (maxi < len1) {
-			auto r = getNumber(maxi + 1, j, k - 1, num1, num2, memo);
-			r.insert(r.begin(), num1[maxi]);
-			ans = r;
-		}
-		else if (maxj < len2)
-		{
-			auto r = getNumber(i, maxj + 1, k - 1, num1, num2, memo);
-			r.insert(r.begin(), num2[maxj]);
-			ans = r;
-		}
-		memo[{i, { j,k }}] = &ans;
 		return ans;
 	}
 	//321. Create Maximum Number
 	vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
-		map<pair<int, pair<int, int>>, vector<int>*>memo;
-		return getNumber(0, 0, k, nums1, nums2, memo);
+		int n1 = nums1.size(), n2 = nums2.size();
+		vector<int> ans;
+		for (int k1 = max(k - n2, 0); k1 <= min(k, n1); k1++)
+			ans = max(ans, getMaxNumber(getMaxNumber(nums1, k1), getMaxNumber(nums2, k - k1)));
+		return ans;
 	}
 };
 
