@@ -72,11 +72,12 @@ private:
 
 class LRUCache2 {
 public:
-	list<int>keys;
+	list<int> keys;
 	unordered_map<int, pair<int, list<int>::iterator>> cache;
 	typedef unordered_map<int, pair<int, list<int>::iterator>>::iterator cacheentry;
 	int size;
-	LRUCache2(int capacity) :size(capacity) {
+
+	LRUCache2(int capacity) : size(capacity) {
 
 	}
 
@@ -90,49 +91,51 @@ public:
 
 	void put(int key, int value) {
 		auto it = cache.find(key);
-		if (it != cache.end())
-		{
+		if (it != cache.end()) {
 			touch(it);
 			it->second.first = value;
 		}
 		else {
-			if (cache.size() == size)
-			{
+			if (cache.size() == size) {
 				cache.erase(keys.back());
 				keys.pop_back();
 			}
 			keys.push_front(key);
-			cache[key] = { value,keys.begin() };
+			cache[key] = { value, keys.begin() };
 		}
 	}
-	void touch(cacheentry it)
-	{
+
+	void touch(cacheentry it) {
 		int key = it->first;
 		keys.erase(it->second.second);
 		keys.push_front(key);
 		it->second.second = keys.begin();
 	}
 };
+
 class Iterator {
 	struct Data;
-	Data* data;
+	Data *data;
 public:
-	Iterator(const vector<int>& nums);
-	Iterator(const Iterator& iter);
+	Iterator(const vector<int> &nums);
+
+	Iterator(const Iterator &iter);
+
 	virtual ~Iterator();
+
 	// Returns the next element in the iteration.
 	int next();
+
 	// Returns true if the iteration has more elements.
 	bool hasNext() const;
 };
 
 
-class PeekingIterator : public Iterator
-{
+class PeekingIterator : public Iterator {
 	int m_next;
 	bool m_hasnext;
 public:
-	PeekingIterator(const vector<int>& nums) : Iterator(nums) {
+	PeekingIterator(const vector<int> &nums) : Iterator(nums) {
 		m_hasnext = Iterator::hasNext();
 		if (m_hasnext) m_next = Iterator::next();
 	}
@@ -152,6 +155,7 @@ public:
 		return m_hasnext;
 	}
 };
+
 class Solution {
 public:
 	int maxSumSubmatrix(vector<vector<int>> &matrix, int k) {
@@ -889,21 +893,19 @@ public:
 		}
 		return ans;
 	}
-	bool findnext(int i, long long  last, long long target, string &num)
-	{
+
+	bool findnext(int i, long long last, long long target, string &num) {
 		cout << i << " " << last << " " << target << endl;
 		int len = num.length(), k = 0;
 		string ts = to_string(target);
 		//if (num[i] == '0')
-			//return false;
-		for (k = 0; i < len&&k < ts.length(); i++, k++)
-		{
+		//return false;
+		for (k = 0; i < len && k < ts.length(); i++, k++) {
 			if (num[i] == ts[k])
 				continue;
 			return false;
 		}
-		if (k == ts.length())
-		{
+		if (k == ts.length()) {
 			if (i == len)
 				return true;
 			else
@@ -911,23 +913,22 @@ public:
 		}
 		return false;
 	}
+
 	//306. Additive Number
 	bool isAdditiveNumber(string num) {
 		int len = num.size();
 		if (len == 0)
 			return false;
 		long long left = 0, right;
-		for (int i = 0; i < len - 1; i++)
-		{
+		for (int i = 0; i < len - 1; i++) {
 			left = left * 10 + num[i] - '0';
 			if (num[0] == '0' && i > 0)
 				continue;
 			right = 0;
-			for (int j = i + 1; j < len; j++)
-			{
+			for (int j = i + 1; j < len; j++) {
 				right = right * 10 + num[j] - '0';
 				//cout << left << " " << right << " " << left + right << endl;
-				if (num[i + 1] == '0'&&j > i + 1)
+				if (num[i + 1] == '0' && j > i + 1)
 					continue;
 				if (findnext(j + 1, right, left + right, num))
 					return true;
@@ -935,6 +936,7 @@ public:
 		}
 		return false;
 	}
+
 	//int cmpVector(vector<int> &num1, vector<int> &num2) {
 	//	if (num1.size() == num2.size())
 	//	{
@@ -1016,16 +1018,13 @@ public:
 	//	map<pair<int, pair<int, int>>, vector<int>*>memo;
 	//	return getNumber(0, 0, k, nums1, nums2, memo);
 	//}
-	vector<int> getMaxNumber(vector<int> &nums, int k)
-	{
-		vector<int>ans;
+	vector<int> getMaxNumber(vector<int> &nums, int k) {
+		vector<int> ans;
 		int len = nums.size();
 		int drop = len - k;
 
-		for (int i = 0; i < len ; i++)
-		{
-			while (drop && !ans.empty() && ans.back() < nums[i])
-			{
+		for (int i = 0; i < len; i++) {
+			while (drop && !ans.empty() && ans.back() < nums[i]) {
 				ans.pop_back();
 				drop--;
 			}
@@ -1034,37 +1033,67 @@ public:
 		ans.resize(k);
 		return ans;
 	}
-	vector<int> getMaxNumber(vector<int>nums1, vector<int>nums2)
-	{
+
+	vector<int> getMaxNumber(vector<int> nums1, vector<int> nums2) {
 		vector<int> ans;
-		while (nums1.size() + nums2.size())
-		{
+		while (nums1.size() + nums2.size()) {
 			vector<int> &now = nums1 > nums2 ? nums1 : nums2;
 			ans.push_back(now[0]);
 			now.erase(now.begin());
 		}
 		return ans;
 	}
+
 	//321. Create Maximum Number
-	vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+	vector<int> maxNumber(vector<int> &nums1, vector<int> &nums2, int k) {
 		int n1 = nums1.size(), n2 = nums2.size();
 		vector<int> ans;
 		for (int k1 = max(k - n2, 0); k1 <= min(k, n1); k1++)
 			ans = max(ans, getMaxNumber(getMaxNumber(nums1, k1), getMaxNumber(nums2, k - k1)));
 		return ans;
 	}
+
+	//324. Wiggle Sort II
+	void wiggleSort(vector<int> &nums) {
+		int n = nums.size();
+
+		// Find a median.
+		auto midptr = nums.begin() + n / 2;
+		nth_element(nums.begin(), midptr, nums.end());
+		int mid = *midptr;
+
+		// Index-rewiring.
+#define A(i) nums[(1+2*(i)) % (n|1)]
+
+		// 3-way-partition-to-wiggly in O(n) time with O(1) space.
+		int i = 0, j = 0, k = n - 1;
+		while (j <= k) {
+			if (A(j) > mid)
+				swap(A(i++), A(j++));
+			else if (A(j) < mid)
+				swap(A(j), A(k--));
+			else
+				j++;
+		}
+	}
 };
 
-
+ 
 int main() {
 	Solution sol;
-	vector<int>nums1{ 3,4,6,5 }, nums2{ 9,1,2,5,8,3 };
-	//nums2 = { 8,9 };
-	//nums2 = { 8,9 };
-	auto r = sol.maxNumber(nums1, nums2, 5);
-	for (auto i : r)
+	vector<int> nums{ 1,5,1,1,6,4 };
+	sol.wiggleSort(nums);
+	for (auto i : nums)
 		cout << i << " ";
 	cout << endl;
+
+	//vector<int> nums1{ 3, 4, 6, 5 }, nums2{ 9, 1, 2, 5, 8, 3 };
+	//nums2 = { 8,9 };
+	//nums2 = { 8,9 };
+	//auto r = sol.maxNumber(nums1, nums2, 5);
+	//for (auto i : r)
+	//	cout << i << " ";
+	//cout << endl;
 	//cout << sol.isAdditiveNumber("112358") << endl;
 	//cout << sol.isAdditiveNumber("1991001992") << endl;
 	//cout << sol.isAdditiveNumber("121474836472147483648") << endl;
@@ -1086,40 +1115,40 @@ int main() {
 	//	cout << sol.removeKdigits("1432219", 3) << endl;
 	//	cout << sol.removeKdigits("10", 1) << endl;
 	//	cout << sol.removeKdigits("112", 1) << endl;
-		//    cout << sol.findMinStep("WBYGWYYGGB", "WR") << endl;
-		//    cout << sol.findMinStep("WWRRBBWW", "WRBRW") << endl;
-		//    cout << sol.findMinStep("G", "GGGG") << endl;
-		//    cout << sol.findMinStep("RBYYBBRRB", "YRBGB") << endl;
-		//words = { "ab","bc","cd" };
-		//    cout << sol.boldWords(words, "aabcd") << endl;
-		//cout << sol.boldWords(words, "aabcd") << endl;
-		//vector<int> prices{ 3,3,5,0,0,3,1,4 };
-		//prices = { 1,2,4 };
-		//prices = { 7,1,5,3,6,4 };
-		//cout << sol.maxProfit(prices) << endl;
-		//cout << sol.maxProfit_two(prices) << endl;
-		//cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
-		//cout << sol.lengthLongestPath("a") << endl;
-		//vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
-		//allowed = { "XXX", "XXY", "XYX", "XYY", "Y1XZ" };
-		//cout << sol.pyramidTransition("XXYX", allowed) << endl;
-		//cout << sol.pyramidTransition("XYZ", allowed) << endl;
-		//cout << sol.monotoneIncreasingDigits(110) << endl;
-		//cout << sol.evaluate("(add 1 2)") << endl;
-		//    vector<int> nums{1, 3, 2, 3, 1};
-		//vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
-		//    cout << sol.reversePairs(nums) << endl;
-		//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
-		//Solution sol;
-		//vector<vector<int>> nums(4, vector<int>());
-		//nums[0] = vector<int>{ 1,4,3,1,3,2 };
-		//nums[1] = vector<int>{ 3,2,1,3,2,4 };
-		//nums[2] = vector<int>{ 2,3,3,2,3,1 };
-		//cout << sol.trapRainWater(nums) << endl;
+	//    cout << sol.findMinStep("WBYGWYYGGB", "WR") << endl;
+	//    cout << sol.findMinStep("WWRRBBWW", "WRBRW") << endl;
+	//    cout << sol.findMinStep("G", "GGGG") << endl;
+	//    cout << sol.findMinStep("RBYYBBRRB", "YRBGB") << endl;
+	//words = { "ab","bc","cd" };
+	//    cout << sol.boldWords(words, "aabcd") << endl;
+	//cout << sol.boldWords(words, "aabcd") << endl;
+	//vector<int> prices{ 3,3,5,0,0,3,1,4 };
+	//prices = { 1,2,4 };
+	//prices = { 7,1,5,3,6,4 };
+	//cout << sol.maxProfit(prices) << endl;
+	//cout << sol.maxProfit_two(prices) << endl;
+	//cout << sol.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext") << endl;
+	//cout << sol.lengthLongestPath("a") << endl;
+	//vector<string> allowed{ "XYD", "YZE", "DEA", "FFF" };
+	//allowed = { "XXX", "XXY", "XYX", "XYY", "Y1XZ" };
+	//cout << sol.pyramidTransition("XXYX", allowed) << endl;
+	//cout << sol.pyramidTransition("XYZ", allowed) << endl;
+	//cout << sol.monotoneIncreasingDigits(110) << endl;
+	//cout << sol.evaluate("(add 1 2)") << endl;
+	//    vector<int> nums{1, 3, 2, 3, 1};
+	//vector<int> nums{ 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 };
+	//    cout << sol.reversePairs(nums) << endl;
+	//cout << sol.longestSubstring("bbaaacbd", 3) << endl;
+	//Solution sol;
+	//vector<vector<int>> nums(4, vector<int>());
+	//nums[0] = vector<int>{ 1,4,3,1,3,2 };
+	//nums[1] = vector<int>{ 3,2,1,3,2,4 };
+	//nums[2] = vector<int>{ 2,3,3,2,3,1 };
+	//cout << sol.trapRainWater(nums) << endl;
 
 
-		//vector<int>nums{ 0,1,0,2,1,0,1,3,2,1,2,1 };
-		//vector<int>nums{ 3,2,1,3,2,4 };
-		//cout << sol.trap(nums) << endl;
+	//vector<int>nums{ 0,1,0,2,1,0,1,3,2,1,2,1 };
+	//vector<int>nums{ 3,2,1,3,2,4 };
+	//cout << sol.trap(nums) << endl;
 	return 0;
 }
