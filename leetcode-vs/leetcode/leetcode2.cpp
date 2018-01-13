@@ -112,7 +112,46 @@ public:
 		it->second.second = keys.begin();
 	}
 };
+//381. Insert Delete GetRandom O(1) - Duplicates allowed
+class RandomizedCollection {
+public:
+	unordered_map<int, vector<int>> m;
+	vector<pair<int, int>> nums;
+	/** Initialize your data structure here. */
+	RandomizedCollection() {
 
+	}
+
+	/** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+	bool insert(int val) {
+		auto result = m.find(val) == m.end();
+		m[val].push_back(nums.size());
+		nums.push_back({ val, m[val].size() - 1 });
+		return result;
+	}
+
+	/** Removes a value from the collection. Returns true if the collection contained the specified element. */
+	bool remove(int val) {
+		auto result = m.find(val) != m.end();
+		if (result)
+		{
+			int idx = m[val].back();
+			auto r = nums.back();
+			m[r.first][r.second] = idx;
+			nums[idx] = r;
+			nums.pop_back();
+			m[val].pop_back();
+			if (m[val].empty())
+				m.erase(val);
+		}
+		return result;
+	}
+
+	/** Get a random element from the collection. */
+	int getRandom() {
+		return nums[rand() % nums.size()].first;
+	}
+};
 class Iterator {
 	struct Data;
 	Data *data;
@@ -1078,14 +1117,18 @@ public:
 	}
 };
 
- 
+
 int main() {
 	Solution sol;
-	vector<int> nums{ 1,5,1,1,6,4 };
-	sol.wiggleSort(nums);
-	for (auto i : nums)
-		cout << i << " ";
-	cout << endl;
+	RandomizedCollection  r;
+	r.insert(1);
+	r.remove(1);
+	r.insert(1);
+	//vector<int> nums{ 1,5,1,1,6,4 };
+	//sol.wiggleSort(nums);
+	//for (auto i : nums)
+	//	cout << i << " ";
+	//cout << endl;
 
 	//vector<int> nums1{ 3, 4, 6, 5 }, nums2{ 9, 1, 2, 5, 8, 3 };
 	//nums2 = { 8,9 };
