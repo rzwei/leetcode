@@ -1121,10 +1121,10 @@ public:
 
 int main() {
 	Solution sol;
-	RandomizedCollection  r;
-	r.insert(1);
-	r.remove(1);
-	r.insert(1);
+	//RandomizedCollection  r;
+	//r.insert(1);
+	//r.remove(1);
+	//r.insert(1);
 	//vector<int> nums{ 1,5,1,1,6,4 };
 	//sol.wiggleSort(nums);
 	//for (auto i : nums)

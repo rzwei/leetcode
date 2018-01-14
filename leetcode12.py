@@ -20,6 +20,7 @@ def buildIntervals(inters: List[List[int]]):
         ans.append(Interval(s, e))
     return ans
 
+
 class Iterator(object):
     def __init__(self, nums):
         """
@@ -39,7 +40,8 @@ class Iterator(object):
         :rtype: int
         """
 
-#284. Peeking Iterator
+
+# 284. Peeking Iterator
 class PeekingIterator(object):
     def __init__(self, iterator):
         """
@@ -74,6 +76,7 @@ class PeekingIterator(object):
         :rtype: bool
         """
         return self.hasnext
+
 
 class Solution:
     def intersectionSizeTwo(self, intervals):
@@ -259,12 +262,91 @@ class Solution:
             prev = inter.end
         return ans
 
+    def partitionLabels(self, S):
+        """
+        :type S: str
+        :rtype: List[int]
+        """
+        d = {}
+        for i, v in enumerate(S):
+            if v not in d:
+                d[v] = [i, i]
+            else:
+                d[v][1] = i
+        L = []
+        for v in d.values():
+            L.append(v)
+        L.sort()
+        ans = []
+        cs = L[0][0]
+        ce = L[0][1]
+        i = 0
+        f = 1
+        for s, e in L:
+            i += 1
+            if s >= cs and e <= ce:
+                continue
+            if s > ce:
+                ans.append(ce - cs + 1)
+                cs = s
+                ce = e
+                f = 0
+            elif e > ce:
+                ce = e
+            f = 1
+        if f:
+            ans.append(ce - cs + 1)
+        return ans
+
+    def orderOfLargestPlusSign(self, N, mines):
+        """
+        :type N: int
+        :type mines: List[List[int]]
+        :rtype: int
+        """
+        M = [[1] * N for _ in range(N)]
+        for i, j in mines:
+            M[i][j] = 0
+        up = [[0] * N for _ in range(N)]
+        down = [[0] * N for _ in range(N)]
+        left = [[0] * N for _ in range(N)]
+        right = [[0] * N for _ in range(N)]
+
+        for i in range(N):
+            for j in range(N):
+                if M[i][j]:
+                    if i == 0:
+                        up[i][j] = 1
+                        left[i][j] = 1
+                    else:
+                        up[i][j] = up[i - 1][j] + 1
+                        left[i][j] = left[i][j - 1] + 1
+        for i in reversed(range(N)):
+            for j in reversed(range(N)):
+                if M[i][j]:
+                    if i == N - 1 or j == N - 1:
+                        down[i][j] = 1
+                        right[i][j] = 1
+                    else:
+                        down[i][j] = down[i + 1][j] + 1
+                        right[i][j] = right[i][j + 1] + 1
+        ans = 0
+        for i in range(N):
+            for j in range(N):
+                if M[i][j]:
+                    ans = max(ans, min(down[i][j], up[i][j], left[i][j], right[i][j]))
+        return ans
+
 
 if __name__ == '__main__':
     sol = Solution()
-    r = buildIntervals([[1, 2], [5, 6], [1, 3], [4, 10]])
+    # print(sol.partitionLabels("ccebabdaeddebeaeaaec"))
+    print(sol.orderOfLargestPlusSign(5, [[4, 2]]))
+    # print(sol.orderOfLargestPlusSign(2, []))
+    # print(sol.orderOfLargestPlusSign(1, [[0, 0]]))
+    # r = buildIntervals([[1, 2], [5, 6], [1, 3], [4, 10]])
     # r = buildIntervals([[1, 3], [6, 7], [2, 4], [2, 5], [9, 12]])
-    print(sol.employeeFreeTime([r]))
+    # print(sol.employeeFreeTime([r]))
     # print(sol.boldWords(['ab', 'bc'], "aabc"))
     # print(sol.maxProfit([1, 3, 2, 8, 4, 9], fee=2))
     # print(sol.shoppingOffers([2, 5], [[3, 0, 5], [1, 2, 10]], [3, 2]))
