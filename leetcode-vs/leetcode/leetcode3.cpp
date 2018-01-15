@@ -13,7 +13,22 @@
 #include <stack>
 
 using namespace std;
+class LFUCache {
+public:
+	unordered_map<int, int> m;
+	vector<int> nums;
+	LFUCache(int capacity) {
 
+	}
+
+	int get(int key) {
+
+	}
+
+	void put(int key, int value) {
+
+	}
+};
 class Solution {
 public:
 	bool isPrime(int a)
@@ -87,10 +102,36 @@ public:
 			}
 		return len;
 	}
+
+	void visit_findItinerary(vector<string> &path, string cur, map<string, vector<string>>&m)
+	{
+		while (!m[cur].empty())
+		{
+			string c = m[cur].back();
+			m[cur].pop_back();
+			visit_findItinerary(path, c, m);
+		}
+		path.push_back(cur);
+	}
+	//332. Reconstruct Itinerary
+	vector<string> findItinerary(vector<pair<string, string>> tickets) {
+		sort(tickets.begin(), tickets.end());
+		map<string, vector<string>> m;
+		for (auto&i : tickets)
+			m[i.first].push_back(i.second);
+		vector<string> path;
+		visit_findItinerary(path, "JFK", m);
+		reverse(path.begin(),path.end());
+		return path;
+	}
 };
 int main()
 {
 	Solution sol;
-	cout << sol.countPrimeSetBits(10, 15) << endl;
+	vector<pair<string, string>> ticks{ { "MUC", "LHR" },{ "JFK", "MUC" },{ "SFO", "SJC" },{ "LHR", "SFO" } };
+	auto r = sol.findItinerary(ticks);
+	for (auto &i : r)
+		cout << i << " ";
+	cout << endl;
 	return 0;
 }

@@ -337,11 +337,32 @@ class Solution:
                     ans = max(ans, min(down[i][j], up[i][j], left[i][j], right[i][j]))
         return ans
 
+    def findItinerary(self, tickets: List):
+        """
+        :type tickets: List[List[str]]
+        :rtype: List[str]
+        332. Reconstruct Itinerary
+        """
+        tickets.sort(reverse=True)
+        d = collections.defaultdict(list)
+        for f, t in tickets:
+            d[f].append(t)
+        route = []
+
+        def visit(airplot):
+            while d[airplot]:
+                visit(d[airplot].pop())
+            route.append(airplot)
+
+        visit("JFK")
+        return route[::-1]
+
 
 if __name__ == '__main__':
     sol = Solution()
+    print(sol.findItinerary([["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]))
     # print(sol.partitionLabels("ccebabdaeddebeaeaaec"))
-    print(sol.orderOfLargestPlusSign(5, [[4, 2]]))
+    # print(sol.orderOfLargestPlusSign(5, [[4, 2]]))
     # print(sol.orderOfLargestPlusSign(2, []))
     # print(sol.orderOfLargestPlusSign(1, [[0, 0]]))
     # r = buildIntervals([[1, 2], [5, 6], [1, 3], [4, 10]])
