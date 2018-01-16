@@ -15,6 +15,14 @@
 using namespace std;
 
 
+struct Point {
+	int x;
+	int y;
+	Point() : x(0), y(0) {}
+	Point(int a, int b) : x(a), y(b) {}
+};
+
+
 class AllOne {
 public:
 	struct Row {
@@ -131,7 +139,7 @@ public:
 		return m[key].first;
 	}
 
-	void set(int key, int value) {
+	void put(int key, int value) {
 		if (cap <= 0) return;
 
 		int storedValue = get(key);
@@ -156,6 +164,7 @@ public:
 		size++;
 	}
 };
+
 class Solution {
 public:
 	bool isPrime(int a)
@@ -251,16 +260,126 @@ public:
 		reverse(path.begin(), path.end());
 		return path;
 	}
+
+	bool onOneLine(Point &p0, Point &p1, Point &p2)
+	{
+		return (long long)(p2.y - p0.y)*(p1.x - p0.x) == (long long)(p1.y - p0.y)*(p2.x - p0.x);
+	}
+
+	//149. Max Points on a Line
+	int maxPoints(vector<Point>& points) {
+		int N = points.size();
+		if (N <= 2)
+			return N;
+		if (N == 3)
+		{
+			int f = 1;
+			for (int i = 0; i < N; i++)
+			{
+				if (points[i].x == 1 && points[i].y == 1)
+					continue;
+				f = 0;
+				break;
+			}
+			if (f == 1)
+				return 3;
+		}
+		int ans = 0;
+		for (int i = 0; i < N; i++)
+			for (int j = i + 1; j < N; j++)
+			{
+				int  t = 2;
+				for (int k = 0; k < N; k++)
+				{
+					if (k == i || k == j || (points[i].x == points[j].x&&points[i].y == points[j].y))
+						continue;
+					if (onOneLine(points[i], points[j], points[k]))
+						t++;
+				}
+				ans = max(ans, t);
+			}
+		return ans;
+	}
+	//30. Substring with Concatenation of All Words
+	vector<int> findSubstring(string S, vector<string>& words) {
+		//set<string> word_set(words.begin(), words.end()), visited;
+		map<string, int>word_M;
+		for (auto&i : words)
+			word_M[i]++;
+		int slen = S.length(), len = words[0].length();
+		vector<int>ans;
+
+		for (int start = 0; start < len; start++)
+		{
+			for (int s = start; s < slen - len + 1; s += len) {
+				auto word_m = word_M;
+				int i = s, j = s;
+
+				while (j < slen)
+				{
+					if (j + len < slen)
+					{
+						string t = S.substr(j, len);
+						if (word_m.find(t) != word_m.end())
+						{
+							if(word_m[t]<=0)
+								break;
+						}
+					}
+					j += len;
+				}
+
+
+				string c = S.substr(s, len);
+
+
+
+				if (word_m.find(c) != word_m.end() && word_m[c] > 0)
+				{
+					for (int i = s; i < slen; i += len)
+					{
+						string t = S.substr(i, len);
+						if (word_m.find(t) == word_m.end())
+							break;
+
+						if (word_m[t] <= 0)
+							break;
+
+						word_m[t]--;
+						int f = 1;
+						for (auto &i : word_m)
+							if (i.second > 0)
+							{
+								f = 0;
+								break;
+							}
+						if (f)
+						{
+							ans.push_back(s);
+							break;
+						}
+					}
+				}
+			}
+		}
+		return ans;
+	}
 };
 int main()
 {
 	Solution sol;
-	list<int> l;
-	l.push_front(1);
-	auto e = l.end();
-	l.push_back(2);
-
-	cout << *e << endl;
+	//vector<string> words{ "foo", "bar" };
+	vector<string> words{ "man" };
+	auto r = sol.findSubstring("barfoothefoobarman", words);
+	for (auto i : r)
+		cout << i << " ";
+	cout << endl;
+	//vector<Point> points;
+	////vector<vector<int>> ps{ { 84,250 },{ 0,0 },{ 1,0 },{ 0,-70 },{ 0,-70 },{ 1,-1 },{ 21,10 },{ 42,90 },{ -42,-230 } };
+	//vector<vector<int>> ps{ { 0, 0 },{ 1,1 },{ 1,-1 } };
+	//for (auto i : ps)
+	//	points.push_back(Point(i[0], i[1]));
+	//cout << sol.maxPoints(points) << endl;
 	//vector<pair<string, string>> ticks{ { "MUC", "LHR" },{ "JFK", "MUC" },{ "SFO", "SJC" },{ "LHR", "SFO" } };
 	//auto r = sol.findItinerary(ticks);
 	//for (auto &i : r)
