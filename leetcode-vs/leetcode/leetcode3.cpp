@@ -311,55 +311,12 @@ public:
 
 		for (int start = 0; start < len; start++)
 		{
-			for (int s = start; s < slen - len + 1; s += len) {
-				auto word_m = word_M;
-				int i = s, j = s;
-
-				while (j < slen)
-				{
-					if (j + len < slen)
-					{
-						string t = S.substr(j, len);
-						if (word_m.find(t) != word_m.end())
-						{
-							if(word_m[t]<=0)
-								break;
-						}
-					}
-					j += len;
-				}
+			int s = start, e = start;
+			while (e < slen)
+			{
+				
 
 
-				string c = S.substr(s, len);
-
-
-
-				if (word_m.find(c) != word_m.end() && word_m[c] > 0)
-				{
-					for (int i = s; i < slen; i += len)
-					{
-						string t = S.substr(i, len);
-						if (word_m.find(t) == word_m.end())
-							break;
-
-						if (word_m[t] <= 0)
-							break;
-
-						word_m[t]--;
-						int f = 1;
-						for (auto &i : word_m)
-							if (i.second > 0)
-							{
-								f = 0;
-								break;
-							}
-						if (f)
-						{
-							ans.push_back(s);
-							break;
-						}
-					}
-				}
 			}
 		}
 		return ans;
