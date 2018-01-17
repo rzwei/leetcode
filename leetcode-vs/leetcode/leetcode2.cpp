@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -11,7 +11,7 @@
 #include <queue>
 #include <climits>
 #include <stack>
-
+#include <list>
 using namespace std;
 
 struct TreeNode {

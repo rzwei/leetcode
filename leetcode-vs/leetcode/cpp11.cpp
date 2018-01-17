@@ -1,12 +1,11 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
-#include <sstream>
-#include <climits>
+#include <vector>
+
 using namespace std;
 
 
-
-int main_()
-{
-	return 0;
+int main_() {
+    vector<int> nums{1};
+    return 0;
 }
