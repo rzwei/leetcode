@@ -301,33 +301,167 @@ public:
 		return ans;
 	}
 	//30. Substring with Concatenation of All Words
-	vector<int> findSubstring(string S, vector<string>& words) {
+	vector<int> findSubstring_(string S, vector<string>& words) {
 		//set<string> word_set(words.begin(), words.end()), visited;
 		map<string, int>word_M;
 		for (auto&i : words)
 			word_M[i]++;
 		int slen = S.length(), len = words[0].length();
 		vector<int>ans;
-
 		for (int start = 0; start < len; start++)
 		{
 			int s = start, e = start;
-			while (e < slen)
+			auto word_set = word_M;
+			while (e + len <= slen)
 			{
-				
-
-
+				string t(S.substr(e, len));
+				if (word_set.find(t) == word_set.end())
+				{
+					word_set = word_M;
+					e += len;
+					s = e;
+					continue;
+				}
+				else
+				{
+					if (word_set[t] > 0)
+						word_set[t]--;
+					else
+					{
+						while (word_set[t] <= 0)
+						{
+							word_set[S.substr(s, len)]++;
+							s += len;
+						}
+						word_set[t]--;
+					}
+					int f = 1;
+					for (auto &i : word_set)
+						if (i.second > 0)
+						{
+							f = 0;
+							break;
+						}
+					if (f)
+					{
+						ans.push_back(s);
+					}
+				}
+				e += len;
 			}
 		}
 		return ans;
 	}
+	vector<int> findSubstring__(string S, vector<string>& words) {
+		map<string, int>word_M;
+		int slen = S.length(), len = words[0].length(), cnt = words.size();
+		for (auto&i : words)
+			word_M[i]++;
+		vector<int>ans;
+		map<string, int>tdict;
+
+		for (int start = 0; start < len; start++)
+		{
+			int s = start, e = start, count = 0;
+			tdict.clear();
+			while (e + len <= slen)
+			{
+				string t = S.substr(e, len);
+				if (word_M.count(t))
+				{
+					tdict[t]++;
+					if (tdict[t] <= word_M[t])
+						count++;
+					else {
+						while (tdict[t] > word_M[t])
+						{
+							string tt(S.substr(s, len));
+							tdict[tt]--;
+							s += len;
+							if (tdict[tt] < word_M[tt])
+								count--;
+						}
+					}
+					if (count == cnt)
+					{
+						ans.push_back(s);
+						tdict[S.substr(s, len)]--;
+						s += len;
+						count--;
+					}
+				}
+				else {
+					count = 0;
+					tdict.clear();
+					s = e + len;
+				}
+				e += len;
+			}
+		}
+		return ans;
+	}
+
+	vector<int> findSubstring(string s, vector<string>& words) {
+		vector<int> ans;
+		int n = s.size(), cnt = words.size();
+		if (n <= 0 || cnt <= 0) return ans;
+
+		// init word occurence
+		unordered_map<string, int> dict;
+		for (int i = 0; i < cnt; ++i) dict[words[i]]++;
+
+		// travel all sub string combinations
+		int wl = words[0].size();
+		for (int i = 0; i < wl; ++i) {
+			int left = i, count = 0;
+			unordered_map<string, int> tdict;
+			for (int j = i; j <= n - wl; j += wl) {
+				string str = s.substr(j, wl);
+				// a valid word, accumulate results
+				if (dict.count(str)) {
+					tdict[str]++;
+					if (tdict[str] <= dict[str])
+						count++;
+					else {
+						// a more word, advance the window left side possiablly
+						while (tdict[str] > dict[str]) {
+							string str1 = s.substr(left, wl);
+							tdict[str1]--;
+							if (tdict[str1] < dict[str1]) count--;
+							left += wl;
+						}
+					}
+					// come to a result
+					if (count == cnt) {
+						ans.push_back(left);
+						// advance one word
+						tdict[s.substr(left, wl)]--;
+						count--;
+						left += wl;
+					}
+				}
+				// not a valid word, reset all vars
+				else {
+					tdict.clear();
+					count = 0;
+					left = j + wl;
+				}
+			}
+		}
+		return ans;
+
+	}
+
+
 };
 int main()
 {
 	Solution sol;
-	//vector<string> words{ "foo", "bar" };
-	vector<string> words{ "man" };
-	auto r = sol.findSubstring("barfoothefoobarman", words);
+	//vector<string> words{ "foo", "bar" ,"the" };
+	vector<string> words{ "a", "b" ,"a" };
+	//vector<string> words{ "man" };
+	//auto r = sol.findSubstring__("barfoofoobarthefoobarman", words);
+	auto r = sol.findSubstring__("abababab", words);
 	for (auto i : r)
 		cout << i << " ";
 	cout << endl;
