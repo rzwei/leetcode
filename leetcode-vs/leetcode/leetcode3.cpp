@@ -464,6 +464,23 @@ public:
         }
         return int(T);
     }
+
+    int dp_446(int n, int d, vector<int> &A) {
+        for (int i = n - 1; i >= 0; i--) {
+            if (A[n] - A[i] == d) {
+                return dp_446(i, d, A) + 1;
+            }
+        }
+        return 0;
+    }
+    //446. Arithmetic Slices II - Subsequence
+    int numberOfArithmeticSlices(vector<int>& A) {
+        int n = A.size(),ans=0;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+            }
+        }
+    }
 };
 
 int main() {
