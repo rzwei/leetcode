@@ -490,12 +490,73 @@ public:
         }
         return res;
     }
+
+    int dp_691(string &target, vector<vector<int>> &stickers, map<string, int> &memo) {
+//        cout << target << endl;
+        if (memo.find(target) != memo.end()) {
+            return memo[target];
+        }
+        if (target.empty()) {
+            return 0;
+        }
+        vector<int> tar(26);
+        for (auto c:target) {
+            tar[c - 'a']++;
+        }
+        int res = INT32_MAX;
+        for (int i = 0; i < stickers.size(); i++) {
+            vector<int> t = tar;
+            int f = 0;
+            for (int j = 0; j < 26; j++)
+                if (tar[j] > 0 && stickers[i][j] > 0) {
+                    t[j] -= min(stickers[i][j], t[j]);
+                    f = 1;
+                }
+            if (f) {
+                string newtarget;
+                for (int j = 0; j < 26;) {
+                    if (t[j] > 0) {
+                        newtarget.push_back(j + 'a');
+                        t[j]--;
+                    } else {
+                        j++;
+                    }
+                }
+//                cout << "use " << i << " ";
+                int r = dp_691(newtarget, stickers, memo);
+                if (r != -1) {
+                    res = min(res, r + 1);
+                }
+            }
+        }
+        if (res == INT32_MAX) {
+            res = -1;
+        }
+        memo[target] = res;
+        return res;
+    }
+
+    //691. Stickers to Spell Word
+    int minStickers(vector<string> &stickers, string target) {
+        map<string, int> dp;
+        int n = stickers.size();
+        vector<vector<int>> Stickers(n, vector<int>(26));
+        for (int i = 0; i < n; i++) {
+            for (auto c:stickers[i]) {
+                Stickers[i][c - 'a']++;
+            }
+        }
+
+        return dp_691(target, Stickers, dp);
+    }
 };
 
 int main() {
     Solution sol;
-    vector<int> nums{2, 4, 6, 8, 10};
-    cout << sol.numberOfArithmeticSlices(nums) << endl;
+    vector<string> stickers{"notice", "possible",};
+    cout << sol.minStickers(stickers, "basicbasic");
+//    vector<int> nums{2, 4, 6, 8, 10};
+//    cout << sol.numberOfArithmeticSlices(nums) << endl;
 //    vector<int> nums{1, 2, 4, 5, 2, 3, 4, 5, 2};
 //    sort(nums.begin(), nums.end(), [](int x, int y) { return x < y; });
 //    for (auto i:nums) {
