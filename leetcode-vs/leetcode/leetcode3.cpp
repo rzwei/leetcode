@@ -465,26 +465,37 @@ public:
         return int(T);
     }
 
-    int dp_446(int n, int d, vector<int> &A) {
-        for (int i = n - 1; i >= 0; i--) {
-            if (A[n] - A[i] == d) {
-                return dp_446(i, d, A) + 1;
-            }
-        }
-        return 0;
-    }
+
     //446. Arithmetic Slices II - Subsequence
-    int numberOfArithmeticSlices(vector<int>& A) {
-        int n = A.size(),ans=0;
+    int numberOfArithmeticSlices(vector<int> &A) {
+        if (A.empty()) {
+            return 0;
+        }
+        int res = 0, n = A.size();
+        vector<unordered_map<long long, int>> dp(n);
+        set<int> s(A.begin(), A.end());
         for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
+            for (int j = 0; j < i; ++j) {
+                long long d = (long long) A[i] - (long long) A[j];
+                if (d > INT32_MAX || d < INT32_MIN) {
+                    continue;
+                }
+                int t = 0;
+                if (dp[j].count(d)) {
+                    t = dp[j][d];
+                    res += t;
+                }
+                dp[i][d] += 1 + t;
             }
         }
+        return res;
     }
 };
 
 int main() {
     Solution sol;
+    vector<int> nums{2, 4, 6, 8, 10};
+    cout << sol.numberOfArithmeticSlices(nums) << endl;
 //    vector<int> nums{1, 2, 4, 5, 2, 3, 4, 5, 2};
 //    sort(nums.begin(), nums.end(), [](int x, int y) { return x < y; });
 //    for (auto i:nums) {
