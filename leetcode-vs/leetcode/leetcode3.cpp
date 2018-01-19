@@ -492,7 +492,7 @@ public:
     }
 
     int dp_691(string &target, vector<vector<int>> &stickers, map<string, int> &memo) {
-//        cout << target << endl;
+        cout << target << endl;
         if (memo.find(target) != memo.end()) {
             return memo[target];
         }
@@ -522,7 +522,7 @@ public:
                         j++;
                     }
                 }
-//                cout << "use " << i << " ";
+                cout << "use " << i << " ";
                 int r = dp_691(newtarget, stickers, memo);
                 if (r != -1) {
                     res = min(res, r + 1);
@@ -538,23 +538,115 @@ public:
 
     //691. Stickers to Spell Word
     int minStickers(vector<string> &stickers, string target) {
-        map<string, int> dp;
         int n = stickers.size();
+        map<string, int> dp;
         vector<vector<int>> Stickers(n, vector<int>(26));
         for (int i = 0; i < n; i++) {
             for (auto c:stickers[i]) {
                 Stickers[i][c - 'a']++;
             }
         }
+        for (auto c:target) {
+            int f = 1;
+            for (int i = 0; i < n && f; ++i) {
+                if (Stickers[i][c - 'a'] > 0) {
+                    f = 0;
+                    break;
+                }
+            }
+            if (f) {
+                return -1;
+            }
+        }
 
         return dp_691(target, Stickers, dp);
+    }
+
+    //649. Dota2 Senate
+    string predictPartyVictory(string senate) {
+        int r = 0, d = 0, N = senate.size(), R = 0, D = 0;
+        for (auto c:senate) {
+            if (c == 'R') {
+                R++;
+            } else {
+                D++;
+            }
+        }
+        vector<int> flags(N, 1);
+        for (int i = 0; i < N;) {
+            char c = senate[i];
+            if (flags[i]) {
+                if (c == 'R') {
+                    if (d > 0) {
+                        d--;
+                        flags[i] = 0;
+                        R--;
+
+                    } else {
+                        r++;
+                    }
+                } else if (c == 'D') {
+                    if (r > 0) {
+                        r--;
+                        flags[i] = 0;
+                        D--;
+                    } else {
+                        d++;
+                    }
+                }
+            }
+            if (i == N - 1 && R && D) {
+                i = 0;
+            } else if (D == 0) {
+                return "Radiant";
+            } else if (R == 0) {
+                return "Dire";
+            } else {
+                i++;
+            }
+        }
+    }
+
+    //483. Smallest Good Base
+    string smallestGoodBase(string n) {
+        unsigned long long tn = (unsigned long long) stoll(n);
+        unsigned long long x = 1;
+        for (int i = 62; i >= 1; i--) {
+            if ((x << i) < tn) {
+                unsigned long long cur = mysolve(tn, i);
+                if (cur != 0) return to_string(cur);
+            }
+        }
+        return to_string(tn - 1);
+    }
+
+    unsigned long long mysolve(unsigned long long n, int d) {
+        double tn = (double) n;
+        unsigned long long right = (unsigned long long) (pow(tn, 1.0 / d) + 1);
+        unsigned long long left = 1;
+        while (left <= right) {
+            unsigned long long mid = left + (right - left) / 2;
+            unsigned long long sum = 1, cur = 1;
+            for (int i = 1; i <= d; i++) {
+                cur *= mid;
+                sum += cur;
+            }
+            if (sum == n) return mid;
+            if (sum > n) right = mid - 1;
+            else left = mid + 1;
+        }
+        return 0;
     }
 };
 
 int main() {
     Solution sol;
-    vector<string> stickers{"notice", "possible",};
-    cout << sol.minStickers(stickers, "basicbasic");
+    cout << sol.smallestGoodBase("13") << endl;
+//    cout << sol.predictPartyVictory("RD") << endl;
+//    cout << sol.predictPartyVictory("D") << endl;
+//    cout << sol.predictPartyVictory("RDD") << endl;
+//    vector<string> stickers{"notice", "possible",};
+//    cout << sol.minStickers(stickers, "basicbasic");
 //    vector<int> nums{2, 4, 6, 8, 10};
 //    cout << sol.numberOfArithmeticSlices(nums) << endl;
 //    vector<int> nums{1, 2, 4, 5, 2, 3, 4, 5, 2};
