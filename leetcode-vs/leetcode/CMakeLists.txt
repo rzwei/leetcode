@@ -3,5 +3,5 @@ project(leetcode)
 
 set(CMAKE_CXX_STANDARD 14)
 set(SOURCE_FILES leetcode3.cpp)
-SET(CMAKE_CXX_COMPILER clang++)
+#SET(CMAKE_CXX_COMPILER clang++)
 add_executable(leetcode ${SOURCE_FILES})

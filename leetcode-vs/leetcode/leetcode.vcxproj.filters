@@ -32,8 +32,5 @@
     <ClCompile Include="leetcode3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="cpp11.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

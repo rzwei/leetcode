@@ -835,13 +835,73 @@ public:
         }
         return ans;
     }
+
+    //719. Find K-th Smallest Pair Distance
+    int smallestDistancePair(vector<int> &nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> pq;
+        mergeSort(0, nums.size() - 1, nums, pq, k);
+        while (pq.size() > k) {
+            pq.pop();
+        }
+        int t = pq.top();
+        while (!pq.empty()) {
+            cout << pq.top() << endl;
+            pq.pop();
+        }
+        return t;
+    }
+
+    void mergeSort(int s, int e, vector<int> &nums, priority_queue<int, vector<int>, greater<int>> &pq, int k) {
+        if (s == e) {
+            return;
+        }
+        if (e - s == 1) {
+            if (nums[s] > nums[e]) {
+                swap(nums[s], nums[e]);
+            }
+//            pq.push(nums[e] - nums[s]);
+//            pq.push(nums[e] - nums[s]);
+            return;
+        }
+        int m = (s + e) / 2;
+        mergeSort(s, m, nums, pq, k);
+        mergeSort(m + 1, e, nums, pq, k);
+        vector<int> T(e - s + 1);
+        int t = 0, i = s, j = m + 1;
+        while (i <= m || j <= e) {
+            if (i <= m && j <= e) {
+                if (nums[i] < nums[j]) {
+                    T[t++] = nums[i++];
+                } else {
+                    T[t++] = nums[j++];
+                }
+            } else if (i <= m) {
+                T[t++] = nums[i++];
+            } else {
+                T[t++] = nums[j++];
+            }
+        }
+        for (i = s; i <= e; i++) {
+            nums[i] = T[i - s];
+            if (i > s) {
+                pq.push(nums[i] - nums[i - 1]);
+                pq.push(nums[i] - nums[i - 1]);
+            }
+        }
+        while (pq.size() > k) {
+            pq.pop();
+        }
+    }
 };
 
 int main() {
     Solution sol;
     vector<int> nums{1, 2, 3, 4, 5, 0};
+    nums = {1, 3, 1};
+    nums = {60, 100, 4};
+    cout << sol.smallestDistancePair(nums, 6) << endl;
     //nums = { 1,0,2,3,4 };
-    cout << sol.maxChunksToSorted(nums) << endl;
+//    cout << sol.maxChunksToSorted(nums) << endl;
     //vector<vector<int>> matrix{ { 1,2,3,4 },{ 5,1,2,3 },{ 9,5,1,2 } };
     //cout << sol.isToeplitzMatrix(matrix) << endl;
     //cout << sol.smallestGoodBase("26546") << endl;
