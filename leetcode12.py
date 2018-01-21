@@ -357,10 +357,82 @@ class Solution:
         visit("JFK")
         return route[::-1]
 
+    def maxChunksToSorted(self, arr):
+        """
+        :type arr: List[int]
+        :rtype: int
+        769. Max Chunks To Make Sorted (ver. 1)
+        768. Max Chunks to Make Sorted (ver. 2) 
+        """
+        items = []
+        for i, v in enumerate(arr):
+            items.append([v, i])
+        items.sort()
+        d2 = {}
+        for i in range(len(items)):
+            d2[items[i][1]] = i
+        ans = 0
+        i = 0
+        while i < len(arr):
+            if i == d2[i]:
+                ans += 1
+                i += 1
+            else:
+                right = d2[i]
+                t = 0
+                while t < len(arr) and t <= right:
+                    right = max(right, d2[t])
+                    t += 1
+                i = right + 1
+                ans += 1
+        return ans
+    
+    def reorganizeString(self, S):
+        """
+        :type S: str
+        :rtype: str
+        767. Reorganize String 
+        """
+        d = {}
+        for i in S:
+            if i not in d:
+                d[i] = 1
+            else:
+                d[i] += 1
+        q = []
+        for k, v in d.items():
+            q.append([-v, k])
+        heapq.heapify(q)
+        ret = []
+        while q:
+            v, k = heapq.heappop(q)
+            if not ret or ret[-1] != k:
+                ret.append(k)
+                v += 1
+                if v < 0:
+                    heapq.heappush(q, [v, k])
+            else:
+                T = [v, k]
+                if q:
+                    v, k = heapq.heappop(q)
+                    ret.append(k)
+                    v += 1
+                    if v < 0:
+                        heapq.heappush(q, [v, k])
+                    heapq.heappush(q, T)
+                else:
+                    return ""
+
+        return ''.join(ret)
+
 
 if __name__ == '__main__':
     sol = Solution()
-    print(sol.findItinerary([["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]))
+    print(sol.reorganizeString("aaab"))
+    # print(sol.maxChunksToSorted([0, 3, 0, 3, 2]))
+    # print(sol.maxChunksToSorted([2, 1, 3, 4, 4]))
+    # print(sol.maxChunksToSorted([1, 0, 1, 3, 2]))
+    # print(sol.findItinerary([["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL", "JFK"], ["ATL", "SFO"]]))
     # print(sol.partitionLabels("ccebabdaeddebeaeaaec"))
     # print(sol.orderOfLargestPlusSign(5, [[4, 2]]))
     # print(sol.orderOfLargestPlusSign(2, []))
