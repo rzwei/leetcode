@@ -146,12 +146,12 @@ public:
             return;
         }
 
-		if (size >= cap) {
-			m.erase(fm[minFreq].front());
-			mIter.erase(fm[minFreq].front());
-			fm[minFreq].pop_front();
-			size--;
-		}
+        if (size >= cap) {
+            m.erase(fm[minFreq].front());
+            mIter.erase(fm[minFreq].front());
+            fm[minFreq].pop_front();
+            size--;
+        }
 
         m[key] = {value, 1};
         fm[1].push_back(key);
@@ -245,97 +245,96 @@ public:
         path.push_back(cur);
     }
 
-	//332. Reconstruct Itinerary
-	vector<string> findItinerary(vector<pair<string, string>> tickets) {
-		sort(tickets.begin(), tickets.end());
-		map<string, vector<string>> m;
-		for (auto &i : tickets)
-			m[i.first].push_back(i.second);
-		vector<string> path;
-		visit_findItinerary(path, "JFK", m);
-		reverse(path.begin(), path.end());
-		return path;
-	}
+    //332. Reconstruct Itinerary
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+        sort(tickets.begin(), tickets.end());
+        map<string, vector<string>> m;
+        for (auto &i : tickets)
+            m[i.first].push_back(i.second);
+        vector<string> path;
+        visit_findItinerary(path, "JFK", m);
+        reverse(path.begin(), path.end());
+        return path;
+    }
 
-	bool onOneLine(Point &p0, Point &p1, Point &p2) {
-		return (long long)(p2.y - p0.y) * (p1.x - p0.x) == (long long)(p1.y - p0.y) * (p2.x - p0.x);
-	}
+    bool onOneLine(Point &p0, Point &p1, Point &p2) {
+        return (long long) (p2.y - p0.y) * (p1.x - p0.x) == (long long) (p1.y - p0.y) * (p2.x - p0.x);
+    }
 
-	//149. Max Points on a Line
-	int maxPoints(vector<Point> &points) {
-		int N = points.size();
-		if (N <= 2)
-			return N;
-		if (N == 3) {
-			int f = 1;
-			for (int i = 0; i < N; i++) {
-				if (points[i].x == 1 && points[i].y == 1)
-					continue;
-				f = 0;
-				break;
-			}
-			if (f == 1)
-				return 3;
-		}
-		int ans = 0;
-		for (int i = 0; i < N; i++)
-			for (int j = i + 1; j < N; j++) {
-				int t = 2;
-				for (int k = 0; k < N; k++) {
-					if (k == i || k == j || (points[i].x == points[j].x && points[i].y == points[j].y))
-						continue;
-					if (onOneLine(points[i], points[j], points[k]))
-						t++;
-				}
-				ans = max(ans, t);
-			}
-		return ans;
-	}
+    //149. Max Points on a Line
+    int maxPoints(vector<Point> &points) {
+        int N = points.size();
+        if (N <= 2)
+            return N;
+        if (N == 3) {
+            int f = 1;
+            for (int i = 0; i < N; i++) {
+                if (points[i].x == 1 && points[i].y == 1)
+                    continue;
+                f = 0;
+                break;
+            }
+            if (f == 1)
+                return 3;
+        }
+        int ans = 0;
+        for (int i = 0; i < N; i++)
+            for (int j = i + 1; j < N; j++) {
+                int t = 2;
+                for (int k = 0; k < N; k++) {
+                    if (k == i || k == j || (points[i].x == points[j].x && points[i].y == points[j].y))
+                        continue;
+                    if (onOneLine(points[i], points[j], points[k]))
+                        t++;
+                }
+                ans = max(ans, t);
+            }
+        return ans;
+    }
 
-	//30. Substring with Concatenation of All Words
-	vector<int> findSubstring_(string S, vector<string> &words) {
-		//set<string> word_set(words.begin(), words.end()), visited;
-		map<string, int> word_M;
-		for (auto &i : words)
-			word_M[i]++;
-		int slen = S.length(), len = words[0].length();
-		vector<int> ans;
-		for (int start = 0; start < len; start++) {
-			int s = start, e = start;
-			auto word_set = word_M;
-			while (e + len <= slen) {
-				string t(S.substr(e, len));
-				if (word_set.find(t) == word_set.end()) {
-					word_set = word_M;
-					e += len;
-					s = e;
-					continue;
-				}
-				else {
-					if (word_set[t] > 0)
-						word_set[t]--;
-					else {
-						while (word_set[t] <= 0) {
-							word_set[S.substr(s, len)]++;
-							s += len;
-						}
-						word_set[t]--;
-					}
-					int f = 1;
-					for (auto &i : word_set)
-						if (i.second > 0) {
-							f = 0;
-							break;
-						}
-					if (f) {
-						ans.push_back(s);
-					}
-				}
-				e += len;
-			}
-		}
-		return ans;
-	}
+    //30. Substring with Concatenation of All Words
+    vector<int> findSubstring_(string S, vector<string> &words) {
+        //set<string> word_set(words.begin(), words.end()), visited;
+        map<string, int> word_M;
+        for (auto &i : words)
+            word_M[i]++;
+        int slen = S.length(), len = words[0].length();
+        vector<int> ans;
+        for (int start = 0; start < len; start++) {
+            int s = start, e = start;
+            auto word_set = word_M;
+            while (e + len <= slen) {
+                string t(S.substr(e, len));
+                if (word_set.find(t) == word_set.end()) {
+                    word_set = word_M;
+                    e += len;
+                    s = e;
+                    continue;
+                } else {
+                    if (word_set[t] > 0)
+                        word_set[t]--;
+                    else {
+                        while (word_set[t] <= 0) {
+                            word_set[S.substr(s, len)]++;
+                            s += len;
+                        }
+                        word_set[t]--;
+                    }
+                    int f = 1;
+                    for (auto &i : word_set)
+                        if (i.second > 0) {
+                            f = 0;
+                            break;
+                        }
+                    if (f) {
+                        ans.push_back(s);
+                    }
+                }
+                e += len;
+            }
+        }
+        return ans;
+    }
 
     vector<int> findSubstring__(string S, vector<string> &words) {
         map<string, int> word_M;
@@ -380,55 +379,55 @@ public:
         return ans;
     }
 
-	vector<int> findSubstring(string s, vector<string> &words) {
-		vector<int> ans;
-		int n = s.size(), cnt = words.size();
-		if (n <= 0 || cnt <= 0) return ans;
+    vector<int> findSubstring(string s, vector<string> &words) {
+        vector<int> ans;
+        int n = s.size(), cnt = words.size();
+        if (n <= 0 || cnt <= 0) return ans;
 
-		// init word occurence
-		unordered_map<string, int> dict;
-		for (int i = 0; i < cnt; ++i) dict[words[i]]++;
+        // init word occurence
+        unordered_map<string, int> dict;
+        for (int i = 0; i < cnt; ++i) dict[words[i]]++;
 
-		// travel all sub string combinations
-		int wl = words[0].size();
-		for (int i = 0; i < wl; ++i) {
-			int left = i, count = 0;
-			unordered_map<string, int> tdict;
-			for (int j = i; j <= n - wl; j += wl) {
-				string str = s.substr(j, wl);
-				// a valid word, accumulate results
-				if (dict.count(str)) {
-					tdict[str]++;
-					if (tdict[str] <= dict[str])
-						count++;
-					else {
-						// a more word, advance the window left side possiablly
-						while (tdict[str] > dict[str]) {
-							string str1 = s.substr(left, wl);
-							tdict[str1]--;
-							if (tdict[str1] < dict[str1]) count--;
-							left += wl;
-						}
-					}
-					// come to a result
-					if (count == cnt) {
-						ans.push_back(left);
-						// advance one word
-						tdict[s.substr(left, wl)]--;
-						count--;
-						left += wl;
-					}
-				}
-				// not a valid word, reset all vars
-				else {
-					tdict.clear();
-					count = 0;
-					left = j + wl;
-				}
-			}
-		}
-		return ans;
-	}
+        // travel all sub string combinations
+        int wl = words[0].size();
+        for (int i = 0; i < wl; ++i) {
+            int left = i, count = 0;
+            unordered_map<string, int> tdict;
+            for (int j = i; j <= n - wl; j += wl) {
+                string str = s.substr(j, wl);
+                // a valid word, accumulate results
+                if (dict.count(str)) {
+                    tdict[str]++;
+                    if (tdict[str] <= dict[str])
+                        count++;
+                    else {
+                        // a more word, advance the window left side possiablly
+                        while (tdict[str] > dict[str]) {
+                            string str1 = s.substr(left, wl);
+                            tdict[str1]--;
+                            if (tdict[str1] < dict[str1]) count--;
+                            left += wl;
+                        }
+                    }
+                    // come to a result
+                    if (count == cnt) {
+                        ans.push_back(left);
+                        // advance one word
+                        tdict[s.substr(left, wl)]--;
+                        count--;
+                        left += wl;
+                    }
+                }
+                    // not a valid word, reset all vars
+                else {
+                    tdict.clear();
+                    count = 0;
+                    left = j + wl;
+                }
+            }
+        }
+        return ans;
+    }
 
     //556. Next Greater Element III
     int nextGreaterElement(int n) {
@@ -675,32 +674,29 @@ public:
     //        return ret;
     //    }
     //766. Toeplitz Matrix
-	bool isToeplitzMatrix(vector<vector<int>>& matrix) {
-		int m = matrix.size(), n = matrix[0].size();
-		for (int i = 0; i < n; i++)
-		{
-			int d = 0, x = 0, y = i, v = matrix[x][y];
-			while (x + d < m&&  y + d < n)
-			{
-				if (matrix[x + d][y + d] != v)
-					return false;
-				d++;
+    bool isToeplitzMatrix(vector<vector<int>> &matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        for (int i = 0; i < n; i++) {
+            int d = 0, x = 0, y = i, v = matrix[x][y];
+            while (x + d < m && y + d < n) {
+                if (matrix[x + d][y + d] != v)
+                    return false;
+                d++;
 
-			}
-		}
-		for (int i = 0; i < m; i++)
-		{
-			int d = 0, x = i, y = 0, v = matrix[x][y];
-			while (x + d < m&&  y + d < n)
-			{
-				if (matrix[x + d][y + d] != v)
-					return false;
-				d++;
-			}
-		}
-		return true;
-	}
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            int d = 0, x = i, y = 0, v = matrix[x][y];
+            while (x + d < m && y + d < n) {
+                if (matrix[x + d][y + d] != v)
+                    return false;
+                d++;
+            }
+        }
+        return true;
+    }
 
+    //769. Max Chunks to Make Sorted (ver. 1)
     int maxChunksToSorted(vector<int> &arr) {
         int n = arr.size();
 
@@ -839,140 +835,54 @@ public:
         }
         return ans;
     }
-
-        int vi = 1;
-        for (int i = 0; i < n;) {
-            if (i == arr[i]) {
-                ans++;
-                i++;
-            } else {
-                int right = vis[i] + 1;
-                for (int t = 0; t < right; t++) {
-                    right = max(right, vis[t] + 1);
-                }
-                ans++;
-                i = right;
-            }
-        }
-        return ans;
-    }
-
-    //768. Max Chunks to Make Sorted (ver. 2)
-    int maxChunksToSortedII(vector<int> &arr) {
-        int n = arr.size();
-        vector<vector<int>> pairs(n, vector<int>(2));
-        for (int i = 0; i < n; i++) {
-            pairs[i][0] = arr[i];
-            pairs[i][1] = i;
-        }
-        sort(pairs.begin(), pairs.end());
-        vector<int> idx(n);
-        for (int i = 0; i < n; i++) {
-            idx[i] = pairs[i][1];
-        }
-        int ans = 0;
-        for (int i = 0; i < n;) {
-            if (i == idx[i]) {
-                ans++;
-                i++;
-            } else {
-                int right = idx[i];
-                for (int j = i; j <= right; j++) {
-                    right = max(right, idx[j]);
-                }
-                i = right + 1;
-                ans++;
-            }
-        }
-        return ans;
-    }
-
-    //767. Reorganize String
-    string reorganizeString(string S) {
-        priority_queue<pair<int, char>> pq;
-        vector<int> counter(26);
-        for (auto c:S) {
-            counter[c - 'a']++;
-        }
-
-        for (int i = 0; i < 26; i++) {
-            if (counter[i]) {
-                pq.push({counter[i], i + 'a'});
-            }
-        }
-        string ret;
-        while (!pq.empty()) {
-            auto t = pq.top();
-            pq.pop();
-            if (ret.empty() || t.second != ret.back()) {
-                ret.push_back(t.second);
-                if (--t.first) {
-                    pq.push(t);
-                }
-            } else {
-                if (!pq.empty()) {
-                    auto m = pq.top();
-                    pq.pop();
-                    ret.push_back(m.second);
-                    if (--m.first) {
-                        pq.push(m);
-                    }
-                    pq.push(t);
-                } else {
-                    return "";
-                }
-            }
-        }
-        return ret;
-    }
 };
 
 int main() {
-	Solution sol;
-	vector<int> nums{ 1,2,3,4,5,0 };
-	//nums = { 1,0,2,3,4 };
-	cout << sol.maxChunksToSorted(nums) << endl;
-	//vector<vector<int>> matrix{ { 1,2,3,4 },{ 5,1,2,3 },{ 9,5,1,2 } };
-	//cout << sol.isToeplitzMatrix(matrix) << endl;
-	//cout << sol.smallestGoodBase("26546") << endl;
-	//    cout << sol.predictPartyVictory("RD") << endl;
-	//    cout << sol.predictPartyVictory("D") << endl;
-	//    cout << sol.predictPartyVictory("RDD") << endl;
-	//    vector<string> stickers{"notice", "possible",};
-	//    cout << sol.minStickers(stickers, "basicbasic");
-	//    vector<int> nums{2, 4, 6, 8, 10};
-	//    cout << sol.numberOfArithmeticSlices(nums) << endl;
-	//    vector<int> nums{1, 2, 4, 5, 2, 3, 4, 5, 2};
-	//    sort(nums.begin(), nums.end(), [](int x, int y) { return x < y; });
-	//    for (auto i:nums) {
-	//        cout << i << " ";
-	//    }
-	//    cout << endl;
+    Solution sol;
+    vector<int> nums{1, 2, 3, 4, 5, 0};
+    //nums = { 1,0,2,3,4 };
+    cout << sol.maxChunksToSorted(nums) << endl;
+    //vector<vector<int>> matrix{ { 1,2,3,4 },{ 5,1,2,3 },{ 9,5,1,2 } };
+    //cout << sol.isToeplitzMatrix(matrix) << endl;
+    //cout << sol.smallestGoodBase("26546") << endl;
+    //    cout << sol.predictPartyVictory("RD") << endl;
+    //    cout << sol.predictPartyVictory("D") << endl;
+    //    cout << sol.predictPartyVictory("RDD") << endl;
+    //    vector<string> stickers{"notice", "possible",};
+    //    cout << sol.minStickers(stickers, "basicbasic");
+    //    vector<int> nums{2, 4, 6, 8, 10};
+    //    cout << sol.numberOfArithmeticSlices(nums) << endl;
+    //    vector<int> nums{1, 2, 4, 5, 2, 3, 4, 5, 2};
+    //    sort(nums.begin(), nums.end(), [](int x, int y) { return x < y; });
+    //    for (auto i:nums) {
+    //        cout << i << " ";
+    //    }
+    //    cout << endl;
 
-	//    int n = 11;
-	//    int n = 1999999999;
-	//    cout << n << endl;
-	//    while ((n = sol.nextGreaterElement(n)) != -1) {
-	//        cout << n << endl;
-	//    }
-	//    vector<string> words{"foo", "bar", "the"};
-	//    vector<string> words{"a", "b", "a"};
-		//vector<string> words{ "man" };
-	//    auto r = sol.findSubstring__("barfoofoobarthefoobarman", words);
-	//    auto r = sol.findSubstring__("abababab", words);
-	//    for (auto i : r)
-	//        cout << i << " ";
-	//    cout << endl;
-		//vector<Point> points;
-		////vector<vector<int>> ps{ { 84,250 },{ 0,0 },{ 1,0 },{ 0,-70 },{ 0,-70 },{ 1,-1 },{ 21,10 },{ 42,90 },{ -42,-230 } };
-		//vector<vector<int>> ps{ { 0, 0 },{ 1,1 },{ 1,-1 } };
-		//for (auto i : ps)
-		//	points.push_back(Point(i[0], i[1]));
-		//cout << sol.maxPoints(points) << endl;
-		//vector<pair<string, string>> ticks{ { "MUC", "LHR" },{ "JFK", "MUC" },{ "SFO", "SJC" },{ "LHR", "SFO" } };
-		//auto r = sol.findItinerary(ticks);
-		//for (auto &i : r)
-		//	cout << i << " ";
-		//cout << endl;
-	return 0;
+    //    int n = 11;
+    //    int n = 1999999999;
+    //    cout << n << endl;
+    //    while ((n = sol.nextGreaterElement(n)) != -1) {
+    //        cout << n << endl;
+    //    }
+    //    vector<string> words{"foo", "bar", "the"};
+    //    vector<string> words{"a", "b", "a"};
+    //vector<string> words{ "man" };
+    //    auto r = sol.findSubstring__("barfoofoobarthefoobarman", words);
+    //    auto r = sol.findSubstring__("abababab", words);
+    //    for (auto i : r)
+    //        cout << i << " ";
+    //    cout << endl;
+    //vector<Point> points;
+    ////vector<vector<int>> ps{ { 84,250 },{ 0,0 },{ 1,0 },{ 0,-70 },{ 0,-70 },{ 1,-1 },{ 21,10 },{ 42,90 },{ -42,-230 } };
+    //vector<vector<int>> ps{ { 0, 0 },{ 1,1 },{ 1,-1 } };
+    //for (auto i : ps)
+    //	points.push_back(Point(i[0], i[1]));
+    //cout << sol.maxPoints(points) << endl;
+    //vector<pair<string, string>> ticks{ { "MUC", "LHR" },{ "JFK", "MUC" },{ "SFO", "SJC" },{ "LHR", "SFO" } };
+    //auto r = sol.findItinerary(ticks);
+    //for (auto &i : r)
+    //	cout << i << " ";
+    //cout << endl;
+    return 0;
 }
