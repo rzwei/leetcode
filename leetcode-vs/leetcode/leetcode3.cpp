@@ -12,6 +12,7 @@
 #include <stack>
 #include <list>
 
+#define __DEBUG
 using namespace std;
 
 
@@ -867,16 +868,110 @@ public:
         return low;
     }
 
+    //207. Course Schedule
+    bool canFinish(int numCourses, vector<pair<int, int>> &prerequisites) {
+        vector<vector<int>> mat(numCourses);
+        vector<int> inv(numCourses);
+        for (auto &p:prerequisites) {
+            mat[p.first].push_back(p.second);
+            inv[p.second]++;
+        }
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (inv[i] == 0) {
+                q.push(i);
+            }
+        }
+        int cnt = 0;
+        while (!q.empty()) {
+            int cur = q.front();
+            q.pop();
+            cnt++;
+            for (int n:mat[cur]) {
+                inv[n]--;
+                if (inv[n] == 0) {
+                    q.push(n);
+                }
+            }
+        }
+        return cnt == numCourses ? true : false;
+    }
+
+    //210. Course Schedule II
+    vector<int> findOrder(int numCourses, vector<pair<int, int>> &prerequisites) {
+        vector<vector<int>> mat(numCourses);
+        vector<int> inv(numCourses);
+        for (auto &p:prerequisites) {
+            mat[p.first].push_back(p.second);
+            inv[p.second]++;
+        }
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (inv[i] == 0) {
+                q.push(i);
+            }
+        }
+        vector<int> ret;
+        while (!q.empty()) {
+            auto cur = q.front();
+            q.pop();
+            ret.push_back(cur);
+            for (auto n:mat[cur]) {
+                inv[n]--;
+                if (inv[n] == 0) {
+                    q.push(n);
+                }
+            }
+        }
+        if (ret.size() == numCourses) {
+            reverse(ret.begin(), ret.end());
+            return ret;
+        } else {
+            return vector<int>();
+        }
+    }
+
+
+    //630. Course Schedule III
+    int scheduleCourse(vector<vector<int>> &courses) {
+        sort(courses.begin(), courses.end(), [](vector<int> &p1, vector<int> &p2) {
+            return p1[1] < p2[1];
+        });
+        priority_queue<int> pq;
+        int ans = 0, e = 0;
+        for (auto c:courses) {
+            e += c[0];
+            pq.push(c[0]);
+            ans++;
+            while (!pq.empty() && e > c[1]) {
+                e -= pq.top();
+                pq.pop();
+                ans--;
+            }
+        }
+        return ans;
+    }
 };
 
 int main() {
     Solution sol;
-    vector<int> nums{1, 2, 3, 4, 5, 0};
-    nums = {1, 3, 1};
+    vector<vector<int>> course{{100,  200},
+                               {200,  1300},
+                               {1000, 1250},
+                               {200,  3200}};
+    cout << sol.scheduleCourse(course) << endl;
+//    auto r = sol.findOrder(4, course);
+//    for (int i :r) {
+//        cout << i << " ";
+//    }
+//    cout << endl;
+//    cout << sol.canFinish(2, course) << endl;
+//    vector<int> nums{1, 2, 3, 4, 5, 0};
+//    nums = {1, 3, 1};
 //    nums = {60, 100, 4};
-    cout << sol.smallestDistancePair(nums, 1) << endl;
-    cout << sol.smallestDistancePair(nums, 2) << endl;
-    cout << sol.smallestDistancePair(nums, 3) << endl;
+//    cout << sol.smallestDistancePair(nums, 1) << endl;
+//    cout << sol.smallestDistancePair(nums, 2) << endl;
+//    cout << sol.smallestDistancePair(nums, 3) << endl;
     //nums = { 1,0,2,3,4 };
 //    cout << sol.maxChunksToSorted(nums) << endl;
     //vector<vector<int>> matrix{ { 1,2,3,4 },{ 5,1,2,3 },{ 9,5,1,2 } };
