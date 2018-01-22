@@ -25,6 +25,40 @@ struct Point {
     Point(int a, int b) : x(a), y(b) {}
 };
 
+//715. Range Module
+class RangeModule {
+public:
+//    vector<pair<int, int>> intervels;
+//    map<int, int> intervels;
+    set<pair<int, int>> intervels;
+
+    RangeModule() {
+
+    }
+
+    void addRange(int left, int right) {
+        auto it = intervels.lower_bound({left, right});
+        if (it != intervels.end() && it->second < left) {
+            it++;
+        }
+        while (it != intervels.end() && right > it->first) {
+            left = min(left, it->first);
+            right = max(right, it->second);
+            it = intervels.erase(it);
+        }
+        intervels.insert({left, right});
+    }
+
+    bool queryRange(int left, int right) {
+        auto it = intervels.lower_bound({left, right});
+        return it != intervels.end() && left >= it->first && right < it->second;
+    }
+
+    void removeRange(int left, int right) {
+        auto it = intervels.lower_bound({left, right});
+
+    }
+};
 
 class AllOne {
 public:
@@ -894,7 +928,7 @@ public:
                 }
             }
         }
-        return cnt == numCourses ? true : false;
+        return cnt == numCourses;
     }
 
     //210. Course Schedule II
@@ -930,7 +964,6 @@ public:
             return vector<int>();
         }
     }
-
 
     //630. Course Schedule III
     int scheduleCourse(vector<vector<int>> &courses) {
