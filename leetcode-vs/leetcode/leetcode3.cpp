@@ -838,15 +838,13 @@ public:
 
     int countPairs(vector<int> &nums, int mid) {
         int res = 0, Len = nums.size();
-        for (int i = 0; i < Len; i++) {
-            for (int j = i + 1; j < Len && nums[j] - nums[i] <= mid; j++) {
-                res++;
+        for (int i = 0, j = 0; j < Len; j++) {
+            while (i < j && nums[j] - nums[i] > mid) {
+                i++;
             }
+            res += j - i;
         }
         return res;
-
-
-
     }
 
     //719. Find K-th Smallest Pair Distance
@@ -856,7 +854,7 @@ public:
         for (int i = 1; i < Len; ++i) {
             low = min(low, nums[i] - nums[i - 1]);
         }
-//        k--;
+
         while (low < high) {
             int m = (low + high) / 2, c = countPairs(nums, m);
             if (c >= k) {
