@@ -1,4 +1,4 @@
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -836,70 +836,49 @@ public:
         return ans;
     }
 
-    //719. Find K-th Smallest Pair Distance
-    int smallestDistancePair(vector<int> &nums, int k) {
-        priority_queue<int, vector<int>, greater<int>> pq;
-        mergeSort(0, nums.size() - 1, nums, pq, k);
-        while (pq.size() > k) {
-            pq.pop();
+    int countPairs(vector<int> &nums, int mid) {
+        int res = 0, Len = nums.size();
+        for (int i = 0; i < Len; i++) {
+            for (int j = i + 1; j < Len && nums[j] - nums[i] <= mid; j++) {
+                res++;
+            }
         }
-        int t = pq.top();
-        while (!pq.empty()) {
-            cout << pq.top() << endl;
-            pq.pop();
-        }
-        return t;
+        return res;
+
+
+
     }
 
-    void mergeSort(int s, int e, vector<int> &nums, priority_queue<int, vector<int>, greater<int>> &pq, int k) {
-        if (s == e) {
-            return;
+    //719. Find K-th Smallest Pair Distance
+    int smallestDistancePair(vector<int> &nums, int k) {
+        sort(nums.begin(), nums.end());
+        int Len = nums.size(), low = nums[1] - nums[0], high = nums[nums.size() - 1] - nums[0];
+        for (int i = 1; i < Len; ++i) {
+            low = min(low, nums[i] - nums[i - 1]);
         }
-        if (e - s == 1) {
-            if (nums[s] > nums[e]) {
-                swap(nums[s], nums[e]);
-            }
-//            pq.push(nums[e] - nums[s]);
-//            pq.push(nums[e] - nums[s]);
-            return;
-        }
-        int m = (s + e) / 2;
-        mergeSort(s, m, nums, pq, k);
-        mergeSort(m + 1, e, nums, pq, k);
-        vector<int> T(e - s + 1);
-        int t = 0, i = s, j = m + 1;
-        while (i <= m || j <= e) {
-            if (i <= m && j <= e) {
-                if (nums[i] < nums[j]) {
-                    T[t++] = nums[i++];
-                } else {
-                    T[t++] = nums[j++];
-                }
-            } else if (i <= m) {
-                T[t++] = nums[i++];
+//        k--;
+        while (low < high) {
+            int m = (low + high) / 2, c = countPairs(nums, m);
+            if (c >= k) {
+                high = m;
             } else {
-                T[t++] = nums[j++];
+                low = m + 1;
             }
+
         }
-        for (i = s; i <= e; i++) {
-            nums[i] = T[i - s];
-            if (i > s) {
-                pq.push(nums[i] - nums[i - 1]);
-                pq.push(nums[i] - nums[i - 1]);
-            }
-        }
-        while (pq.size() > k) {
-            pq.pop();
-        }
+        return low;
     }
+
 };
 
 int main() {
     Solution sol;
     vector<int> nums{1, 2, 3, 4, 5, 0};
     nums = {1, 3, 1};
-    nums = {60, 100, 4};
-    cout << sol.smallestDistancePair(nums, 6) << endl;
+//    nums = {60, 100, 4};
+    cout << sol.smallestDistancePair(nums, 1) << endl;
+    cout << sol.smallestDistancePair(nums, 2) << endl;
+    cout << sol.smallestDistancePair(nums, 3) << endl;
     //nums = { 1,0,2,3,4 };
 //    cout << sol.maxChunksToSorted(nums) << endl;
     //vector<vector<int>> matrix{ { 1,2,3,4 },{ 5,1,2,3 },{ 9,5,1,2 } };
