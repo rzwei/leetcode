@@ -2,7 +2,7 @@
 // Created by ren on 18-1-23.
 //
 //#include "stdafx.h"
-#include <sstream>
+//#include <sstream>
 #include <functional>
 #include <iostream>
 #include <unordered_map>
@@ -287,13 +287,62 @@ public:
         set<pair<int, int>> memo;
         return dfs_678(0, 0, s, memo);
     }
+
+    int dp_639(int i, string &s, vector<int> &memo) {
+        if (memo[i] != -1) {
+            return memo[i];
+        }
+        if (i == 0) {
+            return s[i] == '*' ? 9 : 1;
+        }
+        if (i < 0) {
+            return 0;
+        }
+        int r = 0;
+        if (s[i] == '*') {
+            if (s[i - 1] == '*') {
+                r = dp_639(i - 1, s, memo) + 9 + dp_639(i - 2, s, memo) + 9 + 6;
+            } else {
+                if (s[i - 1] == '1') {
+                    r = 9 + dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo) + 9;
+                } else if (s[i - 1] == '2') {
+                    r = 9 + dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo) + 6;
+                }
+            }
+        } else {
+            if (s[i - 1] == '*') {
+                if (s[i] == '1' || s[i] == '2') {
+                    r = dp_639(i - 1, s, memo) + 2 + dp_639(i - 2, s, memo);
+                } else {
+                    r = dp_639(i - 1, s, memo);
+                }
+            } else {
+                int v = (s[i - 1] - '0') * 10 + s[i];
+                if (10 <= v && v <= 26) {
+                    r = dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo);
+                } else {
+                    r = dp_639(i - 2, s, memo);
+                }
+            }
+        }
+        memo[i] = r;
+        return r;
+    }
+
+    //639. Decode Ways II
+    int numDecodings(string s) {
+        vector<int> memo(s.length(), -1);
+        memo[0] = 1;
+    }
 };
 
 
 int main() {
     Solution sol;
+    cout << sol.numDecodings("123") << endl;
 //    cout << sol.checkValidString(
-//            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()") << endl;
+//            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()")
+//         << endl;
 //    vector<string> bank;
 //    bank = {"AACCGGTA", "AACCGCTA", "AAACGGTA"};
 //    bank = {"AAAACCCC", "AAACCCCC", "AACCCCCC"};
