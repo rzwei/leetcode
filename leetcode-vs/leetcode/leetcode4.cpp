@@ -3,10 +3,18 @@
 //
 //#include "stdafx.h"
 #include <sstream>
+#include <functional>
 #include <iostream>
 #include <unordered_map>
+#include <set>
 #include <unordered_set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
 #include <algorithm>
+#include <queue>
+#include <stack>
+
 
 #define __DEBUG
 using namespace std;
@@ -119,7 +127,6 @@ public:
         return paths;
     }
 
-private:
     bool findLaddersHelper(
             unordered_set<string> &words1,
             unordered_set<string> &words2,
@@ -171,15 +178,52 @@ private:
                 path.pop_back();
             }
     }
+
+    //456. 132 Pattern
+    bool find132pattern(vector<int> &nums) {
+//        int Len = nums.size();
+//        if (Len < 3) {
+//            return false;
+//        }
+//        int m = nums[0];
+//        for (int i = 1; i < Len; i++) {
+//            for (int j = i + 1; j < Len; ++j) {
+//                if (nums[j] > m && nums[j] < nums[i]) {
+//                    return true;
+//                }
+//            }
+//            m = min(m, nums[i]);
+//        }
+//        return false;
+        int s3 = INT_MIN;
+        stack<int> st;
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            if (nums[i] < s3) return true;
+            else
+                while (!st.empty() && nums[i] > st.top()) {
+                    s3 = st.top();
+                    st.pop();
+                }
+            st.push(nums[i]);
+        }
+        return false;
+    }
+
 };
 
 
 int main() {
     Solution sol;
-    vector<vector<int>> mat{{0, 1, -1},
-                            {1, 0, 1},
-                            {1, 1, 1}};
-    cout << sol.cherryPickup(mat) << endl;
+    vector<int> nums{1, 2, 3, 4, 5};
+    nums = {1, 0, 1, -4, -3};
+//    nums = {3, 1, 4, 2};
+//    nums = {-1, 3, 2, 0};
+//    nums = {3, 5, 0, 3, 4};
+    cout << sol.find132pattern(nums) << endl;
+//    vector<vector<int>> mat{{0, 1, -1},
+//                            {1, 0, 1},
+//                            {1, 1, 1}};
+//    cout << sol.cherryPickup(mat) << endl;
 //    string expression;
 //    while (getline(cin, expression)) {
 //        cout << sol.calculateII(expression) << endl;
