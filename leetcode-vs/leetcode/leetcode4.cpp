@@ -1,7 +1,7 @@
 //
 // Created by ren on 18-1-23.
 //
-//#include "stdafx.h"
+#include "stdafx.h"
 //#include <sstream>
 #include <functional>
 #include <iostream>
@@ -288,55 +288,56 @@ public:
         return dfs_678(0, 0, s, memo);
     }
 
-    int dp_639(int i, string &s, vector<int> &memo) {
-        if (i == 0) {
-            return s[i] == '*' ? 9 : 1;
-        }
-        if (i < 0) {
-            return 1;
-        }
-        if (memo[i] != -1) {
-            return memo[i];
-        }
-        long long r = 0;
-        if (s[i] == '*') {
-            if (s[i - 1] == '*') {
-                r = dp_639(i - 1, s, memo) + 9 + dp_639(i - 2, s, memo) + 9 + 6;
-            } else {
-                if (s[i - 1] == '1') {
-                    r = 9 + dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo) + 9;
-                } else if (s[i - 1] == '2') {
-                    r = 9 + dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo) + 6;
-                } else {
-                    r = dp_639(i - 2, s, memo) + 9;
-                }
-            }
-        } else {
-            if (s[i - 1] == '*') {
-                if (s[i] == '1' || s[i] == '2') {
-                    r = dp_639(i - 1, s, memo) + 2 + dp_639(i - 2, s, memo);
-                } else {
-                    r = dp_639(i - 1, s, memo);
-                }
-            } else {
-                int v = (s[i - 1] - '0') * 10 + s[i] - '0';
-                if (10 <= v && v <= 26) {
-                    r = dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo);
-                } else {
-                    r = dp_639(i - 1, s, memo);
-                }
-            }
-        }
-        int ret = int(r % 1000000007);
-        memo[i] = ret;
-        cout << i << " " << ret << endl;
-        return ret;
-    }
 
     //639. Decode Ways II
     int numDecodings(string s) {
-        vector<int> memo(s.length(), -1);
-        return dp_639(s.length() - 1, s, memo);
+        int Len = s.length();
+        if (Len == 0 || s[0] == '0') {
+            return 0;
+        }
+        vector<long long> dp(Len + 1);
+        const int MOD = 1000000007;
+        dp[0] = s[0] == '*' ? 9 : 1;
+        for (int i = 1; i < Len; i++) {
+            if (s[i] == '*') {
+                if (s[i - 1] == '*') {
+                    dp[i] = 9 * dp[i - 1] + 15 * (i - 2 >= 0 ? dp[i - 2] : 1);
+                } else if (s[i - 1] == '1') {
+                    dp[i] = 9 * dp[i - 1] + 9 * (i - 2 >= 0 ? dp[i - 2] : 1);
+                } else if (s[i - 1] == '2') {
+                    dp[i] = 9 * dp[i - 1] + 6 * (i - 2 >= 0 ? dp[i - 2] : 1);
+                } else {
+                    dp[i] = 9 * dp[i - 1];
+                }
+            } else if (s[i] != '0') {
+                if (s[i - 1] == '*') {
+                    if ('1' <= s[i] && s[i] <= '6') {
+                        dp[i] = dp[i - 1] + 2 * (i - 2 >= 0 ? dp[i - 2] : 1);
+                    } else {
+                        dp[i] = dp[i - 1] + (i - 2 >= 0 ? dp[i - 2] : 1);
+                    }
+                } else {
+                    int v = (s[i - 1] - '0') * 10 + s[i] - '0';
+                    if (10 <= v && v <= 26) {
+                        dp[i] = dp[i - 1] + (i - 2 >= 0 ? dp[i - 2] : 1);
+                    } else {
+                        dp[i] = dp[i - 1];
+                    }
+                }
+            } else if (s[i] == '0') {
+                if (s[i - 1] == '1' || s[i - 1] == '2') {
+                    dp[i] = (i - 2 >= 0) ? dp[i - 2] : 1;
+                } else if (s[i - 1] == '*') {
+                    dp[i] = 2 * (i - 2 >= 0 ? dp[i - 2] : 1);
+                }
+            }
+            dp[i] %= MOD;
+        }
+        for (auto &&item : dp) {
+            cout << item << " ";
+        }
+        cout << endl;
+        return dp[Len - 1];
     }
 };
 
@@ -345,6 +346,10 @@ int main() {
     Solution sol;
     cout << sol.numDecodings("123") << endl;
     cout << sol.numDecodings("1*") << endl;
+    cout << sol.numDecodings("*3") << endl;
+    cout << sol.numDecodings("*10*1") << endl;
+    cout << sol.numDecodings("*0**0") << endl;
+    cout << sol.numDecodings("1*72*") << endl;
 //    cout << sol.checkValidString(
 //            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()")
 //         << endl;

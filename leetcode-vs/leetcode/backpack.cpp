@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+#include "stdafx.h"
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -260,17 +260,17 @@ void heapAdjust(int i, vector<int> &nums, int Len) {
     }
     if (i * 2 + 1 < Len && nums[i] > nums[2 * i + 1]) {
         swap(nums[i], nums[i * 2]);
-        heapAdjust(i * 2 + 1);
+        heapAdjust(i * 2 + 1,nums,Len);
     }
     if (2 * i + 2 < Len && nums[i] > nums[2 * i + 2]) {
         swap(nums[i], nums[i * 2 + 2]);
-        heapAdjust(i * 2 + 2);
+        heapAdjust(i * 2 + 2,nums,Len);
     }
 }
 
 void heapify(vector<int> &nums, int Len) {
     for (int i = Len / 2; i >= 0; i--) {
-        heapAdjust(i, nums);
+        heapAdjust(i, nums,Len);
     }
 }
 
