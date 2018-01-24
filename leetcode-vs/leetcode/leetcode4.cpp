@@ -289,14 +289,14 @@ public:
     }
 
     int dp_639(int i, string &s, vector<int> &memo) {
-        if (memo[i] != -1) {
-            return memo[i];
-        }
         if (i == 0) {
             return s[i] == '*' ? 9 : 1;
         }
         if (i < 0) {
-            return 0;
+            return 1;
+        }
+        if (memo[i] != -1) {
+            return memo[i];
         }
         long long r = 0;
         if (s[i] == '*') {
@@ -319,16 +319,17 @@ public:
                     r = dp_639(i - 1, s, memo);
                 }
             } else {
-                int v = (s[i - 1] - '0') * 10 + s[i];
+                int v = (s[i - 1] - '0') * 10 + s[i] - '0';
                 if (10 <= v && v <= 26) {
                     r = dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo);
                 } else {
-                    r = dp_639(i - 2, s, memo);
+                    r = dp_639(i - 1, s, memo);
                 }
             }
         }
         int ret = int(r % 1000000007);
         memo[i] = ret;
+        cout << i << " " << ret << endl;
         return ret;
     }
 
@@ -343,6 +344,7 @@ public:
 int main() {
     Solution sol;
     cout << sol.numDecodings("123") << endl;
+    cout << sol.numDecodings("1*") << endl;
 //    cout << sol.checkValidString(
 //            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()")
 //         << endl;
