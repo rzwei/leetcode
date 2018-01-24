@@ -298,7 +298,7 @@ public:
         if (i < 0) {
             return 0;
         }
-        int r = 0;
+        long long r = 0;
         if (s[i] == '*') {
             if (s[i - 1] == '*') {
                 r = dp_639(i - 1, s, memo) + 9 + dp_639(i - 2, s, memo) + 9 + 6;
@@ -307,6 +307,8 @@ public:
                     r = 9 + dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo) + 9;
                 } else if (s[i - 1] == '2') {
                     r = 9 + dp_639(i - 1, s, memo) + dp_639(i - 2, s, memo) + 6;
+                } else {
+                    r = dp_639(i - 2, s, memo) + 9;
                 }
             }
         } else {
@@ -325,14 +327,15 @@ public:
                 }
             }
         }
-        memo[i] = r;
-        return r;
+        int ret = int(r % 1000000007);
+        memo[i] = ret;
+        return ret;
     }
 
     //639. Decode Ways II
     int numDecodings(string s) {
         vector<int> memo(s.length(), -1);
-        memo[0] = 1;
+        return dp_639(s.length() - 1, s, memo);
     }
 };
 
