@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <queue>
 #include <stack>
+#include <climits>
 
 
 #define __DEBUG
@@ -209,17 +210,100 @@ public:
         return false;
     }
 
+    //433. Minimum Genetic Mutation
+    int minMutation(string start, string end, vector<string> &bank) {
+        unordered_set<string> validgenic(bank.begin(), bank.end());
+        if (!validgenic.count(end)) {
+            return -1;
+        }
+        unordered_set<string> left{start}, right{end}, visited;
+        vector<char> chars{'A', 'G', 'C', 'T'};
+        int ans = 0;
+        while (!left.empty() && !right.empty()) {
+            unordered_set<string> &l = left, &r = right;
+            if (l.size() > r.size()) {
+                swap(l, r);
+            }
+            unordered_set<string> nl;
+            for (auto genic:l) {
+                if (visited.count(genic)) {
+                    continue;
+                }
+                if (r.count(genic)) {
+                    return ans;
+                }
+                for (int i = 0; i < genic.size(); i++) {
+                    char t = genic[i];
+                    for (char c:chars) {
+                        if (c == t) {
+                            continue;
+                        }
+                        genic[i] = c;
+                        if (validgenic.count(genic)) {
+                            nl.insert(genic);
+                        }
+                    }
+                    genic[i] = t;
+                }
+                visited.insert(genic);
+            }
+            ans++;
+            l = nl;
+        }
+        return -1;
+    }
+
+
+    bool dfs_678(int i, int counter, string &s, set<pair<int, int>> &memo) {
+        if (memo.find({i, counter}) != memo.end()) {
+            return false;
+        }
+        if (i == s.size()) {
+            return counter == 0;
+        }
+        if (counter < 0) {
+            return false;
+        }
+        if (counter == 0 && s[i] == ')') {
+            return false;
+        }
+        bool r = false;
+        if (s[i] == '(') {
+            r = dfs_678(i + 1, counter + 1, s, memo);
+        } else if (s[i] == ')') {
+            r = dfs_678(i + 1, counter - 1, s, memo);
+        } else if (s[i] == '*') {
+            r = dfs_678(i + 1, counter, s, memo) || dfs_678(i + 1, counter + 1, s, memo) ||
+                dfs_678(i + 1, counter - 1, s, memo);
+        }
+        if (!r) {
+            memo.insert({i, counter});
+        }
+        return r;
+    }
+
+    //678. Valid Parenthesis String
+    bool checkValidString(string s) {
+        set<pair<int, int>> memo;
+        return dfs_678(0, 0, s, memo);
+    }
 };
 
 
 int main() {
     Solution sol;
-    vector<int> nums{1, 2, 3, 4, 5};
-    nums = {1, 0, 1, -4, -3};
+//    cout << sol.checkValidString(
+//            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()") << endl;
+//    vector<string> bank;
+//    bank = {"AACCGGTA", "AACCGCTA", "AAACGGTA"};
+//    bank = {"AAAACCCC", "AAACCCCC", "AACCCCCC"};
+//    cout << sol.minMutation("AACCGGTT", "AAACGGTA", bank) << endl;
+//    vector<int> nums{1, 2, 3, 4, 5};
+//    nums = {1, 0, 1, -4, -3};
 //    nums = {3, 1, 4, 2};
 //    nums = {-1, 3, 2, 0};
 //    nums = {3, 5, 0, 3, 4};
-    cout << sol.find132pattern(nums) << endl;
+//    cout << sol.find132pattern(nums) << endl;
 //    vector<vector<int>> mat{{0, 1, -1},
 //                            {1, 0, 1},
 //                            {1, 1, 1}};
