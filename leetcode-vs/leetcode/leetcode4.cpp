@@ -347,7 +347,7 @@ public:
         if (Len >= 2 && flowerbed[0] == 0 && flowerbed[1] == 0) {
             dp[1] = 1;
         } else if (Len == 1 && flowerbed[0] == 0) {
-            return 1;
+            return true;
         }
         for (int i = 2; i <= Len; i++) {
             int pre = flowerbed[i - 2], cur = flowerbed[i - 1];
@@ -385,9 +385,6 @@ public:
             if (!next && !prev) {
                 flowerbed[i] = 1;
                 cnt--;
-            }
-            if (cnt <= 0) {
-                return true;
             }
         }
         return cnt == 0;
