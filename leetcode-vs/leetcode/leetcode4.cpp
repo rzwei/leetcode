@@ -1,7 +1,7 @@
 //
 // Created by ren on 18-1-23.
 //
-#include "stdafx.h"
+//#include "stdafx.h"
 //#include <sstream>
 #include <functional>
 #include <iostream>
@@ -333,23 +333,79 @@ public:
             }
             dp[i] %= MOD;
         }
-        for (auto &&item : dp) {
-            cout << item << " ";
+//        for (auto &&item : dp) {
+//            cout << item << " ";
+//        }
+//        cout << endl;
+        return dp[Len - 1];
+    }
+
+    //605. Can Place Flowers
+    bool canPlaceFlowers_dp(vector<int> &flowerbed, int n) {
+        int Len = flowerbed.size();
+        vector<int> dp(Len + 1);
+        if (Len >= 2 && flowerbed[0] == 0 && flowerbed[1] == 0) {
+            dp[1] = 1;
+        } else if (Len == 1 && flowerbed[0] == 0) {
+            return 1;
+        }
+        for (int i = 2; i <= Len; i++) {
+            int pre = flowerbed[i - 2], cur = flowerbed[i - 1];
+            if (cur == 0) {
+                if (pre == 1) {
+                    dp[i] = dp[i - 1];
+                } else {
+                    dp[i] = max(dp[i - 1], dp[i - 2] + 1);
+                }
+            } else {
+                if (pre == 1) {
+                    dp[i] = dp[i - 1];
+                } else {
+                    dp[i] = dp[i - 2];
+                }
+            }
+        }
+#ifdef __DEBUG
+        for (auto &&i:dp) {
+            cout << i << " ";
         }
         cout << endl;
-        return dp[Len - 1];
+#endif
+        return dp[Len] >= n;
+    }
+
+    //605. Can Place Flowers
+    bool canPlaceFlowers(vector<int> &flowerbed, int n) {
+        int cnt = n, Len = flowerbed.size();
+        for (int i = 0; i < Len && cnt; i++) {
+            if (flowerbed[i]) {
+                continue;
+            }
+            int next = i + 1 < flowerbed.size() ? flowerbed[i + 1] : 0, prev = i - 1 >= 0 ? flowerbed[i - 1] : 0;
+            if (!next && !prev) {
+                flowerbed[i] = 1;
+                cnt--;
+            }
+            if (cnt <= 0) {
+                return true;
+            }
+        }
+        return cnt == 0;
     }
 };
 
 
 int main() {
     Solution sol;
-    cout << sol.numDecodings("123") << endl;
-    cout << sol.numDecodings("1*") << endl;
-    cout << sol.numDecodings("*3") << endl;
-    cout << sol.numDecodings("*10*1") << endl;
-    cout << sol.numDecodings("*0**0") << endl;
-    cout << sol.numDecodings("1*72*") << endl;
+    vector<int> nums;
+    nums = {0, 0, 1, 0, 1};
+    cout << sol.canPlaceFlowers(nums, 1) << endl;
+//    cout << sol.numDecodings("123") << endl;
+//    cout << sol.numDecodings("1*") << endl;
+//    cout << sol.numDecodings("*3") << endl;
+//    cout << sol.numDecodings("*10*1") << endl;
+//    cout << sol.numDecodings("*0**0") << endl;
+//    cout << sol.numDecodings("1*72*") << endl;
 //    cout << sol.checkValidString(
 //            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()")
 //         << endl;
