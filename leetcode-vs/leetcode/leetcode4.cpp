@@ -389,14 +389,62 @@ public:
         }
         return cnt == 0;
     }
+
+    //721. Accounts Merge
+    vector<vector<string>> accountsMerge(vector<vector<string>> &acts) {
+        unordered_map<string, string> owner;
+        unordered_map<string, string> parents;
+        function<string(string)> find = [&](string s) { return parents[s] == s ? s : find(parents[s]); };
+        for (int i = 0; i < acts.size(); i++) {
+            for (int j = 1; j < acts[i].size(); j++) {
+                parents[acts[i][j]] = acts[i][j];
+                owner[acts[i][j]] = acts[i][0];
+            }
+        }
+        for (int i = 0; i < acts.size(); i++) {
+            string p = find(acts[i][1]);
+            for (int j = 2; j < acts[i].size(); j++) {
+                parents[find(acts[i][j])] = p;
+            }
+        }
+        unordered_map<string, set<string>> unions;
+        for (int i = 0; i < acts.size(); i++) {
+            for (int j = 1; j < acts[i].size(); j++) {
+                unions[find(acts[i][j])].insert(acts[i][j]);
+            }
+        }
+        vector<vector<string>> merged;
+        for (pair<string, set<string>> p : unions) {
+            vector<string> emails(p.second.begin(), p.second.end());
+            emails.insert(emails.begin(), owner[p.first]);
+            merged.push_back(emails);
+        }
+        return merged;
+    }
 };
 
 
 int main() {
     Solution sol;
-    vector<int> nums;
-    nums = {0, 0, 1, 0, 1};
-    cout << sol.canPlaceFlowers(nums, 1) << endl;
+    vector<vector<string>> accounts{{"Hanzo", "Hanzo2@m.co", "Hanzo3@m.co"},
+                                    {"Hanzo", "Hanzo4@m.co", "Hanzo5@m.co"},
+                                    {"Hanzo", "Hanzo0@m.co", "Hanzo1@m.co"},
+                                    {"Hanzo", "Hanzo3@m.co", "Hanzo4@m.co"},
+                                    {"Hanzo", "Hanzo7@m.co", "Hanzo8@m.co"},
+                                    {"Hanzo", "Hanzo1@m.co", "Hanzo2@m.co"},
+                                    {"Hanzo", "Hanzo6@m.co", "Hanzo7@m.co"},
+                                    {"Hanzo", "Hanzo5@m.co", "Hanzo6@m.co"}};
+    auto r = sol.accountsMerge(accounts);
+
+    for (auto &&v:r) {
+        for (auto &&s:v) {
+            cout << s << " ";
+        }
+        cout << endl;
+    }
+//    vector<int> nums;
+//    nums = {0, 0, 1, 0, 1};
+//    cout << sol.canPlaceFlowers(nums, 1) << endl;
 //    cout << sol.numDecodings("123") << endl;
 //    cout << sol.numDecodings("1*") << endl;
 //    cout << sol.numDecodings("*3") << endl;
