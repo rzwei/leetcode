@@ -549,8 +549,8 @@ public:
 
 int main() {
 	Solution sol;
-	auto r=sol.deserialize("324");
-	cout << 1 << endl;
+	//auto r=sol.deserialize("324");
+	//cout << 1 << endl;
 	//cout << sol.fractionToDecimal(2, 3) << endl;
 	//cout << sol.fractionToDecimal(1, 7) << endl;
 	//cout << sol.fractionToDecimal(-1, -2147483648ll) << endl;
