@@ -19,6 +19,36 @@
 #define __DEBUG
 using namespace std;
 
+// This is the interface that allows for creating nested lists.
+// You should not implement it, or speculate about its implementation
+class NestedInteger {
+public:
+	// Constructor initializes an empty nested list.
+	NestedInteger();
+
+	// Constructor initializes a single integer.
+	NestedInteger(int value) {
+		;
+	}
+
+	// Return true if this NestedInteger holds a single integer, rather than a nested list.
+	bool isInteger() const;
+
+	// Return the single integer that this NestedInteger holds, if it holds a single integer
+	// The result is undefined if this NestedInteger holds a nested list
+	int getInteger() const;
+
+	// Set this NestedInteger to hold a single integer.
+	void setInteger(int value);
+
+	// Set this NestedInteger to hold a nested list and adds a nested integer to it.
+	void add(const NestedInteger &ni);
+
+	// Return the nested list that this NestedInteger holds, if it holds a nested list
+	// The result is undefined if this NestedInteger holds a single integer
+	const vector<NestedInteger> &getList() const;
+};
+
 class Solution {
 public:
 	//227. Basic Calculator II
@@ -463,15 +493,69 @@ public:
 		}
 		return res;
 	}
+
+
+	NestedInteger build_385(int &l, int &r, string &s)
+	{
+		if (isdigit(s[l]) || s[l] == '-')
+		{
+			int f = 1, v = 0;
+			if (s[l] == '-')
+			{
+				l++;
+				f = -1;
+			}
+			while (l < r&&isdigit(s[l]))
+				v = v * 10 + s[l++] - '0';
+			return NestedInteger(f == 1 ? v : -v);
+		}
+		else if (s[l] == '[')
+		{
+			NestedInteger ret;
+			int i = l + 1;
+			r--;
+			while (i < r)
+			{
+				if (isdigit(s[i]) || s[i] == '-')
+					ret.add(build_385(i, r, s));
+				else if (s[i] == '[') {
+					int c = 1, j = i + 1;
+					while (j < r) {
+						if (s[j] == ']')
+							c--;
+						else if (s[j] == '[')
+							c++;
+						if (c == 0)
+							break;
+						j++;
+					}
+					ret.add(build_385(i, ++j, s));
+					i = j + 1;
+				}
+				else if (s[i] == ',')
+					i++;
+			}
+			return ret;
+		}
+		return NestedInteger();
+	}
+
+	//385. Mini Parser
+	NestedInteger deserialize(string s) {
+		int l = 0, r = s.length();
+		return build_385(l, r, s);
+	}
 };
 
 
 int main() {
 	Solution sol;
+	auto r=sol.deserialize("324");
+	cout << 1 << endl;
 	//cout << sol.fractionToDecimal(2, 3) << endl;
 	//cout << sol.fractionToDecimal(1, 7) << endl;
 	//cout << sol.fractionToDecimal(-1, -2147483648ll) << endl;
-	cout << sol.fractionToDecimal(-2147483648ll, 1) << endl;
+	//cout << sol.fractionToDecimal(-2147483648ll, 1) << endl;
 	//vector<vector<string>> accounts{{"Hanzo", "Hanzo2@m.co", "Hanzo3@m.co"},
 	//                                {"Hanzo", "Hanzo4@m.co", "Hanzo5@m.co"},
 	//                                {"Hanzo", "Hanzo0@m.co", "Hanzo1@m.co"},
