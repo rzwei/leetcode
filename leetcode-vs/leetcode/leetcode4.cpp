@@ -573,13 +573,46 @@ public:
 		}
 		return ans;
 	}
+
+	void dfs_216(int s, int k, int n, vector<int>&vis, vector<int> &path, vector<vector<int>> &ans) {
+		if (k == 0)
+		{
+			if (n == 0)
+				ans.push_back(path);
+			return;
+		}
+		for (int i = s; i <= 9; i++)
+			if (vis[i] == 0 && n >= i)
+			{
+				vis[i] = 1;
+				path.push_back(i);
+				dfs_216(i + 1, k - 1, n - i, vis, path, ans);
+				path.pop_back();
+				vis[i] = 0;
+			}
+	}
+
+	//216. Combination Sum III
+	vector<vector<int>> combinationSum3(int k, int n) {
+		vector<int> vis(10), path;
+		vector<vector<int>>ans;
+		dfs_216(1, k, n, vis, path, ans);
+		return ans;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	vector<int> houses = { 1,2,3,4 }, heaters = {1,4};
-	cout << sol.findRadius_binarysearch(houses, heaters) << endl;
+	auto r = sol.combinationSum3(3, 9);
+	for (auto &i : r)
+	{
+		for (auto j : i)
+			cout << j << " ";
+		cout << endl;
+	}
+	//vector<int> houses = { 1,2,3,4 }, heaters = { 1,4 };
+	//cout << sol.findRadius_binarysearch(houses, heaters) << endl;
 	//auto r=sol.deserialize("324");
 	//cout << 1 << endl;
 	//cout << sol.fractionToDecimal(2, 3) << endl;
