@@ -544,11 +544,42 @@ public:
 	//	int l = 0, r = s.length();
 	//	return build_385(l, r, s);
 	//}
+	//475. Heaters
+	int findRadius(vector<int>& houses, vector<int>& heaters) {
+		sort(houses.begin(), houses.end());
+		sort(heaters.begin(), heaters.end());
+		int  i = 0, j = 0, ans = 0;
+		while (i < houses.size())
+		{
+			while (j < heaters.size() - 1 && abs(heaters[j + 1] - houses[i]) <= abs(heaters[j] - houses[i]))
+				j++;
+			ans = max(ans, abs(heaters[j] - houses[i]));
+			i++;
+		}
+		return ans;
+	}
+	int findRadius_binarysearch(vector<int>& houses, vector<int>& heaters) {
+		sort(heaters.begin(), heaters.end());
+		int ans = 0;
+		for (int house : houses)
+		{
+			int idx = lower_bound(heaters.begin(), heaters.end(), house) - heaters.begin();
+			int diff = INT_MAX;
+			if (idx < heaters.size())
+				diff = min(diff, heaters[idx] - house);
+			if (idx > 0)
+				diff = min(diff, house - heaters[idx - 1]);
+			ans = max(ans, diff);
+		}
+		return ans;
+	}
 };
 
 
 int main() {
 	Solution sol;
+	vector<int> houses = { 1,2,3,4 }, heaters = {1,4};
+	cout << sol.findRadius_binarysearch(houses, heaters) << endl;
 	//auto r=sol.deserialize("324");
 	//cout << 1 << endl;
 	//cout << sol.fractionToDecimal(2, 3) << endl;
