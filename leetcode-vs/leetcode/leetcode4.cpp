@@ -618,14 +618,6 @@ public:
 				return false;
 		return true;
 	}
-	string getString(vector<vector<int>>&board)
-	{
-		string s;
-		for (int i = 0; i < 2; i++)
-			for (int j = 0; j < 3; j++)
-				s.push_back(board[i][j] + '0');
-		return s;
-	}
 	vector<string> getSwap(string &s)
 	{
 		int x, y;
@@ -652,7 +644,10 @@ public:
 	//773. Sliding Puzzle 
 	int slidingPuzzle(vector<vector<int>>& board) {
 		unordered_set<string> left, right;
-		auto start = getString(board);
+		string start;
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 3; j++)
+				start.push_back(board[i][j] + '0');
 		if (start == "123450")
 			return 0;
 		left.insert(start);
@@ -664,14 +659,6 @@ public:
 			auto &l = left, &r = right;
 			if (l.size() > r.size())
 				swap(l, r);
-#ifdef __DEBUG
-			for (auto s : l)
-				cout << s << " ";
-			cout << "# ";
-			for (auto s : r)
-				cout << s << " ";
-			cout << endl;
-#endif // __DEBUG
 			ans++;
 			unordered_set<string> tmp;
 			for (auto cur : l)
@@ -741,12 +728,12 @@ public:
 
 int main() {
 	Solution sol;
-	vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
+	//vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
 	//cout << sol.minmaxGasDist(nums, 9) << endl;
-	nums = { 23,24,36,39,46,56,57,65,84,98 };
+	//nums = { 23,24,36,39,46,56,57,65,84,98 };
 	//cout << sol.minmaxGasDist(nums, 1) << endl;
-	nums = { 10, 19, 25, 27, 56, 63, 70, 87, 96, 97 };
-	cout << sol.minmaxGasDist(nums, 3) << endl;
+	//nums = { 10, 19, 25, 27, 56, 63, 70, 87, 96, 97 };
+	//cout << sol.minmaxGasDist(nums, 3) << endl;
 	//vector<vector<int>>board = { {4,1,2},{5,0,3} };
 	//board = { {1,2,3},{5,4,0} };
 	//cout << sol.slidingPuzzle(board) << endl;
