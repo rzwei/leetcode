@@ -599,18 +599,168 @@ public:
 		dfs_216(1, k, n, vis, path, ans);
 		return ans;
 	}
+	//771. Jewels and Stones 
+	int numJewelsInStones(string J, string S) {
+		set<char> jewels(J.begin(), J.end());
+		int ans = 0;
+		for (auto c : S)
+			if (jewels.count(c))
+				ans++;
+		return ans;
+	}
+	//775. Global and Local Inversions 
+	bool isIdealPermutation(vector<int>& A) {
+		int Len = A.size();
+		vector<int>dp(Len + 1);
+		int e = -1;
+		for (int i = 0; i < Len; i++)
+			if (A[i] - i < -1 || A[i] - i>1)
+				return false;
+		return true;
+	}
+	string getString(vector<vector<int>>&board)
+	{
+		string s;
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 3; j++)
+				s.push_back(board[i][j] + '0');
+		return s;
+	}
+	vector<string> getSwap(string &s)
+	{
+		int x, y;
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 3; j++)
+				if (s[i * 3 + j] == '0')
+				{
+					x = i; y = j; break;
+				}
+		vector<string> ret;
+		static vector<vector<int>> dirs{ { 0,1 },{ 0,-1 },{ -1,0 },{ 1,0 } };
+		for (auto &d : dirs)
+		{
+			int nx = x + d[0], ny = y + d[1];
+			if (0 <= nx && nx < 2 && 0 <= ny && ny < 3)
+			{
+				string t = s;
+				swap(t[nx * 3 + ny], t[x * 3 + y]);
+				ret.push_back(t);
+			}
+		}
+		return ret;
+	}
+	//773. Sliding Puzzle 
+	int slidingPuzzle(vector<vector<int>>& board) {
+		unordered_set<string> left, right;
+		auto start = getString(board);
+		if (start == "123450")
+			return 0;
+		left.insert(start);
+		right.insert("123450");
+		unordered_set<string> vis;
+		int ans = 0;
+		while (!left.empty() && !right.empty())
+		{
+			auto &l = left, &r = right;
+			if (l.size() > r.size())
+				swap(l, r);
+#ifdef __DEBUG
+			for (auto s : l)
+				cout << s << " ";
+			cout << "# ";
+			for (auto s : r)
+				cout << s << " ";
+			cout << endl;
+#endif // __DEBUG
+			ans++;
+			unordered_set<string> tmp;
+			for (auto cur : l)
+			{
+				if (vis.count(cur))
+					continue;
+				vis.insert(cur);
+				for (auto &s : getSwap(cur)) {
+					if (r.count(s))
+						return ans;
+					tmp.insert(s);
+				}
+			}
+			l = tmp;
+		}
+		return -1;
+	}
+	class CustomClass {
+	public:
+		CustomClass(int x) : num(x), denom(1), val(x) {}
+		bool operator<(const CustomClass &o) const {
+			return val < o.val;
+		}
+		double num;
+		double denom;
+		double val;
+	};
+	//774. Minimize Max Distance to Gas Station 
+	double minmaxGasDist(vector<int>& stations, int K) {
+		double res = 0;
+		double total = 0;
+		priority_queue<CustomClass> gap;
+		for (int i = 1; i < stations.size(); i++) {
+			int diff = stations[i] - stations[i - 1];
+			total += diff;
+			gap.push(CustomClass(diff));
+		}
+		total /= (K + 1);
+		for (int i = 0; i < K;) {
+			auto top = gap.top();
+			gap.pop();
+			while (i < K && (top.val >= gap.top().val || top.val > total)) {
+				i++;
+				top.denom++;
+				top.val = top.num / top.denom;
+			}
+			gap.push(top);
+		}
+		return gap.top().val;
+	}
+	double minmaxGasDist_(vector<int>& st, int K) {
+		int count, N = st.size();
+		float left = 0, right = st[N - 1] - st[0], mid;
+
+		while (left + 0.00001 < right) {
+			mid = (left + right) / 2;
+			count = 0;
+			for (int i = 0; i < N - 1; ++i)
+				count += ceil((st[i + 1] - st[i]) / mid) - 1;
+			if (count > K) left = mid;
+			else right = mid;
+		}
+		return right;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	auto r = sol.combinationSum3(3, 9);
-	for (auto &i : r)
-	{
-		for (auto j : i)
-			cout << j << " ";
-		cout << endl;
-	}
+	vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
+	//cout << sol.minmaxGasDist(nums, 9) << endl;
+	nums = { 23,24,36,39,46,56,57,65,84,98 };
+	//cout << sol.minmaxGasDist(nums, 1) << endl;
+	nums = { 10, 19, 25, 27, 56, 63, 70, 87, 96, 97 };
+	cout << sol.minmaxGasDist(nums, 3) << endl;
+	//vector<vector<int>>board = { {4,1,2},{5,0,3} };
+	//board = { {1,2,3},{5,4,0} };
+	//cout << sol.slidingPuzzle(board) << endl;
+	//vector<int> nums{ 1,0,2 };
+	//nums = { 0,1 };
+	//cout << sol.isIdealPermutation(nums) << endl;
+	//cout << sol.numJewelsInStones("aA","aAAvvbvvvv") << endl;
+	//auto r = sol.combinationSum3(3, 9);
+	//for (auto &i : r)
+	//{
+	//	for (auto j : i)
+	//		cout << j << " ";
+	//	cout << endl;
+	//}
 	//vector<int> houses = { 1,2,3,4 }, heaters = { 1,4 };
 	//cout << sol.findRadius_binarysearch(houses, heaters) << endl;
 	//auto r=sol.deserialize("324");
