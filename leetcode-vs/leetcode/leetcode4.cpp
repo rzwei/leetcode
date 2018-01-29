@@ -656,23 +656,22 @@ public:
 		int ans = 0;
 		while (!left.empty() && !right.empty())
 		{
-			auto &l = left, &r = right;
-			if (l.size() > r.size())
-				swap(l, r);
+			if (left.size() > right.size())
+				swap(left, right);
 			ans++;
 			unordered_set<string> tmp;
-			for (auto cur : l)
+			for (auto cur : left)
 			{
 				if (vis.count(cur))
 					continue;
 				vis.insert(cur);
 				for (auto &s : getSwap(cur)) {
-					if (r.count(s))
+					if (right.count(s))
 						return ans;
 					tmp.insert(s);
 				}
 			}
-			l = tmp;
+			left = tmp;
 		}
 		return -1;
 	}
@@ -722,6 +721,23 @@ public:
 			else right = mid;
 		}
 		return right;
+	}
+	//761. Special Binary String
+	string makeLargestSpecial(string S) {
+		int count = 0, i = 0;
+		vector<string> res;
+		for (int j = 0; j < S.size(); ++j) {
+			if (S[j] == '1') count++;
+			else count--;
+			if (count == 0) {
+				res.push_back('1' + makeLargestSpecial(S.substr(i + 1, j - i - 1)) + '0');
+				i = j + 1;
+			}
+		}
+		sort(res.begin(), res.end(), greater<string>());
+		string res2 = "";
+		for (int i = 0; i < res.size(); ++i) res2 += res[i];
+		return res2;
 	}
 };
 
