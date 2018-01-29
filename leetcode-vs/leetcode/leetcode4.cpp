@@ -15,9 +15,11 @@
 #include <stack>
 #include <climits>
 #include <string>
+#include <utility>
+#include <cmath>
 
-#define __DEBUG
 using namespace std;
+#define __DEBUG
 
 //// This is the interface that allows for creating nested lists.
 //// You should not implement it, or speculate about its implementation
@@ -466,6 +468,7 @@ public:
 		}
 		return merged;
 	}
+
 	//166. Fraction to Recurring Decimal
 	string fractionToDecimal(long long n, long long d) {
 		if (n == 0)return "0";
@@ -478,10 +481,8 @@ public:
 			return res;
 		res += '.';
 		unordered_map<int, int> m;
-		for (; r; r %= d)
-		{
-			if (m.count(r))
-			{
+		for (; r; r %= d) {
+			if (m.count(r)) {
 				res.insert(res.begin() + m[r], '(');
 				res += ')';
 				break;
@@ -545,12 +546,11 @@ public:
 	//	return build_385(l, r, s);
 	//}
 	//475. Heaters
-	int findRadius(vector<int>& houses, vector<int>& heaters) {
+	int findRadius(vector<int> &houses, vector<int> &heaters) {
 		sort(houses.begin(), houses.end());
 		sort(heaters.begin(), heaters.end());
-		int  i = 0, j = 0, ans = 0;
-		while (i < houses.size())
-		{
+		int i = 0, j = 0, ans = 0;
+		while (i < houses.size()) {
 			while (j < heaters.size() - 1 && abs(heaters[j + 1] - houses[i]) <= abs(heaters[j] - houses[i]))
 				j++;
 			ans = max(ans, abs(heaters[j] - houses[i]));
@@ -558,11 +558,11 @@ public:
 		}
 		return ans;
 	}
-	int findRadius_binarysearch(vector<int>& houses, vector<int>& heaters) {
+
+	int findRadius_binarysearch(vector<int> &houses, vector<int> &heaters) {
 		sort(heaters.begin(), heaters.end());
 		int ans = 0;
-		for (int house : houses)
-		{
+		for (int house : houses) {
 			int idx = lower_bound(heaters.begin(), heaters.end(), house) - heaters.begin();
 			int diff = INT_MAX;
 			if (idx < heaters.size())
@@ -574,16 +574,14 @@ public:
 		return ans;
 	}
 
-	void dfs_216(int s, int k, int n, vector<int>&vis, vector<int> &path, vector<vector<int>> &ans) {
-		if (k == 0)
-		{
+	void dfs_216(int s, int k, int n, vector<int> &vis, vector<int> &path, vector<vector<int>> &ans) {
+		if (k == 0) {
 			if (n == 0)
 				ans.push_back(path);
 			return;
 		}
 		for (int i = s; i <= 9; i++)
-			if (vis[i] == 0 && n >= i)
-			{
+			if (vis[i] == 0 && n >= i) {
 				vis[i] = 1;
 				path.push_back(i);
 				dfs_216(i + 1, k - 1, n - i, vis, path, ans);
@@ -595,11 +593,12 @@ public:
 	//216. Combination Sum III
 	vector<vector<int>> combinationSum3(int k, int n) {
 		vector<int> vis(10), path;
-		vector<vector<int>>ans;
+		vector<vector<int>> ans;
 		dfs_216(1, k, n, vis, path, ans);
 		return ans;
 	}
-	//771. Jewels and Stones 
+
+	//771. Jewels and Stones
 	int numJewelsInStones(string J, string S) {
 		set<char> jewels(J.begin(), J.end());
 		int ans = 0;
@@ -608,32 +607,35 @@ public:
 				ans++;
 		return ans;
 	}
-	//775. Global and Local Inversions 
-	bool isIdealPermutation(vector<int>& A) {
+
+	//775. Global and Local Inversions
+	bool isIdealPermutation(vector<int> &A) {
 		int Len = A.size();
-		vector<int>dp(Len + 1);
+		vector<int> dp(Len + 1);
 		int e = -1;
 		for (int i = 0; i < Len; i++)
-			if (A[i] - i < -1 || A[i] - i>1)
+			if (A[i] - i < -1 || A[i] - i > 1)
 				return false;
 		return true;
 	}
-	vector<string> getSwap(string &s)
-	{
+
+	vector<string> getSwap(string &s) {
 		int x, y;
 		for (int i = 0; i < 2; i++)
 			for (int j = 0; j < 3; j++)
-				if (s[i * 3 + j] == '0')
-				{
-					x = i; y = j; break;
+				if (s[i * 3 + j] == '0') {
+					x = i;
+					y = j;
+					break;
 				}
 		vector<string> ret;
-		static vector<vector<int>> dirs{ { 0,1 },{ 0,-1 },{ -1,0 },{ 1,0 } };
-		for (auto &d : dirs)
-		{
+		static vector<vector<int>> dirs{ {0,  1},
+										{0,  -1},
+										{-1, 0},
+										{1,  0} };
+		for (auto &d : dirs) {
 			int nx = x + d[0], ny = y + d[1];
-			if (0 <= nx && nx < 2 && 0 <= ny && ny < 3)
-			{
+			if (0 <= nx && nx < 2 && 0 <= ny && ny < 3) {
 				string t = s;
 				swap(t[nx * 3 + ny], t[x * 3 + y]);
 				ret.push_back(t);
@@ -641,8 +643,9 @@ public:
 		}
 		return ret;
 	}
-	//773. Sliding Puzzle 
-	int slidingPuzzle(vector<vector<int>>& board) {
+
+	//773. Sliding Puzzle
+	int slidingPuzzle(vector<vector<int>> &board) {
 		unordered_set<string> left, right;
 		string start;
 		for (int i = 0; i < 2; i++)
@@ -654,14 +657,12 @@ public:
 		right.insert("123450");
 		unordered_set<string> vis;
 		int ans = 0;
-		while (!left.empty() && !right.empty())
-		{
+		while (!left.empty() && !right.empty()) {
 			if (left.size() > right.size())
 				swap(left, right);
 			ans++;
 			unordered_set<string> tmp;
-			for (auto cur : left)
-			{
+			for (auto cur : left) {
 				if (vis.count(cur))
 					continue;
 				vis.insert(cur);
@@ -675,18 +676,22 @@ public:
 		}
 		return -1;
 	}
+
 	class CustomClass {
 	public:
 		CustomClass(int x) : num(x), denom(1), val(x) {}
+
 		bool operator<(const CustomClass &o) const {
 			return val < o.val;
 		}
+
 		double num;
 		double denom;
 		double val;
 	};
-	//774. Minimize Max Distance to Gas Station 
-	double minmaxGasDist(vector<int>& stations, int K) {
+
+	//774. Minimize Max Distance to Gas Station
+	double minmaxGasDist(vector<int> &stations, int K) {
 		double res = 0;
 		double total = 0;
 		priority_queue<CustomClass> gap;
@@ -708,7 +713,8 @@ public:
 		}
 		return gap.top().val;
 	}
-	double minmaxGasDist_(vector<int>& st, int K) {
+
+	double minmaxGasDist_(vector<int> &st, int K) {
 		int count, N = st.size();
 		float left = 0, right = st[N - 1] - st[0], mid;
 
@@ -722,6 +728,7 @@ public:
 		}
 		return right;
 	}
+
 	//761. Special Binary String
 	string makeLargestSpecial(string S) {
 		int count = 0, i = 0;
@@ -736,86 +743,138 @@ public:
 		}
 		sort(res.begin(), res.end(), greater<string>());
 		string res2 = "";
-		for (int i = 0; i < res.size(); ++i) res2 += res[i];
+		for (i = 0; i < res.size(); ++i) res2 += res[i];
 		return res2;
 	}
+
+	//741. Cherry Pickup
+	int cherryPickup(vector<vector<int>>& grid) {
+		int n = grid.size();
+		// dp holds maximum # of cherries two k-length paths can pickup.
+		// The two k-length paths arrive at (i, k - i) and (j, k - j), 
+		// respectively.
+		vector<vector<int>> dp(n, vector<int>(n, -1));
+
+		dp[0][0] = grid[0][0]; // length k = 0
+
+							   // maxK: number of steps from (0, 0) to (n-1, n-1).
+		const int maxK = 2 * (n - 1);
+
+		for (int k = 1; k <= maxK; k++) { // for every length k
+			vector<vector<int>> curr(n, vector<int>(n, -1));
+
+			// one path of length k arrive at (i, k - i) 
+			for (int i = 0; i < n && i <= k; i++) {
+				if (k - i >= n) continue;
+				// another path of length k arrive at (j, k - j)
+				for (int j = 0; j < n && j <= k; j++) {
+					if (k - j >= n) continue;
+					if (grid[i][k - i] < 0 || grid[j][k - j] < 0) { // keep away from thorns
+						continue;
+					}
+
+					int cherries = dp[i][j]; // # of cherries picked up by the two (k-1)-length paths.
+
+											 // See the figure below for an intuitive understanding
+					if (i > 0) cherries = std::max(cherries, dp[i - 1][j]);
+					if (j > 0) cherries = std::max(cherries, dp[i][j - 1]);
+					if (i > 0 && j > 0) cherries = std::max(cherries, dp[i - 1][j - 1]);
+
+					// No viable way to arrive at (i, k - i)-(j, k-j).
+					if (cherries < 0) continue;
+
+					// Pickup cherries at (i, k - i) and (j, k -j ) if i != j.
+					// Otherwise, pickup (i, k-i). 
+					cherries += grid[i][k - i] + (i == j ? 0 : grid[j][k - j]);
+
+					curr[i][j] = cherries;
+				}
+			}
+			dp = std::move(curr);
+		}
+
+		return std::max(dp[n - 1][n - 1], 0);
+	}
+
 };
 
 
 int main() {
 	Solution sol;
-	//vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
-	//cout << sol.minmaxGasDist(nums, 9) << endl;
-	//nums = { 23,24,36,39,46,56,57,65,84,98 };
-	//cout << sol.minmaxGasDist(nums, 1) << endl;
-	//nums = { 10, 19, 25, 27, 56, 63, 70, 87, 96, 97 };
-	//cout << sol.minmaxGasDist(nums, 3) << endl;
-	//vector<vector<int>>board = { {4,1,2},{5,0,3} };
-	//board = { {1,2,3},{5,4,0} };
-	//cout << sol.slidingPuzzle(board) << endl;
-	//vector<int> nums{ 1,0,2 };
-	//nums = { 0,1 };
-	//cout << sol.isIdealPermutation(nums) << endl;
-	//cout << sol.numJewelsInStones("aA","aAAvvbvvvv") << endl;
-	//auto r = sol.combinationSum3(3, 9);
-	//for (auto &i : r)
-	//{
-	//	for (auto j : i)
-	//		cout << j << " ";
-	//	cout << endl;
-	//}
-	//vector<int> houses = { 1,2,3,4 }, heaters = { 1,4 };
-	//cout << sol.findRadius_binarysearch(houses, heaters) << endl;
-	//auto r=sol.deserialize("324");
-	//cout << 1 << endl;
-	//cout << sol.fractionToDecimal(2, 3) << endl;
-	//cout << sol.fractionToDecimal(1, 7) << endl;
-	//cout << sol.fractionToDecimal(-1, -2147483648ll) << endl;
-	//cout << sol.fractionToDecimal(-2147483648ll, 1) << endl;
-	//vector<vector<string>> accounts{{"Hanzo", "Hanzo2@m.co", "Hanzo3@m.co"},
-	//                                {"Hanzo", "Hanzo4@m.co", "Hanzo5@m.co"},
-	//                                {"Hanzo", "Hanzo0@m.co", "Hanzo1@m.co"},
-	//                                {"Hanzo", "Hanzo3@m.co", "Hanzo4@m.co"},
-	//                                {"Hanzo", "Hanzo7@m.co", "Hanzo8@m.co"},
-	//                                {"Hanzo", "Hanzo1@m.co", "Hanzo2@m.co"},
-	//                                {"Hanzo", "Hanzo6@m.co", "Hanzo7@m.co"},
-	//                                {"Hanzo", "Hanzo5@m.co", "Hanzo6@m.co"}};
-	//auto r = sol.accountsMerge(accounts);
-	//for (auto &i:r) {
-	//    for (auto &j:i) {
-	//        cout << j << " ";
+	//    cout << sol.makeLargestSpecial("11011000") << endl;
+	//	vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
+	//	cout << sol.minmaxGasDist(nums, 9) << endl;
+		//nums = { 23,24,36,39,46,56,57,65,84,98 };
+		//cout << sol.minmaxGasDist(nums, 1) << endl;
+		//nums = { 10, 19, 25, 27, 56, 63, 70, 87, 96, 97 };
+		//cout << sol.minmaxGasDist(nums, 3) << endl;
+	//    vector<vector<int>> board = {{4, 1, 2},
+	//                                 {5, 0, 3}};
+	//	board = { {1,2,3},{5,4,0} };
+	//    cout << sol.slidingPuzzle(board) << endl;
+	//    vector<int> nums{ 1,0,2 };
+		//nums = { 0,1 };
+		//cout << sol.isIdealPermutation(nums) << endl;
+		//cout << sol.numJewelsInStones("aA","aAAvvbvvvv") << endl;
+		//auto r = sol.combinationSum3(3, 9);
+		//for (auto &i : r)
+		//{
+		//	for (auto j : i)
+		//		cout << j << " ";
+		//	cout << endl;
+		//}
+		//vector<int> houses = { 1,2,3,4 }, heaters = { 1,4 };
+		//cout << sol.findRadius_binarysearch(houses, heaters) << endl;
+		//auto r=sol.deserialize("324");
+		//cout << 1 << endl;
+		//cout << sol.fractionToDecimal(2, 3) << endl;
+		//cout << sol.fractionToDecimal(1, 7) << endl;
+		//cout << sol.fractionToDecimal(-1, -2147483648ll) << endl;
+		//cout << sol.fractionToDecimal(-2147483648ll, 1) << endl;
+		//vector<vector<string>> accounts{{"Hanzo", "Hanzo2@m.co", "Hanzo3@m.co"},
+		//                                {"Hanzo", "Hanzo4@m.co", "Hanzo5@m.co"},
+		//                                {"Hanzo", "Hanzo0@m.co", "Hanzo1@m.co"},
+		//                                {"Hanzo", "Hanzo3@m.co", "Hanzo4@m.co"},
+		//                                {"Hanzo", "Hanzo7@m.co", "Hanzo8@m.co"},
+		//                                {"Hanzo", "Hanzo1@m.co", "Hanzo2@m.co"},
+		//                                {"Hanzo", "Hanzo6@m.co", "Hanzo7@m.co"},
+		//                                {"Hanzo", "Hanzo5@m.co", "Hanzo6@m.co"}};
+		//auto r = sol.accountsMerge(accounts);
+		//for (auto &i:r) {
+		//    for (auto &j:i) {
+		//        cout << j << " ";
+		//    }
+		//    cout << endl;
+		//}
+	//    vector<int> nums;
+	//    nums = {0, 0, 1, 0, 1};
+	//    cout << sol.canPlaceFlowers(nums, 1) << endl;
+	//    cout << sol.numDecodings("123") << endl;
+	//    cout << sol.numDecodings("1*") << endl;
+	//    cout << sol.numDecodings("*3") << endl;
+	//    cout << sol.numDecodings("*10*1") << endl;
+	//    cout << sol.numDecodings("*0**0") << endl;
+	//    cout << sol.numDecodings("1*72*") << endl;
+	//    cout << sol.checkValidString(
+	//            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()")
+	//         << endl;
+	//    vector<string> bank;
+	//    bank = {"AACCGGTA", "AACCGCTA", "AAACGGTA"};
+	//    bank = {"AAAACCCC", "AAACCCCC", "AACCCCCC"};
+	//    cout << sol.minMutation("AACCGGTT", "AAACGGTA", bank) << endl;
+	//    vector<int> nums{1, 2, 3, 4, 5};
+	//    nums = {1, 0, 1, -4, -3};
+	//    nums = {3, 1, 4, 2};
+	//    nums = {-1, 3, 2, 0};
+	//    nums = {3, 5, 0, 3, 4};
+	//    cout << sol.find132pattern(nums) << endl;
+	//    vector<vector<int>> mat{{0, 1, -1},
+	//                            {1, 0, 1},
+	//                            {1, 1, 1}};
+	//    cout << sol.cherryPickup(mat) << endl;
+	//    string expression;
+	//    while (getline(cin, expression)) {
+	//        cout << sol.calculateII(expression) << endl;
 	//    }
-	//    cout << endl;
-	//}
-//    vector<int> nums;
-//    nums = {0, 0, 1, 0, 1};
-//    cout << sol.canPlaceFlowers(nums, 1) << endl;
-//    cout << sol.numDecodings("123") << endl;
-//    cout << sol.numDecodings("1*") << endl;
-//    cout << sol.numDecodings("*3") << endl;
-//    cout << sol.numDecodings("*10*1") << endl;
-//    cout << sol.numDecodings("*0**0") << endl;
-//    cout << sol.numDecodings("1*72*") << endl;
-//    cout << sol.checkValidString(
-//            "()(()(*(())()*)(*)))()))*)((()(*(((()())()))()()*)((*)))()))(*)(()()(((()*()()((()))((*((*)()")
-//         << endl;
-//    vector<string> bank;
-//    bank = {"AACCGGTA", "AACCGCTA", "AAACGGTA"};
-//    bank = {"AAAACCCC", "AAACCCCC", "AACCCCCC"};
-//    cout << sol.minMutation("AACCGGTT", "AAACGGTA", bank) << endl;
-//    vector<int> nums{1, 2, 3, 4, 5};
-//    nums = {1, 0, 1, -4, -3};
-//    nums = {3, 1, 4, 2};
-//    nums = {-1, 3, 2, 0};
-//    nums = {3, 5, 0, 3, 4};
-//    cout << sol.find132pattern(nums) << endl;
-//    vector<vector<int>> mat{{0, 1, -1},
-//                            {1, 0, 1},
-//                            {1, 1, 1}};
-//    cout << sol.cherryPickup(mat) << endl;
-//    string expression;
-//    while (getline(cin, expression)) {
-//        cout << sol.calculateII(expression) << endl;
-//    }
 	return 0;
 }
