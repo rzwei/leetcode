@@ -996,42 +996,28 @@ public:
 		}
 		return ans;
 	}
-
-	long long getPalindrome(int n)
-	{
-		string s = to_string(n), s2 = s;
-		reverse(s2.begin(), s2.end());
-		long long ret = 0;
-		for (auto c : s + s2)
-			ret = ret * 10 + c - '0';
-		return ret;
-	}
 	//479. Largest Palindrome Product
 	int  largestPalindrome(int n) {
 		if (n == 1)
 			return 9;
-		int upper = pow(10, n) - 1, lower = upper / 10;
-		long long maxNum = (long long)upper*upper;
-		int half = maxNum / (int)pow(10, n);
-		long long palindrome;
-		bool f = false;
-		while (!f)
+		int maxNum = pow(10, n) - 1;
+		int minNum = maxNum / 10;
+		for (int cur = maxNum; cur > minNum; cur--)
 		{
-			palindrome = getPalindrome(half);
-			for (long long i = upper; upper > lower; i--) {
-				if (palindrome / i > maxNum || i * i < palindrome) {
-					break;
+			string curStr = to_string(cur);
+			string revStr(curStr);
+			reverse(revStr.begin(), revStr.end());
+			long long toCheck = stoll(curStr + revStr);
+			// cout<<toCheck<<endl;
+			for (long long otherCur = maxNum; otherCur*otherCur >= toCheck; otherCur--)
+				if (toCheck % otherCur == 0)
+				{
+					// cout<<toCheck<<endl;                    
+					return toCheck % 1337;
 				}
-				if (palindrome % i == 0) {
-					f = true;
-					break;
-				}
-			}
-			half--;
 		}
-		return palindrome % 1337;
+		return 0;
 	}
-
 };
 
 
