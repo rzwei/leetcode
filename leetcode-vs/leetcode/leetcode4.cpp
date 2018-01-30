@@ -996,12 +996,51 @@ public:
 		}
 		return ans;
 	}
+
+	long long getPalindrome(int n)
+	{
+		string s = to_string(n), s2 = s;
+		reverse(s2.begin(), s2.end());
+		long long ret = 0;
+		for (auto c : s + s2)
+			ret = ret * 10 + c - '0';
+		return ret;
+	}
+	//479. Largest Palindrome Product
+	int  largestPalindrome(int n) {
+		if (n == 1)
+			return 9;
+		int upper = pow(10, n) - 1, lower = upper / 10;
+		long long maxNum = (long long)upper*upper;
+		int half = maxNum / (int)pow(10, n);
+		long long palindrome;
+		bool f = false;
+		while (!f)
+		{
+			palindrome = getPalindrome(half);
+			for (long long i = upper; upper > lower; i--) {
+				if (palindrome / i > maxNum || i * i < palindrome) {
+					break;
+				}
+				if (palindrome % i == 0) {
+					f = true;
+					break;
+				}
+			}
+			half--;
+		}
+		return palindrome % 1337;
+	}
+
 };
 
 
 int main() {
 	Solution sol;
-	cout << sol.getMaxRepetitions("acb", 4, "ab", 2) << endl;
+	cout << sol.largestPalindrome(3) << endl;
+	//for (int i = 1; i <= 8; i++)
+	//	cout << sol.largestPalindrome(i) << endl;
+	//cout << sol.getMaxRepetitions("acb", 4, "ab", 2) << endl;
 	//vector<vector<int>> grid{ { 0, 1, -1 },
 	//						  { 1, 0, -1 },
 	//						  { 1, 1,  1 } };
