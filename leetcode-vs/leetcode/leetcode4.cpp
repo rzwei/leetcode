@@ -2,6 +2,7 @@
 // Created by ren on 18-1-23.
 //
 #include "stdafx.h"
+#include <sstream>
 #include <functional>
 #include <iostream>
 #include <unordered_map>
@@ -864,16 +865,148 @@ public:
 		vector<vector<vector<int>>> memo(N, vector<vector<int>>(N, vector<int>(N, INT_MIN)));
 		return max(dp_741(0, 0, 0, grid, memo), 0);
 	}
+
+	const string validIPv6Chars = "0123456789abcdefABCDEF";
+
+	bool isValidIPv4Block(string& block) {
+		int num = 0;
+		if (block.size() > 0 && block.size() <= 3) {
+			for (int i = 0; i < block.size(); i++) {
+				char c = block[i];
+				// special case: if c is a leading zero and there are characters left
+				if (!isalnum(c) || (i == 0 && c == '0' && block.size() > 1))
+					return false;
+				else {
+					num *= 10;
+					num += c - '0';
+				}
+			}
+			return num <= 255;
+		}
+		return false;
+	}
+
+	bool isValidIPv6Block(string& block) {
+		if (block.size() > 0 && block.size() <= 4) {
+			for (int i = 0; i < block.size(); i++) {
+				char c = block[i];
+				if (validIPv6Chars.find(c) == string::npos)
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	//468. Validate IP Address
+	string validIPAddress(string IP) {
+		string ans[3] = { "IPv4", "IPv6", "Neither" };
+		stringstream ss(IP);
+		string block;
+		// ipv4 candidate
+		if (IP.substr(0, 4).find('.') != string::npos) {
+			for (int i = 0; i < 4; i++) {
+				if (!getline(ss, block, '.') || !isValidIPv4Block(block))
+					return ans[2];
+			}
+			return ss.eof() ? ans[0] : ans[2];
+		}
+		// ipv6 candidate
+		else if (IP.substr(0, 5).find(':') != string::npos) {
+			for (int i = 0; i < 8; i++) {
+				if (!getline(ss, block, ':') || !isValidIPv6Block(block))
+					return ans[2];
+			}
+			return ss.eof() ? ans[1] : ans[2];
+		}
+
+		return ans[2];
+	}
+	//420. Strong Password Checker
+	int strongPasswordChecker(string s) {
+		int deleteTarget = max(0, (int)s.length() - 20), addTarget = max(0, 6 - (int)s.length());
+		int toDelete = 0, toAdd = 0, toReplace = 0, needUpper = 1, needLower = 1, needDigit = 1;
+
+		for (int l = 0, r = 0; r < s.length(); r++) {
+			if (isupper(s[r])) { needUpper = 0; }
+			if (islower(s[r])) { needLower = 0; }
+			if (isdigit(s[r])) { needDigit = 0; }
+
+			if (r - l == 2) {
+				if (s[l] == s[l + 1] && s[l + 1] == s[r]) {
+					if (toAdd < addTarget) { toAdd++, l = r; }
+					else { toReplace++, l = r + 1; }
+				}
+				else { l++; }
+			}
+		}
+		if (s.length() <= 20) { return max(addTarget + toReplace, needUpper + needLower + needDigit); }
+
+		toReplace = 0;
+		vector<unordered_map<int, int>> lenCnts(3);
+		for (int l = 0, r = 0, len; r <= s.length(); r++) {
+			if (r == s.length() || s[l] != s[r]) {
+				if ((len = r - l) > 2) { lenCnts[len % 3][len]++; }
+				l = r;
+			}
+		}
+
+		for (int i = 0, numLetters, dec; i < 3; i++) {
+			for (auto it = lenCnts[i].begin(); it != lenCnts[i].end(); it++) {
+				if (i < 2) {
+					numLetters = i + 1, dec = min(it->second, (deleteTarget - toDelete) / numLetters);
+					toDelete += dec * numLetters, it->second -= dec;
+					if (it->first - numLetters > 2) { lenCnts[2][it->first - numLetters] += dec; }
+				}
+				toReplace += (it->second) * ((it->first) / 3);
+			}
+		}
+
+		int dec = (deleteTarget - toDelete) / 3;
+		toReplace -= dec, toDelete -= dec * 3;
+		return deleteTarget + max(toReplace, needUpper + needLower + needDigit);
+	}
+	//466. Count The Repetitions
+	int getMaxRepetitions(string s1, int n1, string s2, int n2) {
+		int i = 0, j = 0, ans = 0, c2 = n2, c1 = 0, Len1 = s1.size(), Len2 = s2.size();
+		while (c1 < n1)
+		{
+			if (s1[i] == s2[j])
+			{
+				i++;
+				j++;
+			}
+			else
+				i++;
+
+			if (i == Len1)
+			{
+				i = 0;
+				c1++;
+			}
+			if (j == Len2)
+			{
+				c2--;
+				j = 0;
+				if (c2 == 0)
+				{
+					c2 = n2;
+					ans++;
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	vector<vector<int>> grid{ { 0, 1, -1 },
-							  { 1, 0, -1 },
-							  { 1, 1,  1 } };
-	grid = { {1,1,-1},{1,-1,1},{-1,1,1} };
-	cout << sol.cherryPickup_dfs(grid) << endl;
+	cout << sol.getMaxRepetitions("acb", 4, "ab", 2) << endl;
+	//vector<vector<int>> grid{ { 0, 1, -1 },
+	//						  { 1, 0, -1 },
+	//						  { 1, 1,  1 } };
+	//grid = { {1,1,-1},{1,-1,1},{-1,1,1} };
+	//cout << sol.cherryPickup_dfs(grid) << endl;
 	//    cout << sol.makeLargestSpecial("11011000") << endl;
 	//	vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
 	//	cout << sol.minmaxGasDist(nums, 9) << endl;
