@@ -88,54 +88,54 @@ public:
 		return res;
 	}
 
-	int dfs_741(int i, int j, int f, vector<vector<int>> &mat,
-		vector<vector<vector<int>>> &memo) {
-#ifdef __DEBUG
-		cout << i << " " << j << " " << f << " " << endl;
-#endif
-		int N = mat[0].size(), res = -1;
-		if (mat[i][j] == -1) {
-			return -1;
-		}
-		if (f == 0 && memo[f][i][j] != -1) {
-			return memo[f][i][j];
-		}
-		if (i == 0 && j == 0 && f == 1) {
-			return mat[i][j];
-		}
-		else if (i == N - 1 && j == N - 1) {
-			if (f == 0)
-				return dfs_741(i, j, 1, mat, memo);
-		}
-		int t = mat[i][j];
-		mat[i][j] = 0;
-		int F = f == 0 ? 1 : -1;
-		vector<vector<int>> dirs{ {1, 0},
-								 {0, 1} };
-		for (auto d : dirs) {
-			int nx = i + F * d[0], ny = j + F * d[1];
-			if (0 <= nx && nx < N && 0 <= ny && ny < N && mat[i][j] != -1) {
-				int r = dfs_741(nx, ny, f, mat, memo);
-				if (r >= 0) {
-					res = max(res, r + t);
-				}
-			}
-		}
-		mat[i][j] = t;
-		if (f == 0)
-			memo[f][i][j] = res;
-		return res;
-	}
+	//	int dfs_741(int i, int j, int f, vector<vector<int>> &mat,
+	//		vector<vector<vector<int>>> &memo) {
+	//#ifdef __DEBUG
+	//		cout << i << " " << j << " " << f << " " << endl;
+	//#endif
+	//		int N = mat[0].size(), res = -1;
+	//		if (mat[i][j] == -1) {
+	//			return -1;
+	//		}
+	//		if (f == 0 && memo[f][i][j] != -1) {
+	//			return memo[f][i][j];
+	//		}
+	//		if (i == 0 && j == 0 && f == 1) {
+	//			return mat[i][j];
+	//		}
+	//		else if (i == N - 1 && j == N - 1) {
+	//			if (f == 0)
+	//				return dfs_741(i, j, 1, mat, memo);
+	//		}
+	//		int t = mat[i][j];
+	//		mat[i][j] = 0;
+	//		int F = f == 0 ? 1 : -1;
+	//		vector<vector<int>> dirs{ {1, 0},
+	//								 {0, 1} };
+	//		for (auto d : dirs) {
+	//			int nx = i + F * d[0], ny = j + F * d[1];
+	//			if (0 <= nx && nx < N && 0 <= ny && ny < N && mat[i][j] != -1) {
+	//				int r = dfs_741(nx, ny, f, mat, memo);
+	//				if (r >= 0) {
+	//					res = max(res, r + t);
+	//				}
+	//			}
+	//		}
+	//		mat[i][j] = t;
+	//		if (f == 0)
+	//			memo[f][i][j] = res;
+	//		return res;
+	//	}
+	//
+	//	//741. Cherry Pickup wa
+	//	int cherryPickup(vector<vector<int>> &grid) {
+	//		int N = grid.size();
+	//		vector<vector<vector<int>>> memo(2, vector<vector<int>>(N, vector<int>(N, -1)));
+	//		int r = dfs_741(0, 0, 0, grid, memo);
+	//		return r == -1 ? 0 : r;
+	//	}
 
-	//741. Cherry Pickup wa
-	int cherryPickup(vector<vector<int>> &grid) {
-		int N = grid.size();
-		vector<vector<vector<int>>> memo(2, vector<vector<int>>(N, vector<int>(N, -1)));
-		int r = dfs_741(0, 0, 0, grid, memo);
-		return r == -1 ? 0 : r;
-	}
-
-	//126. Word Ladder II
+		//126. Word Ladder II
 	vector<vector<string> >
 		findLadders(string beginWord, string endWord, vector<string> &dictwords) {
 		unordered_set<string> dict(dictwords.begin(), dictwords.end());
@@ -792,15 +792,88 @@ public:
 			}
 			dp = std::move(curr);
 		}
-
 		return std::max(dp[n - 1][n - 1], 0);
 	}
+	//741. Cherry Pickup
+	int cherryPickup_(vector<vector<int>> &grid) {
+		int N = grid.size();
+		vector<vector<int>> dp(N, vector<int>(N, -1));
+		dp[0][0] = grid[0][0];
+		for (int k = 1; k <= 2 * (N - 1); k++)
+		{
+			vector<vector<int>> curr(N, vector<int>(N, -1));
+			for (int i = 0; i < N; i++)
+			{
+				if (k - i >= N || k - i < 0)
+					continue;
+				for (int j = 0; j < N; j++)
+				{
+					if (k - j >= N || k - j < 0)
+						continue;
+					if (grid[i][k - i] < 0 || grid[j][k - j] < 0)
+						continue;
 
+					int cherry = dp[i][j];
+					if (j > 0)cherry = max(cherry, dp[i][j - 1]);
+					if (i > 0)cherry = max(cherry, dp[i - 1][j]);
+					if (i > 0 && j > 0)cherry = max(cherry, dp[i - 1][j - 1]);
+					if (cherry < 0)
+						continue;
+					int val = grid[i][k - i];
+					if (i != j)
+						val += grid[j][k - j];
+					curr[i][j] = cherry + val;
+				}
+			}
+			dp = move(curr);
+		}
+		return dp[N - 1][N - 1];
+	}
+
+	int dp_741(int r1, int c1, int r2, vector<vector<int>> &grid, vector<vector<vector<int>>> &memo)
+	{
+		int c2 = r1 + c1 - r2;
+		int N = grid.size();
+		if (r1 == N || r2 == N || c1 == N || c2 == N || grid[r1][c1] == -1 || grid[r2][c2] == -1)
+			return INT_MIN;
+
+		if (r1 == N - 1 && c1 == N - 1 && r2 == N - 1)
+			return grid[r1][c1];
+
+		if (memo[r1][c1][r2] != INT_MIN)
+			return memo[r1][c1][r2];
+
+		int val = grid[r1][c1];
+		if (r1 != r2)
+			val += grid[r2][c2];
+		int ret = dp_741(r1 + 1, c1, r2, grid, memo);
+		ret = max(ret, dp_741(r1 + 1, c1, r2 + 1, grid, memo));
+		ret = max(ret, dp_741(r1, c1 + 1, r2, grid, memo));
+		ret = max(ret, dp_741(r1, c1 + 1, r2 + 1, grid, memo));
+		if (ret == INT_MIN)
+			ret++;
+		else
+			ret += val;
+		memo[r1][c1][r2] = ret;
+		return ret;
+	}
+
+	//741. Cherry Pickup
+	int cherryPickup_dfs(vector<vector<int>> &grid) {
+		int N = grid.size();
+		vector<vector<vector<int>>> memo(N, vector<vector<int>>(N, vector<int>(N, INT_MIN)));
+		return max(dp_741(0, 0, 0, grid, memo), 0);
+	}
 };
 
 
 int main() {
 	Solution sol;
+	vector<vector<int>> grid{ { 0, 1, -1 },
+							  { 1, 0, -1 },
+							  { 1, 1,  1 } };
+	grid = { {1,1,-1},{1,-1,1},{-1,1,1} };
+	cout << sol.cherryPickup_dfs(grid) << endl;
 	//    cout << sol.makeLargestSpecial("11011000") << endl;
 	//	vector<int>nums{ 1,2,3,4,5,6,7,8,9,10 };
 	//	cout << sol.minmaxGasDist(nums, 9) << endl;
