@@ -1112,6 +1112,46 @@ public:
 		}
 		return curr;
 	}
+
+
+	int dfs_675(int i, int j, int ti, int tj, vector<vector<int>>&forest, vector<vector<int>> &vis)
+	{
+		if (vis[i][j] || forest[i][j] == 0)
+			return -1;
+		if (i == ti && j == tj)
+			return 0;
+		static vector<vector<int>> dirs{ {1,0},{ -1,0 },{ 0,1 },{ 0,-1 } };
+		int ret = -1, Len = forest.size();
+		vis[i][j] = 1;
+		for (auto &d : dirs)
+		{
+			int x = i + d[0], y = j + d[1];
+			if (0 > x && x >= Len && 0 > y && y >= Len)
+				continue;
+			int r = dfs_675(i, j, ti, tj, forest, vis);
+			if (r != -1)
+			{
+				if (ret == -1)
+					ret = r + 1;
+				else
+					ret = min(ret, r + 1);
+			}
+		}
+		vis[i][j] = 0;
+		return ret;
+	}
+
+	//675. Cut Off Trees for Golf Event
+	int cutOffTree(vector<vector<int>>& forest) {
+		int Len = forest.size();
+		priority_queue <vector<int>, vector<vector<int>>, greater<vector<int>>>pq;
+
+		for (int i = 0; i < Len; i++)
+			for (int j = 0; j < Len; j++)
+				if (forest[i][j] > 1)
+					pq.push({ forest[i][j],i,j });
+
+	}
 };
 
 
