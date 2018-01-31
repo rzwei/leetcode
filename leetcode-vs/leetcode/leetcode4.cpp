@@ -1112,8 +1112,6 @@ public:
 		}
 		return curr;
 	}
-
-
 	int dfs_675(int i, int j, int ti, int tj, vector<vector<int>>&forest, vector<vector<int>> &vis)
 	{
 		if (vis[i][j] || forest[i][j] == 0)
@@ -1126,9 +1124,9 @@ public:
 		for (auto &d : dirs)
 		{
 			int x = i + d[0], y = j + d[1];
-			if (0 > x && x >= Len && 0 > y && y >= Len)
+			if (0 > x || x >= Len || 0 > y || y >= Len)
 				continue;
-			int r = dfs_675(i, j, ti, tj, forest, vis);
+			int r = dfs_675(x, y, ti, tj, forest, vis);
 			if (r != -1)
 			{
 				if (ret == -1)
@@ -1159,6 +1157,8 @@ public:
 			int r = dfs_675(x, y, t[1], t[2], forest, vis);
 			if (r == -1)
 				return -1;
+			x = t[1];
+			y = t[2];
 			ans += r;
 		}
 		return ans;
@@ -1168,8 +1168,19 @@ public:
 
 int main() {
 	Solution sol;
-	for (int i = 1; i <= 13; i++)
-		cout << sol.findKthNumber(13, i) << endl;
+	vector<vector<int>> forest{
+					{ 1,2,3 },
+					{ 0,0,0 },
+					{ 7,6,5 }
+	};
+	forest = {
+		{ 2,3,4 },
+	{ 0,0,5 },
+	{ 8,7,6 }
+	};
+	cout << sol.cutOffTree(forest) << endl;
+	//for (int i = 1; i <= 13; i++)
+	//	cout << sol.findKthNumber(13, i) << endl;
 	//cout << sol.nearestPalindromic("1283") << endl;
 	//vector<vector<int > >edges{ { 1,2 },{ 1,3 },{ 2,3 } };
 	//edges = { { 1,2 },{ 2,3 },{ 3,4 },{ 4,1 },{ 1,5 } };
