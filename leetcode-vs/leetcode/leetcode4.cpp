@@ -1080,12 +1080,46 @@ public:
 		}
 		return to_string(minVal);
 	}
+
+	int calstep(long long  n, long long  n1, long long n2)
+	{
+		int steps = 0;
+		while (n1 <= n)
+		{
+			steps += min(n + 1, n2) - n1;
+			n1 *= 10;
+			n2 *= 10;
+		}
+		return steps;
+	}
+
+	//440. K - th Smallest in Lexicographical Order
+	int findKthNumber(int n, int k) {
+		int curr = 1;
+		k = k - 1;
+		while (k > 0)
+		{
+			int steps = calstep(n, curr, curr + 1);
+			if (steps <= k)
+			{
+				curr += 1;
+				k -= steps;
+			}
+			else {
+				curr *= 10;
+				k -= 1;
+			}
+		}
+		return curr;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	cout << sol.nearestPalindromic("1283") << endl;
+	for (int i = 1; i <= 13; i++)
+		cout << sol.findKthNumber(13, i) << endl;
+	//cout << sol.nearestPalindromic("1283") << endl;
 	//vector<vector<int > >edges{ { 1,2 },{ 1,3 },{ 2,3 } };
 	//edges = { { 1,2 },{ 2,3 },{ 3,4 },{ 4,1 },{ 1,5 } };
 	//auto r = sol.findRedundantDirectedConnection(edges);
