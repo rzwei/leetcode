@@ -1150,7 +1150,18 @@ public:
 			for (int j = 0; j < Len; j++)
 				if (forest[i][j] > 1)
 					pq.push({ forest[i][j],i,j });
-
+		int ans = 0, x = 0, y = 0;
+		vector<vector<int>>vis(Len, vector<int>(Len));
+		while (!pq.empty())
+		{
+			auto t = pq.top();
+			pq.pop();
+			int r = dfs_675(x, y, t[1], t[2], forest, vis);
+			if (r == -1)
+				return -1;
+			ans += r;
+		}
+		return ans;
 	}
 };
 
