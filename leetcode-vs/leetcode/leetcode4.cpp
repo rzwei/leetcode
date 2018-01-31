@@ -1018,12 +1018,50 @@ public:
 		}
 		return 0;
 	}
+	//685. Redundant Connection II
+	vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
+		int Len = edges.size();
+		vector<int> graph(Len + 1), candA, candB;
+		for (auto &edge : edges)
+		{
+			int &l = edge[0], &r = edge[1];
+			if (graph[r] == 0)
+				graph[r] = l;
+			else {
+				candA = { graph[r],r };
+				candB = edge;
+				r = 0;
+			}
+		}
+		for (int i = 1; i <= Len; i++)
+			graph[i] = i;
+		function<int(int)> fun = [&](int v) {return v == graph[v] ? v : fun(graph[v]); };
+		for (auto &edge : edges)
+		{
+			if (edge[1] == 0)
+				continue;
+			int u = edge[0], v = edge[1], pu = fun(u);
+			if (pu == v)
+			{
+				if (candA.empty()) return edge;
+				return candA;
+			}
+			graph[v] = pu;
+		}
+		return candB;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	cout << sol.largestPalindrome(3) << endl;
+	vector<vector<int > >edges{ { 1,2 },{ 1,3 },{ 2,3 } };
+	//edges = { { 1,2 },{ 2,3 },{ 3,4 },{ 4,1 },{ 1,5 } };
+	auto r = sol.findRedundantDirectedConnection(edges);
+	for (auto i : r)
+		cout << i << " ";
+	cout << endl;
+	//cout << sol.largestPalindrome(3) << endl;
 	//for (int i = 1; i <= 8; i++)
 	//	cout << sol.largestPalindrome(i) << endl;
 	//cout << sol.getMaxRepetitions("acb", 4, "ab", 2) << endl;
