@@ -752,7 +752,7 @@ public:
 	int cherryPickup(vector<vector<int>>& grid) {
 		int n = grid.size();
 		// dp holds maximum # of cherries two k-length paths can pickup.
-		// The two k-length paths arrive at (i, k - i) and (j, k - j), 
+		// The two k-length paths arrive at (i, k - i) and (j, k - j),
 		// respectively.
 		vector<vector<int>> dp(n, vector<int>(n, -1));
 
@@ -764,7 +764,7 @@ public:
 		for (int k = 1; k <= maxK; k++) { // for every length k
 			vector<vector<int>> curr(n, vector<int>(n, -1));
 
-			// one path of length k arrive at (i, k - i) 
+			// one path of length k arrive at (i, k - i)
 			for (int i = 0; i < n && i <= k; i++) {
 				if (k - i >= n) continue;
 				// another path of length k arrive at (j, k - j)
@@ -785,7 +785,7 @@ public:
 					if (cherries < 0) continue;
 
 					// Pickup cherries at (i, k - i) and (j, k -j ) if i != j.
-					// Otherwise, pickup (i, k-i). 
+					// Otherwise, pickup (i, k-i).
 					cherries += grid[i][k - i] + (i == j ? 0 : grid[j][k - j]);
 
 					curr[i][j] = cherries;
@@ -1012,7 +1012,7 @@ public:
 			for (long long otherCur = maxNum; otherCur*otherCur >= toCheck; otherCur--)
 				if (toCheck % otherCur == 0)
 				{
-					// cout<<toCheck<<endl;                    
+					// cout<<toCheck<<endl;
 					return toCheck % 1337;
 				}
 		}
@@ -1119,38 +1119,41 @@ public:
 		if (i == ti && j == tj)
 			return 0;
 		static vector<vector<int>> dirs{ {1,0},{ -1,0 },{ 0,1 },{ 0,-1 } };
-		deque<vector<int>> q;
-		q.push_back({ i,j });
 		int ans = 0, m = forest.size(), n = forest[0].size();
 		vector<vector<int>> vis(m, vector<int>(n));
-		while (!q.empty())
+
+		set<pair<int, int>> left, right;
+		left.insert({ i,j });
+		right.insert({ ti,tj });
+		while (!left.empty() && !right.empty())
 		{
+			if (left.size() > right.size())
+				swap(left, right);
 			ans++;
-			for (int t_ = q.size(); t_ > 0; t_--)
+			set<pair<int, int>> tmp;
+			for (auto &cur : left)
 			{
-				auto cur = q.front();
-				q.pop_front();
-				int x = cur[0], y = cur[1];
-				if (vis[x][y] || forest[x][y] == 0)
-					continue;
+				int x = cur.first, y = cur.second;
 				vis[x][y] = 1;
 				for (auto &d : dirs)
 				{
 					int nx = x + d[0], ny = y + d[1];
-					if (nx < 0 || nx >= m || ny < 0 || ny >= n || forest[nx][ny] == 0)
+					if (nx < 0 || nx >= m || ny < 0 || ny >= n || vis[nx][ny] || forest[nx][ny] == 0)
 						continue;
-					if (nx == ti && ny == tj)
+					pair<int, int> next = { nx,ny };
+					if (right.find(next) != right.end())
 						return ans;
-					q.push_back({ nx,ny });
+					tmp.insert(next);
 				}
 			}
+			left = tmp;
 		}
 		return -1;
 	}
 
 	//675. Cut Off Trees for Golf Event
 	int cutOffTree(vector<vector<int>>& forest) {
-		int m = forest.size(),n=forest[0].size();
+		int m = forest.size(), n = forest[0].size();
 		priority_queue <vector<int>, vector<vector<int>>, greater<vector<int>>>pq;
 
 		for (int i = 0; i < m; i++)
@@ -1178,16 +1181,16 @@ int main() {
 	Solution sol;
 	vector<vector<int>> forest{
 					{ 1,2,3 },
-					{ 0,0,0 },
+					{ 0,0,4 },
 					{ 7,6,5 }
 	};
-	//forest = {
-	//	{ 2,3,4 },
-	//{ 0,0,5 },
-	//{ 8,7,6 }
-	//};
+	forest = {
+		{ 2,3,4 },
+	{ 0,0,5 },
+	{ 8,7,6 }
+	};
 	//forest = { { 63750247,40643210,95516857,89928134,66334829,58741187,76532780,45104329 },{ 3219401,97566322,9135413,75944198,93735601,33923288,50116695,83660397 },{ 64460750,53045740,31903386,78155821,90848739,38769489,99349027,85982891 },{ 30628785,51077683,70534803,67460877,91077770,74197235,5696362,91459886 },{ 56105195,82479378,45937951,52817583,2768114,43329099,28189138,21418604 } };
-	forest = { { 4125,0,9785,8392,138,0,0,0 },{ 0,0,0,0,6923,6875,8723,0 } };
+	//forest = { { 4125,0,9785,8392,138,0,0,0 },{ 0,0,0,0,6923,6875,8723,0 } };
 	cout << sol.cutOffTree(forest) << endl;
 	//for (int i = 1; i <= 13; i++)
 	//	cout << sol.findKthNumber(13, i) << endl;
