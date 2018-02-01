@@ -1247,11 +1247,72 @@ public:
 				spread(grid, visited, row + dir[i], col + dir[i + 1]);
 		}
 	}
+
+	//743. Network Delay Time
+	int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+		N++;
+		vector<vector<int>>graph(N, vector<int>(N, -1));
+		for (auto &edge : times)
+		{
+			int u = edge[0], v = edge[1], w = edge[2];
+			graph[u][v] = w;
+		}
+		vector<int> minvs(N, -1);
+		minvs[K] = 0;
+		for (int i = 1; i < N; i++)
+			minvs[i] = graph[K][i];
+		vector<int> vis(N);
+		vis[K] = 1;
+		while (true) {
+			int minv = -1;
+			for (int i = 1; i < N; i++)
+				if (minvs[i] != -1 && vis[i] == 0)
+				{
+					if (minv == -1)
+						minv = i;
+					else
+						if (minvs[i] < minvs[minv])
+							minv = i;
+				}
+			if (minv == -1)
+				break;
+			vis[minv] = 1;
+			for (int i = 1; i < N; i++)
+			{
+				if (i != K && graph[minv][i] != -1)
+				{
+					if (minvs[i] == -1)
+						minvs[i] = minvs[minv] + graph[minv][i];
+					else if (minvs[i] > minvs[minv] + graph[minv][i]) {
+						minvs[i] = minvs[minv] + graph[minv][i];
+					}
+				}
+			}
+
+		}
+#ifdef __DEBUG
+		for (int i = 1; i < N; i++)
+			cout << minvs[i] << " ";
+		cout << endl;
+#endif // __DEBUG
+		int ans = 0;
+		for (int i = 1; i < N; i++)
+			if (i != K && minvs[i] == -1)
+				return -1;
+			else
+				ans = max(ans, minvs[i]);
+		return ans;
+	}
 };
 
 
 int main() {
 	Solution sol;
+	vector<vector<int>>times{ {1,2,1},{2,3,2},{1,3,4} };
+	times = { { 2,1,1 },{ 2,3,1 },{ 3,4,1 } };
+	times = { {1,2,1},{2,1,3} };
+	//cout << sol.networkDelayTime(times, 4, 2) << endl;
+	cout << sol.networkDelayTime(times, 2, 2) << endl;
 	//vector<vector<int>> forest{
 	//				{ 1,2,3 },
 	//				{ 0,0,4 },
