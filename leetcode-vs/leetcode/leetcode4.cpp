@@ -1251,18 +1251,24 @@ public:
 	//743. Network Delay Time
 	int networkDelayTime(vector<vector<int>>& times, int N, int K) {
 		N++;
-		vector<vector<int>>graph(N, vector<int>(N, -1));
+		vector<vector<pair<int, int>>>graph(N);
 		for (auto &edge : times)
 		{
 			int u = edge[0], v = edge[1], w = edge[2];
-			graph[u][v] = w;
+			graph[u].push_back({ v,w });
 		}
+
 		vector<int> minvs(N, -1);
 		minvs[K] = 0;
-		for (int i = 1; i < N; i++)
-			minvs[i] = graph[K][i];
 		vector<int> vis(N);
 		vis[K] = 1;
+
+		for (auto &edge : graph[K])
+		{
+			int v = edge.first, w = edge.second;
+			minvs[v] = w;
+		}
+
 		while (true) {
 			int minv = -1;
 			for (int i = 1; i < N; i++)
@@ -1277,24 +1283,13 @@ public:
 			if (minv == -1)
 				break;
 			vis[minv] = 1;
-			for (int i = 1; i < N; i++)
+			for (auto &edge : graph[minv])
 			{
-				if (i != K && graph[minv][i] != -1)
-				{
-					if (minvs[i] == -1)
-						minvs[i] = minvs[minv] + graph[minv][i];
-					else if (minvs[i] > minvs[minv] + graph[minv][i]) {
-						minvs[i] = minvs[minv] + graph[minv][i];
-					}
-				}
+				int v = edge.first, w = edge.second;
+				if (v != K && (minvs[v] == -1 || minvs[v] > minvs[minv] + w))
+					minvs[v] = minvs[minv] + w;
 			}
-
 		}
-#ifdef __DEBUG
-		for (int i = 1; i < N; i++)
-			cout << minvs[i] << " ";
-		cout << endl;
-#endif // __DEBUG
 		int ans = 0;
 		for (int i = 1; i < N; i++)
 			if (i != K && minvs[i] == -1)
@@ -1310,9 +1305,9 @@ int main() {
 	Solution sol;
 	vector<vector<int>>times{ {1,2,1},{2,3,2},{1,3,4} };
 	times = { { 2,1,1 },{ 2,3,1 },{ 3,4,1 } };
-	times = { {1,2,1},{2,1,3} };
-	//cout << sol.networkDelayTime(times, 4, 2) << endl;
-	cout << sol.networkDelayTime(times, 2, 2) << endl;
+	//times = { {1,2,1},{2,1,3} };
+	cout << sol.networkDelayTime(times, 4, 2) << endl;
+	//cout << sol.networkDelayTime(times, 2, 2) << endl;
 	//vector<vector<int>> forest{
 	//				{ 1,2,3 },
 	//				{ 0,0,4 },

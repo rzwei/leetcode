@@ -263,3 +263,4 @@ __pycache__/
 coder.iml
 leetcode-clion/cmake-build-debug/
 pure/
+cmake-build-debug/

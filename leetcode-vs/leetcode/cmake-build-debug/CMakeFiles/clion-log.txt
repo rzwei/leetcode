@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2017.3.1\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" F:\Users\rzhon\IdeaProjects\rzwei-leetcode\leetcode-vs\leetcode
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/d/projects/coder/leetcode-vs/leetcode
 -- Configuring done
 -- Generating done
--- Build files have been written to: F:/Users/rzhon/IdeaProjects/rzwei-leetcode/leetcode-vs/leetcode/cmake-build-debug
+-- Build files have been written to: /mnt/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug
