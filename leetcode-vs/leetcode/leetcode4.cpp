@@ -89,54 +89,8 @@ public:
 		return res;
 	}
 
-	//	int dfs_741(int i, int j, int f, vector<vector<int>> &mat,
-	//		vector<vector<vector<int>>> &memo) {
-	//#ifdef __DEBUG
-	//		cout << i << " " << j << " " << f << " " << endl;
-	//#endif
-	//		int N = mat[0].size(), res = -1;
-	//		if (mat[i][j] == -1) {
-	//			return -1;
-	//		}
-	//		if (f == 0 && memo[f][i][j] != -1) {
-	//			return memo[f][i][j];
-	//		}
-	//		if (i == 0 && j == 0 && f == 1) {
-	//			return mat[i][j];
-	//		}
-	//		else if (i == N - 1 && j == N - 1) {
-	//			if (f == 0)
-	//				return dfs_741(i, j, 1, mat, memo);
-	//		}
-	//		int t = mat[i][j];
-	//		mat[i][j] = 0;
-	//		int F = f == 0 ? 1 : -1;
-	//		vector<vector<int>> dirs{ {1, 0},
-	//								 {0, 1} };
-	//		for (auto d : dirs) {
-	//			int nx = i + F * d[0], ny = j + F * d[1];
-	//			if (0 <= nx && nx < N && 0 <= ny && ny < N && mat[i][j] != -1) {
-	//				int r = dfs_741(nx, ny, f, mat, memo);
-	//				if (r >= 0) {
-	//					res = max(res, r + t);
-	//				}
-	//			}
-	//		}
-	//		mat[i][j] = t;
-	//		if (f == 0)
-	//			memo[f][i][j] = res;
-	//		return res;
-	//	}
-	//
-	//	//741. Cherry Pickup wa
-	//	int cherryPickup(vector<vector<int>> &grid) {
-	//		int N = grid.size();
-	//		vector<vector<vector<int>>> memo(2, vector<vector<int>>(N, vector<int>(N, -1)));
-	//		int r = dfs_741(0, 0, 0, grid, memo);
-	//		return r == -1 ? 0 : r;
-	//	}
 
-		//126. Word Ladder II
+	//126. Word Ladder II
 	vector<vector<string> >
 		findLadders(string beginWord, string endWord, vector<string> &dictwords) {
 		unordered_set<string> dict(dictwords.begin(), dictwords.end());
@@ -1298,6 +1252,58 @@ public:
 				ans = max(ans, minvs[i]);
 		return ans;
 	}
+
+	//591. Tag Validator
+	bool isValid(string code) {
+		int i = 0;
+		return validTag(code, i) && i == code.size();
+	}
+	bool validTag(string s, int& i) {
+		int j = i;
+		string tag = parseTagName(s, j);
+		if (tag.empty()) return false;
+		if (!validContent(s, j)) return false;
+		int k = j + tag.size() + 2; // expecting j = pos of "</" , k = pos of '>'
+		if (k >= s.size() || s.substr(j, k + 1 - j) != "</" + tag + ">") return false;
+		i = k + 1;
+		return true;
+	}
+
+	string parseTagName(string s, int& i) {
+		if (s[i] != '<') return "";
+		int j = s.find('>', i);
+		if (j == string::npos || j - 1 - i < 1 || 9 < j - 1 - i) return "";
+		string tag = s.substr(i + 1, j - 1 - i);
+		for (char ch : tag) {
+			if (ch < 'A' || 'Z' < ch) return "";
+		}
+		i = j + 1;
+		return tag;
+	}
+
+	bool validContent(string s, int& i) {
+		int j = i;
+		while (j < s.size()) {
+			if (!validText(s, j) && !validCData(s, j) && !validTag(s, j)) break;
+		}
+		i = j;
+		return true;
+	}
+
+	bool validText(string s, int& i) {
+		int j = i;
+		while (i < s.size() && s[i] != '<') { i++; }
+		return i != j;
+	}
+
+	bool validCData(string s, int& i) {
+		if (s.find("<![CDATA[", i) != i) return false;
+		int j = s.find("]]>", i);
+		if (j == string::npos) return false;
+		i = j + 3;
+		return true;
+	}
+
 };
 
 
