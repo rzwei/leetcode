@@ -1112,49 +1112,57 @@ public:
 		}
 		return curr;
 	}
-	int dfs_675(int i, int j, int ti, int tj, vector<vector<int>>&forest, vector<vector<int>> &vis)
+	int bfs_675(int i, int j, int ti, int tj, vector<vector<int>>&forest)
 	{
-		if (vis[i][j] || forest[i][j] == 0)
+		if (forest[i][j] == 0)
 			return -1;
 		if (i == ti && j == tj)
 			return 0;
 		static vector<vector<int>> dirs{ {1,0},{ -1,0 },{ 0,1 },{ 0,-1 } };
-		int ret = -1, Len = forest.size();
-		vis[i][j] = 1;
-		for (auto &d : dirs)
+		deque<vector<int>> q;
+		q.push_back({ i,j });
+		int ans = 0, m = forest.size(), n = forest[0].size();
+		vector<vector<int>> vis(m, vector<int>(n));
+		while (!q.empty())
 		{
-			int x = i + d[0], y = j + d[1];
-			if (0 > x || x >= Len || 0 > y || y >= Len)
-				continue;
-			int r = dfs_675(x, y, ti, tj, forest, vis);
-			if (r != -1)
+			ans++;
+			for (int t_ = q.size(); t_ > 0; t_--)
 			{
-				if (ret == -1)
-					ret = r + 1;
-				else
-					ret = min(ret, r + 1);
+				auto cur = q.front();
+				q.pop_front();
+				int x = cur[0], y = cur[1];
+				if (vis[x][y] || forest[x][y] == 0)
+					continue;
+				vis[x][y] = 1;
+				for (auto &d : dirs)
+				{
+					int nx = x + d[0], ny = y + d[1];
+					if (nx < 0 || nx >= m || ny < 0 || ny >= n || forest[nx][ny] == 0)
+						continue;
+					if (nx == ti && ny == tj)
+						return ans;
+					q.push_back({ nx,ny });
+				}
 			}
 		}
-		vis[i][j] = 0;
-		return ret;
+		return -1;
 	}
 
 	//675. Cut Off Trees for Golf Event
 	int cutOffTree(vector<vector<int>>& forest) {
-		int Len = forest.size();
+		int m = forest.size(),n=forest[0].size();
 		priority_queue <vector<int>, vector<vector<int>>, greater<vector<int>>>pq;
 
-		for (int i = 0; i < Len; i++)
-			for (int j = 0; j < Len; j++)
+		for (int i = 0; i < m; i++)
+			for (int j = 0; j < n; j++)
 				if (forest[i][j] > 1)
 					pq.push({ forest[i][j],i,j });
 		int ans = 0, x = 0, y = 0;
-		vector<vector<int>>vis(Len, vector<int>(Len));
 		while (!pq.empty())
 		{
 			auto t = pq.top();
 			pq.pop();
-			int r = dfs_675(x, y, t[1], t[2], forest, vis);
+			int r = bfs_675(x, y, t[1], t[2], forest);
 			if (r == -1)
 				return -1;
 			x = t[1];
@@ -1173,11 +1181,13 @@ int main() {
 					{ 0,0,0 },
 					{ 7,6,5 }
 	};
-	forest = {
-		{ 2,3,4 },
-	{ 0,0,5 },
-	{ 8,7,6 }
-	};
+	//forest = {
+	//	{ 2,3,4 },
+	//{ 0,0,5 },
+	//{ 8,7,6 }
+	//};
+	//forest = { { 63750247,40643210,95516857,89928134,66334829,58741187,76532780,45104329 },{ 3219401,97566322,9135413,75944198,93735601,33923288,50116695,83660397 },{ 64460750,53045740,31903386,78155821,90848739,38769489,99349027,85982891 },{ 30628785,51077683,70534803,67460877,91077770,74197235,5696362,91459886 },{ 56105195,82479378,45937951,52817583,2768114,43329099,28189138,21418604 } };
+	forest = { { 4125,0,9785,8392,138,0,0,0 },{ 0,0,0,0,6923,6875,8723,0 } };
 	cout << sol.cutOffTree(forest) << endl;
 	//for (int i = 1; i <= 13; i++)
 	//	cout << sol.findKthNumber(13, i) << endl;
