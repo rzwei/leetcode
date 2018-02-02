@@ -1304,15 +1304,39 @@ public:
 		return true;
 	}
 
+	//335. Self Crossing
+	bool isSelfCrossing(vector<int>& x) {
+		int l = x.size();
+		if (l <= 3) return false;
+
+		for (int i = 3; i < l; i++) {
+			if (x[i] >= x[i - 2] && x[i - 1] <= x[i - 3]) return true;  //Fourth line crosses first line and onward
+			if (i >= 4)
+			{
+				if (x[i - 1] == x[i - 3] && x[i] + x[i - 4] >= x[i - 2]) return true; // Fifth line meets first line and onward
+			}
+			if (i >= 5)
+			{
+				if (x[i - 2] - x[i - 4] >= 0 && x[i] >= x[i - 2] - x[i - 4] && x[i - 1] >= x[i - 3] - x[i - 5] && x[i - 1] <= x[i - 3]) return true;  // Sixth line crosses first line and onward
+			}
+		}
+		return false;
+	}
 };
 
 
 int main() {
 	Solution sol;
-	vector<vector<int>>times{ {1,2,1},{2,3,2},{1,3,4} };
-	times = { { 2,1,1 },{ 2,3,1 },{ 3,4,1 } };
+	vector<int> nums;
+	nums = { 2,1,1,2 };
+	nums = { 1,2,2,3,4 };
+	cout << sol.isSelfCrossing(nums) << endl;
+	//nums = { 1,1,2,1,1 };
+	//nums = { 1,1,1,1 };
+	//vector<vector<int>>times{ {1,2,1},{2,3,2},{1,3,4} };
+	//times = { { 2,1,1 },{ 2,3,1 },{ 3,4,1 } };
 	//times = { {1,2,1},{2,1,3} };
-	cout << sol.networkDelayTime(times, 4, 2) << endl;
+	//cout << sol.networkDelayTime(times, 4, 2) << endl;
 	//cout << sol.networkDelayTime(times, 2, 2) << endl;
 	//vector<vector<int>> forest{
 	//				{ 1,2,3 },
