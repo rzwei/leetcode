@@ -50,7 +50,82 @@ using namespace std;
 //	// The result is undefined if this NestedInteger holds a single integer
 //	const vector<NestedInteger> &getList() const;
 //};
+struct Trie {
+	vector<int> words; // index of words
+	vector<Trie *> children;
+	Trie() {
+		children = vector<Trie *>(26, nullptr);
+	}
+	// Thanks to @huahualeetcode for adding this in case of memory leak
+	~Trie() {
+		for (int i = 0; i < 26; i++) {
+			if (children[i]) {
+				delete children[i];
+			}
+		}
+	}
 
+	void add(const string &word, size_t begin, int index) {
+		words.push_back(index);
+		if (begin < word.length()) {
+			if (!children[word[begin] - 'a']) {
+				children[word[begin] - 'a'] = new Trie();
+			}
+			children[word[begin] - 'a']->add(word, begin + 1, index);
+		}
+	}
+
+	vector<int> find(const string &prefix, size_t begin) {
+		if (begin == prefix.length()) {
+			return words;
+		}
+		else {
+			if (!children[prefix[begin] - 'a']) {
+				return {};
+			}
+			else {
+				return children[prefix[begin] - 'a']->find(prefix, begin + 1);
+			}
+		}
+	}
+};
+
+class WordFilter {
+public:
+	WordFilter(vector<string> words) {
+		forwardTrie = new Trie();
+		backwardTrie = new Trie();
+		for (int i = 0; i < words.size(); i++) {
+			string word = words[i];
+			forwardTrie->add(word, 0, i);
+			reverse(word.begin(), word.end());
+			backwardTrie->add(word, 0, i);
+		}
+	}
+
+	int f(string prefix, string suffix) {
+		auto forwardMatch = forwardTrie->find(prefix, 0);
+		reverse(suffix.begin(), suffix.end());
+		auto backwardMatch = backwardTrie->find(suffix, 0);
+		// search from the back
+		auto fIter = forwardMatch.rbegin(), bIter = backwardMatch.rbegin();
+		while (fIter != forwardMatch.rend() && bIter != backwardMatch.rend()) {
+			if (*fIter == *bIter) {
+				return *fIter;
+			}
+			else if (*fIter > *bIter) {
+				fIter++;
+			}
+			else {
+				bIter++;
+			}
+		}
+		return -1;
+	}
+
+private:
+	Trie * forwardTrie, *backwardTrie;
+};
 class Solution {
 public:
 	//227. Basic Calculator II
@@ -1321,6 +1396,228 @@ public:
 			}
 		}
 		return false;
+	}
+
+
+	vector<string> basicCalculatorIV(string expression, vector<string>& evalvars, vector<int>& evalints) {
+		unordered_map<string, int> mp;
+		int n = evalvars.size();
+		// create a map for variable value pairs
+		for (int i = 0; i < n; ++i) mp[evalvars[i]] = evalints[i];
+		// helper function is recursion using implicit stack
+		int pos = 0;
+		unordered_map<string, int> output = helper(expression, mp, pos);
+		vector<pair<string, int>> ans(output.begin(), output.end());
+		// sort result based on variable degree
+		sort(ans.begin(), ans.end(), mycompare);
+		vector<string> res;
+		for (auto& p : ans) {
+			// only consider non-zero coefficient variables
+			if (p.second == 0) continue;
+			res.push_back(to_string(p.second));
+			if (p.first != "") res.back() += "*" + p.first;
+		}
+		return res;
+	}
+private:
+	unordered_map<string, int> helper(string& s, unordered_map<string, int>& mp, int& pos) {
+		// every operand is an unordered_map, including single variable or nested (a * b + a * c); 
+		// if the operand is a number, use pair("", number)
+		vector<unordered_map<string, int>> operands;
+		vector<char> ops;
+		ops.push_back('+');
+		int n = s.size();
+		while (pos < n && s[pos] != ')') {
+			if (s[pos] == '(') {
+				pos++;
+				operands.push_back(helper(s, mp, pos));
+			}
+			else {
+				int k = pos;
+				while (pos < n && s[pos] != ' ' && s[pos] != ')') pos++;
+				string t = s.substr(k, pos - k);
+				bool isNum = true;
+				for (char c : t) {
+					if (!isdigit(c)) isNum = false;
+				}
+				unordered_map<string, int> tmp;
+				if (isNum)
+					tmp[""] = stoi(t);
+				else if (mp.count(t))
+					tmp[""] = mp[t];
+				else
+					tmp[t] = 1;
+				operands.push_back(tmp);
+			}
+			if (pos < n && s[pos] == ' ') {
+				ops.push_back(s[++pos]);
+				pos += 2;
+			}
+		}
+		pos++;
+		return calculate(operands, ops);
+	}
+	unordered_map<string, int> calculate(vector<unordered_map<string, int>>& operands, vector<char>& ops) {
+		unordered_map<string, int> ans;
+		int n = ops.size();
+		for (int i = n - 1; i >= 0; --i) {
+			unordered_map<string, int> tmp = operands[i];
+			while (i >= 0 && ops[i] == '*')
+				tmp = multi(tmp, operands[--i]);
+			int sign = ops[i] == '+' ? 1 : -1;
+			for (auto& p : tmp) ans[p.first] += sign * p.second;
+		}
+		return ans;
+	}
+	unordered_map<string, int> multi(unordered_map<string, int>& lhs, unordered_map<string, int>& rhs) {
+		unordered_map<string, int> ans;
+		int m = lhs.size(), n = rhs.size();
+		for (auto& p : lhs) {
+			for (auto& q : rhs) {
+				// combine and sort the product of variables
+				string t = combine(p.first, q.first);
+				ans[t] += p.second*q.second;
+			}
+		}
+		return ans;
+	}
+	string combine(const string& a, const string& b) {
+		if (a == "") return b;
+		if (b == "") return a;
+		vector<string> strs = split(a, '*');
+		for (auto& s : split(b, '*')) strs.push_back(s);
+		sort(strs.begin(), strs.end());
+		string s;
+		for (auto& t : strs) s += t + '*';
+		s.pop_back();
+		return s;
+	}
+	static vector<string> split(const string& s, char c) {
+		vector<string> ans;
+		int i = 0, n = s.size();
+		while (i < n) {
+			int j = i;
+			i = s.find(c, i);
+			if (i == -1) i = n;
+			ans.push_back(s.substr(j, i - j));
+			i++;
+		}
+		return ans;
+	}
+	static bool mycompare(pair<string, int>& a, pair<string, int>& b) {
+		string s1 = a.first, s2 = b.first;
+		vector<string> left = split(s1, '*');
+		vector<string> right = split(s2, '*');
+		return left.size() > right.size() || (left.size() == right.size() && left < right);
+	}    vector<string> basicCalculatorIV(string expression, vector<string>& evalvars, vector<int>& evalints) {
+		unordered_map<string, int> mp;
+		int n = evalvars.size();
+		// create a map for variable value pairs
+		for (int i = 0; i < n; ++i) mp[evalvars[i]] = evalints[i];
+		// helper function is recursion using implicit stack
+		int pos = 0;
+		unordered_map<string, int> output = helper(expression, mp, pos);
+		vector<pair<string, int>> ans(output.begin(), output.end());
+		// sort result based on variable degree
+		sort(ans.begin(), ans.end(), mycompare);
+		vector<string> res;
+		for (auto& p : ans) {
+			// only consider non-zero coefficient variables
+			if (p.second == 0) continue;
+			res.push_back(to_string(p.second));
+			if (p.first != "") res.back() += "*" + p.first;
+		}
+		return res;
+	}
+	unordered_map<string, int> helper(string& s, unordered_map<string, int>& mp, int& pos) {
+		// every operand is an unordered_map, including single variable or nested (a * b + a * c); 
+		// if the operand is a number, use pair("", number)
+		vector<unordered_map<string, int>> operands;
+		vector<char> ops;
+		ops.push_back('+');
+		int n = s.size();
+		while (pos < n && s[pos] != ')') {
+			if (s[pos] == '(') {
+				pos++;
+				operands.push_back(helper(s, mp, pos));
+			}
+			else {
+				int k = pos;
+				while (pos < n && s[pos] != ' ' && s[pos] != ')') pos++;
+				string t = s.substr(k, pos - k);
+				bool isNum = true;
+				for (char c : t) {
+					if (!isdigit(c)) isNum = false;
+				}
+				unordered_map<string, int> tmp;
+				if (isNum)
+					tmp[""] = stoi(t);
+				else if (mp.count(t))
+					tmp[""] = mp[t];
+				else
+					tmp[t] = 1;
+				operands.push_back(tmp);
+			}
+			if (pos < n && s[pos] == ' ') {
+				ops.push_back(s[++pos]);
+				pos += 2;
+			}
+		}
+		pos++;
+		return calculate(operands, ops);
+	}
+	unordered_map<string, int> calculate(vector<unordered_map<string, int>>& operands, vector<char>& ops) {
+		unordered_map<string, int> ans;
+		int n = ops.size();
+		for (int i = n - 1; i >= 0; --i) {
+			unordered_map<string, int> tmp = operands[i];
+			while (i >= 0 && ops[i] == '*')
+				tmp = multi(tmp, operands[--i]);
+			int sign = ops[i] == '+' ? 1 : -1;
+			for (auto& p : tmp) ans[p.first] += sign * p.second;
+		}
+		return ans;
+	}
+	unordered_map<string, int> multi(unordered_map<string, int>& lhs, unordered_map<string, int>& rhs) {
+		unordered_map<string, int> ans;
+		int m = lhs.size(), n = rhs.size();
+		for (auto& p : lhs) {
+			for (auto& q : rhs) {
+				// combine and sort the product of variables
+				string t = combine(p.first, q.first);
+				ans[t] += p.second*q.second;
+			}
+		}
+		return ans;
+	}
+	string combine(const string& a, const string& b) {
+		if (a == "") return b;
+		if (b == "") return a;
+		vector<string> strs = split(a, '*');
+		for (auto& s : split(b, '*')) strs.push_back(s);
+		sort(strs.begin(), strs.end());
+		string s;
+		for (auto& t : strs) s += t + '*';
+		s.pop_back();
+		return s;
+	}
+	static vector<string> split(const string& s, char c) {
+		vector<string> ans;
+		int i = 0, n = s.size();
+		while (i < n) {
+			int j = i;
+			i = s.find(c, i);
+			if (i == -1) i = n;
+			ans.push_back(s.substr(j, i - j));
+			i++;
+		}
+		return ans;
+	}
+	static bool mycompare(pair<string, int>& a, pair<string, int>& b) {
+		string s1 = a.first, s2 = b.first;
+		vector<string> left = split(s1, '*');
+		vector<string> right = split(s2, '*');
+		return left.size() > right.size() || (left.size() == right.size() && left < right);
 	}
 };
 
