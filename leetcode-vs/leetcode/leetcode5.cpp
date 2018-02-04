@@ -51,12 +51,84 @@ public:
 		ans[1] = travel(root, V, ans);
 		return ans;
 	}
+	//777. Swap Adjacent in LR String
+	bool canTransform(string start, string end) {
+		int i = 0, j = 0, Len = start.size();
+		while (true)
+		{
+			while (i < Len&&start[i] == 'X')
+				i++;
+			while (j < Len&&end[j] == 'X')
+				j++;
+			if (i >= Len && j >= Len)
+				break;
+			if (i < Len && j < Len)
+			{
+				if (start[i++] != end[j++])
+					return false;
+			}
+			else return false;
+		}
+
+		j = 0;
+		for (i = 0; i < Len; i++)
+		{
+			if (start[i] == 'L')
+			{
+				while (end[j] != 'L') j++;
+				if (i < j++) return false;
+			}
+		}
+		j = 0;
+		for (i = 0; i < Len; i++)
+		{
+			if (start[i] == 'R')
+			{
+				while (end[j] != 'R') j++;
+				if (i > j++) return false;
+			}
+		}
+		return true;
+	}
+
+	//778. Swim in Rising Water
+	int swimInWater(vector<vector<int>>& grid) {
+		int ans = 0, Len = grid.size();
+		priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+		pq.push({ grid[0][0],0,0 });
+		unordered_set<int> vis;
+		static vector<vector<int>> dirs{ {0,1},{0,-1},{1,0},{-1,0} };
+		while (!pq.empty())
+		{
+			auto c = pq.top();
+			pq.pop();
+			for (auto i : c)
+				cout << i << " ";
+			cout << endl;
+			ans = max(ans, c[0]);
+			if (c[1] == Len - 1 && c[2] == Len - 1)
+				return ans;
+			for (auto &d : dirs)
+			{
+				int nx = c[1] + d[0], ny = c[2] + d[1];
+				if (0 <= nx && nx < Len && 0 <= ny && ny < Len && !vis.count(nx*Len + ny))
+				{
+					pq.push({ grid[nx][ny],nx,ny });
+					vis.insert(nx*Len + ny);
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
 {
 	Solution sol;
 	//cout << sol.canTransform("RXXLRXRXL", "XRLXXRRLX") << endl;
+	vector<vector<int>> grid;
+	grid = { { 0,1,2,3,4 },{ 24,23,22,21,5 },{ 12,13,14,15,16 },{ 11,17,18,19,20 },{ 10,9,8,7,6 } };
+	cout << sol.swimInWater(grid) << endl;
 	//cout << sol.kthGrammar(2, 1) << endl;
 	//cout << sol.kthGrammar(4, 5) << endl;
 	//vector<int>nums1{ 1,2 }, nums2{ 3,4 };
