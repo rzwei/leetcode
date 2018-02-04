@@ -102,9 +102,6 @@ public:
 		{
 			auto c = pq.top();
 			pq.pop();
-			for (auto i : c)
-				cout << i << " ";
-			cout << endl;
 			ans = max(ans, c[0]);
 			if (c[1] == Len - 1 && c[2] == Len - 1)
 				return ans;
