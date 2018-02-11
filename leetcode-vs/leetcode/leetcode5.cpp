@@ -117,15 +117,72 @@ public:
 		}
 		return ans;
 	}
+	void travel_min(TreeNode *p, int &pre, int &m)
+	{
+		if (!p) return;
+		travel_min(p->left, pre, m);
+		if (pre == INT_MIN)
+			pre = p->val;
+		else {
+			m = min(m, abs(p->val - pre));
+			pre = p->val;
+		}
+		travel_min(p->right, pre, m);
+	}
+	//783. Minimum Distance Between BST Nodes
+	int minDiffInBST(TreeNode* root) {
+		int pre = INT_MIN, ans = INT_MAX;
+		travel_min(root, pre, ans);
+		return ans;
+	}
+	//781. Rabbits in Forest
+	int numRabbits(vector<int>& answers) {
+		unordered_map<int, int> m;
+		int ans = 0;
+		for (auto c : answers)
+			if (c == 0)
+				ans++;
+			else
+				m[c]++;
+		for (auto p : m)
+		{
+			int k = p.first, n = p.second;
+			ans += (n / (k + 1))*(k + 1);
+			if (n % (k + 1))
+				ans += k + 1;
+		}
+		return ans;
+	}
+	//780. Reaching Points
+	bool reachingPoints(int sx, int sy, int tx, int ty) {
+		if (tx == ty) return sx == sy && sx == tx;
+		while (sx != tx || sy != ty) {
+			if (tx < sx || ty < sy) return false;
+			if (tx > ty) tx -= max((tx - sx) / ty, 1) * ty;
+			else         ty -= max((ty - sy) / tx, 1) * tx;
+		}
+		return true;
+	}
+	int movesToChessboard(vector<vector<int>>& board) {
+
+	}
 };
 
 int main()
 {
 	Solution sol;
+	//cout << sol.reachingPoints(1, 1, 3, 5) << endl;
+	//cout << sol.reachingPoints(1, 1, 2, 2) << endl;
+	cout << sol.reachingPoints(9, 5, 12, 8) << endl;
+	//vector<int> nums;
+	//nums = { 10,10,10 };
+	//nums = { 3,3,3,3,3 };
+	//nums = { 1,1,0,0,0 };
+	//cout << sol.numRabbits(nums) << endl;
 	//cout << sol.canTransform("RXXLRXRXL", "XRLXXRRLX") << endl;
-	vector<vector<int>> grid;
-	grid = { { 0,1,2,3,4 },{ 24,23,22,21,5 },{ 12,13,14,15,16 },{ 11,17,18,19,20 },{ 10,9,8,7,6 } };
-	cout << sol.swimInWater(grid) << endl;
+	//vector<vector<int>> grid;
+	//grid = { { 0,1,2,3,4 },{ 24,23,22,21,5 },{ 12,13,14,15,16 },{ 11,17,18,19,20 },{ 10,9,8,7,6 } };
+	//cout << sol.swimInWater(grid) << endl;
 	//cout << sol.kthGrammar(2, 1) << endl;
 	//cout << sol.kthGrammar(4, 5) << endl;
 	//vector<int>nums1{ 1,2 }, nums2{ 3,4 };
