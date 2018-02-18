@@ -163,17 +163,146 @@ public:
 		}
 		return true;
 	}
-	int movesToChessboard(vector<vector<int>>& board) {
 
+	void swap_cols(vector<vector<int>> &board, int c1, int c2) {
+		int n = board.size();
+		for (int i = 0; i < n; i++) {
+			swap(board[i][c1], board[i][c2]);
+		}
+	}
+
+	void swap_rows(vector<vector<int>> &board, int r1, int r2) {
+		int n = board.size();
+		for (int i = 0; i < n; i++) {
+			swap(board[r1][i], board[r2][i]);
+		}
+	}
+
+	bool verify(vector<vector<int>> &board) {
+		int n = board.size();
+		int b = board[0][0];
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if ((i + j) % 2 == 0 && board[i][j] != b) return false;
+				if ((i + j) % 2 != 0 && board[i][j] == b) return false;
+			}
+		}
+
+		return true;
+	}
+
+	int can_cols_swap(vector<vector<int>> board, int black) {
+		int n = board.size();
+		vector<int> blks, whites;
+		int moves = 0;
+		for (int i = 0; i < n; i++) {
+			if (board[0][i] == black && i % 2 != 0) blks.push_back(i);
+			if (board[0][i] != black && i % 2 == 0) whites.push_back(i);
+		}
+
+		if (blks.size() == whites.size()) {
+			moves += blks.size();
+
+			for (int i = 0; i < blks.size(); i++) {
+				swap_cols(board, blks[i], whites[i]);
+			}
+			if (!verify(board)) moves = INT_MAX;
+		}
+		else moves = INT_MAX;
+
+		return moves;
+	}
+
+	int can_rows_swap(vector<vector<int>> board, int black) {
+		int moves = 0, n = board.size();
+		vector<int> blks, whites;
+		for (int i = 0; i < n; i++) {
+			if (board[i][0] == black && i % 2 != 0) blks.push_back(i);
+			if (board[i][0] != black && i % 2 == 0) whites.push_back(i);
+		}
+
+		if (blks.size() == whites.size()) {
+			moves += blks.size();
+
+			for (int i = 0; i < blks.size(); i++) {
+				swap_rows(board, blks[i], whites[i]);
+			}
+
+			int col_moves = min(can_cols_swap(board, 0), can_cols_swap(board, 1));
+			if (col_moves == INT_MAX) moves = INT_MAX;
+			else moves += col_moves;
+		}
+		else moves = INT_MAX;
+
+		return moves;
+	}
+	//782. Transform to Chessboard
+	int movesToChessboard(vector<vector<int>>& board) {
+		int ans = min(can_rows_swap(board, 0), can_rows_swap(board, 1));
+		return ans == INT_MAX ? -1 : ans;
+	}
+	void dfs_784(string cur, int i, string &pattern, vector<string> &ans)
+	{
+		while (i < pattern.size() && isdigit(pattern[i]))
+			cur += pattern[i++];
+		if (i == pattern.size())
+		{
+			ans.push_back(cur);
+			return;
+		}
+		dfs_784(cur + char(tolower(pattern[i])), i + 1, pattern, ans);
+		dfs_784(cur + char(toupper(pattern[i])), i + 1, pattern, ans);
+
+	}
+	// 784. Letter Case Permutation
+	vector<string> letterCasePermutation(string S) {
+		vector<string> ans;
+		dfs_784("", 0, S, ans);
+		return ans;
+	}
+	//785. Is Graph Bipartite?
+	bool isBipartite(vector<vector<int>>& graph) {
+		int len = graph.size();
+		vector<int>m(len);
+		int const Left = 100, Right = ~Left;
+		for (int i = 0; i < len; i++)
+		{
+			if (m[i] == 0) m[i] = Left;
+			for (auto j : graph[i])
+			{
+				if (m[j] == m[i]) return false;
+				m[j] = ~m[i];
+			}
+		}
+		return true;
+	}
+	int findCheapestPrice(
+		int n,
+		vector<vector<int>>& flights,
+		int src, int dst, int K) {
+		vector<vector<int>> graph(n, vector<int>(n, INT_MAX));
+		for (int i = 0; i < n; i++)
+		{
+			int u = flights[i][0], v = flights[i][1], w = flights[i][2];
+			graph[u][v] = w;
+		}
 	}
 };
 
 int main()
 {
 	Solution sol;
+	vector<vector<int>> graph;
+	graph = { { 1,3 },{ 0,2 },{ 1,3 },{ 0,2 } };
+	graph = { { 1,2,3 },{ 0,2 },{ 0,1,3 },{ 0,2 } };
+	cout << sol.isBipartite(graph) << endl;
+	//auto r = sol.letterCasePermutation("a1b2");
+	//for (auto &c : r)
+	//	cout << c << endl;
 	//cout << sol.reachingPoints(1, 1, 3, 5) << endl;
 	//cout << sol.reachingPoints(1, 1, 2, 2) << endl;
-	cout << sol.reachingPoints(9, 5, 12, 8) << endl;
+	//cout << sol.reachingPoints(9, 5, 12, 8) << endl;
 	//vector<int> nums;
 	//nums = { 10,10,10 };
 	//nums = { 3,3,3,3,3 };
