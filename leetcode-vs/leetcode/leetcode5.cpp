@@ -277,15 +277,107 @@ public:
 		}
 		return true;
 	}
+
+	//787. Cheapest Flights Within K Stops 
+	int findCheapestPrice_floyd(
+		int n,
+		vector<vector<int>>& flights,
+		int src, int dst, int K) {
+
+		vector<vector<int>> dp(n, vector<int>(n, -1));
+		for (int i = 0; i < flights.size(); i++)
+		{
+			int u = flights[i][0], v = flights[i][1], w = flights[i][2];
+			dp[u][v] = w;
+		}
+		for (int k = 1; k <= K; k++)
+		{
+			for (int i = 0; i < n; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					for (int ki = 0; ki < n; ki++)
+					{
+						if (dp[i][ki] == -1 || dp[ki][j] == -1)
+							continue;
+						int t = dp[i][ki] + dp[ki][j];
+						if (dp[i][j] == -1 || dp[i][j] > t)
+							dp[i][j] = t;
+					}
+				}
+			}
+		}
+		return dp[src][dst];
+	}
 	int findCheapestPrice(
 		int n,
 		vector<vector<int>>& flights,
 		int src, int dst, int K) {
-		vector<vector<int>> graph(n, vector<int>(n, INT_MAX));
-		for (int i = 0; i < n; i++)
+
+		vector<int>dis(n, INT_MAX / 2), pre(n, INT_MAX / 2);
+		dis[src] = pre[src] = 0;
+		for (int i = 0; i <= K; i++)
 		{
-			int u = flights[i][0], v = flights[i][1], w = flights[i][2];
-			graph[u][v] = w;
+			for (auto &edge : flights)
+			{
+				int u = edge[0], v = edge[1], w = edge[2];
+				dis[v] = min(dis[v], pre[u] + w);
+			}
+			pre = dis;
+		}
+		return dis[dst] < INT_MAX / 2 ? dis[dst] : -1;
+	}
+
+	////786. K-th Smallest Prime Fraction
+	//vector<int> kthSmallestPrimeFraction(vector<int>& A, int K) {
+	//	int len = A.size();
+	//	function<bool(vector<int>&, vector<int>&)> fun = [&](vector<int> &a, vector<int> &b) {
+	//		//return  A[a[0]] / float(A[a[1]]) > A[b[0]] / float(A[b[1]]);
+	//		bool r = A[a[0]] * A[b[1]] > A[a[1]] * A[b[0]];
+	//		return r;
+	//	};
+	//	priority_queue<vector<int>, vector<vector<int>>, decltype(fun)> pq(fun);
+	//	for (int i = 0; i < len - 1; i++)
+	//	{
+	//		pq.push({ i,len - 1 });
+	//	}
+	//	while (--K)
+	//	{
+	//		auto top = pq.top();
+	//		//cout << A[top[0]] << " " << A[top[1]] << endl;
+	//		pq.pop();
+	//		if (top[1] - 1 > top[0])
+	//			pq.push({ top[0],top[1] - 1 });
+	//	}
+	//	auto r = pq.top();
+	//	return { A[r[0]],A[r[1]] };
+	//}
+	vector<int> kthSmallestPrimeFraction(vector<int> &A, int K) {
+		int p = 0, q = 1;
+		double l = 0, r = 1;
+
+		for (int n = A.size(), cnt = 0; true; cnt = 0, p = 0) {
+			double m = (l + r) / 2;
+
+			for (int i = 0, j = n - 1; i < n; i++) {
+				while (j >= 0 && A[i] > m * A[n - 1 - j]) j--;
+				cnt += (j + 1);
+
+				if (j >= 0 && p * A[n - 1 - j] < q * A[i]) {
+					p = A[i];
+					q = A[n - 1 - j];
+				}
+			}
+
+			if (cnt < K) {
+				l = m;
+			}
+			else if (cnt > K) {
+				r = m;
+			}
+			else {
+				return { p, q };
+			}
 		}
 	}
 };
@@ -293,10 +385,23 @@ public:
 int main()
 {
 	Solution sol;
-	vector<vector<int>> graph;
-	graph = { { 1,3 },{ 0,2 },{ 1,3 },{ 0,2 } };
-	graph = { { 1,2,3 },{ 0,2 },{ 0,1,3 },{ 0,2 } };
-	cout << sol.isBipartite(graph) << endl;
+	vector<int> A;
+	A = { 1,2,3,5 };
+	auto r = sol.kthSmallestPrimeFraction(A, 5);
+	//A = { 1,7 };
+	//auto r = sol.kthSmallestPrimeFraction(A, 1);
+	cout << r[0] << " " << r[1] << endl;
+	//vector<vector<int>> edges;
+	//edges = { { 1,2,10 },{ 2,0,7 },{ 1,3,8 },{ 4,0,10 },{ 3,4,2 },{ 4,2,10 },{ 0,3,3 },{ 3,1,6 },{ 2,4,5 } };
+	//cout << sol.findCheapestPrice(5, edges, 0, 4, 1) << endl;
+	//edges = { { 0,1,100 },{ 1,2,100 },{ 0,2,500 } };
+	//edges = { { 0,1,2 },{ 1,2,1 },{ 2,0,10} };
+	//cout << sol.findCheapestPrice(3, edges, 0, 2, 1) << endl;
+	//cout << sol.findCheapestPrice(3, edges, 1, 2, 1) << endl;
+	//vector<vector<int>> graph;
+	//graph = { { 1,3 },{ 0,2 },{ 1,3 },{ 0,2 } };
+	//graph = { { 1,2,3 },{ 0,2 },{ 0,1,3 },{ 0,2 } };
+	//cout << sol.isBipartite(graph) << endl;
 	//auto r = sol.letterCasePermutation("a1b2");
 	//for (auto &c : r)
 	//	cout << c << endl;
