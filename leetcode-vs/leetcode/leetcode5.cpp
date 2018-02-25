@@ -394,6 +394,7 @@ public:
 		}
 		return s2 != t;
 	}
+	//788. Rotated Digits
 	int rotatedDigits(int N) {
 		unordered_map<char, char> m;
 		m['0'] = '0';
@@ -408,7 +409,7 @@ public:
 			if (vailid(i, m)) ans++;
 		return ans;
 	}
-
+	//789. Escape The Ghosts
 	bool escapeGhosts(vector<vector<int>>& ghosts, vector<int>& target) {
 		int l = abs(target[0]) + abs(target[1]);
 		for (auto &c : ghosts)
@@ -418,6 +419,7 @@ public:
 		}
 		return true;
 	}
+	//791. Custom Sort String
 	string customSortString(string S, string T) {
 		char m[26];
 		for (int i = 0; i < S.size(); i++)
@@ -428,6 +430,7 @@ public:
 		sort(T.begin(), T.end(), cmp);
 		return T;
 	}
+	//790. Domino and Tromino Tiling
 	int numTilings(int N) {
 		vector<int> dp(N + 1);;
 		dp[1] = 1;
@@ -438,7 +441,6 @@ public:
 			dp[i] = (dp[i - 3] % MOD + (dp[i - 1] % MOD) * 2 % MOD) % MOD;
 		return dp[N];
 	}
-
 };
 
 int main()
