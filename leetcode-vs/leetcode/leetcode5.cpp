@@ -352,6 +352,7 @@ public:
 	//	auto r = pq.top();
 	//	return { A[r[0]],A[r[1]] };
 	//}
+	//786. K-th Smallest Prime Fraction
 	vector<int> kthSmallestPrimeFraction(vector<int> &A, int K) {
 		int p = 0, q = 1;
 		double l = 0, r = 1;
@@ -380,17 +381,85 @@ public:
 			}
 		}
 	}
+
+	bool vailid(int n, unordered_map<char, char>&m)
+	{
+		string t = to_string(n);
+		string s2 = t;
+		for (int i = 0; i < t.size(); i++)
+		{
+			if (!m.count(t[i]))
+				return false;
+			s2[i] = m[t[i]];
+		}
+		return s2 != t;
+	}
+	int rotatedDigits(int N) {
+		unordered_map<char, char> m;
+		m['0'] = '0';
+		m['1'] = '1';
+		m['8'] = '8';
+		m['2'] = '5';
+		m['5'] = '2';
+		m['6'] = '9';
+		m['9'] = '6';
+		int ans = 0;
+		for (int i = 1; i <= N; i++)
+			if (vailid(i, m)) ans++;
+		return ans;
+	}
+
+	bool escapeGhosts(vector<vector<int>>& ghosts, vector<int>& target) {
+		int l = abs(target[0]) + abs(target[1]);
+		for (auto &c : ghosts)
+		{
+			int dis = abs(c[0] - target[0]) + abs(c[1] - target[1]);
+			if (dis <= l) return false;
+		}
+		return true;
+	}
+	string customSortString(string S, string T) {
+		char m[26];
+		for (int i = 0; i < S.size(); i++)
+			m[S[i] - 'a'] = i;
+		auto cmp = [&](char a, char b) {
+			return m[a - 'a'] < m[b - 'a'];
+		};
+		sort(T.begin(), T.end(), cmp);
+		return T;
+	}
+	int numTilings(int N) {
+		vector<int> dp(N + 1);;
+		dp[1] = 1;
+		dp[2] = 2;
+		dp[3] = 5;
+		int const MOD = 1000000007;
+		for (int i = 4; i <= N; i++)
+			dp[i] = (dp[i - 3] % MOD + (dp[i - 1] % MOD) * 2 % MOD) % MOD;
+		return dp[N];
+	}
+
 };
 
 int main()
 {
 	Solution sol;
-	vector<int> A;
-	A = { 1,2,3,5 };
-	auto r = sol.kthSmallestPrimeFraction(A, 5);
+	cout << sol.numTilings(30) << endl;
+	//string S = "cba", T = "abcd";
+	//cout << sol.customSortString(S, T) << endl;
+	//vector<vector<int>> ghosts;
+	//ghosts = { {1,0},{0,3} };
+	//vector<int> target{ 0,1 };
+	//target = { 1,0 };
+	//ghosts = { {2,0} };
+	//cout << sol.escapeGhosts(ghosts, target) << endl;
+	//cout << sol.rotatedDigits(10) << endl;
+	//vector<int> A;
+	//A = { 1,2,3,5 };
+	//auto r = sol.kthSmallestPrimeFraction(A, 5);
 	//A = { 1,7 };
 	//auto r = sol.kthSmallestPrimeFraction(A, 1);
-	cout << r[0] << " " << r[1] << endl;
+	//cout << r[0] << " " << r[1] << endl;
 	//vector<vector<int>> edges;
 	//edges = { { 1,2,10 },{ 2,0,7 },{ 1,3,8 },{ 4,0,10 },{ 3,4,2 },{ 4,2,10 },{ 0,3,3 },{ 3,1,6 },{ 2,4,5 } };
 	//cout << sol.findCheapestPrice(5, edges, 0, 4, 1) << endl;
