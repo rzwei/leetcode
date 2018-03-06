@@ -17,6 +17,37 @@
 #include <utility>
 #include <cmath>
 using namespace std;
+
+
+class Trie {
+public:
+	char v;
+	std::unordered_map<char, Trie*> next;
+	Trie(char _v) :v(_v) {};
+
+	static void add(Trie *root, std::string &word)
+	{
+		auto cur = root;
+		for (char c : word)
+		{
+			if (!cur->next.count(c))
+				cur->next[c] = new Trie(c);
+			cur = cur->next[c];
+		}
+	}
+	static bool find(Trie *root, std::string &word)
+	{
+		auto cur = root;
+		for (auto c : word)
+		{
+			if (!cur->next.count(c)) return false;
+			cur = cur->next[c];
+		}
+		return true;
+	}
+
+};
+
 class Solution
 {
 public:
@@ -438,13 +469,133 @@ public:
 			dp[i] = (dp[i - 3] % MOD + (dp[i - 1] % MOD) * 2 % MOD) % MOD;
 		return dp[N];
 	}
+	bool valid_794(vector<string> &board)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			int t = board[i][0], j;
+			for (j = 0; t != ' '&&j < 3; j++)
+				if (board[i][j] != t) break;
+			if (j == 3) return true;
+			t = board[0][i];
+			for (j = 0; t != ' '&&j < 3; j++)
+				if (board[j][i] != t) break;
+			if (j == 3) return true;
+		}
+		int t = board[0][0], j;
+		for (j = 0; j < 3 && t != ' '; j++)
+			if (board[j][j] != t)break;
+		if (j == 3) return true;
+		t = board[0][2];
+		for (j = 0; t != ' '&&j < 3; j++)
+			if (board[j][2 - j] != t) break;
+		if (j == 3) return true;
+		return false;
+	}
+	bool dfs_794(int cur, vector<string> &board, vector<vector<int>> &vis, bool old)
+	{
+#ifdef __DEBUG
+		for (auto c : board)
+			cout << c << endl;
+		cout << "---------------" << endl;
+#endif // __DEBUG
+		int f = 0;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				if (board[i][j] != ' ')
+				{
+					f = 1; break;
+				}
+			}
+		if (f == 0) return true;
 
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				if (board[i][j] == cur && vis[i][j] == 0)
+				{
+					board[i][j] = ' ';
+					vis[i][j] = 1;
+					bool s = false;
+					if (old == true)
+						s = valid_794(board);
+					bool r = dfs_794(cur == 'X' ? 'O' : 'X', board, vis, s);
+					board[i][j] = cur;
+					vis[i][j] = 0;
+					if (r && (old == true ? s == false : true))
+						return true;
+				}
+			}
+		return false;
+	}
+	//794. Valid Tic-Tac-Toe State
+	bool validTicTacToe(vector<string>& board) {
+		vector<vector<int>> vis(3, vector<int>(3));
+		int x = 0, o = 0;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				if (board[i][j] == ' ') continue;
+				if (board[i][j] == 'X') x++;
+				else if (board[i][j] == 'O')o++;
+			}
+		if (o > x || x - o > 1) return false;
+		return dfs_794(x > o ? 'X' : 'O', board, vis, valid_794(board));
+	}
+	////792. Number of Matching Subsequences
+	//int numMatchingSubseq(string S, vector<string>& words) {
+	//	Trie* root = new Trie('*');
+	//	int len = S.length();
+	//	for (int i = 0; i < len; i++)
+	//		Trie::add(root, S.substr(i, 50));
+	//	int ans = 0;
+	//	for (auto &c : words)
+	//		if (Trie::find(root, c)) ans++;
+	//	return ans;
+	//}
+
+	//795. Number of Subarrays with Bounded Maximum
+	int numSubarrayBoundedMax(vector<int>& A, int L, int R) {
+		int ans = 0, len = A.size(), c = 0, last = INT_MIN;
+		for (int i = 0; i < len; i++)
+		{
+			last = max(last, A[i]);
+			if (L <= last && last <= R) c++;
+			else {
+				last = INT_MIN;
+				c = 0;
+			}
+			ans += c;
+		}
+		return ans;
+	}
+	//793. Preimage Size of Factorial Zeroes Function
+	int preimageSizeFZF(int K) {
+		if (K < 5) return 0;
+		return K / 5 + preimageSizeFZF(K - 1);
+	}
 };
 
 int main()
 {
 	Solution sol;
-	cout << sol.numTilings(30) << endl;
+	vector<int> nums = { 2, 1, 4, 3 };
+	nums = { 2,9,2,5,6 };
+	cout << sol.numSubarrayBoundedMax(nums, 2, 8) << endl;
+	//vector<string> words = { "a", "bb", "acd", "ace" };
+	//string S = "abcde";
+	//cout << sol.numMatchingSubseq(S, words) << endl;
+	//vector<string> board = { "XOX", " X ", "   " };
+	//cout << sol.validTicTacToe(board) << endl;
+	//board = { "XOX", " X ", "   " };
+	//cout << sol.validTicTacToe(board) << endl;
+	//board = { "XOX", "O O", "XOX" };
+	//cout << sol.validTicTacToe(board) << endl;
+	//board = { "O  ", " X ", "   " };
+	//board = { "XOX","OXO","XXO" };
+	//cout << sol.validTicTacToe(board) << endl;
+	//cout << sol.numTilings(30) << endl;
 	//string S = "cba", T = "abcd";
 	//cout << sol.customSortString(S, T) << endl;
 	//vector<vector<int>> ghosts;
