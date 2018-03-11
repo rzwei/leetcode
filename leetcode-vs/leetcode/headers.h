@@ -1,20 +1,15 @@
 #pragma once
-#include <unordered_map>
-#include <string>
-#ifndef __DEBUG
-#define __DEBUG
-#endif
-struct ListNode {
-	int val;
-	ListNode *next;
-	ListNode(int x) : val(x), next(nullptr) {}
-};
+ struct ListNode {
+     int val;
+     ListNode *next;
+     ListNode(int x) : val(x), next(nullptr) {}
+ };
 
 struct TreeNode {
-	int val;
-	TreeNode *left;
-	TreeNode *right;
-	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 //class Trie {
 //	char v;
