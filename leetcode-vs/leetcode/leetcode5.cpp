@@ -548,6 +548,19 @@ public:
 		return ans;
 	}
 
+	int numSubarrayBoundedMax_(vector<int> &A, int L, int R) {
+		return count(A, R) - count(A, L - 1);
+	}
+
+	int count(vector<int> &A, int bound) {
+		int ans = 0, cur = 0;
+		for (int x : A) {
+			cur = x <= bound ? cur + 1 : 0;
+			ans += cur;
+		}
+		return ans;
+	}
+
 	//795. Number of Subarrays with Bounded Maximum
 	int numSubarrayBoundedMax(vector<int> &A, int L, int R) {
 		int res = 0, heads = 0, tails = 0;
@@ -674,6 +687,7 @@ public:
 		}
 
 		int best = -N;
+
 		int ans = 0, cur = 0;
 		for (int i = 0; i < N; ++i) {
 			cur += bad[i];
