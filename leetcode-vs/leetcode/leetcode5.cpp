@@ -698,6 +698,128 @@ public:
 		}
 		return ans;
 	}
+
+
+	inline char toChar(int v)
+	{
+		if (v < 10)
+			return v + '0';
+		else
+			return v - 10 + 'a';
+	}
+
+	inline int value(char c)
+	{
+		if ('0' <= c && c <= '9') return c - '0';
+		else return c - 'a' + 10;
+	}
+	//800. Similar RGB Color 
+	string similarRGB(string color) {
+		int mins = INT_MIN;
+		int r = (value(color[1]) << 4) + value(color[2]);
+		int g = (value(color[3]) << 4) + value(color[4]);
+		int b = (value(color[5]) << 4) + value(color[6]);
+		int ansi = 0, ansj = 0, ansk = 0;
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 16; j++) {
+				for (int k = 0; k < 16; k++) {
+					int dis = -(r - (i << 4) - i)*(r - (i << 4) - i)
+						- (g - (j << 4) - j)*(g - (j << 4) - j)
+						- (b - (k << 4) - k)*(b - (k << 4) - k);
+					if (dis > mins)
+					{
+						ansi = i;
+						ansj = j;
+						ansk = k;
+						mins = dis;
+					}
+				}
+			}
+		}
+		string ans;
+		ans.push_back('#');
+		ans.push_back(toChar(ansi));
+		ans.push_back(toChar(ansi));
+		ans.push_back(toChar(ansj));
+		ans.push_back(toChar(ansj));
+		ans.push_back(toChar(ansk));
+		ans.push_back(toChar(ansk));
+		return ans;
+	}
+	//801. Minimum Swaps To Make Sequences Increasing 
+	int minSwap(vector<int> &A, vector<int> &B) {
+		int len = A.size();
+		vector<int[2]> dp(len);
+
+		dp[0][0] = 0;
+		dp[0][1] = A[0] == B[0] ? 0 : 1;
+
+		for (int i = 1; i < len; i++)
+		{
+			if (A[i] == B[i])
+			{
+				dp[i][0] = min(dp[i - 1][0], dp[i - 1][1]);
+				dp[i][1] = dp[i][0];
+				continue;
+			}
+
+			dp[i][0] = INT_MAX;
+			dp[i][1] = INT_MAX;
+
+			if (A[i] > B[i - 1] && B[i] > A[i - 1])
+			{
+				dp[i][0] = min(dp[i - 1][1], dp[i][0]);
+				dp[i][1] = min(dp[i - 1][0] + 1, dp[i][1]);
+			}
+			if (A[i] > A[i - 1] && B[i] > B[i - 1])
+			{
+				dp[i][0] = min(dp[i - 1][0], dp[i][0]);
+				dp[i][1] = min(dp[i - 1][1] + 1, dp[i][1]);
+			}
+		}
+		return min(dp[len - 1][0], dp[len - 1][1]);
+	}
+	//802. Find Eventual Safe States 
+	vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+		vector<int> ans;
+		int N = graph.size();
+		vector<vector<int>> outgoing(N);
+		vector<int> diag(N);
+
+		for (int i = 0; i < N; i++)
+			for (auto j : graph[i])
+			{
+				outgoing[j].push_back(i);
+				diag[i]++;
+			}
+		int d = -1;
+		while (true)
+		{
+			if (d == -1)
+			{
+				for (int i = 0; i < N; i++)
+					if (diag[i] == 0)
+					{
+						d = i;
+						break;
+					}
+			}
+			if (d == -1)
+				break;
+			ans.push_back(d);
+			diag[d] = -1;
+			for (auto j : outgoing[d])
+			{
+				diag[j]--;
+				if (diag[j] == 0)
+					d = j;
+			}
+			d = -1;
+		}
+		sort(ans.begin(), ans.end());
+		return ans;
+	}
+
 };
 int main() {
 	Solution sol;
