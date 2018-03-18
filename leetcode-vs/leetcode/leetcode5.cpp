@@ -19,7 +19,45 @@
 
 using namespace std;
 
+class DSU {
+	vector<int> parent;
+	vector<int> rank;
+	vector<int> sz;
+public:
+	DSU(int N) :parent(N), rank(N), sz(N, 1) {
+		for (int i = 0; i < N; ++i)
+			parent[i] = i;
+	}
 
+	int find(int x) {
+		if (parent[x] != x) parent[x] = find(parent[x]);
+		return parent[x];
+	}
+
+	void Union(int x, int y) {
+		int xr = find(x), yr = find(y);
+		if (xr == yr) return;
+
+		if (rank[xr] < rank[yr]) {
+			int tmp = yr;
+			yr = xr;
+			xr = tmp;
+		}
+		if (rank[xr] == rank[yr])
+			rank[xr]++;
+
+		parent[yr] = xr;
+		sz[xr] += sz[yr];
+	}
+
+	int size(int x) {
+		return sz[find(x)];
+	}
+
+	int top() {
+		return size(sz.size() - 1) - 1;
+	}
+};
 class Trie {
 public:
 	char v;
@@ -699,7 +737,6 @@ public:
 		return ans;
 	}
 
-
 	inline char toChar(int v)
 	{
 		if (v < 10)
@@ -779,9 +816,34 @@ public:
 		}
 		return min(dp[len - 1][0], dp[len - 1][1]);
 	}
+
+	bool dfs_SafeNodes(int u, vector<int> &color, vector<vector<int>> &graph)
+	{
+		if (color[u] != 0)
+			return color[u] == 2;
+		color[u] = 1;
+		for (auto ni : graph[u])
+		{
+			if (color[ni] == 2)
+				continue;
+			if (color[ni] == 1 || !dfs_SafeNodes(ni, color, graph))
+				return false;
+		}
+		color[u] = 2;
+		return true;
+	}
+
+	vector<int> eventualSafeNodes_dfs(vector<vector<int>>& graph) {
+		int N = graph.size();
+		vector<int> color(N), ans;
+		for (int i = 0; i < N; i++)
+			if (dfs_SafeNodes(i, color, graph))
+				ans.push_back(i);
+		return ans;
+	}
+
 	//802. Find Eventual Safe States 
 	vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
-		vector<int> ans;
 		int N = graph.size();
 		vector<vector<int>> outgoing(N);
 		vector<int> diag(N);
@@ -792,40 +854,131 @@ public:
 				outgoing[j].push_back(i);
 				diag[i]++;
 			}
-		int d = -1;
-		while (true)
+		vector<int> q;
+		for (int i = 0; i < N; i++)
+			if (diag[i] == 0)
+				q.push_back(i);
+		while (!q.empty())
 		{
-			if (d == -1)
-			{
-				for (int i = 0; i < N; i++)
-					if (diag[i] == 0)
-					{
-						d = i;
-						break;
-					}
-			}
-			if (d == -1)
-				break;
-			ans.push_back(d);
-			diag[d] = -1;
+			int d = q.back();
+			q.pop_back();
+
 			for (auto j : outgoing[d])
 			{
 				diag[j]--;
 				if (diag[j] == 0)
-					d = j;
+					q.push_back(j);
 			}
-			d = -1;
 		}
-		sort(ans.begin(), ans.end());
+		vector<int> ans;
+		for (int i = 0; i < N; i++)
+			if (diag[i] == 0)
+				ans.push_back(i);
 		return ans;
 	}
 
+	//void dfs_falling(int i, int j, int color, vector<vector<int>> &grid, vector<vector<bool>> &vis, int m, int n)
+	//{
+	//	static int dirs[4][2] = { {0,1},{1,0},{0,-1},{-1,0} };
+	//	vis[i][j] = color;
+	//	for (auto &d : dirs)
+	//	{
+	//		int x = i + d[0], y = j + d[1];
+	//		if (x < 0 || x >= m || y < 0 || y >= n || vis[x][y] != 0 || grid[x][y] == 0)
+	//			continue;
+	//		dfs_falling(x, y, color, grid, vis, m, n);
+	//	}
+	//}
+
+	//int falling(vector<vector<int>> &grid)
+	//{
+	//	int m = grid.size(), n = grid[0].size();
+	//	vector<vector<bool>> vis(m, vector<bool>(n, 0));
+	//	for (int i = 0; i < n; i++)
+	//	{
+	//		if (grid[0][i] == 1 && vis[0][i] == 0)
+	//			dfs_falling(0, i, 1, grid, vis, m, n);
+	//	}
+	//	int ret = 0;
+	//	for (int i = 0; i < m; i++)
+	//		for (int j = 0; j < n; j++)
+	//		{
+	//			if (vis[i][j] == 0 && grid[i][j] != 0)
+	//			{
+	//				ret++;
+	//				grid[i][j] = 0;
+	//			}
+	//		}
+	//	return ret;
+	//}
+
+	//803. Bricks Falling When Hit 
+	vector<int> hitBricks(vector<vector<int>>& grid, vector<vector<int>>& hits) {
+		int R = grid.size(), C = grid[0].size();
+		vector<int> dr = { 1, 0, -1, 0 };
+		vector<int> dc = { 0, 1, 0, -1 };
+
+		vector<vector<int>> A(R, vector<int>(C));
+		for (int r = 0; r < R; ++r)
+			A[r] = grid[r];
+		for (auto hit : hits)
+			A[hit[0]][hit[1]] = 0;
+
+		DSU dsu(R*C + 1);
+		for (int r = 0; r < R; ++r) {
+			for (int c = 0; c < C; ++c) {
+				if (A[r][c] == 1) {
+					int i = r * C + c;
+					if (r == 0)
+						dsu.Union(i, R*C);
+					if (r > 0 && A[r - 1][c] == 1)
+						dsu.Union(i, (r - 1) *C + c);
+					if (c > 0 && A[r][c - 1] == 1)
+						dsu.Union(i, r * C + c - 1);
+				}
+			}
+		}
+		int t = hits.size();
+		vector<int> ans(t--);
+
+		while (t >= 0) {
+			int r = hits[t][0];
+			int c = hits[t][1];
+			int preRoof = dsu.top();
+			if (grid[r][c] == 0) {
+				t--;
+			}
+			else {
+				int i = r * C + c;
+				for (int k = 0; k < 4; ++k) {
+					int nr = r + dr[k];
+					int nc = c + dc[k];
+					if (0 <= nr && nr < R && 0 <= nc && nc < C && A[nr][nc] == 1)
+						dsu.Union(i, nr * C + nc);
+				}
+				if (r == 0)
+					dsu.Union(i, R*C);
+				A[r][c] = 1;
+				ans[t--] = max(0, dsu.top() - preRoof - 1);
+			}
+		}
+		return ans;
+	}
 };
 int main() {
 	Solution sol;
+	vector<vector<int>> grid, hits;
+	grid = { { 1,0,0,0 },{ 1,1,1,0 } };
+	hits = { {1,0} };
+	//grid = { {1,0,0,0},{1,1,0,0} };
+	//hits = { {1,1},{1,0} };
+	auto r = sol.hitBricks(grid, hits);
+	for (auto i : r)
+		cout << i << " ";
+	cout << endl;
 	//cout << sol.champagneTower(1, 1, 1) << endl;
-	vector<int> nums = { 2,3,1,4,0 };
-	cout << sol.bestRotation(nums) << endl;
+	//vector<int> nums = { 2,3,1,4,0 };
+	//cout << sol.bestRotation(nums) << endl;
 	//nums = { 4,1,4,0,0 };
 	//cout << sol.champagneTower(200, 15, 11) << endl;
 	//cout << sol.champagneTower(4, 2, 1) << endl;
