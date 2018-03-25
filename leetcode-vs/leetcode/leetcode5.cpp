@@ -964,18 +964,123 @@ public:
 		}
 		return ans;
 	}
+	//806. Number of Lines To Write String
+	vector<int> numberOfLines(vector<int> &widths, string S) {
+		int curl = 0, curpos = 0;
+		for (auto c : S) {
+			if (curpos + widths[c - 'a'] < 100) {
+				curpos += widths[c - 'a'];
+			}
+			else if (curpos + widths[c - 'a'] == 100) {
+				curl += 1;
+				curpos = 0;
+			}
+			else {
+				curl += 1;
+				curpos = widths[c - 'a'];
+			}
+		}
+		return { curl + 1, curpos };
+	}
+
+	//804. Unique Morse Code Words
+	int uniqueMorseRepresentations(vector<string> &words) {
+		static vector<string> dict = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-",
+			".-..",
+			"--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--",
+			"-..-",
+			"-.--", "--.." };
+		unordered_set<string> ans;
+		for (auto &word : words) {
+			string morse;
+			for (auto c : word) {
+				morse += dict[c - 'a'];
+			}
+			if (!ans.count(morse)) {
+				ans.insert(morse);
+			}
+		}
+		return ans.size();
+	}
+
+	//807. Max Increase to Keep City Skyline
+	int maxIncreaseKeepingSkyline(vector<vector<int>> &grid) {
+		int m = grid.size(), n = grid[0].size();
+		int ans = 0;
+		for (int i = 0; i < m; ++i) {
+			for (int j = 0; j < n; ++j) {
+				int m1 = 0;
+				for (int k = 0; k < n; ++k) {
+					m1 = max(m1, grid[i][k]);
+				}
+				int m2 = 0;
+				for (int k = 0; k < m; ++k) {
+					m2 = max(m2, grid[k][j]);
+				}
+				ans += min(m1, m2) - grid[i][j];
+			}
+		}
+		return ans;
+	}
+
+	bool dfs_805(int len1, int i, int s1, int s, vector<int> &A) {
+		if (i == A.size()) return false;
+		if (len1 > A.size() / 2) {
+			return false;
+		}
+		if (s1 * (A.size() - len1) == (s - s1) * len1) {
+			return true;
+		}
+		return dfs_805(len1, i + 1, s1, s, A) || dfs_805(len1 + 1, i + 1, s1 + A[i], s, A);
+	}
+
+	bool subsetWithk(int i, int ks, int kn, vector<int> &A) {
+		if (ks == 0 && kn == 0) return true;
+		if (kn == 0) return false;
+		for (int j = i; j < A.size(); ++j) {
+			if (A[j] <= ks) {
+				if (subsetWithk(j + 1, ks - A[j], kn - 1, A)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	//805. Split Array With Same Average
+	bool splitArraySameAverage(vector<int> &A) {
+		int s = 0, len = A.size();
+		for (auto ai : A) {
+			s += ai;
+		}
+		for (int k = 1; k <= len / 2; ++k) {
+			if (k * s % len) {
+				continue;
+			}
+			int tk = k * s / len;
+			if (subsetWithk(0, tk, k, A)) {
+				return true;
+			}
+		}
+		return false;
+	}
 };
 int main() {
 	Solution sol;
-	vector<vector<int>> grid, hits;
-	grid = { { 1,0,0,0 },{ 1,1,1,0 } };
-	hits = { {1,0} };
+	vector<int> A;
+	A = { 1, 2, 3, 4, 5, 6, 7, 8,10 };
+	A = { 1, 3,2 };
+	A = { 33,86,88,78,21,76,19,20,88,76,10,25,37,97,58,89,65,59,98,57,50,30,58,5,61,72,23,6 };
+	cout << sol.splitArraySameAverage(A) << endl;
+	//vector<vector<int>> grid, hits;
+	//grid = { { 1,0,0,0 },{ 1,1,1,0 } };
+	//hits = { {1,0} };
 	//grid = { {1,0,0,0},{1,1,0,0} };
 	//hits = { {1,1},{1,0} };
-	auto r = sol.hitBricks(grid, hits);
-	for (auto i : r)
-		cout << i << " ";
-	cout << endl;
+	//auto r = sol.hitBricks(grid, hits);
+	//for (auto i : r)
+	//	cout << i << " ";
+	//cout << endl;
 	//cout << sol.champagneTower(1, 1, 1) << endl;
 	//vector<int> nums = { 2,3,1,4,0 };
 	//cout << sol.bestRotation(nums) << endl;
