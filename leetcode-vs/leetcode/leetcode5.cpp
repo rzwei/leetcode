@@ -1005,19 +1005,22 @@ public:
 
 	//807. Max Increase to Keep City Skyline
 	int maxIncreaseKeepingSkyline(vector<vector<int>> &grid) {
-		int m = grid.size(), n = grid[0].size();
-		int ans = 0;
+		int m = grid.size(), n = grid[0].size(), ans = 0;
+		vector<int> top(n), left(m);
+		for (int i = 0; i < m; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (grid[i][j] > top[j])
+					top[j] = grid[i][j];
+				if (grid[i][j] > left[i])
+					left[i] = grid[i][j];
+			}
+		}
+
 		for (int i = 0; i < m; ++i) {
 			for (int j = 0; j < n; ++j) {
-				int m1 = 0;
-				for (int k = 0; k < n; ++k) {
-					m1 = max(m1, grid[i][k]);
-				}
-				int m2 = 0;
-				for (int k = 0; k < m; ++k) {
-					m2 = max(m2, grid[k][j]);
-				}
-				ans += min(m1, m2) - grid[i][j];
+				ans += min(left[i], top[j]) - grid[i][j];
 			}
 		}
 		return ans;
