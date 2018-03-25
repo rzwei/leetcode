@@ -1026,17 +1026,6 @@ public:
 		return ans;
 	}
 
-	bool dfs_805(int len1, int i, int s1, int s, vector<int> &A) {
-		if (i == A.size()) return false;
-		if (len1 > A.size() / 2) {
-			return false;
-		}
-		if (s1 * (A.size() - len1) == (s - s1) * len1) {
-			return true;
-		}
-		return dfs_805(len1, i + 1, s1, s, A) || dfs_805(len1 + 1, i + 1, s1 + A[i], s, A);
-	}
-
 	bool subsetWithk(int i, int ks, int kn, vector<int> &A) {
 		if (ks == 0 && kn == 0) return true;
 		if (kn == 0) return false;
