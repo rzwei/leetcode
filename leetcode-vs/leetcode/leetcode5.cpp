@@ -1064,6 +1064,111 @@ public:
 		}
 		return false;
 	}
+	//811. Subdomain Visit Count
+	vector<string> subdomainVisits(vector<string> &cpdomains) {
+		unordered_map<string, int> count;
+		for (auto &cpdomain : cpdomains) {
+			int n = 0, i = 0, len = cpdomain.size();
+			while (i < len) {
+				if (isdigit(cpdomain[i])) {
+					n = n * 10 + cpdomain[i] - '0';
+					i++;
+				}
+				else {
+					break;
+				}
+			}
+			int j = len - 1;
+			string sub;
+			while (j > i) {
+				if (cpdomain[j] != '.') {
+					sub = cpdomain[j] + sub;
+				}
+				else {
+					count[sub] += n;
+					sub = "." + sub;
+				}
+				j--;
+			}
+			count[sub] += n;
+		}
+		vector<string> ans;
+		for (auto &p : count) {
+			ans.push_back(to_string(p.second) + " " + p.first);
+		}
+		return ans;
+	}
+	bool match(string &s, string &p)
+	{
+		int lens = s.size(), lenp = p.size(), i = 0, j = 0;
+		while (i < lens && j < lenp)
+		{
+			if (s[i] != p[j]) return false;
+			int t = i, n = 0;
+			while (t < lens && s[i] == s[t])
+			{
+				n++;
+				t++;
+			}
+			int n2 = 0, t2 = j;
+			while (t2 < lenp && p[t2] == p[j])
+			{
+				t2++;
+				n2++;
+			}
+			if (!(n == n2 || n >= 3 && n > n2))
+				return false;
+			if (t == lens)
+			{
+				return t2 == lenp;
+			}
+			j = t2;
+			i = t;
+		}
+		return false;
+	}
+	//809. Expressive Words
+	int expressiveWords(string S, vector<string>& words) {
+		int ans = 0;
+		for (auto &pi : words)
+		{
+			if (match(S, pi))
+				ans++;
+		}
+		return ans;
+	}
+	//810. Chalkboard XOR Game
+	bool xorGame(vector<int>& nums) {
+		int n = 0;
+		for (auto &i : nums)
+			n ^= i;
+		if (n == 0) return true;
+		return nums.size() % 2 == 0;
+	}
+	function<unsigned long(const pair<int, int> &)> hasFun = [](const pair<int, int> &a) {
+		return a.first * 101 + a.second;
+	};
+	double emptyA(int na, int nb, unordered_map<pair<int, int>, double, decltype(hasFun)> &memo)
+	{
+		if (na <= 0 && nb <= 0) return 0.5;
+		if (na <= 0) return 1;
+		if (nb <= 0) return 0;
+		auto key = make_pair(na, nb);
+		if (memo.count(key)) return memo[key];
+		double ans = 0;
+		ans += emptyA(na - 100, nb, memo);
+		ans += emptyA(na - 75, nb - 25, memo);
+		ans += emptyA(na - 50, nb - 50, memo);
+		ans += emptyA(na - 25, nb - 75, memo);
+		ans *= .25;
+		memo[key] = ans;
+		return ans;
+	}
+	//808. Soup Servings
+	double soupServings(int N) {
+		unordered_map<pair<int, int>, double, decltype(hasFun)> memo(0, hasFun);
+		return emptyA(N, N, memo);
+	}
 };
 int main() {
 	Solution sol;
