@@ -1005,33 +1005,25 @@ public:
 
 	//807. Max Increase to Keep City Skyline
 	int maxIncreaseKeepingSkyline(vector<vector<int>> &grid) {
-		int m = grid.size(), n = grid[0].size();
-		int ans = 0;
+		int m = grid.size(), n = grid[0].size(), ans = 0;
+		vector<int> top(n), left(m);
+		for (int i = 0; i < m; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (grid[i][j] > top[j])
+					top[j] = grid[i][j];
+				if (grid[i][j] > left[i])
+					left[i] = grid[i][j];
+			}
+		}
+
 		for (int i = 0; i < m; ++i) {
 			for (int j = 0; j < n; ++j) {
-				int m1 = 0;
-				for (int k = 0; k < n; ++k) {
-					m1 = max(m1, grid[i][k]);
-				}
-				int m2 = 0;
-				for (int k = 0; k < m; ++k) {
-					m2 = max(m2, grid[k][j]);
-				}
-				ans += min(m1, m2) - grid[i][j];
+				ans += min(left[i], top[j]) - grid[i][j];
 			}
 		}
 		return ans;
-	}
-
-	bool dfs_805(int len1, int i, int s1, int s, vector<int> &A) {
-		if (i == A.size()) return false;
-		if (len1 > A.size() / 2) {
-			return false;
-		}
-		if (s1 * (A.size() - len1) == (s - s1) * len1) {
-			return true;
-		}
-		return dfs_805(len1, i + 1, s1, s, A) || dfs_805(len1 + 1, i + 1, s1 + A[i], s, A);
 	}
 
 	bool subsetWithk(int i, int ks, int kn, vector<int> &A) {
