@@ -1205,7 +1205,7 @@ public:
                 dp[i][k] = dp[i][k - 1];
                 for (int j = 1; j <= i; ++j) {
                     dp[i][k] = max(dp[i][k],
-                                   (j - 1 >= 0 ? dp[j - 1][k - 1] : 0)
+                                   dp[j - 1][k - 1]
                                    + double(sums[i + 1] - sums[j]) / (i - j + 1));
                 }
             }
@@ -1270,10 +1270,13 @@ public:
 
 int main() {
     Solution sol;
-    vector<vector<int>> routes;
-    routes = {{1, 2, 7},
-              {3, 6, 7}};
-    cout << sol.numBusesToDestination(routes, 1, 6) << endl;
+    vector<int> nums;
+    nums = {1, 2, 3, 4, 5, 6, 7};
+    cout << sol.largestSumOfAverages(nums, 4) << endl;
+//    vector<vector<int>> routes;
+//    routes = {{1, 2, 7},
+//              {3, 6, 7}};
+//    cout << sol.numBusesToDestination(routes, 1, 6) << endl;
 //    vector<int> A;
 //    A = {1, 2, 3, 4, 5, 6, 7, 8, 10};
 //    A = {1, 3, 2};

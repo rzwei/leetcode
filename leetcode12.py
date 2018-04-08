@@ -386,7 +386,7 @@ class Solution:
                 i = right + 1
                 ans += 1
         return ans
-    
+
     def reorganizeString(self, S):
         """
         :type S: str
@@ -424,6 +424,19 @@ class Solution:
                     return ""
 
         return ''.join(ret)
+
+    def subdomainVisits(self, cpdomains):
+        """
+        :type cpdomains: List[str]
+        :rtype: List[str]
+        """
+        d = {}
+        ans = []
+        for cpdomain in cpdomains:
+            tokens = cpdomain.split(' ')
+            count = int(tokens[0])
+            domain = tokens[1]
+
 
 
 if __name__ == '__main__':
