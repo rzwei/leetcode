@@ -1266,6 +1266,183 @@ public:
         }
         return -1;
     }
+
+    //819. Most Common Word
+    string mostCommonWord(string paragraph, vector<string> &banned) {
+        unordered_set<string> ban(banned.begin(), banned.end());
+        unordered_map<string, int> d;
+        int len = paragraph.size();
+        string s;
+        int i = 0;
+        while (i < len) {
+            while (i < len && !isalpha(paragraph[i])) {
+                i += 1;
+            }
+            while (i < len && isalpha(paragraph[i])) {
+                s.push_back(tolower(paragraph[i++]));
+            }
+            if (!s.empty()) {
+                d[s] += 1;
+                s.clear();
+            }
+        }
+        string ans;
+        int v = 0;
+        for (auto &p:d) {
+            if (!ban.count(p.first) && p.second > v) {
+                v = p.second;
+                ans = p.first;
+            }
+        }
+        return ans;
+    }
+
+    //817. Linked List Components
+    int numComponents(ListNode *head, vector<int> &G) {
+        unordered_set<int> vis(G.begin(), G.end());
+        auto p = head;
+        int ans = 0;
+        while (p) {
+            if (vis.count(p->val)) {
+                while (p && vis.count(p->val)) {
+                    vis.erase(p->val);
+                    p = p->next;
+                }
+                ans += 1;
+                if (!p) break;
+            } else {
+                p = p->next;
+            }
+        }
+        return ans;
+    }
+
+    bool verfiy(string &s) {
+        int nc = 0, len = s.size(), ni = -1;
+        for (int i = 0; i < len; ++i) {
+            if (s[i] == '.') {
+                nc++;
+                ni = i;
+                break;
+            }
+        }
+        if (nc == 1) {
+            string l = s.substr(0, ni), r = s.substr(ni + 1);
+            if (l.empty() || r.empty()) return false;
+            try {
+                int vl = stoi(l), vr = stoi(r);
+                if (vl == 0 && vr == 0) return false;
+                if (l.size() > 1 && l[0] == '0') return false;
+                return r.back() != '0';
+            }
+            catch (std::invalid_argument &) {
+                return false;
+            }
+        } else if (nc == 0) {
+            try {
+                return to_string(stoi(s)) == s;
+            }
+            catch (std::invalid_argument &) {
+                return false;
+            }
+        }
+    }
+
+    vector<string> addpoint(string s) {
+        int len = s.size();
+        vector<string> ans;
+        for (int i = 1; i < len; ++i) {
+            string t = s;
+            t.insert(t.begin() + i, '.');
+            if (verfiy(t)) {
+                ans.push_back(t);
+            }
+        }
+        return ans;
+    }
+
+    //816. Ambiguous Coordinates
+    vector<string> ambiguousCoordinates(string S) {
+        vector<string> ans;
+        S = S.substr(1, S.size() - 2);
+        int len = S.size();
+        for (string::size_type l = 1; l <= len - 1; ++l) {
+            string le = S.substr(0, l), ri = S.substr(l);
+            vector<string> ls, rs;
+            if (verfiy(le)) {
+                ls.push_back(le);
+            }
+            if (verfiy(ri)) {
+                rs.push_back(ri);
+            }
+            for (auto &s : addpoint(le)) {
+                ls.push_back(s);
+            }
+            for (auto &s : addpoint(ri)) {
+                rs.push_back(s);
+            }
+            for (auto ll : ls) {
+                for (auto rr : rs) {
+                    ans.push_back("(" + ll + ", " + rr + ')');
+                }
+            }
+        }
+        return ans;
+    }
+
+    class State {
+    public:
+        State(int cur_, int speed_) : cur(cur_), speed(speed_) {}
+
+        int cur;
+        int speed;
+
+        bool operator==(const State &p) const {
+            return p.cur == cur && p.speed == speed;
+        }
+    };
+
+    class Statehash {
+    public:
+        std::size_t operator()(const State p1) const {
+            return p1.cur * 101 + p1.speed;
+        }
+    };
+
+    //818. Race Car
+    int racecar(int target) {
+        if (target == 0) return 0;
+        unordered_set<State, Statehash> vis;
+        deque<State> q;
+        q.push_back(State(0, 1));
+        vis.insert(State(0, 1));
+        int ans = 0;
+        while (!q.empty()) {
+            int size = q.size();
+            while (size--) {
+                auto cur = q.front().cur, speed = q.front().speed;
+                q.pop_front();
+//                cout << cur << " " << speed << endl;
+                if (cur == target) {
+                    return ans;
+                }
+                int nc = cur + speed, ns = speed * 2;
+
+                State p1(nc, ns), p2(cur, speed > 0 ? -1 : 1);
+
+                if (!vis.count(p1)) {
+                    q.push_back(p1);
+//                    vis.insert(p1);
+                }
+                if (!vis.count(p2)) {
+                    vis.insert(p2);
+                    q.push_back(p2);
+                }
+            }
+            ans += 1;
+        }
+        return -1;
+    }
 };
 
 int main() {
