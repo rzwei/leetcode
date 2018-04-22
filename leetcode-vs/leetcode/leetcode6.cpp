@@ -32,18 +32,22 @@ public:
                 idx.push_back(i);
             }
         }
-        vector<int> ans(len);
+        vector<int> ans(len, INT_MAX);
+        int j = 0;
         for (int i = 0; i < len; ++i) {
-            auto it = upper_bound(idx.begin(), idx.end(), i);
-            if (it == idx.end()) {
-                ans[i] = abs(idx.back() - i);
-            } else {
-                int t = abs(*it - i);
-                while (it != idx.begin() && *it > i)
-                    --it;
-                t = min(t, abs(i - *it));
-                ans[i] = t;
+            if (i > idx[j]) {
+                if (j < idx.size() - 1)
+                    j += 1;
             }
+            ans[i] = abs(idx[j] - i);
+        }
+        j = idx.size() - 1;
+        for (int i = len - 1; i >= 0; --i) {
+            if (i < idx[j]) {
+                if (j > 0)
+                    j -= 1;
+            }
+            ans[i] = min(ans[i], abs(i - idx[j]));
         }
         return ans;
     }
