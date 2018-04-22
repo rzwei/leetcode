@@ -1404,7 +1404,7 @@ public:
 
     class Statehash {
     public:
-        std::size_t operator()(const State p1) const {
+        std::size_t operator()(const State &p1) const {
             return p1.cur * 101 + p1.speed;
         }
     };
