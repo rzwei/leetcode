@@ -425,18 +425,40 @@ class Solution:
 
         return ''.join(ret)
 
-    def subdomainVisits(self, cpdomains):
-        """
-        :type cpdomains: List[str]
-        :rtype: List[str]
-        """
-        d = {}
-        ans = []
-        for cpdomain in cpdomains:
-            tokens = cpdomain.split(' ')
-            count = int(tokens[0])
-            domain = tokens[1]
+    def isEmail(self, s):
+        if '@' not in s or '.' not in s:
+            return False
+        return True
 
+    def maskPII(self, S):
+        """
+        :type S: str
+        :rtype: str
+        # 831. Masking Personal Information
+        """
+        if self.isEmail(S):
+            tokens = S.split('@')
+            name1 = tokens[0]
+            name2, name3 = tokens[1].split('.')
+            name1 = str.lower(name1)
+            name2 = str.lower(name2)
+            name3 = str.lower(name3)
+            newName1 = name1[0] + '*' * 5 + name1[-1]
+            return newName1 + '@' + name2 + '.' + name3
+        n = 0
+        last = ''
+        country = 0
+        for c in reversed(S):
+            if str.isdigit(c):
+                n += 1
+                if n <= 4:
+                    last = c + last
+                elif n > 10:
+                    country += 1
+        local = '***-***-' + last
+        if country:
+            local = '+' + '*' * country + '-' + local
+        return local
 
 
 if __name__ == '__main__':

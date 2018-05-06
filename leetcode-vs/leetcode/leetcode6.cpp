@@ -274,6 +274,68 @@ public:
         }
         return ans;
     }
+
+    //830. Positions of Large Groups
+    vector<vector<int>> largeGroupPositions(string S) {
+        int last = -1, len = S.size(), cnt = 0, lasti = -1;
+        vector<vector<int>> ans;
+        for (int i = 0; i <= len; ++i) {
+            if (i == len || S[i] != last) {
+                if (cnt >= 3)
+                    ans.push_back({lasti, i - 1});
+                last = S[i];
+                lasti = i;
+                cnt = 1;
+            } else {
+                cnt += 1;
+            }
+        }
+        return ans;
+    }
+
+    //829. Consecutive Numbers Sum
+    int consecutiveNumbersSum(int N) {
+        int x = N, ans = 0;;
+        for (int i = 1; 2 * x > (i - 1) * i; ++i) {
+            long long a2 = 2 * x / i - i + 1;
+            long long a = a2 / 2;
+            if ((a * i + (i - 1) * i / 2) == x) {
+                ans += 1;
+            }
+        }
+        return ans;
+    }
+
+    //828. Unique Letter String
+    int uniqueLetterString(string S) {
+        unordered_set<char> letters;
+        for (auto c : S)
+            letters.insert(c);
+        int ans = 0;
+        int const mod = 1e9 + 7;
+        int len = S.size();
+        for (auto c : letters) {
+            int cnt0 = 0, cnt1 = 0, i = 0;
+            while (i < len && S[i] != c) {
+                cnt0 += 1;
+                ++i;
+            }
+            cnt0 += 1;
+            i += 1;
+            cnt1 = 1;
+
+            for (; i <= len; ++i) {
+                if (i == len || S[i] == c) {
+                    ans = (ans + cnt0 % mod * cnt1 % mod) % mod;
+                    cnt0 = cnt1;
+                    cnt1 = 1;
+                } else {
+                    cnt1 += 1;
+                }
+            }
+        }
+        return ans;
+    }
 };
 
 int main() {
