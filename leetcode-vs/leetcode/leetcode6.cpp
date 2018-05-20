@@ -20,6 +20,45 @@
 #include <cmath>
 
 using namespace std;
+class DSU {
+	vector<int> parent;
+	vector<int> rank;
+	vector<int> sz;
+public:
+	DSU(int N) : parent(N), rank(N), sz(N, 1) {
+		for (int i = 0; i < N; ++i)
+			parent[i] = i;
+	}
+
+	int find(int x) {
+		if (parent[x] != x) parent[x] = find(parent[x]);
+		return parent[x];
+	}
+
+	void Union(int x, int y) {
+		int xr = find(x), yr = find(y);
+		if (xr == yr) return;
+
+		if (rank[xr] < rank[yr]) {
+			int tmp = yr;
+			yr = xr;
+			xr = tmp;
+		}
+		if (rank[xr] == rank[yr])
+			rank[xr]++;
+
+		parent[yr] = xr;
+		sz[xr] += sz[yr];
+	}
+
+	int size(int x) {
+		return sz[find(x)];
+	}
+
+	int top() {
+		return size(sz.size() - 1) - 1;
+	}
+};
 
 class Solution {
 public:
@@ -461,8 +500,103 @@ public:
 				dfs2(i, seen, n, tree, count, res);
 			};
 	}
+	//836. Rectangle Overlap
+	bool isRectangleOverlap(vector<int>& rec1, vector<int>& rec2) {
+		int xl = max(rec1[0], rec2[0]), yl = max(rec1[1], rec2[1]);
+		int xr = min(rec1[2], rec2[2]), yr = min(rec1[3], rec2[3]);
+		return xl < xr && yl < yr;
+	}
+	//838. Push Dominoes
+	string pushDominoes(string dominoes) {
+		int len = dominoes.size();
+		vector<int> lefts(len, -1), rights(len, -1);
+		int last = -1;
+		for (int i = 0; i < len; ++i)
+		{
+			if (dominoes[i] == 'R')
+				last = i;
+			else if (dominoes[i] == '.')
+				rights[i] = last;
+			else if (dominoes[i] == 'L')
+				last = -1;
+		}
+		last = -1;
+		for (int i = len - 1; i >= 0; --i)
+		{
+			if (dominoes[i] == 'L')
+				last = i;
+			else if (dominoes[i] == '.')
+				lefts[i] = last;
+			else if (dominoes[i] == 'R')
+				last = -1;
+		}
+		string ans = dominoes;
+		for (int i = 0; i < len; ++i)
+		{
+			if (dominoes[i] != '.') continue;
+			int l = lefts[i], r = rights[i];
+			if (l == -1 && r == -1) continue;
+			if (l != -1 && r == -1)
+			{
+				ans[i] = 'L';
+			}
+			else if (l == -1 && r != -1)
+			{
+				ans[i] = 'R';
+			}
+			else if (l != -1 && r != -1)
+			{
+				if (i - r == l - i) continue;
+				if (i - r > l - i) ans[i] = 'L';
+				else ans[i] = 'R';
+			}
+		}
+		return ans;
+	}
+	bool check(string &a, string &b)
+	{
+		int f = 0;
+		for (int i = 0; i < a.size(); ++i)
+			if (a[i] != b[i]) f++;
+		return f <= 2;
+	}
+	//839. Similar String Groups
+	int numSimilarGroups(vector<string>& A) {
+		int len = A.size();
+		DSU dsu(A.size());
+		for (int i = 0; i < len; ++i)
+		{
+			for (int j = i + 1; j < len; ++j)
+			{
+				if (check(A[i], A[j]))
+				{
+					dsu.Union(i, j);
+				}
+			}
+		}
+		int ans = 0;
+		for (int i = 0; i < len; ++i)
+			if (dsu.find(i) == i) ans++;
+		return ans;
+	}
+	//837. New 21 Game
+	double new21Game(int N, int K, int W) {
+		if (K == 0) return 1.0;
+		vector<double> dp(N + W + 1);
+		for (int i = K; i <= N; ++i)
+			dp[i] = 1;
+		double S = min(N - K + 1, W);
+		for (int k = K - 1; k >= 0; --k)
+		{
+			dp[k] = S / W;
+			S += dp[k] - dp[k + W];
+		}
+		return dp[0];
+	}
 };
 
 int main() {
+	Solution sol;
+	cout << sol.new21Game(21, 17, 10) << endl;
 	return 0;
 }
