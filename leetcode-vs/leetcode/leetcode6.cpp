@@ -20,6 +20,24 @@
 #include <cmath>
 
 using namespace std;
+
+class Master {
+public:
+	int getmatch(string &a, string &b) {
+		int len = a.size();
+		int ans = 0;
+		for (int i = 0; i < len; ++i)
+		{
+			if (a[i] == b[i]) ans++;
+		}
+		return ans;
+	}
+	string ss = "acckzz";
+	int guess(string word) {
+		if (word == ss) cout << "find" << endl;
+		return getmatch(ss, word);
+	};
+};
 class DSU {
 	vector<int> parent;
 	vector<int> rank;
@@ -593,6 +611,184 @@ public:
 		}
 		return dp[0];
 	}
+
+	bool vaild(vector<vector<int>> &grid)
+	{
+		vector<int> vis(9);
+		int n = 3, s = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			s += grid[i][0];
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			int t = 0;
+			for (int j = 0; j < n; ++j)
+			{
+				t += grid[i][j];
+
+				if (grid[i][j] <= 0 || grid[i][j] > 9)
+					return false;
+				if (vis[grid[i][j] - 1]) return false;
+				vis[grid[i][j] - 1] = 1;
+			}
+			if (t != s) return false;
+			t = 0;
+			for (int j = 0; j < n; ++j)
+			{
+				t += grid[j][i];
+			}
+			if (t != s) return false;
+		}
+		int a = 0, b = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			a += grid[i][i];
+			b += grid[i][n - 1 - i];
+		}
+		if (a != s || b != s) return false;
+		return true;
+	}
+	//840. Magic Squares In Grid
+	int numMagicSquaresInside(vector<vector<int>>& grid) {
+		if (grid.empty()) return 0;
+		int  m = grid.size(), n = grid[0].size();
+		if (m < 3 || n < 3) return 0;
+		int ans = 0;
+		for (int i = 0; i <= m - 3; ++i)
+			for (int j = 0; j <= n - 3; ++j)
+			{
+				vector<vector<int>> tmp(3, vector<int>(3));
+				for (int ii = 0; ii < 3; ++ii)
+				{
+					for (int jj = 0; jj < 3; ++jj)
+					{
+						tmp[ii][jj] = grid[ii + i][jj + j];
+					}
+				}
+				if (vaild(tmp))
+					ans++;
+			}
+		return ans;
+	}
+	//0 white 1 gray 2 black
+	void dfs(int u, vector<int> &color, vector<vector<int>> &rooms)
+	{
+		if (color[u] == 2) return;
+		if (color[u] == 1) return;
+		color[u] = 1;
+		for (int v : rooms[u])
+		{
+			dfs(v, color, rooms);
+		}
+		color[u] = 2;
+	}
+	//841. Keys and Rooms
+	bool canVisitAllRooms(vector<vector<int>>& rooms) {
+		int n = rooms.size();
+		vector<int> vis(n);
+		dfs(0, vis, rooms);
+		for (int i = 0; i < n; ++i)
+		{
+			if (vis[i] == 0)
+				return false;
+		}
+		return true;
+	}
+
+	typedef long long ll;
+	bool judge(int s, ll pre, string &num, vector<int> &path)
+	{
+		int len = num.size();
+		for (int j = s; j <= len; ++j)
+		{
+			if (num[s] == '0' && j > s) break;
+			ll nv = stoll(num.substr(s, j - s + 1));
+			if (nv > INT_MAX) break;
+			ll nans = nv + pre;
+			string ns = to_string(nans);
+			int jj = 0;
+			for (int k = j + 1; k < len; ++k)
+			{
+				if (ns[jj] != num[k]) break;
+				++jj;
+				if (jj == ns.size()) break;
+			}
+			if (jj == ns.size())
+			{
+				path.push_back(nv);
+				if (j + jj + 1 == num.size())
+				{
+					ll xxx = stoll(num.substr(j + 1, jj));
+					if (xxx > INT_MAX) {
+						path.pop_back();
+						return false;
+					}
+					path.push_back(xxx);
+					return true;
+				}
+				if (judge(j + 1, nv, num, path))
+					return true;
+				path.pop_back();
+			}
+		}
+		return false;
+	}
+	//842. Split Array into Fibonacci Sequence
+	vector<int> splitIntoFibonacci(string num) {
+		ll pre = 0, len = num.size();
+		vector<int> path;
+		for (int i = 0; i < len - 1; ++i)
+		{
+			if (num[0] == '0' && i > 0) break;
+
+			pre = pre * 10 + num[i] - '0';
+			if (pre > INT_MAX) break;
+
+			path.push_back(pre);
+			if (judge(i + 1, pre, num, path))
+				return path;
+			path.pop_back();
+		}
+		return {};
+	}
+
+	int getmatch(string &a, string &b) {
+		int len = a.size();
+		int ans = 0;
+		for (int i = 0; i < len; ++i)
+		{
+			if (a[i] == b[i]) ans++;
+		}
+		return ans;
+	}
+	//843. Guess the Word
+	void findSecretWord(vector<string>& wordlist, Master& master) {
+		int len = wordlist.size();
+		vector<int> valid(len);
+		for (int i = 0; i < len; ++i)
+			valid[i] = i;
+		int cnt = 0;
+		while (true && !valid.empty())
+		{
+			vector<int> next;
+			int idx = valid[rand() % valid.size()];
+			int match = master.guess(wordlist[idx]);
+			if (match == 6) return;
+			for (int nx : valid)
+			{
+				if (nx != idx)
+				{
+					if (getmatch(wordlist[idx], wordlist[nx]) == match)
+						next.push_back(nx);
+				}
+			}
+			valid = next;
+			cnt++;
+			if (cnt > 10) break;
+		}
+	}
+
 };
 
 int main() {
