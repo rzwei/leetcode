@@ -789,7 +789,7 @@ public:
 			if (cnt > 10) break;
 		}
 	}
-
+	//844. Backspace String Compare
 	bool backspaceCompare(string S, string T) {
 		vector<char>a, b;
 		for (char c : S)
@@ -812,6 +812,7 @@ public:
 		}
 		return a == b;
 	}
+	//845. Longest Mountain in Array
 	int longestMountain(vector<int>& A) {
 		int len = A.size();
 		vector<int>a(len, 1), b(len, 1);
@@ -835,6 +836,7 @@ public:
 		}
 		return ans < 3 ? 0 : ans;
 	}
+	//846. Hand of Straights
 	bool isNStraightHand(vector<int>& hand, int W) {
 		if (hand.size() % W) return false;
 		priority_queue<int, vector<int>, greater<int>> pq(hand.begin(), hand.end());
@@ -867,9 +869,10 @@ public:
 		}
 		return true;
 	}
+
+	//847. Shortest Path Visiting All Nodes
 	int maxn = INT_MAX / 10;
-	map<pair<unsigned long, int>, int> memo;
-	int dfs(int u, vector<vector<int>> &G, bitset<13> &vis) {
+	int dfs(int u, vector<vector<int>> &G, bitset<13> &vis, map<pair<unsigned long, int>, int> &memo) {
 		int n = G.size();
 		auto key = make_pair(vis.to_ulong(), u);
 		if (memo.count(key)) return memo[key];
@@ -881,7 +884,7 @@ public:
 			{
 				f = 0;
 				vis[v] = 1;
-				ans = min(ans, dfs(v, G, vis) + G[u][v]);
+				ans = min(ans, dfs(v, G, vis, memo) + G[u][v]);
 				vis[v] = 0;
 			}
 		}
@@ -905,14 +908,19 @@ public:
 		int ans = maxn;
 		bitset<13> vis;
 		vis[0] = 1;
-		dfs(0, G, vis);
+		map<pair<unsigned long, int>, int> memo;
+		dfs(0, G, vis, memo);
 		for (int i = 0; i < n; ++i)
 		{
 			bitset<13> tmp;
 			tmp[i] = 1;
-			ans = min(ans, dfs(i, G, tmp));
+			ans = min(ans, dfs(i, G, tmp, memo));
 		}
 		return ans;
+	}
+	int shortestPathLength_dp()
+	{
+
 	}
 };
 
