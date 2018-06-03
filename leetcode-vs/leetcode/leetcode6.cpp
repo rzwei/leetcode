@@ -830,9 +830,10 @@ public:
 		int ans = 0;
 		for (int i = 0; i < len; ++i)
 		{
-			ans = max(ans, a[i] + b[i] - 1);
+			if (a[i] != 1 && b[i] != 1)
+				ans = max(ans, a[i] + b[i] - 1);
 		}
-		return ans;
+		return ans < 3 ? 0 : ans;
 	}
 	bool isNStraightHand(vector<int>& hand, int W) {
 		if (hand.size() % W) return false;
