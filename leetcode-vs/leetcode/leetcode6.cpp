@@ -947,6 +947,37 @@ public:
 			ans = min(ans, e);
 		return ans;
 	}
+	int shortestPathLength_bfs(vector<vector<int>>& g) {
+		int n = g.size();
+		int const maxn = INT_MAX / 8;
+		typedef pair<int, int> ii;
+		queue<ii>q;
+		vector<vector<int>> dp(1 << n, vector<int>(n, maxn));
+		for (int i = 0; i < n; ++i)
+		{
+			dp[1 << i][i] = 0;
+			q.emplace(1 << i, i);
+		}
+		while (!q.empty())
+		{
+			int mask = q.front().first;
+			int u = q.front().second;
+			q.pop();
+			for (int v : g[u])
+			{
+				int nx_mask = mask | (1 << v);
+				if (dp[nx_mask][v] != maxn) continue;
+				dp[nx_mask][v] = dp[mask][u] + 1;
+				q.emplace(nx_mask, v);
+			}
+		}
+		int res = maxn;
+		for (int i = 0; i < n; ++i)
+		{
+			res = min(res, dp[(1 << n) - 1][i]);
+		}
+		return res;
+	}
 };
 
 int main() {
