@@ -2,6 +2,7 @@
 // Created by rzhon on 18/4/22.
 //
 #include "headers.h"
+#include <bitset>
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -789,6 +790,127 @@ public:
 		}
 	}
 
+	bool backspaceCompare(string S, string T) {
+		vector<char>a, b;
+		for (char c : S)
+		{
+			if (c == '#')
+			{
+				if (!a.empty()) a.pop_back();
+			}
+			else
+				a.push_back(c);
+		}
+		for (char c : T)
+		{
+			if (c == '#')
+			{
+				if (!b.empty()) b.pop_back();
+			}
+			else
+				b.push_back(c);
+		}
+		return a == b;
+	}
+	int longestMountain(vector<int>& A) {
+		int len = A.size();
+		vector<int>a(len, 1), b(len, 1);
+		for (int i = 1; i < len; ++i)
+		{
+			if (A[i] > A[i - 1])
+				a[i] += a[i - 1];
+		}
+
+		for (int i = len - 2; i >= 0; --i)
+		{
+			if (A[i] > A[i + 1])
+				b[i] += b[i + 1];
+		}
+
+		int ans = 0;
+		for (int i = 0; i < len; ++i)
+		{
+			ans = max(ans, a[i] + b[i] - 1);
+		}
+		return ans;
+	}
+	bool isNStraightHand(vector<int>& hand, int W) {
+		if (hand.size() % W) return false;
+		priority_queue<int, vector<int>, greater<int>> pq(hand.begin(), hand.end());
+		for (int i = 0; i < hand.size() / W; ++i)
+		{
+			vector<int> tmp, a;
+			for (int j = 0; j < W; ++j)
+			{
+				if (tmp.empty())
+				{
+					int v = pq.top();
+					pq.pop();
+					tmp.push_back(v);
+				}
+				else {
+					while (!pq.empty() && pq.top() != tmp.back() + 1)
+					{
+						a.push_back(pq.top());
+						pq.pop();
+					}
+					if (!pq.empty() && pq.top() == tmp.back() + 1)
+					{
+						tmp.push_back(pq.top());
+						pq.pop();
+					}
+					else return false;
+				}
+			}
+			for (int e : a)pq.push(e);
+		}
+		return true;
+	}
+	int maxn = INT_MAX / 10;
+	map<pair<unsigned long, int>, int> memo;
+	int dfs(int u, vector<vector<int>> &G, bitset<13> &vis) {
+		int n = G.size();
+		auto key = make_pair(vis.to_ulong(), u);
+		if (memo.count(key)) return memo[key];
+		int ans = maxn;
+		int f = 1;
+		for (int v = 0; v < n; ++v)
+		{
+			if (!vis[v])
+			{
+				f = 0;
+				vis[v] = 1;
+				ans = min(ans, dfs(v, G, vis) + G[u][v]);
+				vis[v] = 0;
+			}
+		}
+		if (f) ans = 0;
+		memo[key] = ans;
+		return ans;
+	}
+	int shortestPathLength(vector<vector<int>>& graph) {
+		int n = graph.size();
+		vector<vector<int>> G(n, vector<int>(n, 1e7));
+		for (int i = 0; i < n; ++i)
+		{
+			G[i][i] = 0;
+			for (int j : graph[i])
+				G[i][j] = 1;
+		}
+		for (int k = 0; k < n; ++k)
+			for (int i = 0; i < n; ++i)
+				for (int j = 0; j < n; ++j)
+					G[i][j] = min(G[i][j], G[i][k] + G[k][j]);
+		int ans = maxn;
+		for (int i = 0; i < n; ++i)
+		{
+			bitset<13> vis;
+			vis[i] = 1;
+			memo.clear();
+			ans = min(ans, dfs(i, G, vis));
+		}
+		return ans;
+	}
 };
 
 int main() {
