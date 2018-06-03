@@ -903,12 +903,14 @@ public:
 				for (int j = 0; j < n; ++j)
 					G[i][j] = min(G[i][j], G[i][k] + G[k][j]);
 		int ans = maxn;
+		bitset<13> vis;
+		vis[0] = 1;
+		dfs(0, G, vis);
 		for (int i = 0; i < n; ++i)
 		{
-			bitset<13> vis;
-			vis[i] = 1;
-			memo.clear();
-			ans = min(ans, dfs(i, G, vis));
+			bitset<13> tmp;
+			tmp[i] = 1;
+			ans = min(ans, dfs(i, G, tmp));
 		}
 		return ans;
 	}
