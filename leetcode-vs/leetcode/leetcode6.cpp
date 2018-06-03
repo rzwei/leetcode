@@ -872,24 +872,23 @@ public:
 
 	//847. Shortest Path Visiting All Nodes
 	int maxn = INT_MAX / 10;
-	int dfs(int u, vector<vector<int>> &G, bitset<13> &vis, map<pair<unsigned long, int>, int> &memo) {
+	int dfs(int u, bitset<13> &s, const vector<vector<int>> &G, vector<vector<int>> &memo) {
 		int n = G.size();
-		auto key = make_pair(vis.to_ulong(), u);
-		if (memo.count(key)) return memo[key];
-		int ans = maxn;
+		int &ans = memo[s.to_ulong()][u];
+		if (ans != -1) return ans;
+		ans = maxn;
 		int f = 1;
 		for (int v = 0; v < n; ++v)
 		{
-			if (!vis[v])
+			if (s[v] == 0)
 			{
 				f = 0;
-				vis[v] = 1;
-				ans = min(ans, dfs(v, G, vis, memo) + G[u][v]);
-				vis[v] = 0;
+				s[v] = 1;
+				ans = min(ans, dfs(v, s, G, memo) + G[u][v]);
+				s[v] = 0;
 			}
 		}
 		if (f) ans = 0;
-		memo[key] = ans;
 		return ans;
 	}
 	int shortestPathLength(vector<vector<int>>& graph) {
@@ -906,26 +905,55 @@ public:
 				for (int j = 0; j < n; ++j)
 					G[i][j] = min(G[i][j], G[i][k] + G[k][j]);
 		int ans = maxn;
-		bitset<13> vis;
-		vis[0] = 1;
-		map<pair<unsigned long, int>, int> memo;
-		dfs(0, G, vis, memo);
+		vector<vector<int>> memo(1 << n, vector<int>(n, -1));
 		for (int i = 0; i < n; ++i)
 		{
-			bitset<13> tmp;
-			tmp[i] = 1;
-			ans = min(ans, dfs(i, G, tmp, memo));
+			bitset<13> vis;
+			vis[i] = 1;
+			ans = min(ans, dfs(i, vis, G, memo));
 		}
 		return ans;
 	}
-	int shortestPathLength_dp()
+	int shortestPathLength_dp(vector<vector<int>>& graph)
 	{
-
+		int const maxn = INT_MAX / 10;
+		int n = graph.size();
+		vector<vector<int>> dp(1 << n, vector<int>(n, maxn));
+		for (int x = 0; x < n; ++x)
+			dp[1 << x][x] = 0;
+		for (int s = 0; s < (1 << n); ++s)
+		{
+			bool repeat = true;
+			while (repeat)
+			{
+				repeat = false;
+				for (int u = 0; u < n; ++u)
+				{
+					int d = dp[s][u];
+					for (int v : graph[u])
+					{
+						int ns = s | (1 << v);
+						if (d + 1 < dp[ns][v])
+						{
+							dp[ns][v] = d + 1;
+							if (s == ns) repeat = true;
+						}
+					}
+				}
+			}
+		}
+		int ans = maxn;
+		for (int e : dp[(1 << n) - 1])
+			ans = min(ans, e);
+		return ans;
 	}
 };
 
 int main() {
 	Solution sol;
-	cout << sol.new21Game(21, 17, 10) << endl;
+	vector<vector<int>> G;
+	G = { { 1 },{ 0,2,4 },{ 1,3,4 },{ 2 },{ 1,2 } };
+	cout << sol.shortestPathLength(G) << endl;
+	//cout << sol.new21Game(21, 17, 10) << endl;
 	return 0;
 }
