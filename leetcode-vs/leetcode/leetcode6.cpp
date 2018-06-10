@@ -978,6 +978,120 @@ public:
 		}
 		return res;
 	}
+	//848. Shifting Letters
+	string shiftingLetters(string s, vector<int>& a) {
+		int n = a.size();
+		for (int i = n - 2; i >= 0; --i)
+		{
+			a[i] = (a[i] + a[i + 1]) % 26;
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			s[i] = (s[i] - 'a' + a[i]) % 26 + 'a';
+		}
+		return s;
+	}
+	//849. Maximize Distance to Closest Person
+	int maxDistToClosest(vector<int>& a) {
+		int n = a.size();
+		vector<int> right(n);
+		int last = 1000000;
+		for (int i = n - 1; i >= 0; --i)
+		{
+			if (a[i] == 1) last = i;
+			else right[i] = last;
+		}
+		int last = -1000000;
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (a[i] == 0)
+			{
+				ans = max(ans, min(i - last, right[i] - i));
+			}
+			else last = i;
+		}
+		return ans;
+	}
+
+	int dfs_851(int u, vector<int> &q, vector<vector<int>> &g, vector<bool> &vis, vector<int> &ans)
+	{
+		if (vis[u]) return ans[u];
+		vis[u] = 1;
+		if (g[u].empty())
+		{
+			ans[u] = u;
+			return u;
+		}
+		int low = u;
+		for (int v : g[u])
+		{
+			int nv = dfs_851(v, q, g, vis, ans);
+			if (q[low] > q[nv])
+			{
+				low = nv;
+			}
+		}
+		ans[u] = low;
+		return low;
+	}
+	//851. Loud and Rich
+	vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+		int n = quiet.size();
+		vector<vector<int>> g(n);
+		for (auto &e : richer)
+		{
+			int u = e[0], v = e[1];
+			g[v].push_back(u);
+		}
+		vector<bool>vis(n);
+		vector<int> ans(n);
+		for (int i = 0; i < n; ++i)
+			ans[i] = i;
+		for (int i = 0; i < n; ++i)
+		{
+			dfs_851(i, quiet, g, vis, ans);
+		}
+		return ans;
+	}
+	//850. Rectangle Area II
+	int rectangleArea(vector<vector<int>>& a) {
+		typedef long long int64;
+		const ll mod = 1e9 + 7;
+		int n = a.size();
+		vector<int> X, Y;
+		for (int i = 0; i < n; ++i) {
+			X.push_back(a[i][0]);
+			X.push_back(a[i][2]);
+			Y.push_back(a[i][1]);
+			Y.push_back(a[i][3]);
+		}
+		sort(X.begin(), X.end());
+		X.erase(unique(X.begin(), X.end()), X.end());
+		sort(Y.begin(), Y.end());
+		Y.erase(unique(Y.begin(), Y.end()), Y.end());
+		vector<vector<bool>> visit(X.size(), vector<bool>(Y.size()));
+		for (int i = 0; i < n; ++i) {
+			int x1 = lower_bound(X.begin(), X.end(), a[i][0]) - X.begin();
+			int x2 = lower_bound(X.begin(), X.end(), a[i][2]) - X.begin();
+			int y1 = lower_bound(Y.begin(), Y.end(), a[i][1]) - Y.begin();
+			int y2 = lower_bound(Y.begin(), Y.end(), a[i][3]) - Y.begin();
+			for (int u = x1; u < x2; ++u) {
+				for (int v = y1; v < y2; ++v) {
+					visit[u][v] = true;
+				}
+			}
+		}
+		int ret = 0;
+		for (int i = 0; i < X.size(); ++i) {
+			for (int j = 0; j < Y.size(); ++j) {
+				if (visit[i][j]) {
+					ret = (ret + (int64)(X[i + 1] - X[i]) * (Y[j + 1] - Y[j])) % mod;
+				}
+			}
+		}
+		return ret;
+	}
 };
 
 int main() {
