@@ -1256,6 +1256,160 @@ public:
 		}
 		return res;
 	}
+
+	//860. Lemonade Change
+	bool lemonadeChange(vector<int>& bills) {
+		int a = 0, b = 0, c = 0;
+		for (int e : bills)
+		{
+			if (e == 5) a++;
+			else if (e == 10) {
+				if (a == 0) return false;
+				a--;
+				b++;
+			}
+			else if (e == 20)
+			{
+				if (b && a) {
+					b--;
+					a--;
+				}
+				else {
+					if (a >= 3)
+					{
+						a -= 3;
+					}
+					else
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	void dfs_862(TreeNode *cur, vector<vector<int>> &g)
+	{
+		if (!cur) return;
+		if (cur->left)
+		{
+			g[cur->val].push_back(cur->left->val);
+			g[cur->left->val].push_back(cur->val);
+			dfs_862(cur->left, g);
+		}
+		if (cur->right)
+		{
+			g[cur->val].push_back(cur->right->val);
+			g[cur->right->val].push_back(cur->val);
+			dfs_862(cur->right, g);
+		}
+	}
+	//862. Shortest Subarray with Sum at Least K
+	vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+		vector<int> ans;
+		if (K == 0) return { target->val };
+		vector<vector<int>> g(101);
+		dfs_862(root, g);
+		queue<int> q;
+		q.push(target->val);
+		vector<bool> vis(101);
+		vis[target->val] = 1;
+		while (K)
+		{
+			K--;
+			int size = q.size();
+			while (size--)
+			{
+				auto u = q.front();
+				q.pop();
+				for (auto v : g[u])
+				{
+					if (!vis[v])
+					{
+						q.push(v);
+						vis[v] = 1;
+					}
+				}
+			}
+		}
+		while (!q.empty())
+		{
+			ans.push_back(q.front());
+			q.pop();
+		}
+		return ans;
+	}
+	//861. Score After Flipping Matrix
+	int matrixScore(vector<vector<int>>& a) {
+		int n = a.size(), m = a[0].size();
+		for (int i = 0; i < n; ++i)
+		{
+			if (a[i][0] == 0)
+			{
+				for (int j = 0; j < m; ++j)
+				{
+					a[i][j] ^= 1;
+				}
+			}
+		}
+
+		for (int j = 1; j < m; ++j)
+		{
+			int cnt = 0;
+			for (int i = 0; i < n; ++i)
+			{
+				cnt += a[i][j];
+			}
+			if (cnt <= n / 2)
+			{
+				for (int i = 0; i < n; ++i)
+				{
+					a[i][j] ^= 1;
+				}
+			}
+		}
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			int t = 0;
+			for (int j = 0; j < m; ++j)
+			{
+				t = t * 2 + a[i][j];
+			}
+			ans += t;
+		}
+		return ans;
+	}
+
+	//862. Shortest Subarray with Sum at Least K
+	int shortestSubarray(vector<int>& A, int K) {
+		int n = A.size();
+		vector<pair<int, long long> > all;
+		all.push_back(make_pair(0, 0LL));
+		long long sum = 0LL;
+		int answer = -1;
+		for (int i = 1; i <= A.size(); ++i) {
+			sum += A[i - 1];
+			while (!all.empty() && all.back().second >= sum) {
+				all.pop_back();
+			}
+			int left = 0, right = all.size() - 1;
+			while (left <= right) {
+				int mid = (left + right >> 1);
+				if (sum - all[mid].second >= K) {
+					left = mid + 1;
+					int may = i - all[mid].first;
+					if (answer < 0 || answer > may) {
+						answer = may;
+					}
+				}
+				else {
+					right = mid - 1;
+				}
+			}
+			all.push_back(make_pair(i, sum));
+		}
+		return answer;
+	}
 };
 
 int main() {
