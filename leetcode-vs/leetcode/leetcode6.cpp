@@ -1410,6 +1410,30 @@ public:
 		}
 		return answer;
 	}
+	int shortestSubarray_sliding_window(vector<int>& A, int K) {
+		int n = A.size();
+		vector<long long> sums(n + 1);
+		for (int i = 1; i <= n; ++i)
+		{
+			sums[i] = sums[i - 1] + A[i - 1];
+		}
+		int ans = n + 1;
+		deque<int> q;
+		for (int i = 0; i < n + 1; ++i)
+		{
+			while (!q.empty() && sums[i] <= sums[q.back()])
+			{
+				q.pop_back();
+			}
+			while (!q.empty() && sums[i] >= sums[q.front()] + K)
+			{
+				ans = min(ans, i - q.front());
+				q.pop_front();
+			}
+			q.push_back(i);
+		}
+		return ans == n + 1 ? -1 : ans;
+	}
 };
 
 int main() {
