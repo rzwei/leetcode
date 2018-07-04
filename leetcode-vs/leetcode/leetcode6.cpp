@@ -1351,7 +1351,6 @@ public:
 				}
 			}
 		}
-
 		for (int j = 1; j < m; ++j)
 		{
 			int cnt = 0;
@@ -1434,6 +1433,52 @@ public:
 		}
 		return ans == n + 1 ? -1 : ans;
 	}
+
+
+	bool check(vector<int> &nums, int k, double avg)
+	{
+		double sum = 0;
+		for (int i = 0; i < k; ++i)
+		{
+			sum += nums[i] - avg;
+		}
+		if (sum >= 0) return true;
+		double minv = 0;
+		double pre = 0;
+		for (int i = k; i < nums.size(); ++i)
+		{
+			sum += nums[i] - avg;
+			pre += nums[i - k] - avg;
+			minv = min(minv, pre);
+			if (sum >= minv) return true;
+		}
+		return false;
+	}
+
+	//644. Maximum Average Subarray II
+	double findMaxAverage(vector<int> nums, int k) {
+		int mi = INT_MAX, mx = INT_MIN;
+		for (int e : nums)
+		{
+			mi = min(mi, e);
+			mx = max(mx, e);
+		}
+		double l = mi, r = mx;
+		while (fabs(r - l) > 1e-7)
+		{
+			double m = (l + r) / 2;
+			if (check(nums, k, m))
+			{
+				l = m;
+			}
+			else {
+				r = m;
+			}
+		}
+		return l;
+	}
+
+
 };
 
 int main() {
