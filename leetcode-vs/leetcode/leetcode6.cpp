@@ -1478,6 +1478,31 @@ public:
 		return l;
 	}
 
+	//864. Random Pick with Blacklist
+	Solution() {}
+	unordered_map<int, int> a;
+	int n, m;
+	Solution(int N, vector<int> blacklist) :n(N) {
+		int s = 0, i = 0, len = blacklist.size();
+		m = n - blacklist.size();
+		for (int e : blacklist) a[e] = -1;
+		for (int e : blacklist)
+		{
+			if (e < m)
+			{
+				while (a.count(N - 1)) N--;
+				a[e] = N - 1;
+				N--;
+			}
+		}
+	}
+
+	int pick() {
+		int idx = rand() % m;
+		if (a.count(idx)) return a[idx];
+		return idx;
+	}
+
 
 };
 
