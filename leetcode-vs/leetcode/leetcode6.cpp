@@ -82,6 +82,100 @@ public:
 	}
 };
 
+//865. Shortest Path to Get All Keys
+//class State {
+//public:
+//	int x, y;
+//	int k;
+//	bool operator ==(State &a) { return x == a.x && y == a.y && k == a.k; }
+//	State() :k(0) {  }
+//	State(int x_, int y_) :x(x_), y(y_), k(0) { }
+//};
+//int h(const State &a)
+//{
+//	return (a.x << 12) + (a.y << 6) + a.k;
+//}
+//bool operator<(const State &a, const State &b)
+//{
+//	return h(a) < h(b);
+//}
+//class Solution {
+//public:
+//	int shortestPathAllKeys(vector<string>& g) {
+//		int n = g.size(), m = g[0].size();
+//		int sx = 0, sy = 0;
+//		int keyc = 0;
+//		for (int i = 0; i < n; ++i)
+//			for (int j = 0; j < m; ++j)
+//			{
+//				if (g[i][j] == '@')
+//				{
+//					sx = i;
+//					sy = j;
+//				}
+//				else if (islower(g[i][j]))
+//					keyc |= (1 << (g[i][j] - 'a'));
+//			}
+//		queue<State> q;
+//		q.push(State(sx, sy));
+//		vector<vector<int>> dirs = { { 0,1 },{ 0,-1 },{ 1,0 },{ -1,0 } };
+//		set<State> vis;
+//		int ans = 0;
+//		while (!q.empty())
+//		{
+//			int size = q.size();
+//			ans++;
+//			while (size--)
+//			{
+//				auto cur = q.front();
+//				q.pop();
+//				int x = cur.x, y = cur.y;
+//				//cout << x << " " << y << " " << cur.k << endl;
+//				for (auto &d : dirs)
+//				{
+//					int nx = x + d[0], ny = y + d[1];
+//					if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] != '#')
+//					{
+//						if (islower(g[nx][ny]))
+//						{
+//							State next(nx, ny);
+//							next.k = cur.k;
+//							next.k = cur.k | (1 << (g[nx][ny] - 'a'));
+//							if (next.k == keyc) return ans;
+//							if (!vis.count(next)) {
+//								vis.insert(next);
+//								q.push(next);
+//							}
+//						}
+//						else if (isupper(g[nx][ny]))
+//						{
+//							if (cur.k & (1 << (g[nx][ny] - 'A')))
+//							{
+//								State next(nx, ny);
+//								next.k = cur.k;
+//								if (!vis.count(next))
+//								{
+//									vis.insert(next);
+//									q.push(next);
+//								}
+//							}
+//						}
+//						else {
+//							State next(nx, ny);
+//							next.k = cur.k;
+//							if (!vis.count(next)) {
+//								vis.insert(next);
+//								q.push(next);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return -1;
+//	}
+//};
+
 class Solution {
 public:
 	//821. Shortest Distance to a Character
@@ -1647,7 +1741,6 @@ public:
 		}
 		return -1;
 	}
-
 };
 
 int main() {
