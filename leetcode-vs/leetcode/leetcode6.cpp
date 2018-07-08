@@ -1502,7 +1502,151 @@ public:
 		if (a.count(idx)) return a[idx];
 		return idx;
 	}
+	//868. Transpose Matrix
+	vector<vector<int>> transpose(vector<vector<int>>& A) {
+		int n = A.size(), m = A[0].size();
+		vector<vector<int>> ans(m, vector<int>(n));
 
+		int ii = 0, jj = 0;
+		for (int i = 0; i < m; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				ans[i][j] = A[ii][jj];
+				if (++ii >= n) { ii = 0; jj++; }
+			}
+		}
+		return ans;
+	}
+
+	//866. Smallest Subtree with all the Deepest Nodes
+	int getdep(TreeNode *cur)
+	{
+		if (!cur) return 0;
+		return max(getdep(cur->left), getdep(cur->right)) + 1;
+	}
+	TreeNode *getNode(TreeNode *cur, int dep, int maxdep)
+	{
+		if (!cur) return nullptr;
+		if (!cur->left && !cur->right)
+		{
+			if (dep == maxdep)
+				return cur;
+			else {
+				return nullptr;
+			}
+		}
+		auto l = getNode(cur->left, dep + 1, maxdep);
+		auto r = getNode(cur->right, dep + 1, maxdep);
+		if (l && r) return cur;
+		return l ? l : r;
+	}
+	TreeNode* subtreeWithAllDeepest(TreeNode* root) {
+		int maxdep = getdep(root);
+		return getNode(root, 0, maxdep);
+	}
+
+	int func(int n)
+	{
+		int res = n / 10;
+		while (n)
+		{
+			res = res * 10 + n % 10;
+			n /= 10;
+		}
+		return res;
+	}
+	int is_prime(int n)
+	{
+		if (n <= 1) {
+			return 0;
+		}
+		if (n == 2)
+			return 1;
+		int i;
+		int k = sqrt(n);
+		for (i = 2; i <= k; i++)
+		{
+			if (n%i == 0)
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+	//867. Prime Palindrome
+	int primePalindrome(int N) {
+		if (N < 12)
+		{
+			for (int i = N; i < 12; ++i)
+			{
+				if (is_prime(i)) return i;
+			}
+		}
+		for (int i = 10; i <= 1000000; i++)
+		{
+			int x;
+			x = func(i);
+			if (x >= N && is_prime(x) == 1) {
+				return x;
+			}
+		}
+	}
+
+	//865. Shortest Path to Get All Keys
+	int shortestPathAllKeys(vector<string>& g) {
+		int n = g.size(), m = g[0].size();
+		vector<vector<vector<int>>> ts(n, vector<vector<int>>(m, vector<int>(1 << 6, -1)));
+		int all = 0, x, y;
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < m; ++j)
+			{
+				if (islower(g[i][j]))
+				{
+					all |= (1 << g[i][j] - 'a');
+				}
+				if (g[i][j] == '@')
+				{
+					x = i;
+					y = j;
+				}
+			}
+		int ds[][2] = { { 0,1 } ,{ 0,-1 },{ 1,0 },{ -1,0 } };
+		queue<int> q;
+		q.push((x << 12) + (y << 6) + 0);
+		while (!q.empty())
+		{
+			int cur = q.front();
+			q.pop();
+			x = cur >> 12;
+			y = (cur >> 6) & 0x3f;
+			int k = cur & 0x3f;
+			for (int d = 0; d < 4; ++d)
+			{
+				int nx = x + ds[d][0], ny = y + ds[d][1];
+				if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+				char ch = g[nx][ny];
+				if (ch == '#') continue;
+				if ('A' <= ch && ch <= 'Z')
+				{
+					int x = 1 << (ch - 'A');
+					if (!(k & x)) continue;
+				}
+				int k1 = k;
+				if ('a' <= ch && ch <= 'z')
+				{
+					k1 |= (1 << (ch - 'a'));
+				}
+				if (ts[nx][ny][k1] < 0)
+				{
+					ts[nx][ny][k1] = ts[x][y][k] + 1;
+					if (k == all) return ts[nx][ny][k1];
+					q.push((nx << 12) + (ny << 6) + k1);
+				}
+			}
+		}
+		return -1;
+	}
 
 };
 
