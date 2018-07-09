@@ -130,43 +130,27 @@ public:
 //				auto cur = q.front();
 //				q.pop();
 //				int x = cur.x, y = cur.y;
-//				//cout << x << " " << y << " " << cur.k << endl;
+//				cout << x << " " << y << " " << cur.k << endl;
 //				for (auto &d : dirs)
 //				{
 //					int nx = x + d[0], ny = y + d[1];
+//					State next(nx, ny);
+//					next.k = cur.k;
 //					if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] != '#')
 //					{
 //						if (islower(g[nx][ny]))
 //						{
-//							State next(nx, ny);
-//							next.k = cur.k;
-//							next.k = cur.k | (1 << (g[nx][ny] - 'a'));
+//							next.k |= (1 << (g[nx][ny] - 'a'));
 //							if (next.k == keyc) return ans;
-//							if (!vis.count(next)) {
-//								vis.insert(next);
-//								q.push(next);
-//							}
 //						}
 //						else if (isupper(g[nx][ny]))
 //						{
-//							if (cur.k & (1 << (g[nx][ny] - 'A')))
-//							{
-//								State next(nx, ny);
-//								next.k = cur.k;
-//								if (!vis.count(next))
-//								{
-//									vis.insert(next);
-//									q.push(next);
-//								}
-//							}
+//							if (!(cur.k & (1 << (g[nx][ny] - 'A'))))
+//								continue;
 //						}
-//						else {
-//							State next(nx, ny);
-//							next.k = cur.k;
-//							if (!vis.count(next)) {
-//								vis.insert(next);
-//								q.push(next);
-//							}
+//						if (!vis.count(next)) {
+//							vis.insert(next);
+//							q.push(next);
 //						}
 //					}
 //				}
