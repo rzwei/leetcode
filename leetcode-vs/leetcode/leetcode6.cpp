@@ -1624,7 +1624,7 @@ public:
 		if (!cur) return nullptr;
 		if (!cur->left && !cur->right)
 		{
-			if (dep == maxdep)
+			if (dep + 1 == maxdep)
 				return cur;
 			else {
 				return nullptr;
