@@ -1556,7 +1556,7 @@ public:
 		return l;
 	}
 
-	//864. Random Pick with Blacklist
+	//710. Random Pick with Blacklist
 	Solution() {}
 	unordered_map<int, int> a;
 	int n, m;
