@@ -1,4 +1,5 @@
 //#include "stdafx.h"
+#include <bitset>
 #include "headers.h"
 #include <sstream>
 #include <functional>
@@ -18,6 +19,7 @@
 #include <cmath>
 
 using namespace std;
+typedef long long ll;
 
 //703. Kth Largest Element in a Stream
 class KthLargest {
@@ -129,6 +131,100 @@ public:
 		else
 			root->right = insertIntoBST(root->right, val);
 		return root;
+	}
+	//868. Binary Gap 
+	int binaryGap(int N) {
+		bitset<32> b(N);
+		int ans = 0;
+		int last = 0;
+
+		for (int i = 0; i < 32; ++i)
+		{
+			if (b[i] == 1)
+			{
+				if (last == -1)
+				{
+					last = i;
+				}
+				else {
+					ans = max(ans, i - last);
+					last = i;
+				}
+			}
+		}
+		return ans;
+	}
+	//869. Reordered Power of 2 
+	bool reorderedPowerOf2(int N) {
+		auto p = to_string(N);
+		vector<int> d(10);
+		for (char c : p)
+			d[c - '0']++;
+
+		for (int i = 1; i < 1e9; i <<= 1)
+		{
+			auto s = to_string(i);
+			vector<int> d2(10);
+			for (char c : s)
+			{
+				d2[c - '0']++;
+			}
+			if (d == d2)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	//870. Advantage Shuffle 
+	vector<int> advantageCount(vector<int>& a, vector<int>& b) {
+		int len = a.size();
+		multiset<int> sa(a.begin(), a.end());
+		vector<int> ans(len);
+
+		vector<pair<int, int>>bb(len);
+		for (int i = 0; i < len; ++i)
+		{
+			bb[i].first = b[i];
+			bb[i].second = i;
+		}
+		sort(bb.begin(), bb.end());
+
+		for (int i = 0; i < len; ++i)
+		{
+			auto idx = bb[i].second;
+			int v = bb[i].first;
+			auto it = sa.upper_bound(v);
+			if (it == sa.end())
+			{
+				it = sa.begin();
+			}
+			ans[idx] = *it;
+			sa.erase(it);
+		}
+		return ans;
+	}
+	//871. Minimum Number of Refueling Stops 
+	int minRefuelStops(int t, int sf, vector<vector<int>>& st) {
+		priority_queue<int> pq;
+		ll ans = 0, cur = 0, tank = sf;
+		st.push_back({ t,0 });
+		for (int i = 0; i < st.size(); ++i)
+		{
+			ll dist = st[i][0] - cur;
+			while (dist > tank)
+			{
+				if (pq.empty()) return -1;
+				auto tmp = pq.top();
+				pq.pop();
+				tank += tmp;
+				ans++;
+			}
+			tank -= dist;
+			cur = st[i][0];
+			pq.push(st[i][1]);
+		}
+		return ans;
 	}
 };
 
