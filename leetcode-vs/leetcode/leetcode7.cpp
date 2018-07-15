@@ -113,7 +113,6 @@ public:
 			s[i].erase(it);
 	}
 };
-
 //707. Design Linked List
 class MyLinkedList {
 public:
@@ -195,7 +194,7 @@ public:
 	int binaryGap(int N) {
 		bitset<32> b(N);
 		int ans = 0;
-		int last = 0;
+		int last = -1;
 
 		for (int i = 0; i < 32; ++i)
 		{
