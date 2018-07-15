@@ -114,6 +114,65 @@ public:
 	}
 };
 
+//707. Design Linked List
+class MyLinkedList {
+public:
+	list<int> nums;
+	/** Initialize your data structure here. */
+	MyLinkedList() {
+
+	}
+
+	/** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
+	int get(int index) {
+		if (index >= nums.size()) return -1;
+		auto it = getidx(index);
+		return *it;
+	}
+
+
+	/** Add a node of value val before the first element of the linked list.
+	After the insertion, the new node will be the first node of the linked list. */
+	void addAtHead(int val) {
+		nums.push_front(val);
+	}
+
+	/** Append a node of value val to the last element of the linked list. */
+	void addAtTail(int val) {
+		nums.push_back(val);
+	}
+
+	/** Add a node of value val before the index-th node in the linked list.
+	If index equals to the length of linked list, the node will be appended to the end of linked list.
+	If index is greater than the length, the node will not be inserted. */
+	void addAtIndex(int index, int val) {
+		if (index > nums.size()) return;
+		if (index == nums.size())
+		{
+			nums.push_back(val);
+			return;
+		}
+		auto it = getidx(index);
+		nums.insert(it, val);
+	}
+	list<int>::iterator getidx(int idx)
+	{
+		auto it = nums.begin();
+		while (idx)
+		{
+			it++;
+			idx--;
+		}
+		return it;
+	}
+	/** Delete the index-th node in the linked list, if the index is valid. */
+	void deleteAtIndex(int index) {
+		if (index >= nums.size()) return;
+		auto it = getidx(index);
+		nums.erase(it);
+	}
+};
+
 class Solution {
 public:
 	//700. Search in a Binary Search Tree
