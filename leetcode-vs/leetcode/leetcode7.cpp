@@ -284,6 +284,24 @@ public:
 		}
 		return ans;
 	}
+
+	//872. Implement Rand10() Using Rand7()
+	int rand7() {
+		return rand() % 7 + 1;
+	}
+	int rand10() {
+		int d;
+		while ((d = rand7()) == 4);
+		if (d < 4)
+		{
+			while (((d = rand7()) > 5));
+			return d;
+		}
+		else {
+			while (((d = rand7()) > 5));
+			return d + 5;
+		}
+	}
 };
 
 int main()
