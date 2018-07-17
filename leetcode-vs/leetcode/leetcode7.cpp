@@ -190,6 +190,26 @@ public:
 			root->right = insertIntoBST(root->right, val);
 		return root;
 	}
+
+	//704. Binary Search
+	int search(vector<int>& nums, int target) {
+		int l = 0, r = nums.size() - 1;
+		while (l <= r)
+		{
+			int m = (l + r) / 2;
+			if (nums[m] == target) return m;
+			else if (nums[m] < target) l = m + 1;
+			else r = m - 1;
+		}
+		return -1;
+	}
+
+	//709. To Lower Case
+	string toLowerCase(string str) {
+		for (char &c : str) c = tolower(c);
+		return str;
+	}
+
 	//868. Binary Gap 
 	int binaryGap(int N) {
 		bitset<32> b(N);
@@ -302,6 +322,8 @@ public:
 			return d + 5;
 		}
 	}
+
+
 };
 
 int main()
