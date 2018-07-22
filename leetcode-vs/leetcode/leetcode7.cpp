@@ -350,9 +350,7 @@ public:
 			idx[ob[0]].insert(ob[1]);
 			idx2[ob[1]].insert(ob[0]);
 		}
-
 		int d = 0;
-		//sort(obs.begin(), obs.end());
 		int x = 0, y = 0;
 		int ans = 0;
 		for (int c : cmds)
@@ -440,7 +438,7 @@ public:
 		}
 		return ans <= H;
 	}
-
+	//875. Koko Eating Bananas 
 	int minEatingSpeed(vector<int>& a, int H) {
 		int l = 1, r = INT_MIN;
 		for (int e : a) r = max(r, e);
@@ -464,8 +462,8 @@ public:
 			return it - a.begin();
 		return -1;
 	}
+	//873. Length of Longest Fibonacci Subsequence 
 	int lenLongestFibSubseq(vector<int>& A) {
-		//multiset<int> s(A.begin(), A.end());
 		int ans = 0, n = A.size();
 		for (int i = 0; i < n; ++i)
 		{
@@ -487,7 +485,6 @@ public:
 		}
 		return ans;
 	}
-
 };
 
 int main()
