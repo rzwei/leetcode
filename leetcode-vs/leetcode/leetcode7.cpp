@@ -323,6 +323,170 @@ public:
 		}
 	}
 
+	void getleaf(TreeNode *root, vector<int> &a)
+	{
+		if (!root) return;
+		if (!root->left && !root->right) {
+			a.push_back(root->val);
+			return;
+		}
+		getleaf(root->left, a);
+		getleaf(root->right, a);
+	}
+	//872. Leaf-Similar Trees 
+	bool leafSimilar(TreeNode* root1, TreeNode* root2) {
+		vector<int> a, b;
+		getleaf(root1, a);
+		getleaf(root2, b);
+		return a == b;
+	}
+	//874. Walking Robot Simulation 
+	int robotSim(vector<int>& cmds, vector<vector<int>>& obs) {
+		vector<vector<int>> dirs = { { 0,1 },{ 1,0 },{ 0,-1 },{ -1,0 } };
+
+		map<int, set<int>> idx, idx2;
+		for (auto ob : obs)
+		{
+			idx[ob[0]].insert(ob[1]);
+			idx2[ob[1]].insert(ob[0]);
+		}
+
+		int d = 0;
+		//sort(obs.begin(), obs.end());
+		int x = 0, y = 0;
+		int ans = 0;
+		for (int c : cmds)
+		{
+			if (c == -2) {
+				d = (d - 1 + 4) % 4;
+			}
+			else if (c == -1) {
+				d = (d + 1) % 4;
+			}
+			else {
+				int nx = x + dirs[d][0] * c, ny = y + dirs[d][1] * c;
+				if (nx == x) {
+					if (idx.count(x))
+					{
+						auto it = idx[x].lower_bound(y);
+						int l, r;
+						if (it == idx[x].begin())
+						{
+							l = INT_MIN;
+						}
+						else {
+							l = *(--it);
+							++it;
+						}
+						if (it == idx[x].end())
+						{
+							r = INT_MAX;
+						}
+						else {
+							r = *it;
+						}
+						if (dirs[d][1] > 0)
+						{
+							ny = min(ny, r - 1);
+						}
+						else {
+							ny = max(ny, l + 1);
+						}
+					}
+				}
+				else if (ny == y)
+				{
+					if (idx2.count(y))
+					{
+						auto it = idx2[y].lower_bound(x);
+						int l, r;
+						if (it == idx2[y].begin())
+						{
+							l = INT_MIN;
+						}
+						else {
+							l = *(--it);
+							++it;
+						}
+						if (it == idx2[y].end())
+						{
+							r = INT_MAX;
+						}
+						else {
+							r = *it;
+						}
+						if (dirs[d][0] > 0)
+						{
+							nx = min(nx, r - 1);
+						}
+						else {
+							nx = max(nx, l + 1);
+						}
+					}
+				}
+				ans = max(ans, nx * nx + ny * ny);
+				x = nx, y = ny;
+			}
+		}
+		return ans;
+	}
+
+	bool check(vector<int> &a, int k, int H)
+	{
+		int ans = 0;
+		for (int e : a)
+		{
+			ans += ceil(double(e) / k);
+		}
+		return ans <= H;
+	}
+
+	int minEatingSpeed(vector<int>& a, int H) {
+		int l = 1, r = INT_MIN;
+		for (int e : a) r = max(r, e);
+		while (l < r)
+		{
+			int m = l + (r - l) / 2;
+			if (check(a, m, H))
+				r = m;
+			else
+				l = m + 1;
+		}
+		return l;
+	}
+
+	int find(vector<int> &a, int s, int v)
+	{
+		if (s == a.size()) return -1;
+		auto it = lower_bound(a.begin() + s, a.end(), v);
+		if (it == a.end()) return -1;
+		if (*it == v)
+			return it - a.begin();
+		return -1;
+	}
+	int lenLongestFibSubseq(vector<int>& A) {
+		//multiset<int> s(A.begin(), A.end());
+		int ans = 0, n = A.size();
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = i + 1; j < n; ++j)
+			{
+				ll a = A[i], b = A[j];
+				ll c = a + b;
+				int len = 2;
+				int f = j + 1;
+				while ((f = find(A, f, c)) != -1) {
+					len++;
+					a = b;
+					b = c;
+					c = a + b;
+				}
+				if (len > 2)
+					ans = max(ans, len);
+			}
+		}
+		return ans;
+	}
 
 };
 
