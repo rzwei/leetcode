@@ -340,8 +340,37 @@ public:
 		getleaf(root2, b);
 		return a == b;
 	}
+
 	//874. Walking Robot Simulation 
 	int robotSim(vector<int>& cmds, vector<vector<int>>& obs) {
+		vector<vector<int>> dirs = { { 0,1 },{ 1,0 },{ 0,-1 },{ -1,0 } };
+		set<pair<int, int>> s;
+		for (auto &e : obs)
+			s.insert({ e[0],e[1] });
+		int d = 0;
+		int x = 0, y = 0;
+		int ans = 0;
+		for (int c : cmds)
+		{
+			if (c == -2) {
+				d = (d - 1 + 4) % 4;
+			}
+			else if (c == -1) {
+				d = (d + 1) % 4;
+			}
+			else {
+				for (int i = 0; i < c; ++i)
+				{
+					int nx = x + dirs[d][0], ny = y + dirs[d][1];
+					if (s.count({ nx,ny })) break;
+					x = nx, y = ny;
+				}
+				ans = max(ans, x*x + y * y);
+			}
+		}
+		return ans;
+	}
+	int robotSim2(vector<int>& cmds, vector<vector<int>>& obs) {
 		vector<vector<int>> dirs = { { 0,1 },{ 1,0 },{ 0,-1 },{ -1,0 } };
 
 		map<int, set<int>> idx, idx2;
@@ -350,6 +379,7 @@ public:
 			idx[ob[0]].insert(ob[1]);
 			idx2[ob[1]].insert(ob[0]);
 		}
+
 		int d = 0;
 		int x = 0, y = 0;
 		int ans = 0;
@@ -369,27 +399,20 @@ public:
 						auto it = idx[x].lower_bound(y);
 						int l, r;
 						if (it == idx[x].begin())
-						{
 							l = INT_MIN;
-						}
-						else {
+						else
+						{
 							l = *(--it);
 							++it;
 						}
 						if (it == idx[x].end())
-						{
 							r = INT_MAX;
-						}
-						else {
+						else
 							r = *it;
-						}
 						if (dirs[d][1] > 0)
-						{
 							ny = min(ny, r - 1);
-						}
-						else {
+						else
 							ny = max(ny, l + 1);
-						}
 					}
 				}
 				else if (ny == y)
@@ -399,27 +422,20 @@ public:
 						auto it = idx2[y].lower_bound(x);
 						int l, r;
 						if (it == idx2[y].begin())
-						{
 							l = INT_MIN;
-						}
-						else {
+						else
+						{
 							l = *(--it);
 							++it;
 						}
 						if (it == idx2[y].end())
-						{
 							r = INT_MAX;
-						}
-						else {
+						else
 							r = *it;
-						}
 						if (dirs[d][0] > 0)
-						{
 							nx = min(nx, r - 1);
-						}
-						else {
+						else
 							nx = max(nx, l + 1);
-						}
 					}
 				}
 				ans = max(ans, nx * nx + ny * ny);
@@ -429,7 +445,7 @@ public:
 		return ans;
 	}
 
-	bool check(vector<int> &a, int k, int H)
+	bool check_875(vector<int> &a, int k, int H)
 	{
 		int ans = 0;
 		for (int e : a)
@@ -445,7 +461,7 @@ public:
 		while (l < r)
 		{
 			int m = l + (r - l) / 2;
-			if (check(a, m, H))
+			if (check_875(a, m, H))
 				r = m;
 			else
 				l = m + 1;
@@ -465,24 +481,45 @@ public:
 	//873. Length of Longest Fibonacci Subsequence 
 	int lenLongestFibSubseq(vector<int>& A) {
 		int ans = 0, n = A.size();
+		vector<vector<int>> dp(n, vector<int>(n));
+		map<int, int> idx;
 		for (int i = 0; i < n; ++i)
-		{
-			for (int j = i + 1; j < n; ++j)
+			idx[A[i]] = i;
+
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < i; ++i)
 			{
-				ll a = A[i], b = A[j];
-				ll c = a + b;
-				int len = 2;
-				int f = j + 1;
-				while ((f = find(A, f, c)) != -1) {
-					len++;
-					a = b;
-					b = c;
-					c = a + b;
+				dp[j][i] = 2;
+				if (idx.count(A[i] - A[j]))
+				{
+					int k = idx[A[i] - A[j]];
+					dp[j][i] = max(dp[j][i], dp[k][j] + 1);
 				}
-				if (len > 2)
-					ans = max(ans, len);
+				ans = max(ans, dp[j][i]);
 			}
-		}
+		if (ans <= 2) return 0;
+		return ans;
+	}
+	int lenLongestFibSubseq2(vector<int>& A)
+	{
+		int ans = 0, n = A.size();
+		vector<vector<int>> dp(n, vector<int>(n));
+		map<int, int> idx;
+		for (int i = 0; i < n; ++i)
+			idx[A[i]] = i;
+
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < i; ++j)
+			{
+				dp[j][i] = 2;
+				if (idx.count(A[i] - A[j]))
+				{
+					int k = idx[A[i] - A[j]];
+					dp[j][i] = max(dp[j][i], dp[k][j] + 1);
+				}
+				ans = max(ans, dp[j][i]);
+			}
+		if (ans <= 2) return 0;
 		return ans;
 	}
 };
