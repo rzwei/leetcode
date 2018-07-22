@@ -511,13 +511,13 @@ public:
 		for (int i = 0; i < n; ++i)
 			for (int j = 0; j < i; ++j)
 			{
-				dp[j][i] = 2;
+				dp[i][j] = 2;
 				if (idx.count(A[i] - A[j]))
 				{
 					int k = idx[A[i] - A[j]];
-					dp[j][i] = max(dp[j][i], dp[k][j] + 1);
+					dp[i][j] = max(dp[i][j], dp[j][k] + 1);
 				}
-				ans = max(ans, dp[j][i]);
+				ans = max(ans, dp[i][j]);
 			}
 		if (ans <= 2) return 0;
 		return ans;
