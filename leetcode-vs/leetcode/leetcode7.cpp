@@ -171,7 +171,46 @@ public:
 		nums.erase(it);
 	}
 };
-
+//880. Random Pick with Weight
+//class Solution {
+//public:
+//	vector<int> sums;
+//	int sum = 0;
+//	Solution(vector<int> w) {
+//		int n = w.size();
+//		sums.assign(n, 0);
+//		sums[0] = w[0];
+//		sum = w[0];
+//		for (int i = 1; i < n; ++i)
+//		{
+//			sums[i] = sums[i - 1] + w[i];
+//		}
+//		sum = sums.back();
+//	}
+//
+//	int pickIndex() {
+//		int idx = rand() % sum;
+//		auto it = upper_bound(sums.begin(), sums.end(), idx) - sums.begin();
+//		return it;
+//	}
+//};
+//883. Generate Random Point in a Circle
+//class Solution {
+//public:
+//	double r, x, y;
+//	const int maxn = 1e3;
+//	const double pi = 3.141592653589;
+//	Solution(double r, double x, double y) :r(r), x(x), y(y) {
+//
+//	}
+//
+//	vector<double> randPoint() {
+//		int v1 = rand() % maxn, v2 = rand() % maxn;
+//		int v = v1 * maxn + v2;
+//		double delta = pi * 2 / 1e6 * v;
+//		return { x + r * cos(delta),y + r * sin(delta) };
+//	}
+//};
 class Solution {
 public:
 	//700. Search in a Binary Search Tree
