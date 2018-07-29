@@ -209,6 +209,63 @@ public:
 //		return { x + r * cos(delta),y + r * sin(delta) };
 //	}
 //};
+//882. Random Point in Non - overlapping Rectangles
+//class Solution {
+//public:
+//	vector<vector<int>> pos;
+//	vector<int> w;
+//	int tot = 0;
+//	int const maxn = 1000;
+//	Solution(vector<vector<int>> rects) {
+//		int n = rects.size();
+//		w.assign(n, 0);
+//		pos.assign(n, vector<int>());
+//		for (int i = 0; i < n; ++i)
+//		{
+//			int x0 = rects[i][0], y0 = rects[i][1], x1 = rects[i][2], y1 = rects[i][3];
+//			int row = y1 - y0 + 1;
+//			int col = x1 - x0 + 1;
+//			w[i] = row * col;
+//			pos[i] = { x0,y0,col };
+//			tot += row * col;
+//		}
+//		for (int i = 1; i < n; ++i) w[i] += w[i - 1];
+//	}
+//	int mrand()
+//	{
+//		return rand() % maxn  * maxn + rand() % maxn;
+//	}
+//	vector<int> pick() {
+//		int v = mrand() % tot;
+//		auto i = upper_bound(w.begin(), w.end(), v) - w.begin();
+//		int d = w[i];
+//		if (i) v -= w[i - 1];
+//		return { pos[i][0] + v % pos[i][2] , pos[i][1] + v / pos[i][2] };
+//	}
+//};
+//881. Random Flip Matrix
+//class Solution {
+//public:
+//	int n, m;
+//	unordered_set<int> s;
+//	Solution(int n_rows, int n_cols) :n(n_rows), m(n_cols) {
+//
+//	}
+//	int mrand() {
+//		return rand() % 10000 * 10000 + rand() % 10000;
+//	}
+//	vector<int> flip() {
+//		int v;
+//		do {
+//			v = mrand() % (n*m);
+//		} while (s.count(v));
+//		s.insert(v);
+//		return { v / m,v % m };
+//	}
+//	void reset() {
+//		s.clear();
+//	}
+//};
 class Solution {
 public:
 	//700. Search in a Binary Search Tree
