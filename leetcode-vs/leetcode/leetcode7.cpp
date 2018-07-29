@@ -17,10 +17,8 @@
 #include <string>
 #include <utility>
 #include <cmath>
-
 using namespace std;
 typedef long long ll;
-
 //703. Kth Largest Element in a Stream
 class KthLargest {
 public:
@@ -585,6 +583,59 @@ public:
 				dp[i][j] = max(a[i] - dp[i + 1][j], a[j] - dp[i][j - 1]);
 		}
 		return dp[0][n - 1] > 0;
+	}
+	//878. Nth Magical Number
+	ll gcd(ll a, ll b) { if (a < b) swap(a, b); ll t; while (b) { t = b; b = a % b; a = t; } return a; }
+	int nthMagicalNumber(int N, int A, int B) {
+		int const mod = 1e9 + 7;
+		ll l = min(A, B), r = 100 * max((ll)N * A, (ll)N * B);
+		ll lcm = (ll)A / gcd(A, B) * B;
+		while (l < r)
+		{
+			ll m = l + (r - l) / 2;
+			ll cnt = m / A + m / B - m / lcm;
+			if (cnt < N) l = m + 1;
+			else r = m;
+		}
+		return l % mod;
+	}
+	//879. Profitable Schemes
+	//int dfs_879(int u, int g, int p, vector<int> &gs, vector<int> &ps, vector<vector<vector<int>>> &memo)
+	//{
+	//	static int const mod = 1e9 + 7;
+	//	if (u == -1) return p <= 0;
+	//	if (p < 0) p = 0;
+	//	if (g < 0) return 0;
+	//	if (memo[u][g][p] != -1) return memo[u][g][p];
+	//	ll ans = dfs_879(u - 1, g, p, gs, ps, memo);
+	//	if (g >= gs[u])
+	//		ans += dfs_879(u - 1, g - gs[u], p - ps[u], gs, ps, memo);
+	//	ans %= mod;
+	//	memo[u][g][p] = ans;
+	//	return ans;
+	//}
+	//int profitableSchemes(int G, int P, vector<int>& group, vector<int>& profit) {
+	//	vector<vector<vector<int>>>
+	//		memo(group.size(), vector<vector<int>>(G + 1, vector<int>(P + 1, -1)));
+	//	return dfs_879(group.size() - 1, G, P, group, profit, memo);
+	//}
+	int profitableSchemes(int G, int P, vector<int>& group, vector<int>& profit) {
+		vector<vector<int>> dp(P + 1, vector<int>(G + 1));
+		int const mod = 1e9 + 7;
+		for (int k = 0; k < group.size(); ++k)
+		{
+			int g = group[k], p = profit[k];
+			for (int i = P; i >= 0; --i)
+			{
+				for (int j = G - p; j >= 0; --j)
+				{
+					dp[min(i + p, P)][j + g] = (dp[min(i + p, P)][j + g] + dp[i][j]) % mod;
+				}
+			}
+		}
+		int ans = 0;
+		for (int e : dp[P])  ans = (ans + e) % mod;
+		return ans;
 	}
 };
 
