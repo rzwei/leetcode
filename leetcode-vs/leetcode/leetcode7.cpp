@@ -561,6 +561,31 @@ public:
 		if (ans <= 2) return 0;
 		return ans;
 	}
+
+	//876. Middle of the Linked List
+	ListNode* middleNode(ListNode* head) {
+		auto slow = head, fast = head;
+		while (fast && fast->next)
+		{
+			slow = slow->next;
+			fast = fast->next->next;
+		}
+		return slow;
+	}
+
+	//877. Stone Game
+	bool stoneGame(vector<int>& a) {
+		int n = a.size();
+		vector<vector<int>> dp(n, vector<int>(n));
+		for (int i = 0; i < n; ++i)
+			dp[i][i] = a[i];
+		for (int l = 2; l <= n; ++l)
+		{
+			for (int i = 0, j = i + l - 1; j < n; ++i, ++j)
+				dp[i][j] = max(a[i] - dp[i + 1][j], a[j] - dp[i][j - 1]);
+		}
+		return dp[0][n - 1] > 0;
+	}
 };
 
 int main()
