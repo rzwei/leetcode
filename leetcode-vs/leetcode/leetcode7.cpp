@@ -247,23 +247,26 @@ public:
 //class Solution {
 //public:
 //	int n, m;
-//	unordered_set<int> s;
-//	Solution(int n_rows, int n_cols) :n(n_rows), m(n_cols) {
+//	int tot;
+//	unordered_map<int, int> s;
+//	Solution(int n_rows, int n_cols) :n(n_rows), m(n_cols), tot(n*m) {
 //
 //	}
 //	int mrand() {
 //		return rand() % 10000 * 10000 + rand() % 10000;
 //	}
 //	vector<int> flip() {
-//		int v;
-//		do {
-//			v = mrand() % (n*m);
-//		} while (s.count(v));
-//		s.insert(v);
-//		return { v / m,v % m };
+//		int k = mrand() % tot;
+//		tot--;
+//		int val = k;
+//		if (s.count(k)) val = s[k];
+//		if (!s.count(tot)) s[k] = tot;
+//		else s[k] = s[tot];
+//		return { val / m,val %m };
 //	}
 //	void reset() {
 //		s.clear();
+//		tot = m * n;
 //	}
 //};
 class Solution {
