@@ -697,6 +697,53 @@ public:
 		for (int e : dp[P])  ans = (ans + e) % mod;
 		return ans;
 	}
+	//558. Quad Tree Intersection
+	//Node * intersect(Node* q1, Node* q2) {
+	//	if (!q1 && !q2) return nullptr;
+	//	if (q1 && q2)
+	//	{
+	//		if (q1->isLeaf && q2->isLeaf)
+	//		{
+	//			q1->val = q1->val || q2->val;
+	//			return q1;
+	//		}
+	//		if (q1->isLeaf && q1->val) return q1;
+	//		if (q2->isLeaf && q2->val) return q2;
+
+	//		auto r = new Node();
+	//		r->topLeft = intersect(q1->topLeft, q2->topLeft);
+	//		r->topRight = intersect(q1->topRight, q2->topRight);
+	//		r->bottomLeft = intersect(q1->bottomLeft, q2->bottomLeft);
+	//		r->bottomRight = intersect(q1->bottomRight, q2->bottomRight);
+	//		r->isLeaf = false;
+	//		if (r->topLeft && r->topLeft->isLeaf &&
+	//			r->topRight && r->topRight->isLeaf &&
+	//			r->bottomLeft && r->bottomLeft->isLeaf &&
+	//			r->bottomRight && r->bottomRight->isLeaf
+	//			)
+	//		{
+	//			if (r->topLeft->val && r->topRight->val && r->bottomLeft->val && r->bottomRight->val)
+	//			{
+	//				r->isLeaf = true;
+	//				r->val = true;
+	//			}
+	//			else if (!r->topLeft->val && !r->topRight->val && !r->bottomLeft->val && !r->bottomRight->val)
+	//			{
+	//				r->isLeaf = true;
+	//				r->val = false;
+	//			}
+	//		}
+	//		return r;
+	//	}
+	//	else if (q1)
+	//	{
+	//		return q1;
+	//	}
+	//	else {
+	//		return q2;
+	//	}
+	//}
+
 };
 
 int main()
