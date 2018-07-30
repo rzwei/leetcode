@@ -807,6 +807,28 @@ public:
 	//		dummy->next->prev = nullptr;
 	//	return dummy->next;
 	//}
+
+	//429. N - ary Tree Level Order Traversal
+	//vector<vector<int>> levelOrder(Node* root) {
+	//	if (!root) return {};
+	//	vector<vector<int>> ans;
+	//	queue<Node *>q;
+	//	q.push(root);
+	//	while (!q.empty())
+	//	{
+	//		int size = q.size();
+	//		vector<int> cur;
+	//		while (size--) {
+	//			auto u = q.front();
+	//			q.pop();
+	//			cur.push_back(u->val);
+	//			for (auto p : u->children)
+	//				if (p) q.push(p);
+	//		}
+	//		ans.push_back(cur);
+	//	}
+	//	return ans;
+	//}
 };
 
 int main()
