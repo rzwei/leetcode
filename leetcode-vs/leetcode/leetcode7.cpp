@@ -743,7 +743,41 @@ public:
 	//		return q2;
 	//	}
 	//}
-
+	//427. Construct Quad Tree
+	//	Node * build(int i, int j, int l, vector<vector<int>>& g)
+	//	{
+	//		if (l == 0) return nullptr;
+	//		auto r = new Node(false, false, nullptr, nullptr, nullptr, nullptr);
+	//		if (l == 1) {
+	//			r->isLeaf = true;
+	//			r->val = g[i][j];
+	//		}
+	//		else {
+	//			auto tl = build(i, j, l / 2, g);
+	//			auto tr = build(i, j + l / 2, l / 2, g);
+	//			auto bl = build(i + l / 2, j, l / 2, g);
+	//			auto br = build(i + l / 2, j + l / 2, l / 2, g);
+	//			if (tl->isLeaf && tr->isLeaf && bl->isLeaf && br->isLeaf &&
+	//				(tl->val && tr->val && bl->val && br->val || !tl->val && !tr->val && !bl->val && !br->val))
+	//			{
+	//				r->isLeaf = true;
+	//				r->val = tl->val;
+	//				delete tl;
+	//				delete tr;
+	//				delete bl;
+	//				delete br;
+	//			}
+	//			else {
+	//				r->topLeft = tl; r->topRight = tr;
+	//				r->bottomLeft = bl; r->bottomRight = br;
+	//			}
+	//		}
+	//		return r;
+	//	}
+	//
+	//	Node* construct(vector<vector<int>>& grid) {
+	//		return build(0, 0, grid.size(), grid);
+	//	}
 };
 
 int main()
