@@ -169,6 +169,121 @@ public:
 		nums.erase(it);
 	}
 };
+//622. Design Circular Queue
+class MyCircularQueue {
+public:
+	/** Initialize your data structure here. Set the size of the queue to be k. */
+	int l, r, k, size;
+	vector<int> a;
+	MyCircularQueue(int k) :a(k), l(0), r(0), k(k), size(0) {
+
+	}
+
+	/** Insert an element into the circular queue. Return true if the operation is successful. */
+	bool enQueue(int value) {
+		if (isFull()) return false;
+		a[(r++) % k] = value;
+		size++;
+		return true;
+	}
+
+	/** Delete an element from the circular queue. Return true if the operation is successful. */
+	bool deQueue() {
+		if (isEmpty()) return false;
+		size--;
+		l++;
+		return true;
+	}
+
+	/** Get the front item from the queue. */
+	int Front() {
+		if (isEmpty()) return -1;
+		return a[l%k];
+	}
+
+	/** Get the last item from the queue. */
+	int Rear() {
+		if (isEmpty()) return -1;
+		return a[(r - 1 + k) % k];
+	}
+
+	/** Checks whether the circular queue is empty or not. */
+	bool isEmpty() {
+		return size == 0;
+	}
+
+	/** Checks whether the circular queue is full or not. */
+	bool isFull() {
+		return size == k;
+	}
+};
+//641. Design Circular Deque
+class MyCircularDeque {
+public:
+	vector<int> a;
+	int l, r, k, size;
+	/** Initialize your data structure here. Set the size of the deque to be k. */
+	MyCircularDeque(int k) :l(0), r(0), k(k), size(0), a(k) {
+
+	}
+
+	/** Adds an item at the front of Deque. Return true if the operation is successful. */
+	bool insertFront(int value) {
+		if (isFull()) return false;
+		a[((--l) % k + k) % k] = value;
+		size++;
+		return true;
+	}
+
+	/** Adds an item at the rear of Deque. Return true if the operation is successful. */
+	bool insertLast(int value) {
+		if (isFull()) return false;
+		a[(r%k + k) % k] = value;
+		size++;
+		r++;
+		return true;
+	}
+
+	/** Deletes an item from the front of Deque. Return true if the operation is successful. */
+	bool deleteFront() {
+		if (isEmpty()) return false;
+		l++;
+		size--;
+		return true;
+	}
+
+	/** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+	bool deleteLast() {
+		if (isEmpty()) return false;
+		r--;
+		size--;
+		return true;
+	}
+
+	/** Get the front item from the deque. */
+	int getFront() {
+		if (isEmpty()) return -1;
+		return a[(l%k + k) % k];
+	}
+
+	/** Get the last item from the deque. */
+	int getRear() {
+		if (isEmpty()) return -1;
+		return a[((r - 1) % k + k) % k];
+	}
+
+	/** Checks whether the circular deque is empty or not. */
+	bool isEmpty() {
+		return size == 0;
+	}
+
+	/** Checks whether the circular deque is full or not. */
+	bool isFull() {
+		return size == k;
+	}
+};
+
+
 //880. Random Pick with Weight
 //class Solution {
 //public:
