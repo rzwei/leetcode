@@ -944,6 +944,52 @@ public:
 	//	}
 	//	return ans;
 	//}
+
+	//589. N - ary Tree Preorder Traversal
+	//vector<int> preorder(Node* root) {
+	//	vector<int> ans;
+	//	if (!root) return ans;
+	//	ans.push_back(root->val);
+	//	typedef vector<Node *>::iterator nit;
+	//	stack<pair<Node*, nit>> stk;
+	//	Node* cur = root;
+	//	nit it = root->children.begin();
+	//	while (cur && it != cur->children.end() || !stk.empty())
+	//	{
+	//		if (cur && it != cur->children.end())
+	//		{
+	//			ans.push_back((*it)->val);
+	//			auto nx = ++it;
+	//			--it;
+	//			stk.push({ cur,nx });
+	//			cur = *it;
+	//			it = cur->children.begin();
+	//		}
+	//		else {
+	//			auto top = stk.top(); stk.pop();
+	//			cur = top.first;
+	//			it = top.second;
+	//		}
+	//	}
+	//	return ans;
+	//}
+
+	//590. N-ary Tree Postorder Traversal
+	//vector<int> postorder(Node* root) {
+	//	if (root == NULL) return {};
+	//	vector<int> res;
+	//	stack<Node*> stk;
+	//	stk.push(root);
+	//	while (!stk.empty())
+	//	{
+	//		Node* temp = stk.top();
+	//		stk.pop();
+	//		for (int i = 0; i < temp->children.size(); i++) stk.push(temp->children[i]);
+	//		res.push_back(temp->val);
+	//	}
+	//	reverse(res.begin(), res.end());
+	//	return res;
+	//}
 };
 
 int main()
