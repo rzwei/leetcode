@@ -778,6 +778,35 @@ public:
 	//	Node* construct(vector<vector<int>>& grid) {
 	//		return build(0, 0, grid.size(), grid);
 	//	}
+	//430. Flatten a Multilevel Doubly Linked List
+	//Node * build(Node *pre, Node *p)
+	//{
+	//	while (p)
+	//	{
+	//		pre->next = p;
+	//		p->prev = pre;
+	//		pre = p;
+	//		auto nx = p->next;
+	//		if (p->child)
+	//		{
+	//			auto e = build(pre, p->child);
+	//			p->child = nullptr;
+	//			pre = e;
+	//		}
+	//		p = nx;
+	//	}
+	//	return pre;
+	//}
+
+	//Node * flatten(Node* head) {
+	//	if (!head) return nullptr;
+	//	auto dummy = new Node();
+	//	auto r = build(dummy, head);
+	//	r->next = nullptr;
+	//	if (dummy->next)
+	//		dummy->next->prev = nullptr;
+	//	return dummy->next;
+	//}
 };
 
 int main()
