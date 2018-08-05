@@ -990,6 +990,100 @@ public:
 	//	reverse(res.begin(), res.end());
 	//	return res;
 	//}
+	//887. Projection Area of 3D Shapes
+	int projectionArea(vector<vector<int>>& g) {
+		int ans = 0, n = g.size(), m = g[0].size();
+		vector<int> h(m), w(n);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j]) ans++;
+				w[i] = max(w[i], g[i][j]);
+				h[j] = max(h[j], g[i][j]);
+			}
+		}
+		for (int e : h) ans += e;
+		for (int e : w) ans += e;
+		return ans;
+	}
+	//885. Boats to Save People
+	int numRescueBoats(vector<int>& a, int limit) {
+		multiset<int> pre;
+		sort(a.begin(), a.end());
+		int n = a.size();
+		int ans = 0;
+		for (int i = n - 1; i >= 0; --i)
+		{
+			auto it = pre.lower_bound(a[i]);
+			if (it != pre.end())
+				pre.erase(it);
+			else {
+				pre.insert(limit - a[i]);
+				ans++;
+			}
+		}
+		return ans;
+	}
+	//884. Decoded String at Index
+	string decodeAtIndex(string s, int k) {
+		ll len = 0;
+		ll cur = 0;
+		int sl = s.size();
+		for (int i = 0; i < sl; ++i)
+		{
+			if (!isdigit(s[i]))
+			{
+				len++;
+				cur++;
+				if (cur == k)
+					return string(1, s[i]);
+			}
+			else {
+				ll d = s[i] - '0';
+				if (k > d  * len)
+				{
+					cur = d * len;
+					len *= d;
+				}
+				else {
+					k = k % len;
+					if (k == 0) k = len;
+					i = -1;
+					len = 0;
+					cur = 0;
+				}
+			}
+		}
+	}
+	//886. Reachable Nodes In Subdivided Graph
+	int reachableNodes(vector<vector<int>>& edges, int M, int N) {
+		unordered_map<int, unordered_map<int, int>> e;
+		for (auto v : edges) e[v[0]][v[1]] = e[v[1]][v[0]] = v[2];
+		priority_queue<pair<int, int>> pq;
+		pq.push({ M, 0 });
+		unordered_map<int, int> seen;
+		while (pq.size()) {
+			int moves = pq.top().first, i = pq.top().second;
+			pq.pop();
+			if (!seen.count(i)) {
+				seen[i] = moves;
+				for (auto j : e[i]) {
+					int moves2 = moves - j.second - 1;
+					if (!seen.count(j.first) && moves2 >= 0)
+						pq.push({ moves2, j.first });
+				}
+			}
+		}
+		int res = seen.size();
+		for (auto v : edges) {
+			int a = seen.find(v[0]) == seen.end() ? 0 : seen[v[0]];
+			int b = seen.find(v[1]) == seen.end() ? 0 : seen[v[1]];
+			res += min(a + b, v[2]);
+		}
+		return res;
+	}
+
 };
 
 int main()
