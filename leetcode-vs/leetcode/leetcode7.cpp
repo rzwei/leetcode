@@ -1083,7 +1083,114 @@ public:
 		}
 		return res;
 	}
+	vector<string> split(string &s)
+	{
+		vector<string> ans;
+		int len = s.size();
+		for (int i = 0; i < len; ++i)
+		{
+			while (i < len && s[i] == ' ') i++;
+			string tmp;
+			while (i < len && s[i] != ' ') {
+				tmp.push_back(s[i++]);
+			}
+			if (!tmp.empty())
+			{
+				ans.push_back(tmp);
+			}
+		}
+		return ans;
+	}
+	//888. Uncommon Words from Two Sentences 
+	vector<string> uncommonFromSentences(string A, string B) {
+		auto a = split(A), b = split(B);
+		map<string, int> cnta, cntb;
+		for (auto &s : a)
+			cnta[s]++;
+		for (auto &s : b)
+			cntb[s]++;
+		vector<string> ans;
+		for (auto &p : cnta)
+		{
+			if (p.second == 1 && !cntb.count(p.first))
+				ans.push_back(p.first);
+		}
+		for (auto &p : cntb)
+		{
+			if (p.second == 1 && !cnta.count(p.first))
+				ans.push_back(p.first);
+		}
+		return ans;
+	}
 
+	//889. Spiral Matrix III 
+	vector<vector<int>> spiralMatrixIII(int R, int C, int r0, int c0) {
+		vector<vector<int>> ans;
+		vector<vector<int>> dirs = { { 0,1 },{ 1,0 },{ 0,-1 },{ -1,0 } };
+		int d = 0, tot = 1, len = 1;
+		int x = r0, y = c0;
+		ans.push_back({ x,y });
+		int turn = 0;
+		while (tot < R * C)
+		{
+			for (int i = 0; i < len; ++i)
+			{
+				x = x + dirs[d][0];
+				y = y + dirs[d][1];
+				if (0 <= x && x < R && 0 <= y && y < C) {
+					ans.push_back({ x,y });
+					tot++;
+				}
+			}
+			turn++;
+			d = (d + 1) % 4;
+			if (turn % 2 == 0)
+				len++;
+		}
+		return ans;
+	}
+	bool dfs_890(int u, vector<int> &color, vector<vector<int>> &g)
+	{
+		vector<int> nx;
+		for (int v : g[u])
+		{
+			if (color[v] == 0)
+			{
+				color[v] = -color[u];
+				nx.push_back(v);
+			}
+			else
+				if (color[v] == color[u])
+					return false;
+		}
+		for (auto v : nx)
+		{
+			if (!dfs_890(v, color, g))
+				return false;
+		}
+		return true;
+	}
+
+	//890. Possible Bipartition 
+	bool possibleBipartition(int N, vector<vector<int>>& dislikes) {
+		vector<vector<int>> g(N + 1);
+		for (auto &e : dislikes)
+		{
+			int a = e[0], b = e[1];
+			g[a].push_back(b);
+			g[b].push_back(a);
+		}
+		vector<int> color(N + 1);
+		for (int i = 1; i <= N; ++i)
+		{
+			if (color[i] == 0)
+			{
+				color[i] = 1;
+				if (!dfs_890(i, color, g)) return false;
+			}
+		}
+		return true;
+	}
 };
 
 int main()

@@ -1,4 +1,1 @@
-/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/d/projects/coder/leetcode-vs/leetcode
--- Configuring done
--- Generating done
--- Build files have been written to: /mnt/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug
+CMake executable is incorrect Configure
