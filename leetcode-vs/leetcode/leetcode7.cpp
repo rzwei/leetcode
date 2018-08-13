@@ -1191,6 +1191,43 @@ public:
 		}
 		return true;
 	}
+
+	//891. Super Egg Drop
+	int superEggDrop(int K, int N) {
+		int const maxn = INT_MAX / 16;
+		vector<vector<int>> dp(K + 1, vector<int>(N + 1, maxn));
+		dp[0][0] = 0;
+		for (int i = 1; i <= K; ++i)
+		{
+			dp[i][1] = 1;
+			dp[i][0] = 0;
+		}
+		for (int i = 1; i <= N; ++i)
+		{
+			dp[1][i] = i;
+		}
+		for (int k = 1; k <= K; ++k)
+		{
+			for (int n = 1; n <= N; ++n)
+			{
+				int l = 1, r = n;
+				int res = n;
+				while (l < r)
+				{
+					int m = (l + r) / 2;
+					int left = dp[k - 1][m - 1], right = dp[k][n - m];
+					res = min(res, max(left, right) + 1);
+					if (left < right)
+						l = m + 1;
+					else
+						r = m;
+				}
+				dp[k][n] = res;
+			}
+		}
+		return dp[K][N];
+	}
+
 };
 
 int main()
