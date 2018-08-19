@@ -1228,6 +1228,105 @@ public:
 		return dp[K][N];
 	}
 
+	//888. Fair Candy Swap
+	vector<int> fairCandySwap(vector<int>& A, vector<int>& B) {
+		int sum = 0;
+		int suma = 0, sumb = 0;
+		for (int e : A) { sum += e; suma += e; }
+		for (int e : B) { sum += e; sumb += e; }
+		set<int> Bs(B.begin(), B.end());
+		vector<int> ans;
+		for (int e : A)
+		{
+			int v = sum / 2 - (suma - e);
+			if (Bs.count(v))
+			{
+				return { e,v };
+			}
+		}
+		return {};
+	}
+
+	TreeNode *build(int l1, int r1, int l2, int r2, vector<int> &pre, vector<int> &post)
+	{
+		if (l1 > r1 && l2 > r2) return nullptr;
+		//if (l1 == r1 && l2 > r2) return new TreeNode(pre[l1]);
+		//else if (l1 > r1 && l2 == r2) return new TreeNode(post[r1]);
+
+		auto ret = new TreeNode(pre[l1]);
+		if (l1 == r1)
+			return ret;
+		int nl1 = l1 + 1;
+		int nr1 = -1;
+
+		int nr2 = r2 - 1;
+		int nl2 = -1;
+		for (int i = l2; i <= r2; ++i)
+		{
+			if (post[i] == pre[nl1])
+			{
+				nr1 = i;
+				break;
+			}
+		}
+		for (int i = l1; i <= r1; ++i)
+		{
+			if (pre[i] == post[nr2])
+			{
+				nl2 = i;
+				break;
+			}
+		}
+
+		if (nl1 > nl2 - 1 && nr1 + 1 > nr2)
+			ret->left = build(nl2, r1, l2, nr1, pre, post);
+		else if (l2 > nr1 && nl2 > r1)
+			ret->left = build(nl1, nl2 - 1, nl2, r1, pre, post);
+		else {
+			ret->left = build(nl1, nl2 - 1, l2, nr1, pre, post);
+			ret->right = build(nl2, r1, nr1 + 1, nr2, pre, post);
+		}
+		return ret;
+	}
+	//889. Construct Binary Tree from Preorder and Postorder Traversal
+	TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+		return build(0, pre.size() - 1, 0, post.size() - 1, pre, post);
+	}
+
+	//891. Sum of Subsequence Widths
+	int sumSubseqWidths(vector<int>& A) {
+		int const mod = 1e9 + 7;
+		unordered_map<int, int> cnt;
+		for (int e : A) cnt[e]++;
+		int n = cnt.size();
+		sort(A.begin(), A.end());
+		A.erase(unique(A.begin(), A.end()), A.end());
+
+		vector<int> pow2(n + 10);
+		pow2[0] = 1;
+		for (int i = 1; i < n + 10; ++i)
+			pow2[i] = (pow2[i - 1] * 2ll) % mod;
+
+		ll sum = 0;
+		ll ans = 0;
+		for (int i = n - 1; i >= 0; --i)
+		{
+			ll c = pow2[cnt[A[i]]] - 1;
+			ll t = (sum * c + c) % mod;
+			ans = (ans + mod - (t * A[i]) % mod) % mod;
+			sum = (sum + t) % mod;
+		}
+
+		sum = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			ll c = pow2[cnt[A[i]]] - 1;
+			ll t = (sum * c + c) % mod;
+			ans = (ans + (t * A[i]) % mod) % mod;
+			sum = (sum + t) % mod;
+		}
+		return ans;
+	}
 };
 
 int main()
