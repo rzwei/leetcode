@@ -389,22 +389,24 @@ public:
 class FreqStack {
 public:
 	unordered_map<int, int> cnt;
-	map<int, vector<int>> vals;
+	unordered_map<int, vector<int>> vals;
+	int maxfreq = 0;
 	FreqStack() {
 
 	}
 
 	void push(int x) {
 		int c = ++cnt[x];
+		maxfreq = max(maxfreq, c);
 		vals[c].push_back(x);
 	}
 
 	int pop() {
-		auto end = --vals.end();
-		auto ret = end->second.back();
-		end->second.pop_back();
-		if (end->second.empty())
-			vals.erase(end);
+		auto &end = vals[maxfreq];
+		auto ret = end.back();
+		end.pop_back();
+		if (end.empty())
+			maxfreq--;
 		cnt[ret]--;
 		return ret;
 	}
@@ -1383,7 +1385,7 @@ public:
 
 	//893. Groups of Special-Equivalent Strings 
 	int numSpecialEquivGroups(vector<string>& A) {
-		map<string, int> cnt;
+		unordered_map<string, int> cnt;
 		for (auto &s : A)
 		{
 			string l, r;
