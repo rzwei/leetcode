@@ -388,7 +388,7 @@ public:
 //895. Maximum Frequency Stack 
 class FreqStack {
 public:
-	map<int, int> cnt;
+	unordered_map<int, int> cnt;
 	map<int, vector<int>> vals;
 	FreqStack() {
 
