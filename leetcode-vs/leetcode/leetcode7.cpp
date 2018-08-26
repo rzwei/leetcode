@@ -384,6 +384,32 @@ public:
 //		tot = m * n;
 //	}
 //};
+
+//895. Maximum Frequency Stack 
+class FreqStack {
+public:
+	map<int, int> cnt;
+	unordered_map<int, vector<int>> vals;
+	FreqStack() {
+
+	}
+
+	void push(int x) {
+		int c = ++cnt[x];
+		vals[c].push_back(x);
+	}
+
+	int pop() {
+		auto end = --vals.end();
+		auto ret = end->second.back();
+		end->second.pop_back();
+		if (end->second.empty())
+			vals.erase(end);
+		cnt[ret]--;
+		return ret;
+	}
+};
+
 class Solution {
 public:
 	//700. Search in a Binary Search Tree
@@ -1326,6 +1352,81 @@ public:
 			sum = (sum + t) % mod;
 		}
 		return ans;
+	}
+
+	//892. Surface Area of 3D Shapes 
+	int surfaceArea(vector<vector<int>>& a) {
+		int ans = 0;
+		int n = a.size();
+		int dr[] = { 0,1,0,-1 };
+		int dc[] = { 1,0,-1,0 };
+
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (!a[i][j]) continue;
+				ans += a[i][j] * 4 + 2;
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = i + dr[d];
+					int ny = j + dc[d];
+					if (0 <= nx && nx < n && 0 <= ny && ny < n)
+					{
+						ans -= min(a[nx][ny], a[i][j]);
+					}
+				}
+			}
+		}
+		return ans;
+	}
+
+	//893. Groups of Special-Equivalent Strings 
+	int numSpecialEquivGroups(vector<string>& A) {
+		map<string, int> cnt;
+		for (auto &s : A)
+		{
+			string l, r;
+			for (int i = 0; i < s.size(); ++i)
+			{
+				if (i & 1) l.push_back(s[i]);
+				else r.push_back(s[i]);
+			}
+			sort(l.begin(), l.end());
+			sort(r.begin(), r.end());
+			string key = l + ' ' + r;
+			cnt[key]++;
+		}
+		return cnt.size();
+	}
+	//894. All Possible Full Binary Trees 
+	vector<TreeNode*> build(int n)
+	{
+		if (n == 1) return { new TreeNode(0) };
+		if (n % 2 == 0) return {};
+		vector<TreeNode *> ans;
+		n--;
+		for (int i = 1; i <= n && n - i >= 1; i += 2)
+		{
+			auto left = build(i);
+			auto right = build(n - i);
+			if (!left.empty() && !right.empty())
+			{
+				for (auto l : left)
+					for (auto r : right)
+					{
+						auto root = new TreeNode(0);
+						root->left = l;
+						root->right = r;
+						ans.push_back(root);
+					}
+			}
+		}
+		return ans;
+	}
+	vector<TreeNode*> allPossibleFBT(int N) {
+		if (N % 2 == 0) return {};
+		return build(N);
 	}
 };
 
