@@ -389,7 +389,7 @@ public:
 class FreqStack {
 public:
 	map<int, int> cnt;
-	unordered_map<int, vector<int>> vals;
+	map<int, vector<int>> vals;
 	FreqStack() {
 
 	}
