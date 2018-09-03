@@ -1430,6 +1430,92 @@ public:
 		if (N % 2 == 0) return {};
 		return build(N);
 	}
+
+	bool less(int a, int b, string &s)
+	{
+		int N = s.size();
+		for (int i = 0; i < N; ++i)
+		{
+			if (s[(i + a) % N] != s[(i + b) % N])
+				return s[(i + a) % N] < s[(i + b) % N];
+		}
+		return false;
+	}
+
+	//896. Monotonic Array 
+	bool isMonotonic(vector<int>& A) {
+		bool f = true;
+		int n = A.size();
+		for (int i = 1; i < n && f; ++i)
+		{
+			if (A[i] < A[i - 1])
+				f = false;
+		}
+		if (f) return true;
+		f = true;
+		for (int i = 1; i < n && f; ++i)
+		{
+			if (A[i] > A[i - 1])
+				f = false;
+		}
+		if (f) return true;
+		return false;
+	}
+	//899. Orderly Queue
+	string orderlyQueue(string S, int K) {
+		if (K == 1)
+		{
+			int ans = 0;
+			for (int i = 1; i < S.size(); ++i)
+				if (less(i, ans, S))
+					ans = i;
+			return S.substr(ans) + S.substr(0, ans);
+		}
+		else
+		{
+			sort(S.begin(), S.end());
+			return S;
+		}
+	}
+
+	//897. Increasing Order Search Tree 
+	void dfs_897(TreeNode *p, vector<int> &a)
+	{
+		if (!p) return;
+		dfs_897(p->left, a);
+		a.push_back(p->val);
+		dfs_897(p->right, a);
+	}
+	TreeNode* increasingBST(TreeNode* root) {
+		vector<int> a;
+		if (!root) return root;
+		dfs_897(root, a);
+		auto dummy = new TreeNode(0);
+		auto p = dummy;
+		for (int e : a)
+		{
+			p->right = new TreeNode(e);
+			p = p->right;
+		}
+		return dummy->right;
+	}
+
+	//898. Bitwise ORs of Subarrays
+	int subarrayBitwiseORs(vector<int>& A) {
+		unordered_set<int> ans, cur;
+		cur.insert(0);
+		for (int e : A)
+		{
+			unordered_set<int> tmp;
+			for (int v : cur)
+				tmp.insert(v | e);
+			tmp.insert(e);
+			swap(cur, tmp);
+			for (int v : cur)
+				ans.insert(v);
+		}
+		return ans.size();
+	}
 };
 
 int main()
