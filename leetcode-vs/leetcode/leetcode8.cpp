@@ -16,50 +16,35 @@ using namespace std;
 //901. Online Stock Span
 class StockSpanner {
 public:
+	stack<pair<int, int>> stk;
 	StockSpanner() {
 
 	}
-	vector<int> a, b;
-	int tot = 0;
-	int next(int x) {
-		if (a.empty() || x < a.back())
+
+	int next(int price) {
+		int w = 1;
+		while (!stk.empty() && stk.top().first <= price)
 		{
-			a.push_back(x);
-			b.push_back(tot - 1);
-			tot++;
-			return 1;
+			w += stk.top().second;
+			stk.pop();
 		}
-		else
-		{
-			int ans = 1;
-			int i = tot - 1;
-			while (i >= 0 && x >= a[i])
-			{
-				ans += i - b[i];
-				i = b[i];
-			}
-			a.push_back(x);
-			b.push_back(i);
-			tot++;
-			return ans;
-		}
+		stk.push({ price, w });
+		return w;
 	}
 };
 //900. RLE Iterator
 class RLEIterator {
 public:
-	int i = 0;
 	vector<int> a;
-	RLEIterator(vector<int> A) : a(A) {
+	int i = 0;
+	RLEIterator(vector<int> A) :a(A) {
 
 	}
 
 	int next(int n) {
-		while (i < a.size() && n >= a[i])
+		while (i < a.size() && n > a[i])
 		{
 			n -= a[i];
-			a[i] = 0;
-			if (n == 0) break;
 			i += 2;
 		}
 		if (i >= a.size()) return -1;
@@ -69,46 +54,75 @@ public:
 };
 class Solution {
 public:
-	int count_lower(char c, vector<int> &d)
-	{
-		int ans = 0;
-		for (int i = 0; i < c - '0'; ++i)
-			if (d[i]) ans++;
-		return ans;
-	}
-	int dfs_902(int u, string &n, vector<int> &ds, vector<int> &m)
-	{
-		if (u == n.size() - 1)
-		{
-			int ans = 0;
-			for (int i = 0; i <= n[u] - '0'; ++i)
-				ans += ds[i];
-			return ans;
-		}
-		int lower = count_lower(n[u], ds);
-		int ans = lower * m[n.size() - u - 1];
-		if (ds[n[u] - '0'])
-			ans += dfs_902(u + 1, n, ds, m);
-		return ans;
-	}
 	//902. Numbers At Most N Given Digit Set
 	int atMostNGivenDigitSet(vector<string>& D, int N) {
-		vector<int> ss(10);
-		for (auto &s : D) {
-			ss[s[0] - '0'] = 1;
-		}
-		string n = to_string(N);
-		int len = n.size();
-		vector<int> m(len + 1);
-		m[0] = 1;
-		for (int i = 1; i <= len; ++i)
-			m[i] = m[i - 1] * D.size();
+		int k = D.size();
+		vector<char> digits(k);
+		for (int i = 0; i < k; ++i)
+			digits[i] = D[i][0];
+
+		string s = to_string(N);
+		int n = s.size();
+		vector<int> powk(n + 1);
+		powk[0] = 1;
+		for (int i = 1; i <= n; ++i)
+			powk[i] = powk[i - 1] * k;
+
 		int ans = 0;
-		for (int l = len - 1; l >= 1; --l)
+		for (int i = 1; i < n; ++i)
 		{
-			ans += m[l];
+			ans += powk[i];
 		}
-		ans += dfs_902(0, n, ss, m);
+		for (int i = 0; i < n; ++i)
+		{
+			int cnt = 0;
+			bool same = false;
+			for (char c : digits)
+			{
+				if (c < s[i]) cnt++;
+				if (c == s[i]) same = true;
+				if (c >= s[i]) break;
+			}
+			ans += cnt * powk[n - 1 - i];
+			if (same == false) break;
+			if (i == n - 1)
+				ans += 1;
+		}
+		return ans;
+	}
+
+	//903. Valid Permutations for DI Sequence
+	int numPermsDISequence(string S) {
+		const int mod = 1e9 + 7;
+		int n = S.size();
+		vector<vector<int>> dp(n + 1, vector<int>(n + 1));
+		for (int i = 0; i < n; ++i)
+		{
+			dp[0][i] = 1;
+		}
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 0; j <= i; ++j)
+			{
+				if (S[i - 1] == 'D')
+				{
+					for (int k = j; k < i; ++k)
+					{
+						dp[i][j] = (dp[i][j] + dp[i - 1][k]) % mod;
+					}
+				}
+				else
+				{
+					for (int k = 0; k < j; ++k)
+					{
+						dp[i][j] = (dp[i][j] + dp[i - 1][k]) % mod;
+					}
+				}
+			}
+		}
+		int ans = 0;
+		for (int e : dp[n])
+			ans = (ans + e) % mod;
 		return ans;
 	}
 };
