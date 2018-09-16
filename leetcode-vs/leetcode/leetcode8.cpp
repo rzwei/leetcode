@@ -12,7 +12,7 @@
 #include <list>
 #include <climits>
 using namespace std;
-
+typedef long long ll;
 //901. Online Stock Span
 class StockSpanner {
 public:
@@ -211,18 +211,55 @@ public:
 		return ans;
 	}
 
+	bool judge(ll n)
+	{
+		ll v2 = 0, t = n;
+		while (t)
+		{
+			v2 = v2 * 10 + t % 10;
+			t /= 10;
+		}
+		return v2 == n;
+	}
+	ll create(ll n)
+	{
+		ll ans = n;
+		while (n)
+		{
+			ans = ans * 10 + n % 10;
+			n /= 10;
+		}
+		return ans;
+	}
+	ll create2(ll n)
+	{
+		ll ans = n;
+		n /= 10;
+		while (n)
+		{
+			ans = ans * 10 + n % 10;
+			n /= 10;
+		}
+		return ans;
+	}
 	//906. Super Palindromes
 	int superpalindromesInRange(string L, string R) {
-		typedef long long ll;
-		vector<ll> a = { 0,1,2,3,11,22,101,111,121,202,212,1001,1111,2002,10001,10101,10201,11011,11111,11211,20002,20102,100001,101101,110011,111111,200002,1000001,1001001,1002001,1010101,1011101,1012101,1100011,1101011,1102011,1110111,1111111,2000002,2001002,10000001,10011001,10100101,10111101,11000011,11011011,11100111,11111111,20000002,100000001,100010001,100020001,100101001,100111001,100121001,101000101,101010101,101020101,101101101,101111101,110000011,110010011,110020011,110101011,110111011,111000111,111010111,111101111,111111111,200000002,200010002,1000000001,1000110001,1001001001,1001111001,1010000101,1010110101,1011001101,1011111101,1100000011,1100110011,1101001011,1101111011,1110000111,1110110111,1111001111,2000000002 };
-
-		auto left = stoll(L), right = stoll(R);
-		int ans = 0;
-		for (ll e : a)
+		vector<ll> a;
+		int const BOUND = 1e9;
+		for (int i = 1; i <= 3e4; ++i)
 		{
-			if (left <= e * e && e * e <= right)
-				ans++;
+			auto v1 = create(i), v2 = create2(i);
+			if (v1 >= BOUND && v2 >= BOUND) break;
+			if (v1 < BOUND &&  judge(v1 * v1)) a.push_back(v1 * v1);
+			if (v2 < BOUND && judge(v2 * v2)) a.push_back(v2 * v2);
 		}
+		auto l = stoll(L), r = stoll(R);
+		int ans = 0;
+		//for (ll e : a)
+		//	cout << e << endl;
+		for (ll e : a)
+			if (l <= e && e <= r)
+				ans++;
 		return ans;
 	}
 };
