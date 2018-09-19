@@ -101,23 +101,30 @@ public:
 		return fun(N, K);
 	}
 
-	TreeNode *travel(TreeNode *root, int v, vector<TreeNode *> ans) {
-		if (!root) return NULL;
-		if (ans[0] == nullptr && root->val <= v) {
-			ans[0] = root;
-			auto r = root->right;
-			root->right = NULL;
-			return r;
+	vector<TreeNode *> split(TreeNode *u, int v) {
+		if (!u) return { nullptr, nullptr };
+		vector<TreeNode *> ans(2);
+		if (u->val <= v)
+		{
+			ans[0] = u;
+			auto r = split(u->right, v);
+			u->right = r[0];
+			ans[1] = r[1];
+			return ans;
 		}
-		else root->left = travel(root->left, v, ans);
-		return root;
+		else
+		{
+			ans[1] = u;
+			auto r = split(u->left, v);
+			u->left = r[1];
+			ans[0] = r[0];
+			return ans;
+		}
 	}
 
 	//776. Split BST
 	vector<TreeNode *> splitBST(TreeNode *root, int V) {
-		vector<TreeNode *> ans(2);
-		ans[1] = travel(root, V, ans);
-		return ans;
+		return split(root, V);
 	}
 
 	//777. Swap Adjacent in LR String
