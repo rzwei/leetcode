@@ -293,69 +293,43 @@ public:
 	int snakesAndLadders(vector<vector<int>>& a) {
 		int n = a.size();
 		int const maxn = INT_MAX / 8;
-		vector<vector<int>> dp(n, vector<int>(n, maxn));
-		vector<int> mapx(n * n + 1), mapy(n * n + 1);
-		vector<vector<int>> invmap(n, vector<int>(n));
+		vector<int> s(n * n + 1);
 		int cur = 1;
 		for (int i = n - 1, f = 0; i >= 0; --i, f = 1 - f)
 		{
 			if (f == 0) for (int j = 0; j < n; ++j)
-			{
-				invmap[i][j] = cur;
-				mapx[cur] = i;
-				mapy[cur] = j;
-				cur++;
-			}
+				s[cur++] = a[i][j];
 			else for (int j = n - 1; j >= 0; --j)
-			{
-				invmap[i][j] = cur;
-				mapx[cur] = i;
-				mapy[cur] = j;
-				cur++;
-			}
+				s[cur++] = a[i][j];
 		}
 		queue<int> q;
-		vector<vector<bool>> vis(n, vector<bool>(n));
-		dp[n - 1][0] = 0;
+		vector<bool> vis(n * n + 1);
+		vis[1] = 1;
 		q.push(1);
-		vis[n - 1][0] = 1;
-		for (int ii = 0; ii <= n * n && !q.empty(); ++ii)
+		vector<int> dist(n * n + 1, maxn);
+		dist[1] = 0;
+		while (!q.empty())
 		{
-			int X = q.front();
+			int u = q.front();
 			q.pop();
-			int x = mapx[X], y = mapy[X];
-			vis[x][y] = 0;
-			//cout << x << " " << y << endl;
-			for (int k = 1; k <= 6; ++k)
+			for (int i = 1; i <= 6 && u + i <= n * n; ++i)
 			{
-				if (X + k <= n * n)
+				int v = u + i;
+				if (s[v] != -1)
+					v = s[v];
+				if (dist[u] + 1 < dist[v])
 				{
-					int nx = mapx[X + k], ny = mapy[X + k];
-					int val = a[nx][ny];
-					if (val != -1)
-						nx = mapx[val], ny = mapy[val];
-					if (dp[nx][ny] > dp[x][y] + 1)
+					dist[v] = dist[u] + 1;
+					if (!vis[v])
 					{
-						dp[nx][ny] = dp[x][y] + 1;
-						if (!vis[nx][ny])
-						{
-							vis[nx][ny] = 1;
-							q.push(invmap[nx][ny]);
-						}
+						vis[v] = 1;
+						q.push(v);
 					}
 				}
-				else break;
 			}
 		}
-		//for (auto &row : dp)
-		//{
-		//	for (int e : row)
-		//		cout << e << " ";
-		//	cout << endl;
-		//}
-		int dx = mapx[n * n], dy = mapy[n * n];
-		if (dp[dx][dy] == maxn) return -1;
-		else return dp[dx][dy];
+		if (dist[n * n] == maxn) return -1;
+		return dist[n * n];
 	}
 	//908. Smallest Range I
 	int smallestRangeI(vector<int>& A, int K) {
