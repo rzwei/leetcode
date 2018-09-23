@@ -294,23 +294,25 @@ public:
 		int n = a.size();
 		int const maxn = INT_MAX / 8;
 		vector<vector<int>> dp(n, vector<int>(n, maxn));
-		map<int, pair<int, int>> remap;
-		map<pair<int, int>, int> rrmap;
+		vector<int> mapx(n * n + 1), mapy(n * n + 1);
+		vector<vector<int>> invmap(n, vector<int>(n));
 		int cur = 1;
 		for (int i = n - 1, f = 0; i >= 0; --i, f = 1 - f)
 		{
-			if (f == 0)
-				for (int j = 0; j < n; ++j)
-				{
-					rrmap[{i, j}] = cur;
-					remap[cur++] = { i, j };
-				}
-			else
-				for (int j = n - 1; j >= 0; --j)
-				{
-					rrmap[{i, j}] = cur;
-					remap[cur++] = { i, j };
-				}
+			if (f == 0) for (int j = 0; j < n; ++j)
+			{
+				invmap[i][j] = cur;
+				mapx[cur] = i;
+				mapy[cur] = j;
+				cur++;
+			}
+			else for (int j = n - 1; j >= 0; --j)
+			{
+				invmap[i][j] = cur;
+				mapx[cur] = i;
+				mapy[cur] = j;
+				cur++;
+			}
 		}
 		queue<int> q;
 		vector<vector<bool>> vis(n, vector<bool>(n));
@@ -321,24 +323,24 @@ public:
 		{
 			int X = q.front();
 			q.pop();
-			int x = remap[X].first, y = remap[X].second;
+			int x = mapx[X], y = mapy[X];
 			vis[x][y] = 0;
 			//cout << x << " " << y << endl;
 			for (int k = 1; k <= 6; ++k)
 			{
 				if (X + k <= n * n)
 				{
-					int nx = remap[X + k].first, ny = remap[X + k].second;
+					int nx = mapx[X + k], ny = mapy[X + k];
 					int val = a[nx][ny];
 					if (val != -1)
-						nx = remap[val].first, ny = remap[val].second;
+						nx = mapx[val], ny = mapy[val];
 					if (dp[nx][ny] > dp[x][y] + 1)
 					{
 						dp[nx][ny] = dp[x][y] + 1;
 						if (!vis[nx][ny])
 						{
 							vis[nx][ny] = 1;
-							q.push(rrmap[{nx, ny}]);
+							q.push(invmap[nx][ny]);
 						}
 					}
 				}
@@ -351,7 +353,7 @@ public:
 		//		cout << e << " ";
 		//	cout << endl;
 		//}
-		int dx = remap[n * n].first, dy = remap[n * n].second;
+		int dx = mapx[n * n], dy = mapy[n * n];
 		if (dp[dx][dy] == maxn) return -1;
 		else return dp[dx][dy];
 	}
