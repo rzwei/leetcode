@@ -52,6 +52,32 @@ public:
 		return a[i + 1];
 	}
 };
+
+//911. Online Election
+class TopVotedCandidate {
+public:
+	map<int, int> win;
+	TopVotedCandidate(vector<int> a, vector<int> t) {
+		map<int, int> cnt;
+		int n = a.size();
+		int mx = 0, p = -1;
+		for (int i = 0; i < n; ++i)
+		{
+			if (++cnt[a[i]] >= mx)
+			{
+				mx = cnt[a[i]];
+				p = a[i];
+			}
+			win[t[i]] = p;
+		}
+	}
+
+	int q(int t) {
+		auto it = win.upper_bound(t);
+		--it;
+		return it->second;
+	}
+};
 class Solution {
 public:
 	//902. Numbers At Most N Given Digit Set
@@ -261,6 +287,84 @@ public:
 			if (l <= e && e <= r)
 				ans++;
 		return ans;
+	}
+
+	// 909. Snakes and Ladders
+	int snakesAndLadders(vector<vector<int>>& a) {
+		int n = a.size();
+		int const maxn = INT_MAX / 8;
+		vector<vector<int>> dp(n, vector<int>(n, maxn));
+		map<int, pair<int, int>> remap;
+		map<pair<int, int>, int> rrmap;
+		int cur = 1;
+		for (int i = n - 1, f = 0; i >= 0; --i, f = 1 - f)
+		{
+			if (f == 0)
+				for (int j = 0; j < n; ++j)
+				{
+					rrmap[{i, j}] = cur;
+					remap[cur++] = { i, j };
+				}
+			else
+				for (int j = n - 1; j >= 0; --j)
+				{
+					rrmap[{i, j}] = cur;
+					remap[cur++] = { i, j };
+				}
+		}
+		queue<int> q;
+		vector<vector<bool>> vis(n, vector<bool>(n));
+		dp[n - 1][0] = 0;
+		q.push(1);
+		vis[n - 1][0] = 1;
+		for (int ii = 0; ii <= n * n && !q.empty(); ++ii)
+		{
+			int X = q.front();
+			q.pop();
+			int x = remap[X].first, y = remap[X].second;
+			vis[x][y] = 0;
+			//cout << x << " " << y << endl;
+			for (int k = 1; k <= 6; ++k)
+			{
+				if (X + k <= n * n)
+				{
+					int nx = remap[X + k].first, ny = remap[X + k].second;
+					int val = a[nx][ny];
+					if (val != -1)
+						nx = remap[val].first, ny = remap[val].second;
+					if (dp[nx][ny] > dp[x][y] + 1)
+					{
+						dp[nx][ny] = dp[x][y] + 1;
+						if (!vis[nx][ny])
+						{
+							vis[nx][ny] = 1;
+							q.push(rrmap[{nx, ny}]);
+						}
+					}
+				}
+				else break;
+			}
+		}
+		//for (auto &row : dp)
+		//{
+		//	for (int e : row)
+		//		cout << e << " ";
+		//	cout << endl;
+		//}
+		int dx = remap[n * n].first, dy = remap[n * n].second;
+		if (dp[dx][dy] == maxn) return -1;
+		else return dp[dx][dy];
+	}
+	//908. Smallest Range I
+	int smallestRangeI(vector<int>& A, int K) {
+		int mi = INT_MAX, mx = INT_MIN;
+		for (int e : A)
+		{
+			mi = min(mi, e);
+			mx = max(mx, e);
+		}
+		if (mx - mi <= K * 2)  return 0;
+		else return mx - mi - K * 2;
 	}
 };
 int main()
