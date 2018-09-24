@@ -342,6 +342,24 @@ public:
 		if (mx - mi <= K * 2)  return 0;
 		else return mx - mi - K * 2;
 	}
+
+	//910. Smallest Range II
+	int smallestRangeII(vector<int>& A, int K) {
+		sort(A.begin(), A.end());
+		int n = A.size();
+		if (n == 1) return 0;
+		int i = 0, j = n - 1;
+		int ans = A.back() - A[0];
+		for (int i = 0; i < n - 1; ++i)
+		{
+			int lx = A[i] + K, rx = A.back() - K;
+			int mx = max(lx, rx);
+			int li = A[0] + K, ri = A[i + 1] - K;
+			int mi = min(li, ri);
+			ans = min(ans, mx - mi);
+		}
+		return ans;
+	}
 };
 int main()
 {
