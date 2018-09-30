@@ -360,8 +360,82 @@ public:
 		}
 		return ans;
 	}
+	int gcd(int a, int b)
+	{
+		if (a < b) swap(a, b);
+		int t;
+		while (b)
+		{
+			t = b;
+			b = a % b;
+			a = t;
+		}
+		return a;
+	}
+	//914. X of a Kind in a Deck of Cards 
+	bool hasGroupsSizeX(vector<int>& deck) {
+		map<int, int> cnt;
+		for (int e : deck) cnt[e]++;
+		int pv = -1;
+		for (auto it = cnt.begin(); it != cnt.end(); ++it)
+		{
+			if (pv == -1) pv = it->second;
+			else pv = gcd(pv, it->second);
+		}
+		return pv >= 2;
+	}
+
+	//915. Partition Array into Disjoint Intervals
+	int partitionDisjoint(vector<int>& A) {
+		int n = A.size();
+		vector<int> mis(n);
+		mis[n - 1] = A[n - 1];
+		for (int i = n - 2; i >= 0; --i)
+		{
+			mis[i] = min(mis[i + 1], A[i]);
+		}
+		int mx = -1;
+		for (int i = 0; i + 1 < n; ++i)
+		{
+			mx = max(mx, A[i]);
+			if (mx <= mis[i + 1])
+				return i + 1;
+		}
+		return -1;
+	}
+
+	//916. Word Subsets
+	vector<string> wordSubsets(vector<string>& A, vector<string>& B) {
+		int n = B.size();
+		vector<int> bb(26);
+		for (int i = 0; i < n; ++i)
+		{
+			vector<int> cnt(26);
+			for (int j = 0; j < B[i].size(); ++j)
+				cnt[B[i][j] - 'a']++;
+			for (int j = 0; j < 26; ++j)
+				bb[j] = max(bb[j], cnt[j]);
+		}
+		vector<string> ans;
+		int m = A.size();
+		for (int i = 0; i < m; ++i)
+		{
+			vector<int> cnt(26);
+			for (char c : A[i])
+				cnt[c - 'a']++;
+			bool f = true;
+			for (int i = 0; f && i < 26; ++i)
+			{
+				if (cnt[i] < bb[i])
+					f = false;
+			}
+			if (f) ans.push_back(A[i]);
+		}
+		return ans;
+	}
 };
 int main()
 {
+	Solution sol;
 	return 0;
 }
