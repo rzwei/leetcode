@@ -433,6 +433,66 @@ public:
 		}
 		return ans;
 	}
+
+	//913. Cat and Mouse
+	int catMouseGame(vector<vector<int>>& graph) {
+		int n = graph.size();
+		int const DRAW = 0, MOUSE = 1, CAT = 2;
+		vector<vector<vector<int>>> color(n, vector<vector<int>>(n, vector<int>(3)));
+		auto outdegree = color;
+		//cat, mouse, turn, win, mouse -> 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				outdegree[i][j][0] = graph[j].size();
+				outdegree[i][j][1] = graph[i].size();
+				for (int k : graph[i])
+				{
+					if (k == 0)
+					{
+						outdegree[i][j][1]--;
+						break;
+					}
+				}
+			}
+
+		}
+		queue<vector<int>> q;
+
+		for (int k = 1; k < n; ++k)
+		{
+			for (int m = 0; m < 2; ++m)
+			{
+				color[k][0][m] = 1;         //mouse
+				q.push({ k, 0, m, 1 });
+				color[k][k][m] = 2;         //cat
+				q.push({ k, k, m, 2 });
+			}
+		}
+
+		while (!q.empty())
+		{
+			auto u = q.front();
+			q.pop();
+			int cat = u[0], mouse = u[1], turn = u[2], c = u[3];
+			if (cat == 2 && mouse == 1 && turn == 0) return c;
+			int pre = 1 - turn;
+			for (int v : graph[pre == 1 ? cat : mouse])
+			{
+				int preCat = pre == 1 ? v : cat;
+				int preMouse = pre == 1 ? mouse : v;
+				if (preCat == 0) continue;
+				if (color[preCat][preMouse][pre] > 0) continue;
+				if (pre == 1 && c == 2 || pre == 0 && c == 1
+					|| --outdegree[preCat][preMouse][pre] == 0) {
+					color[preCat][preMouse][pre] = c;
+					q.push({ preCat, preMouse, pre, c });
+				}
+			}
+		}
+		return color[2][1][0];
+	}
 };
 int main()
 {
