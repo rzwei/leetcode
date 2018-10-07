@@ -78,6 +78,85 @@ public:
 		return it->second;
 	}
 };
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+//919. Complete Binary Tree Inserter
+class CBTInserter {
+public:
+	queue<TreeNode *> cur;
+	TreeNode *ret;
+	int maxdep(TreeNode *u)
+	{
+		if (!u) return 0;
+		return max(maxdep(u->left), maxdep(u->right)) + 1;
+	}
+	CBTInserter(TreeNode* root) {
+		ret = root;
+		int dep = maxdep(root);
+		queue<TreeNode *> q;
+		q.push(root);
+		int level = 0;
+		while (!q.empty())
+		{
+			int size = q.size();
+			level++;
+			while (size--)
+			{
+				auto u = q.front();
+				q.pop();
+				if (level == dep - 1 && (u->left == nullptr || u->right == nullptr) || level == dep)
+				{
+					if (level == dep - 1)
+					{
+						if (u->left == nullptr)
+							cur.push(u);
+						if (u->right == nullptr)
+							cur.push(u);
+					}
+					else
+					{
+						cur.push(u);
+						cur.push(u);
+					}
+				}
+				if (u->left) q.push(u->left);
+				if (u->right) q.push(u->right);
+			}
+			if (level == dep) break;
+		}
+	}
+
+	int insert(int v) {
+		auto u = cur.front();
+		cur.pop();
+		if (u->left == nullptr)
+		{
+			u->left = new TreeNode(v);
+			cur.push(u->left);
+			cur.push(u->left);
+			return u->val;
+		}
+		else if (u->right == nullptr)
+		{
+			u->right = new TreeNode(v);
+			cur.push(u->right);
+			cur.push(u->right);
+			return u->val;
+		}
+	}
+
+	TreeNode* get_root() {
+		return ret;
+	}
+};
+
+
 class Solution {
 public:
 	//902. Numbers At Most N Given Digit Set
@@ -492,6 +571,46 @@ public:
 			}
 		}
 		return color[2][1][0];
+	}
+
+	//917. Reverse Only Letters
+	string reverseOnlyLetters(string S) {
+		int i = 0, j = S.size() - 1;
+		while (i < j)
+		{
+			while (i < j && !isalpha(S[i])) i++;
+			while (i < j && !isalpha(S[j])) j--;
+			if (i >= j) break;
+			swap(S[i], S[j]);
+			i++;
+			j--;
+		}
+		return S;
+	}
+
+	//918. Maximum Sum Circular Subarray
+	int maxSubarraySumCircular(vector<int>& A) {
+		int n = A.size();
+		vector<int> sums(n + n + 1);
+		int ans = INT_MIN;
+		for (int i = 0; i < n; ++i)
+		{
+			sums[i + 1] = sums[i + n + 1] = A[i];
+			ans = max(ans, A[i]);
+		}
+		for (int i = 1; i <= n + n; ++i)
+			sums[i] += sums[i - 1];
+		deque<int> q;
+		q.push_back(0);
+		for (int i = 1; i <= n + n; ++i)
+		{
+			while (!q.empty() && sums[q.back()] > sums[i]) q.pop_back();
+			while (!q.empty() && i - q.front() > n) q.pop_front();
+			if (!q.empty())
+				ans = max(ans, sums[i] - sums[q.front()]);
+			q.push_back(i);
+		}
+		return ans;
 	}
 };
 int main()
