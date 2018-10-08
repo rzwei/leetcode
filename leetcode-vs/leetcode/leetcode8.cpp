@@ -80,10 +80,10 @@ public:
 };
 
 struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+	int val;
+	TreeNode *left;
+	TreeNode *right;
+	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
 //919. Complete Binary Tree Inserter
@@ -611,6 +611,24 @@ public:
 			q.push_back(i);
 		}
 		return ans;
+	}
+
+	//920. Number of Music Playlists
+	int numMusicPlaylists(int N, int L, int K) {
+		long mod = 1e9 + 7;
+		vector <vector<long>> dp(N + 1, vector<long>(L + 1));
+		vector<long> factorial(N + 1);
+		factorial[0] = 1;
+		for (int i = 1; i <= N; ++i)
+			factorial[i] = factorial[i - 1] * i % mod;
+
+		for (int i = K + 1; i <= N; ++i)
+			for (int j = i; j <= L; ++j)
+				if ((i == j) || (i == K + 1))
+					dp[i][j] = factorial[i];
+				else
+					dp[i][j] = (dp[i - 1][j - 1] * i + dp[i][j - 1] * (i - K)) % mod;
+		return (int)dp[N][L];
 	}
 };
 int main()
