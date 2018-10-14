@@ -630,6 +630,129 @@ public:
 					dp[i][j] = (dp[i - 1][j - 1] * i + dp[i][j - 1] * (i - K)) % mod;
 		return (int)dp[N][L];
 	}
+
+	//922. Sort Array By Parity II
+	vector<int> sortArrayByParityII(vector<int>& A) {
+		vector<int> odd, even;
+		int n = A.size();
+		for (int i = 0; i < n; ++i)
+			if (A[i] % 2 == 1)
+			{
+				odd.push_back(A[i]);
+			}
+			else {
+				even.push_back(A[i]);
+			}
+		vector<int> ans(n);
+		int p0 = 0, p1 = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (i % 2) ans[i] = odd[p0++];
+			else ans[i] = even[p1++];
+		}
+		return ans;
+	}
+
+	//921. Minimum Add to Make Parentheses Valid
+	int minAddToMakeValid(string S) {
+		stack<char> stk;
+		int ans = 0;
+		for (char c : S)
+		{
+			if (c == '(') stk.push(c);
+			else    // )
+			{
+				if (stk.empty()) ans++;
+				else if (stk.top() != '(') ans++;
+				else if (stk.top() == '(') stk.pop();
+			}
+		}
+		while (!stk.empty())
+		{
+			ans++;
+			stk.pop();
+		}
+		return ans;
+	}
+
+	//923. 3Sum With Multiplicity
+	int threeSumMulti(vector<int>& A, int target) {
+		int const mod = 1e9 + 7;
+		int n = A.size();
+		typedef long long ll;
+		vector<vector<int>> dp(n, vector<int>(301));
+		for (int i = 0; i < n; ++i)
+		{
+			if (i == 0)
+				dp[i][A[i]]++;
+			else
+			{
+				dp[i] = dp[i - 1];
+				dp[i][A[i]]++;
+			}
+		}
+		int const N = 300;
+		vector<vector<int>> dp2(n, vector<int>(301));
+		for (int i = 1; i < n; ++i)
+		{
+			dp2[i] = dp2[i - 1];
+			for (int v = 0; v + A[i] <= N; ++v)
+			{
+				dp2[i][v + A[i]] = (dp[i - 1][v] + dp2[i][v + A[i]]) % mod;
+			}
+		}
+		ll ans = 0;
+		for (int i = n - 1; i >= 2; --i)
+			if (target - A[i] >= 0)
+				ans = (ans + dp2[i - 1][target - A[i]]) % mod;
+		return ans;
+	}
+
+	void bfs_924(int u, vector<int> &color, vector<vector<int>> &g)
+	{
+		queue<int> q;
+		q.push(u);
+		color[u] = 1;
+		while (!q.empty())
+		{
+			int u = q.front(); q.pop();
+			for (int v = 0; v < g.size(); ++v)
+			{
+				if (g[u][v])
+				{
+					if (color[v] == 0)
+					{
+						color[v] = 1;
+						q.push(v);
+					}
+				}
+			}
+		}
+	}
+	//924. Minimize Malware Spread
+	int minMalwareSpread(vector<vector<int>>& graph, vector<int>& initial) {
+		int n = graph.size();
+		sort(initial.begin(), initial.end());
+		int ans = INT_MAX, idx = -1;
+		for (int i = 0; i < initial.size(); i++)
+		{
+			vector<int> color(n);
+			for (int j = 0; j < initial.size(); ++j)
+			{
+				if (i == j) continue;
+				if (color[initial[j]] == 0)
+					bfs_924(initial[j], color, graph);
+			}
+			int cur = 0;
+			for (int i = 0; i < n; ++i) cur += color[i];
+			if (cur < ans)
+			{
+				ans = cur;
+				idx = initial[i];
+			}
+		}
+		return idx;
+	}
 };
 int main()
 {
