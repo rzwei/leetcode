@@ -633,24 +633,17 @@ public:
 
 	//922. Sort Array By Parity II
 	vector<int> sortArrayByParityII(vector<int>& A) {
-		vector<int> odd, even;
-		int n = A.size();
-		for (int i = 0; i < n; ++i)
-			if (A[i] % 2 == 1)
-			{
-				odd.push_back(A[i]);
-			}
-			else {
-				even.push_back(A[i]);
-			}
-		vector<int> ans(n);
-		int p0 = 0, p1 = 0;
-		for (int i = 0; i < n; ++i)
+		int n = A.size(), i = 0, j = 1;
+		for (int i = 0; i < n; i += 2)
 		{
-			if (i % 2) ans[i] = odd[p0++];
-			else ans[i] = even[p1++];
+			if (A[i] % 2)
+			{
+				while (j < n && A[j] % 2) j += 2;
+				swap(A[i], A[j]);
+				j += 2;
+			}
 		}
-		return ans;
+		return A;
 	}
 
 	//921. Minimum Add to Make Parentheses Valid
@@ -672,81 +665,80 @@ public:
 
 	//923. 3Sum With Multiplicity
 	int threeSumMulti(vector<int>& A, int target) {
-		int const mod = 1e9 + 7;
-		int n = A.size();
-		typedef long long ll;
-		vector<vector<int>> dp(n, vector<int>(301));
-		for (int i = 0; i < n; ++i)
+		int const N = 100, mod = 1e9 + 7;
+		vector<long long> cnt(N + 1);
+		for (int e : A) cnt[e]++;
+		long long ans = 0;
+		for (int a = 0; a <= N; ++a)
 		{
-			if (i == 0)
-				dp[i][A[i]]++;
-			else
+			for (int b = a; b <= N; ++b)
 			{
-				dp[i] = dp[i - 1];
-				dp[i][A[i]]++;
-			}
-		}
-		int const N = 300;
-		vector<vector<int>> dp2(n, vector<int>(301));
-		for (int i = 1; i < n; ++i)
-		{
-			dp2[i] = dp2[i - 1];
-			for (int v = 0; v + A[i] <= N; ++v)
-			{
-				dp2[i][v + A[i]] = (dp[i - 1][v] + dp2[i][v + A[i]]) % mod;
-			}
-		}
-		ll ans = 0;
-		for (int i = n - 1; i >= 2; --i)
-			if (target - A[i] >= 0)
-				ans = (ans + dp2[i - 1][target - A[i]]) % mod;
-		return ans;
-	}
-
-	void bfs_924(int u, vector<int> &color, vector<vector<int>> &g)
-	{
-		queue<int> q;
-		q.push(u);
-		color[u] = 1;
-		while (!q.empty())
-		{
-			int u = q.front(); q.pop();
-			for (int v = 0; v < g.size(); ++v)
-			{
-				if (g[u][v])
+				int c = target - a - b;
+				if (b <= c && c <= N)
 				{
-					if (color[v] == 0)
+					if (a == b && a != c)
 					{
-						color[v] = 1;
-						q.push(v);
+						long long v = cnt[a];
+						ans = (ans + (v * (v - 1)) / 2 * cnt[c]) % mod;
+					}
+					else if (a == b && a == c)
+					{
+						long long v = cnt[a];
+						ans = (ans + v * (v - 1) * (v - 2) / 6) % mod;
+					}
+					else if (a != b && b == c)
+					{
+						long long v = cnt[b];
+						ans = (ans + v * (v - 1) / 2 * cnt[a]) % mod;
+					}
+					else if (a != b && a != c)
+					{
+						ans = (ans + cnt[a] * cnt[b] * cnt[c]) % mod;
 					}
 				}
 			}
 		}
+		return ans;
 	}
-	//924. Minimize Malware Spread
-	int minMalwareSpread(vector<vector<int>>& graph, vector<int>& initial) {
-		int n = graph.size();
-		sort(initial.begin(), initial.end());
-		int ans = INT_MAX, idx = -1;
-		for (int i = 0; i < initial.size(); i++)
+
+	void dfs_924(int u, vector<vector<int>> &g, vector<int> &color, int c)
+	{
+		color[u] = c;
+		for (int v = 0; v < g.size(); ++v)
 		{
-			vector<int> color(n);
-			for (int j = 0; j < initial.size(); ++j)
+			if (g[u][v] && color[v] == -1)
+				dfs_924(v, g, color, c);
+		}
+	}
+
+	//924. Minimize Malware Spread
+	int minMalwareSpread(vector<vector<int>>& g, vector<int>& init) {
+		int n = g.size();
+		vector<int>color(n, -1);
+		int c = 0;
+		for (int i = 0; i < n; ++i)
+			if (color[i] == -1) dfs_924(i, g, color, c++);
+		vector<int> colorsize(c);
+		for (int x : color) colorsize[x]++;
+		vector<int> colorcnt(n);
+		for (int e : init) colorcnt[color[e]]++;
+		int ans = -1;
+		for (int e : init)
+		{
+			int x = color[e];
+			if (colorcnt[x] == 1)
 			{
-				if (i == j) continue;
-				if (color[initial[j]] == 0)
-					bfs_924(initial[j], color, graph);
-			}
-			int cur = 0;
-			for (int i = 0; i < n; ++i) cur += color[i];
-			if (cur < ans)
-			{
-				ans = cur;
-				idx = initial[i];
+				if (ans == -1) ans = e;
+				else if (colorsize[x] > colorsize[color[ans]]) ans = e;
+				else if (colorsize[x] == colorsize[color[ans]] && e < ans) ans = e;
 			}
 		}
-		return idx;
+		if (ans == -1)
+		{
+			for (int e : init) if (ans == -1) ans = e;
+			else if (e < ans) ans = e;
+		}
+		return ans;
 	}
 };
 int main()
