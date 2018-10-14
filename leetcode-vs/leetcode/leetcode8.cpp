@@ -655,23 +655,18 @@ public:
 
 	//921. Minimum Add to Make Parentheses Valid
 	int minAddToMakeValid(string S) {
-		stack<char> stk;
-		int ans = 0;
+		int cnt = 0, ans = 0;
 		for (char c : S)
 		{
-			if (c == '(') stk.push(c);
-			else    // )
+			if (c == '(') cnt++;
+			else
 			{
-				if (stk.empty()) ans++;
-				else if (stk.top() != '(') ans++;
-				else if (stk.top() == '(') stk.pop();
+				if (cnt > 0) cnt--;
+				else
+					ans++;
 			}
 		}
-		while (!stk.empty())
-		{
-			ans++;
-			stk.pop();
-		}
+		ans += cnt;
 		return ans;
 	}
 
