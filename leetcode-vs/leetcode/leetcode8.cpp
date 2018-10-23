@@ -740,6 +740,142 @@ public:
 		}
 		return ans;
 	}
+
+	//925. Long Pressed Name
+	bool isLongPressedName(string name, string typed) {
+		int i = 0, j = 0, n = name.size(), m = typed.size();
+		while (j < m && i < n)
+		{
+			while (j > 0 && j < m && typed[j] != name[i] && typed[j] == typed[j - 1]) j++;
+			if (name[i] == typed[j])
+			{
+				i++;
+				j++;
+			}
+			else return false;
+		}
+		return i == n;
+	}
+
+	//926. Flip String to Monotone Increasing
+	int minFlipsMonoIncr(string S) {
+		int ans = INT_MAX, n = S.size();
+		int left = 0, right = 0;
+		for (int i = 0; i < n; ++i)
+			right += S[i] == '0';
+		for (int i = 0; i < n; ++i)
+		{
+			ans = min(ans, left + right);
+			if (S[i] == '0') right--;
+			else left++;
+		}
+		ans = min(ans, left + right);
+		return ans;
+	}
+
+	//927. Three Equal Parts
+	vector<int> threeEqualParts(vector<int>& A) {
+		int cnt = 0;
+		for (int e : A) cnt += e == 1;
+		int n = A.size();
+		if (cnt == 0) return { 0, n - 1 };
+		if (cnt % 3) return { -1, -1 };
+		int k = cnt / 3;
+		vector<int> st(3, -1), ed(3, -1);
+		int f = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (A[i] == 1)
+			{
+				if (f % k == 0)
+					st[f / k] = i;
+				f++;
+				if (f % k == 0)
+					ed[(f - 1) / k] = i;
+			}
+		}
+
+		for (int e : st) if (e == -1) return { -1, -1 };
+
+
+		for (int i = 1; i < 3; ++i)
+		{
+			if (ed[i] - st[i] != ed[i - 1] - st[i - 1])
+				return { -1, -1 };
+		}
+
+		int endzeros = n - 1 - ed[2];
+		int len = ed[0] - st[0] + 1;
+
+		for (int i = 1; i < 3; ++i) if (st[i] - ed[i - 1] - 1 < endzeros) return { -1, -1 };
+
+		for (int i = 0; i < len; ++i)
+		{
+			int val = A[st[0] + i];
+			for (int j = 1; j < 3; ++j) if (A[st[j] + i] != val) return { -1, -1 };
+		}
+
+		return { ed[0] + endzeros, ed[1] + endzeros + 1 };
+	}
+
+	void bfs_928(int u, vector<int> &color, vector<vector<int>> &g)
+	{
+		queue<int> q;
+		q.push(u);
+		color[u] = 1;
+		while (!q.empty())
+		{
+			int u = q.front(); q.pop();
+			for (int v = 0; v < g.size(); ++v)
+			{
+				if (g[u][v])
+				{
+					if (color[v] == 0)
+					{
+						color[v] = 1;
+						q.push(v);
+					}
+				}
+			}
+		}
+	}
+	//928. Minimize Malware Spread II
+	int minMalwareSpreadII(vector<vector<int>>& graph, vector<int>& initial) {
+		int n = graph.size();
+		sort(initial.begin(), initial.end());
+		int ans = INT_MAX, idx = -1;
+		vector<int> bk(n);
+		for (int i = 0; i < initial.size(); i++)
+		{
+			int e = initial[i];
+			bk = graph[e];
+			fill(graph[e].begin(), graph[e].end(), 0);
+			vector<int> color(n);
+			for (int j = 0; j < initial.size(); ++j)
+			{
+				if (i == j) continue;
+				if (color[initial[j]] == 0)
+				{
+					bfs_928(initial[j], color, graph);
+				}
+			}
+			int cur = 0;
+			for (int i = 0; i < n; ++i) cur += color[i];
+
+			cur -= color[e];
+
+			// cout << initial[i] << " " << cur << endl;
+
+			if (cur < ans)
+			{
+				ans = cur;
+				idx = initial[i];
+			}
+			graph[e] = bk;
+		}
+		return idx;
+	}
+
 };
 int main()
 {
