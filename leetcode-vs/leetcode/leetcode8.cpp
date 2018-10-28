@@ -907,42 +907,52 @@ public:
 
 	//930. Binary Subarrays With Sum
 	int numSubarraysWithSum(vector<int>& A, int S) {
-		int ans = 0;
-		int n = A.size();
-		vector<int> b(n);
-		int cur = 0;
-		for (int i = 0; i < n; ++i)
-		{
-			if (A[i] == 0)
-			{
-				cur++;
-				b[i] = cur;
-			}
-			else
-			{
-				b[i] = cur;
-				cur = 0;
-			}
-		}
-		cur = 0;
-		int j = 0;
+		map<int, int> cnt;
+		int n = A.size(), ans = 0, cur = 0;
+		cnt[0] = 1;
 		for (int i = 0; i < n; ++i)
 		{
 			cur += A[i];
-			while (cur > S)
-			{
-				cur -= A[j++];
-			}
-			if (cur == S && j <= i)
-			{
-				while (j < i && A[j] == 0) j++;
-				if (A[j] != 0)
-					ans += b[j] + 1;
-				else
-					ans += b[j];
-			}
+			ans += cnt[cur - S];
+			cnt[cur]++;
 		}
 		return ans;
+		//int ans = 0;
+		//int n = A.size();
+		//vector<int> b(n);
+		//int cur = 0;
+		//for (int i = 0; i < n; ++i)
+		//{
+		//	if (A[i] == 0)
+		//	{
+		//		cur++;
+		//		b[i] = cur;
+		//	}
+		//	else
+		//	{
+		//		b[i] = cur;
+		//		cur = 0;
+		//	}
+		//}
+		//cur = 0;
+		//int j = 0;
+		//for (int i = 0; i < n; ++i)
+		//{
+		//	cur += A[i];
+		//	while (cur > S)
+		//	{
+		//		cur -= A[j++];
+		//	}
+		//	if (cur == S && j <= i)
+		//	{
+		//		while (j < i && A[j] == 0) j++;
+		//		if (A[j] != 0)
+		//			ans += b[j] + 1;
+		//		else
+		//			ans += b[j];
+		//	}
+		//}
+		//return ans;
 	}
 
 	int dfs_931(int u, int pre, vector<vector<int>>& a, int n, int m, vector<vector<int>> &memo)
