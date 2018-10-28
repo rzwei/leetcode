@@ -875,7 +875,115 @@ public:
 		}
 		return idx;
 	}
+	//929. Unique Email Addresses
+	int numUniqueEmails(vector<string>& emails) {
+		set<string> ans;
+		for (string &s : emails)
+		{
+			string n;
+			bool f = true;
+			for (int i = 0; i < s.size(); ++i)
+			{
+				if (f && s[i] == '.') continue;
+				if (s[i] == '+')
+				{
+					int j = i + 1;
+					while (j < s.size() && s[j] != '@') j++;
+					if (s[j] == '@')
+						j--;
+					i = j;
+				}
+				else
+				{
+					n.push_back(s[i]);
+					if (s[i] == '@') f = false;
+				}
+			}
+			ans.insert(n);
+		}
+		// for (auto &s : ans) cout << s << endl;
+		return ans.size();
+	}
 
+	//930. Binary Subarrays With Sum
+	int numSubarraysWithSum(vector<int>& A, int S) {
+		int ans = 0;
+		int n = A.size();
+		vector<int> b(n);
+		int cur = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (A[i] == 0)
+			{
+				cur++;
+				b[i] = cur;
+			}
+			else
+			{
+				b[i] = cur;
+				cur = 0;
+			}
+		}
+		cur = 0;
+		int j = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			cur += A[i];
+			while (cur > S)
+			{
+				cur -= A[j++];
+			}
+			if (cur == S && j <= i)
+			{
+				while (j < i && A[j] == 0) j++;
+				if (A[j] != 0)
+					ans += b[j] + 1;
+				else
+					ans += b[j];
+			}
+		}
+		return ans;
+	}
+
+	int dfs_931(int u, int pre, vector<vector<int>>& a, int n, int m, vector<vector<int>> &memo)
+	{
+		if (u == n) return 0;
+		if (memo[u][pre] != -1) return memo[u][pre];
+		int ans = INT_MAX;
+		for (int d = -1; d <= 1; d++)
+		{
+			int np = pre + d;
+			if (0 <= np && np < m)
+			{
+				ans = min(ans, dfs_931(u + 1, np, a, n, m, memo) + a[u][np]);
+			}
+		}
+		memo[u][pre] = ans;
+		return ans;
+	}
+	//931. Minimum Falling Path Sum
+	int minFallingPathSum(vector<vector<int>>& a) {
+		int n = a.size();
+		int m = a[0].size();
+		vector<vector<int>> memo(n, vector<int>(m, -1));
+		int ans = INT_MAX;
+		for (int i = 0; i < n; ++i)
+		{
+			ans = min(ans, dfs_931(1, i, a, n, m, memo) + a[0][i]);
+		}
+		return ans;
+	}
+	//932. Beautiful Array
+	vector<int> beautifulArray(int N) {
+		vector<int> res = { 1 };
+		while (res.size() < N) {
+			vector<int> tmp;
+			for (int i : res) if (i * 2 - 1 <= N) tmp.push_back(i * 2 - 1);
+			for (int i : res) if (i * 2 <= N) tmp.push_back(i * 2);
+			res = tmp;
+		}
+		return res;
+	}
 };
 int main()
 {
