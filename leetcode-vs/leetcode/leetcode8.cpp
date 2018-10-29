@@ -955,33 +955,45 @@ public:
 		//return ans;
 	}
 
-	int dfs_931(int u, int pre, vector<vector<int>>& a, int n, int m, vector<vector<int>> &memo)
-	{
-		if (u == n) return 0;
-		if (memo[u][pre] != -1) return memo[u][pre];
-		int ans = INT_MAX;
-		for (int d = -1; d <= 1; d++)
-		{
-			int np = pre + d;
-			if (0 <= np && np < m)
-			{
-				ans = min(ans, dfs_931(u + 1, np, a, n, m, memo) + a[u][np]);
-			}
-		}
-		memo[u][pre] = ans;
-		return ans;
-	}
+	//int dfs_931(int u, int pre, vector<vector<int>>& a, int n, int m, vector<vector<int>> &memo)
+	//{
+	//	if (u == n) return 0;
+	//	if (memo[u][pre] != -1) return memo[u][pre];
+	//	int ans = INT_MAX;
+	//	for (int d = -1; d <= 1; d++)
+	//	{
+	//		int np = pre + d;
+	//		if (0 <= np && np < m)
+	//		{
+	//			ans = min(ans, dfs_931(u + 1, np, a, n, m, memo) + a[u][np]);
+	//		}
+	//	}
+	//	memo[u][pre] = ans;
+	//	return ans;
+	//}
 	//931. Minimum Falling Path Sum
 	int minFallingPathSum(vector<vector<int>>& a) {
-		int n = a.size();
-		int m = a[0].size();
-		vector<vector<int>> memo(n, vector<int>(m, -1));
-		int ans = INT_MAX;
-		for (int i = 0; i < n; ++i)
+		//int n = a.size();
+		//int m = a[0].size();
+		//vector<vector<int>> memo(n, vector<int>(m, -1));
+		//int ans = INT_MAX;
+		//for (int i = 0; i < n; ++i)
+		//{
+		//	ans = min(ans, dfs_931(1, i, a, n, m, memo) + a[0][i]);
+		//}
+		//return ans;
+		int n = a.size(), m = a[0].size();
+		for (int i = n - 2; i >= 0; --i)
 		{
-			ans = min(ans, dfs_931(1, i, a, n, m, memo) + a[0][i]);
+			for (int j = 0; j < m; ++j)
+			{
+				int val = a[i + 1][j];
+				if (j + 1 < m) val = min(val, a[i + 1][j + 1]);
+				if (j - 1 >= 0) val = min(val, a[i + 1][j - 1]);
+				a[i][j] += val;
+			}
 		}
-		return ans;
+		return *min_element(a[0].begin(), a[0].end());
 	}
 	//932. Beautiful Array
 	vector<int> beautifulArray(int N) {
