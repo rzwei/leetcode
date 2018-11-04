@@ -1093,6 +1093,7 @@ public:
 		int n = a.size(), m = a[0].size();
 		vector<pair<int, int>> left, right;
 		int c = 100;
+		queue<pair<int, int>> q;
 		for (int i = 0; i < n; ++i)
 		{
 			for (int j = 0; j < m; ++j)
@@ -1102,42 +1103,41 @@ public:
 			}
 		}
 		for (int i = 0; i < n; ++i)
-		{
 			for (int j = 0; j < m; ++j)
-			{
-				if (a[i][j] == 0) continue;
-				bool f = false;
-				for (int d = 0; !f && d < 4; ++d)
-				{
-
-					int ni = i + dr[d], nj = j + dc[d];
-					if (0 <= ni && ni < n && 0 <= nj && nj < m && a[ni][nj] == 0)
-						f = true;
-				}
-				if (f)
-				{
-					if (a[i][j] == 100)
-						left.push_back({ i, j });
-					else
-						right.push_back({ i, j });
-					a[i][j] = 1;
-				}
-			}
-		}
-		int ans = n * m;
-		for (int i = 0; i < left.size(); ++i)
+				if (a[i][j] == 100) q.emplace(i, j);
+		int ans = 0;
+		while (!q.empty())
 		{
-			for (int j = 0; j < right.size(); ++j)
+			int size = q.size();
+			ans++;
+			while (size--)
 			{
-				int d = abs(left[i].first - right[j].first) + abs(left[i].second - right[j].second);
-				ans = min(ans, d - 1);
+				auto i = q.front().first, j = q.front().second;
+				q.pop();
+				for (int d = 0; d < 4; ++d)
+				{
+					int ni = i + dr[d], nj = j + dc[d];
+					if (0 <= ni && ni < n && 0 <= nj && nj < m)
+					{
+						if (a[ni][nj] == c - 1)
+							return ans - 1;
+						else if (a[ni][nj] == 0)
+						{
+							a[ni][nj] = 100;
+							q.emplace(ni, nj);
+						}
+					}
+				}
 			}
 		}
-		return ans;
+		return -1;
 	}
 };
 int main()
 {
 	Solution sol;
+	vector<vector<int>> a;
+	a = { {0,1},{1,0} };
+	cout << sol.shortestBridge(a) << endl;
 	return 0;
 }
