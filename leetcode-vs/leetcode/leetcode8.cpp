@@ -156,6 +156,19 @@ public:
 	}
 };
 
+//933. Number of Recent Calls
+class RecentCounter {
+public:
+	vector<int> a;
+	RecentCounter() {
+
+	}
+
+	int ping(int t) {
+		a.push_back(t);
+		return a.end() - lower_bound(a.begin(), a.end(), t - 3000);
+	}
+};
 
 class Solution {
 public:
@@ -1005,6 +1018,122 @@ public:
 			res = tmp;
 		}
 		return res;
+	}
+
+	//935. Knight Dialer
+	int knightDialer(int N) {
+		int n = 4, m = 3;
+		vector<vector<int>> valid = { {1, 1, 1},{1, 1, 1},{1, 1, 1},{0, 1, 0}, };
+		int dr[] = { 1,-1,1,-1,2,-2,2,-2 };
+		int dc[] = { 2,2,-2,-2,1,1,-1,-1 };
+		int const mod = 1e9 + 7;
+		vector<vector<long long>> dp(n, vector<long long>(m));
+		auto pre = dp;
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < m; ++j)
+				pre[i][j] = valid[i][j];
+		for (int t = 0; t < N - 1; ++t)
+		{
+			for (auto it = dp.begin(); it != dp.end(); ++it)
+				fill(it->begin(), it->end(), 0);
+			for (int i = 0; i < n; ++i)
+				for (int j = 0; j < m; ++j)
+				{
+					if (!valid[i][j]) continue;
+					for (int d = 0; d < 8; ++d)
+					{
+						int nx = i + dr[d], ny = j + dc[d];
+						if (0 <= nx && nx < n && 0 <= ny && ny < m && valid[nx][ny])
+						{
+							dp[nx][ny] = (dp[nx][ny] + pre[i][j]) % mod;
+						}
+					}
+				}
+			swap(dp, pre);
+		}
+		long long ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (valid[i][j]) ans = (ans + pre[i][j]) % mod;
+			}
+		}
+		return ans;
+	}
+
+	void bfs_934(int i, int j, vector<vector<int>> &a, int c)
+	{
+		static int dr[4] = { 0, 1, 0, -1 };
+		static int dc[4] = { 1, 0, -1, 0 };
+		int n = a.size(), m = a[0].size();
+		queue<pair<int, int>> q;
+		q.emplace(i, j);
+		a[i][j] = c;
+		while (!q.empty())
+		{
+			i = q.front().first, j = q.front().second;
+			q.pop();
+			for (int d = 0; d < 4; ++d)
+			{
+				int ni = i + dr[d], nj = j + dc[d];
+				if (0 <= ni && ni < n && 0 <= nj && nj < m && a[ni][nj] == 1)
+				{
+					a[ni][nj] = c;
+					q.emplace(ni, nj);
+				}
+			}
+		}
+	}
+
+	//934. Shortest Bridge
+	int shortestBridge(vector<vector<int>>& a) {
+		static int dr[4] = { 0, 1, 0, -1 };
+		static int dc[4] = { 1, 0, -1, 0 };
+		int n = a.size(), m = a[0].size();
+		vector<pair<int, int>> left, right;
+		int c = 100;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (a[i][j] == 1)
+					bfs_934(i, j, a, c++);
+			}
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (a[i][j] == 0) continue;
+				bool f = false;
+				for (int d = 0; !f && d < 4; ++d)
+				{
+
+					int ni = i + dr[d], nj = j + dc[d];
+					if (0 <= ni && ni < n && 0 <= nj && nj < m && a[ni][nj] == 0)
+						f = true;
+				}
+				if (f)
+				{
+					if (a[i][j] == 100)
+						left.push_back({ i, j });
+					else
+						right.push_back({ i, j });
+					a[i][j] = 1;
+				}
+			}
+		}
+		int ans = n * m;
+		for (int i = 0; i < left.size(); ++i)
+		{
+			for (int j = 0; j < right.size(); ++j)
+			{
+				int d = abs(left[i].first - right[j].first) + abs(left[i].second - right[j].second);
+				ans = min(ans, d - 1);
+			}
+		}
+		return ans;
 	}
 };
 int main()
