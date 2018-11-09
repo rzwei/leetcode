@@ -1132,6 +1132,74 @@ public:
 		}
 		return -1;
 	}
+
+	//936. Stamping The Sequence
+	vector<int> movesToStamp(string stamp, string target) {
+		class Node
+		{
+		public:
+			set<int> made, todo;
+			Node(set<int> &made_, set<int> &todo_) : made(made_), todo(todo_) {}
+		};
+		int m = stamp.size(), n = target.size();
+		queue<int> q;
+		vector<bool> vis(n);
+		vector<int> ans;
+		vector<Node> a;
+		for (int i = 0; i <= n - m; ++i)
+		{
+			set<int> made, todo;
+			for (int j = 0; j < m; ++j)
+			{
+				if (target[i + j] == stamp[j])
+					made.insert(i + j);
+				else
+					todo.insert(i + j);
+			}
+			a.emplace_back(made, todo);
+			if (todo.empty())
+			{
+				ans.push_back(i);
+				for (int j = i; j < i + m; ++j)
+				{
+					if (!vis[j])
+					{
+						vis[j] = 1;
+						q.push(j);
+					}
+				}
+			}
+		}
+		while (!q.empty())
+		{
+			int i = q.front();
+			q.pop();
+			for (int j = max(0, i - m + 1); j <= min(n - m, i); ++j)
+			{
+				if (a[j].todo.count(i))
+				{
+					a[j].todo.erase(i);
+					if (a[j].todo.empty())
+					{
+						ans.push_back(j);
+						for (int m : a[j].made)
+						{
+							if (!vis[m])
+							{
+								q.push(m);
+								vis[m] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int i = 0; i < n; ++i)
+			if (!vis[i]) return {};
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+
 };
 int main()
 {
