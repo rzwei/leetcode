@@ -1200,6 +1200,103 @@ public:
 		return ans;
 	}
 
+	//937. Reorder Log Files
+	vector<string> reorderLogFiles(vector<string>& logs) {
+		vector<string> ans;
+		vector<string> tmp, tmp2;
+		for (auto &s : logs)
+		{
+			bool f = true;
+			for (int i = 0; i < s.size(); ++i)
+			{
+				if (s[i] == ' ')
+				{
+					if (isdigit(s[i + 1]))
+					{
+						f = false;
+					}
+					break;
+				}
+			}
+			if (f)
+				tmp.push_back(s);
+			else tmp2.push_back(s);
+		}
+		auto cmp = [](string &a, string &b) {
+
+			int i = 0, j = 0;
+			while (a[i] != ' ') i++;
+			while (b[j] != ' ') j++;
+			return a.substr(i) < b.substr(j);
+		};
+		sort(tmp.begin(), tmp.end(), cmp);
+		for (string &s : tmp2)
+			tmp.push_back(s);
+		return tmp;
+	}
+
+	//938. Range Sum of BST
+	int rangeSumBST(TreeNode* root, int L, int R) {
+		if (!root) return 0;
+		int ans = 0;
+		if (L <= root->val && root->val <= R)
+			ans += root->val;
+		ans += rangeSumBST(root->left, L, R);
+		ans += rangeSumBST(root->right, L, R);
+		return ans;
+	}
+
+	//939. Minimum Area Rectangle
+	int minAreaRect(vector<vector<int>>& a) {
+		int n = a.size();
+		map<int, set<int>> plane;
+		for (auto &e : a)
+		{
+			plane[e[0]].insert(e[1]);
+		}
+		int ans = INT_MAX;
+		for (auto i = plane.begin(); i != plane.end(); ++i)
+		{
+			for (auto j = plane.begin(); j != i; ++j)
+			{
+				int last = -1, dx = i->first - j->first;
+				for (int y : i->second)
+				{
+					if (j->second.count(y))
+					{
+						if (last == -1) last = y;
+						else
+						{
+							ans = min(ans, dx * (y - last));
+							last = y;
+						}
+					}
+				}
+			}
+		}
+		if (ans != INT_MAX)
+			return ans;
+		return 0;
+	}
+
+	//940. Distinct Subsequences II
+	int distinctSubseqII(string S) {
+		int const mod = 1e9 + 7;
+		vector<int> last(128, -1);
+		int n = S.size();
+		vector<ll> dp(n + 1);
+		dp[0] = 1;
+		for (int i = 1; i <= n; ++i)
+		{
+			dp[i] = dp[i - 1] * 2 % mod;
+			if (last[S[i - 1]] != -1)
+			{
+				dp[i] = (dp[i] - dp[last[S[i - 1]]] + 2 * mod) % mod;
+			}
+			last[S[i - 1]] = i - 1;
+		}
+		return dp[n] - 1;
+	}
 };
 int main()
 {
