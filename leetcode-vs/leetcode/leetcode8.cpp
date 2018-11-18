@@ -1352,12 +1352,8 @@ public:
 			e += -l;
 		return ans;
 	}
-	/*
 	//943. Find the Shortest Superstring
-	int memo[1 << 12][12];	
-	int path[1 << 12][12];
-	vector<vector<int>> g;
-	int dfs(bitset<12> &s, int i, vector<string> &a)
+	int dfs_943(bitset<12> &s, int i, vector<string> &a, vector<vector<int>> &memo, vector<vector<int>> &path, vector<vector<int>> &g)
 	{
 		if (s.count() == a.size()) return 0;
 		int &ans = memo[s.to_ulong()][i];
@@ -1370,7 +1366,7 @@ public:
 			if (s[k] == 0)
 			{
 				s[k] = 1;
-				int v = dfs(s, k, a) + a[k].size() - g[i][k];
+				int v = dfs_943(s, k, a, memo, path, g) + a[k].size() - g[i][k];
 				if (v < ans)
 				{
 					ans = v;
@@ -1386,7 +1382,7 @@ public:
 	{
 		if (a.size() == 1) return a[0];
 		int n = a.size();
-		g = vector<vector<int>>(n, vector<int>(n));
+		vector<vector<int>> g(n, vector<int>(n));
 		for (int i = 0; i < n; ++i)
 		{
 			for (int j = 0; j < n; ++j)
@@ -1402,15 +1398,15 @@ public:
 				}
 			}
 		}
-		memset(memo, -1, sizeof(memo));
-		memset(path, -1, sizeof(path));
+		vector<vector<int>>memo(1 << n, vector<int>(n, -1));
+		vector<vector<int>>path(1 << n, vector<int>(n, -1));
 		int ans = INT_MAX;
 		int x = -1;
 		for (int i = 0; i < n; ++i)
 		{
 			bitset<12> s;
 			s[i] = 1;
-			int v = dfs(s, i, a) + a[i].size();
+			int v = dfs_943(s, i, a, memo, path, g) + a[i].size();
 			if (ans > v)
 			{
 				ans = v;
@@ -1431,13 +1427,15 @@ public:
 		}
 		return ret;
 	}
-	*/
 };
 int main()
 {
 	Solution sol;
-	vector<vector<int>> a;
-	a = { {0,1},{1,0} };
-	cout << sol.shortestBridge(a) << endl;
+	vector<string> a;
+	a = { "catg","ctaagt","gcta","ttca","atgcatc" };
+	cout << sol.shortestSuperstring(a) << endl;
+	//vector<vector<int>> a;
+	//a = { {0,1},{1,0} };
+	//cout << sol.shortestBridge(a) << endl;
 	return 0;
 }
