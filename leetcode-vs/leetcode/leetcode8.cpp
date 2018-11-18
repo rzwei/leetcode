@@ -1403,7 +1403,7 @@ public:
 			}
 		}
 		memset(memo, -1, sizeof(memo));
-		memset(memo, -1, sizeof(path));
+		memset(path, -1, sizeof(path));
 		int ans = INT_MAX;
 		int x = -1;
 		for (int i = 0; i < n; ++i)
