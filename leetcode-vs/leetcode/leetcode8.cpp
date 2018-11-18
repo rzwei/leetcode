@@ -1,6 +1,7 @@
 #include <sstream>
 #include <functional>
 #include <iostream>
+#include <bitset>
 #include <unordered_map>
 #include <vector>
 #include <set>
@@ -1297,6 +1298,159 @@ public:
 		}
 		return dp[n] - 1;
 	}
+
+	//941. Valid Mountain Array
+	bool validMountainArray(vector<int>& a) {
+		if (a.size() < 3) return false;
+		int pv = -1, n = a.size();
+		for (int i = 0; i + 1 < n; ++i)
+		{
+			if (a[i] < a[i + 1]) continue;
+			pv = i;
+			break;
+		}
+		for (int i = pv + 1; i < n; ++i)
+		{
+			if (a[i] < a[i - 1]) continue;
+			return false;
+		}
+		return pv != -1 && 1 <= pv && pv <= n - 2;
+	}
+
+	//944. Delete Columns to Make Sorted
+	int minDeletionSize(vector<string>& a)
+	{
+		int n = a.size(), m = a[0].size();
+		int ans = 0;
+		for (int j = 0; j < m; ++j)
+		{
+			bool f0 = true, f1 = true;
+			for (int i = 1; f0 && i < n; ++i)
+			{
+				if (a[i][j] < a[i - 1][j]) f0 = false;
+			}
+			if (f0) continue;
+			ans++;
+		}
+		return ans;
+	}
+
+	//942. DI String Match
+	vector<int> diStringMatch(string S) {
+		int n = S.size();
+		vector<int> ans(n + 1);
+		ans[0] = 0;
+		int l = 0, h = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (S[i] == 'I')
+				ans[i + 1] = ++h;
+			else
+				ans[i + 1] = --l;
+		}
+		for (int &e : ans)
+			e += -l;
+		return ans;
+	}
+	/*
+	//move array to heap space
+	int memo[1 << 12][12][12];
+	int path[1 << 12][12][12];
+	vector<vector<int>> g;
+	int dfs(bitset<12> &s, int i, int j, vector<string> &a)
+	{
+		if (s.count() == a.size()) return 0;
+		int &ans = memo[s.to_ulong()][i][j];
+		if (ans != -1) return ans;
+		ans = INT_MAX;
+		int &p = path[s.to_ulong()][i][j];
+		int nx = -1, f = 1;
+		for (int k = 0; k < a.size(); ++k)
+		{
+			if (s[k] == 0)
+			{
+				s[k] = 1;
+				int l = dfs(s, k, j, a) + (int)a[k].size() - g[k][i], r = dfs(s, i, k, a) + (int)a[k].size() - g[j][k];
+				int v = min(l, r);
+				if (v < ans)
+				{
+					ans = v;
+					if (l < r) nx = k + 1;
+					else nx = -k - 1;
+				}
+				s[k] = 0;
+			}
+		}
+		p = nx;
+		return ans;
+	}
+	//943. Find the Shortest Superstring
+	string shortestSuperstring(vector<string>& a)
+	{
+		if (a.size() == 1) return a[0];
+		int n = a.size();
+		g = vector<vector<int>>(n, vector<int>(n));
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (i == j) continue;
+				for (int l = min(a[i].size(), a[j].size()); l >= 0; --l)
+				{
+					if (a[i].substr(a[i].size() - l) == a[j].substr(0, l))
+					{
+						g[i][j] = l;
+						break;
+					}
+				}
+			}
+		}
+		memset(memo, -1, sizeof(memo));
+		memset(memo, -1, sizeof(path));
+		int ans = INT_MAX;
+		int x = -1, y = -1;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (i == j) continue;
+				bitset<12> s;
+				s[i] = 1;
+				s[j] = 1;
+				int v = dfs(s, i, j, a) + (int)a[i].size() + (int)a[j].size() - g[i][j];
+				if (v < ans)
+				{
+					x = i;
+					y = j;
+					ans = v;
+				}
+			}
+		}
+		//cout << ans << endl;
+		int cnt = 2;
+		string ret = a[x] + a[y].substr(g[x][y]);
+		int s = (1 << x) + (1 << y);
+		while (cnt < n)
+		{
+			int nx = path[s][x][y];
+			if (nx < 0)
+			{
+				nx = -nx - 1;
+				ret = ret + a[nx].substr(g[y][nx]);
+				y = nx;
+			}
+			else
+			{
+				nx = nx - 1;
+				ret = a[nx].substr(0, a[nx].size() - g[nx][x]) + ret;
+				x = nx;
+			}
+			s |= (1 << nx);
+			cnt++;
+		}
+		return ret;
+	}
+	*/
 };
 int main()
 {
