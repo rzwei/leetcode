@@ -1354,30 +1354,27 @@ public:
 	}
 	/*
 	//943. Find the Shortest Superstring
-	//move array to heap space
-	int memo[1 << 12][12][12];
-	int path[1 << 12][12][12];
+	int memo[1 << 12][12];	
+	int path[1 << 12][12];
 	vector<vector<int>> g;
-	int dfs(bitset<12> &s, int i, int j, vector<string> &a)
+	int dfs(bitset<12> &s, int i, vector<string> &a)
 	{
 		if (s.count() == a.size()) return 0;
-		int &ans = memo[s.to_ulong()][i][j];
+		int &ans = memo[s.to_ulong()][i];
 		if (ans != -1) return ans;
 		ans = INT_MAX;
-		int &p = path[s.to_ulong()][i][j];
-		int nx = -1, f = 1;
+		int &p = path[s.to_ulong()][i];
+		int nx = -1;
 		for (int k = 0; k < a.size(); ++k)
 		{
 			if (s[k] == 0)
 			{
 				s[k] = 1;
-				int l = dfs(s, k, j, a) + (int)a[k].size() - g[k][i], r = dfs(s, i, k, a) + (int)a[k].size() - g[j][k];
-				int v = min(l, r);
+				int v = dfs(s, k, a) + a[k].size() - g[i][k];
 				if (v < ans)
 				{
 					ans = v;
-					if (l < r) nx = k + 1;
-					else nx = -k - 1;
+					nx = k;
 				}
 				s[k] = 0;
 			}
@@ -1408,43 +1405,27 @@ public:
 		memset(memo, -1, sizeof(memo));
 		memset(memo, -1, sizeof(path));
 		int ans = INT_MAX;
-		int x = -1, y = -1;
+		int x = -1;
 		for (int i = 0; i < n; ++i)
 		{
-			for (int j = 0; j < n; ++j)
+			bitset<12> s;
+			s[i] = 1;
+			int v = dfs(s, i, a) + a[i].size();
+			if (ans > v)
 			{
-				if (i == j) continue;
-				bitset<12> s;
-				s[i] = 1;
-				s[j] = 1;
-				int v = dfs(s, i, j, a) + (int)a[i].size() + (int)a[j].size() - g[i][j];
-				if (v < ans)
-				{
-					x = i;
-					y = j;
-					ans = v;
-				}
+				ans = v;
+				x = i;
 			}
 		}
-		//cout << ans << endl;
-		int cnt = 2;
-		string ret = a[x] + a[y].substr(g[x][y]);
-		int s = (1 << x) + (1 << y);
+		// cout << ans << endl;
+		int cnt = 1;
+		string ret = a[x];
+		int s = (1 << x);
 		while (cnt < n)
 		{
-			int nx = path[s][x][y];
-			if (nx < 0)
-			{
-				nx = -nx - 1;
-				ret = ret + a[nx].substr(g[y][nx]);
-				y = nx;
-			}
-			else
-			{
-				nx = nx - 1;
-				ret = a[nx].substr(0, a[nx].size() - g[nx][x]) + ret;
-				x = nx;
-			}
+			int nx = path[s][x];
+			ret = ret + a[nx].substr(g[x][nx]);
+			x = nx;
 			s |= (1 << nx);
 			cnt++;
 		}
