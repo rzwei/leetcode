@@ -1353,31 +1353,6 @@ public:
 		return ans;
 	}
 	//943. Find the Shortest Superstring
-	int dfs_943(bitset<12> &s, int i, vector<string> &a, vector<vector<int>> &memo, vector<vector<int>> &path, vector<vector<int>> &g)
-	{
-		if (s.count() == a.size()) return 0;
-		int &ans = memo[s.to_ulong()][i];
-		if (ans != -1) return ans;
-		ans = INT_MAX;
-		int &p = path[s.to_ulong()][i];
-		int nx = -1;
-		for (int k = 0; k < a.size(); ++k)
-		{
-			if (s[k] == 0)
-			{
-				s[k] = 1;
-				int v = dfs_943(s, k, a, memo, path, g) + a[k].size() - g[i][k];
-				if (v < ans)
-				{
-					ans = v;
-					nx = k;
-				}
-				s[k] = 0;
-			}
-		}
-		p = nx;
-		return ans;
-	}
 	string shortestSuperstring(vector<string>& a)
 	{
 		if (a.size() == 1) return a[0];
@@ -1398,35 +1373,134 @@ public:
 				}
 			}
 		}
-		vector<vector<int>>memo(1 << n, vector<int>(n, -1));
-		vector<vector<int>>path(1 << n, vector<int>(n, -1));
-		int ans = INT_MAX;
-		int x = -1;
+		int const maxn = INT_MAX / 8;
+		vector<vector<int>> dp(1 << n, vector<int>(n, maxn));
 		for (int i = 0; i < n; ++i)
 		{
-			bitset<12> s;
-			s[i] = 1;
-			int v = dfs_943(s, i, a, memo, path, g) + a[i].size();
-			if (ans > v)
+			dp[1 << i][i] = a[i].size();
+		}
+		vector<vector<int>> path(1 << n, vector<int>(n, -1));
+		int BOUND = 1 << n;
+		for (int s = 0; s < BOUND; ++s)
+		{
+			for (int i = 0; i < n; ++i)
 			{
-				ans = v;
+				if (s & (1 << i))
+				{
+					int pre = s ^ (1 << i);
+					for (int j = 0; j < n; ++j)
+					{
+						if (pre & (1 << j))
+						{
+							int v = dp[pre][j] + (int)a[i].size() - g[j][i];
+							if (dp[s][i] > v)
+							{
+								dp[s][i] = v;
+								path[s][i] = j;
+							}
+						}
+					}
+				}
+			}
+		}
+		int ans = maxn, x = -1;
+		for (int i = 0; i < n; ++i)
+		{
+			if (ans > dp[BOUND - 1][i])
+			{
+				ans = dp[BOUND - 1][i];
 				x = i;
 			}
 		}
-		// cout << ans << endl;
-		int cnt = 1;
+		//cout << ans << endl;
 		string ret = a[x];
-		int s = (1 << x);
-		while (cnt < n)
+		int s = (BOUND - 1) ^ (1 << x), pre = x;
+		x = path[BOUND - 1][x];
+		while (x != -1)
 		{
-			int nx = path[s][x];
-			ret = ret + a[nx].substr(g[x][nx]);
-			x = nx;
-			s |= (1 << nx);
-			cnt++;
+			ret = a[x].substr(0, a[x].size() - g[x][pre]) + ret;
+
+			int ns = s ^ (1 << x);
+			pre = x;
+			x = path[s][x];
+			s = ns;
 		}
 		return ret;
 	}
+	//int dfs_943(bitset<12> &s, int i, vector<string> &a, vector<vector<int>> &memo, vector<vector<int>> &path, vector<vector<int>> &g)
+	//{
+	//	if (s.count() == a.size()) return 0;
+	//	int &ans = memo[s.to_ulong()][i];
+	//	if (ans != -1) return ans;
+	//	ans = INT_MAX;
+	//	int &p = path[s.to_ulong()][i];
+	//	int nx = -1;
+	//	for (int k = 0; k < a.size(); ++k)
+	//	{
+	//		if (s[k] == 0)
+	//		{
+	//			s[k] = 1;
+	//			int v = dfs_943(s, k, a, memo, path, g) + a[k].size() - g[i][k];
+	//			if (v < ans)
+	//			{
+	//				ans = v;
+	//				nx = k;
+	//			}
+	//			s[k] = 0;
+	//		}
+	//	}
+	//	p = nx;
+	//	return ans;
+	//}
+	//string shortestSuperstring(vector<string>& a)
+	//{
+	//	if (a.size() == 1) return a[0];
+	//	int n = a.size();
+	//	vector<vector<int>> g(n, vector<int>(n));
+	//	for (int i = 0; i < n; ++i)
+	//	{
+	//		for (int j = 0; j < n; ++j)
+	//		{
+	//			if (i == j) continue;
+	//			for (int l = min(a[i].size(), a[j].size()); l >= 0; --l)
+	//			{
+	//				if (a[i].substr(a[i].size() - l) == a[j].substr(0, l))
+	//				{
+	//					g[i][j] = l;
+	//					break;
+	//				}
+	//			}
+	//		}
+	//	}
+	//	vector<vector<int>>memo(1 << n, vector<int>(n, -1));
+	//	vector<vector<int>>path(1 << n, vector<int>(n, -1));
+	//	int ans = INT_MAX;
+	//	int x = -1;
+	//	for (int i = 0; i < n; ++i)
+	//	{
+	//		bitset<12> s;
+	//		s[i] = 1;
+	//		int v = dfs_943(s, i, a, memo, path, g) + a[i].size();
+	//		if (ans > v)
+	//		{
+	//			ans = v;
+	//			x = i;
+	//		}
+	//	}
+	//	// cout << ans << endl;
+	//	int cnt = 1;
+	//	string ret = a[x];
+	//	int s = (1 << x);
+	//	while (cnt < n)
+	//	{
+	//		int nx = path[s][x];
+	//		ret = ret + a[nx].substr(g[x][nx]);
+	//		x = nx;
+	//		s |= (1 << nx);
+	//		cnt++;
+	//	}
+	//	return ret;
+	//}
 };
 int main()
 {
