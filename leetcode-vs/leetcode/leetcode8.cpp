@@ -1501,6 +1501,86 @@ public:
 	//	}
 	//	return ret;
 	//}
+
+	//945. Minimum Increment to Make Array Unique
+	int minIncrementForUnique(vector<int>& a) {
+		int n = a.size();
+		if (n == 0) return 0;
+		sort(a.begin(), a.end());
+		int cur = a[0] + 1, ans = 0;
+		for (int i = 1; i < n; ++i)
+		{
+			if (cur >= a[i])
+			{
+				ans += cur - a[i];
+				cur++;
+			}
+			else
+			{
+				cur = a[i] + 1;
+			}
+		}
+		return ans;
+	}
+
+	//946. Validate Stack Sequences
+	bool validateStackSequences(vector<int>& a, vector<int>& b) {
+		int n = a.size();
+		if (n != b.size()) return false;
+		stack<int> stk;
+		int i = 0, j = 0;
+		while (i < n)
+		{
+			stk.push(a[i++]);
+			while (j < n && !stk.empty() && stk.top() == b[j])
+			{
+				stk.pop();
+				j++;
+			}
+		}
+		return i == n && j == n;
+	}
+
+	//948. Bag of Tokens
+	int bagOfTokensScore(vector<int>& a, int p) {
+		int i = 0, j = a.size() - 1;
+		sort(a.begin(), a.end());
+		int ans = 0, cur = 0;
+		for (int i = 0; i < a.size(); ++i)
+		{
+			cur += a[i];
+			if (cur <= p) ans++;
+			else break;
+		}
+		cur = 0;
+		while (i <= j)
+		{
+			if (a[i] <= p)
+			{
+				cur++;
+				p -= a[i++];
+			}
+			else break;
+			ans = max(ans, cur);
+			if (cur > 0 && i <= j)
+			{
+				p += a[j--];
+				cur--;
+			}
+			int t = 0, tp = p;
+			for (int k = i; k <= j; ++k)
+			{
+				if (tp >= a[k])
+				{
+					t++;
+					tp -= a[k];
+				}
+				else break;
+			}
+			ans = max(ans, t);
+		}
+		return ans;
+	}
 };
 int main()
 {
