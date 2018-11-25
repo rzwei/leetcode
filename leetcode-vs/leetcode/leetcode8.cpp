@@ -1581,6 +1581,48 @@ public:
 		}
 		return ans;
 	}
+
+	//947. Most Stones Removed with Same Row or Column
+	void dfs_947(int x, int y, map<int, vector<int>> &g, set<pair<int, int>> &vis)
+	{
+		for (auto &e : g[x])
+		{
+			if (e != y && !vis.count({ x, e }))
+			{
+				vis.insert({ x, e });
+				dfs_947(x, e, g, vis);
+			}
+		}
+		for (auto &e : g[10000 + y])
+		{
+			if (e != x && !vis.count({ e, y }))
+			{
+				vis.insert({ e, y });
+				dfs_947(e, y, g, vis);
+			}
+		}
+	}
+	int removeStones(vector<vector<int>>& a) {
+		int n = a.size();
+		map<int, vector<int>> m;
+		for (auto &e : a)
+		{
+			m[e[0]].push_back(e[1]);
+			m[e[1] + 10000].push_back(e[0]);
+		}
+		set<pair<int, int>> vis;
+		int ans = n;
+		for (int i = 0; i < n; ++i)
+		{
+			if (!vis.count({ a[i][0], a[i][1] }))
+			{
+				ans--;
+				vis.insert({ a[i][0], a[i][1] });
+				dfs_947(a[i][0], a[i][1], m, vis);
+			}
+		}
+		return ans;
+	}
 };
 int main()
 {
