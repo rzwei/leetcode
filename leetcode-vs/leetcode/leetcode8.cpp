@@ -1623,7 +1623,160 @@ public:
 		}
 		return ans;
 	}
+
+	//951. Flip Equivalent Binary Trees
+	bool flipEquiv(TreeNode* root1, TreeNode* root2) {
+		if (!root1 && !root2) return true;
+		if (!root1 || !root2) return false;
+		if (root1->val == root2->val)
+		{
+			return flipEquiv(root1->left, root2->left) && flipEquiv(root1->right, root2->right) ||
+				flipEquiv(root1->left, root2->right) && flipEquiv(root1->right, root2->left);
+		}
+		return false;
+	}
+
+	//950. Reveal Cards In Increasing Order
+	vector<int> deckRevealedIncreasing(vector<int>& a) {
+		sort(a.begin(), a.end());
+		int n = a.size();
+		list<int> tmp;
+		tmp.push_back(a[n - 1]);
+		for (int l = 2; l <= n; ++l)
+		{
+			tmp.push_front(tmp.back());
+			tmp.pop_back();
+			tmp.push_front(a[n - l]);
+		}
+		vector<int> ans(n);
+		auto it = tmp.begin();
+		for (int i = 0; i < n; ++i, ++it)
+			ans[i] = *it;
+		return ans;
+	}
+
+	//949. Largest Time for Given Digits
+	string largestTimeFromDigits(vector<int>& a) {
+		int ans = -1;
+		for (int i = 0; i < 4; ++i)
+			for (int j = 0; j < 4; ++j)
+			{
+				int h = a[i] * 10 + a[j];
+				if (j == i || !(0 <= h && h <= 23)) continue;
+				for (int k = 0; k < 4; ++k)
+				{
+					if (k == i || k == j) continue;
+					for (int l = 0; l < 4; ++l)
+					{
+						if (l == i || l == j || l == k) continue;
+						int m = a[k] * 10 + a[l];
+						if (0 <= m && m <= 59)
+							ans = max(ans, h * 60 + m);
+					}
+				}
+			}
+		if (ans == -1) return "";
+		int h = ans / 60, m = ans % 60;
+		string ret(5, '0');
+		ret[2] = ':';
+		ret[0] += h / 10;
+		ret[1] += h % 10;
+		ret[3] += m / 10;
+		ret[4] += m % 10;
+		return ret;
+	}
+	/*
+//952. Largest Component Size by Common Factor
+static vector<int> primes;
+int const maxn = 1e5 + 1;
+static vector<int> mrank(maxn, 0);
+static vector<int> sz(maxn, 1);
+static vector<int> parent(maxn, 0);
+class DSU {
+public:
+	DSU(int N)  {
+		for (int i = 0; i < N; ++i)
+		{
+			parent[i] = i;
+			sz[i] = 1;
+			mrank[i] = 0;
+		}
+	}
+
+	int find(int x) {
+		if (parent[x] != x) parent[x] = find(parent[x]);
+		return parent[x];
+	}
+
+	void Union(int x, int y) {
+		int xr = find(x), yr = find(y);
+		if (xr == yr) return;
+
+		if (mrank[xr] < mrank[yr]) {
+			int tmp = yr;
+			yr = xr;
+			xr = tmp;
+		}
+		if (mrank[xr] == mrank[yr])
+			mrank[xr]++;
+
+		parent[yr] = xr;
+		sz[xr] += sz[yr];
+	}
+
+	int size(int x) {
+		return sz[find(x)];
+	}
+
+	int top() {
+		return size(sz.size() - 1) - 1;
+	}
 };
+
+class Solution {
+public:
+	Solution()
+	{
+		if (primes.size() != 0) return ;
+		primes.reserve(10000);
+		vector<bool> pvis(maxn, 1);
+		for (int i = 2; i < maxn; ++i)
+		{
+			if (pvis[i])
+			{
+				primes.push_back(i);
+				for (int j = i + i; j < maxn; j += i)
+					pvis[j] = 0;
+			}
+		}
+	}
+	int const maxn = 1e5 + 1;
+	int largestComponentSize(vector<int>& a) {
+		vector<int> num(maxn);
+		for (int e : a) num[e] = 1;
+		DSU d(maxn);
+		for (int e : primes)
+		{
+			int f = -1;
+			for (int i = e; i < maxn; i += e)
+			{
+				if (num[i])
+				{
+					if (f == -1) f = i;
+					else d.Union(f, i);
+				}
+			}
+		}
+		int ans = 0;
+		for (int i = 0; i < maxn; ++i)
+			if (parent[i] == i)
+				ans = max(ans, d.size(i));
+		return ans;
+	}
+};
+*/
+};
+
 int main()
 {
 	Solution sol;
