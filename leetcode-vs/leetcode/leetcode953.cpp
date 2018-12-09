@@ -56,8 +56,7 @@ public:
 
 	//954. Array of Doubled Pairs
 	bool canReorderDoubled(vector<int>& a) {
-		int s = accumulate(a.begin(), a.end(), 0);
-		if (s % 3) return false;
+		if (accumulate(a.begin(), a.end(), 0) % 3) return false;
 		auto cmp = [](int a, int b) {
 			return abs(a) < abs(b);
 		};
@@ -118,6 +117,28 @@ public:
 			}
 		}
 		return ans;
+	}
+
+	//956. Tallest Billboard
+	int tallestBillboard(vector<int>& a) {
+		int const offset = accumulate(a.begin(), a.end(), 0), maxn = 2 * offset + 1;
+		int n = a.size();
+		vector<int> dp(maxn, INT_MIN), pre(maxn, INT_MIN);
+		pre[offset] = 0;
+		for (int e : a)
+		{
+			for (int v = 0; v < maxn; ++v)
+			{
+				int val = pre[v];
+				if (v - e >= 0)
+					val = max(val, pre[v - e] + e);
+				if (v + e < maxn)
+					val = max(val, pre[v + e] + e);
+				dp[v] = val;
+			}
+			pre = dp;
+		}
+		return pre[offset] / 2;
 	}
 };
 
