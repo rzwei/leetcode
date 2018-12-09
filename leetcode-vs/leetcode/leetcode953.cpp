@@ -129,12 +129,9 @@ public:
 		{
 			for (int v = 0; v < maxn; ++v)
 			{
-				int val = pre[v];
-				if (v - e >= 0)
-					val = max(val, pre[v - e] + e);
-				if (v + e < maxn)
-					val = max(val, pre[v + e] + e);
-				dp[v] = val;
+				dp[v] = pre[v];
+				if (v - e >= 0) dp[v] = max(dp[v], pre[v - e] + e);
+				if (v + e < maxn) dp[v] = max(dp[v], pre[v + e] + e);
 			}
 			pre = dp;
 		}
