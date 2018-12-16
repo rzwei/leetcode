@@ -137,9 +137,91 @@ public:
 		}
 		return pre[offset] / 2;
 	}
+
+	void next_957(vector<int> &a, vector<int> &b)
+	{
+		b[0] = 0;
+		b[7] = 0;
+		for (int i = 1; i < 7; ++i)
+		{
+			if (a[i - 1] == 0 && a[i + 1] == 0 || a[i - 1] == 1 && a[i + 1] == 1)
+				b[i] = 1;
+			else b[i] = 0;
+		}
+	}
+
+	//957. Prison Cells After N Days
+	vector<int> prisonAfterNDays(vector<int>& cells, int N) {
+		map<vector<int>, int> vis;
+		int u = 0;
+		vector<int> a = cells, b = cells;
+		for (int i = 0; i < N; ++i)
+		{
+			next_957(a, b);
+			if (vis.count(b))
+			{
+				int s = vis[b], t = i;
+				int v = (N - s - 1) % (t - s);
+				for (auto &e : vis)
+				{
+					if (e.second == s + v) return e.first;
+				}
+			}
+			else
+			{
+				vis[b] = u++;
+			}
+			swap(a, b);
+		}
+		return a;
+	}
+
+	//958. Check Completeness of a Binary Tree
+	bool isCompleteTree(TreeNode* root) {
+		if (!root) return false;
+		queue<TreeNode *> q;
+		q.push(root);
+
+		bool f = 0;
+		while (!q.empty())
+		{
+			int size = q.size();
+			while (size--)
+			{
+				auto u = q.front(); q.pop();
+				if (f)
+				{
+					if (u->left || u->right) return false;
+				}
+				else
+				{
+					if (u->left && u->right)
+					{
+						q.push(u->left);
+						q.push(u->right);
+
+					}
+					else if (u->left && !u->right)
+					{
+						q.push(u->left);
+						f = 1;
+					}
+					else if (!u->left && u->right)
+					{
+						return false;
+					}
+					else
+					{
+						f = 1;
+					}
+				}
+			}
+		}
+		return true;
+	}
 };
 
 int main()
 {
-
+	return 0;
 }
