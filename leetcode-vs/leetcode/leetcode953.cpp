@@ -80,40 +80,23 @@ public:
 	}
 
 	//955. Delete Columns to Make Sorted II
-	int minDeletionSize(vector<string>& a) {
-		int ans = 0;
-		int len = a[0].size(), n = a.size();
-		vector<char> last(n);
-		for (int j = 0; j < len; ++j)
+	int minDeletionSize(vector<string>& A) {
+		int n = A.size(), m = A[0].size(), i, j, ans = 0;
+		vector<bool> vis(n);
+		for (j = 0; j < m; ++j)
 		{
-			bool f = false, con = false;
-			for (int i = 1; !f && i < n; ++i)
+			for (i = 0; i < n - 1; ++i)
 			{
-				if (a[i][j] < a[i - 1][j]) f = true;
-			}
-			if (f) ans += f;
-			else
-			{
-				for (int i = 0; i < n; ++i) last[i] = a[i][j];
-				j++;
-				while (j < len)
+				if (A[i][j] > A[i + 1][j] && vis[i] == 0)
 				{
-					bool f = false;
-					for (int i = 1; !f && i < n; ++i)
-					{
-						if (last[i] == last[i - 1])
-						{
-							if (a[i][j] < a[i - 1][j]) f = true;
-						}
-					}
-					if (f) ans++;
-					else
-					{
-						for (int i = 0; i < n; ++i) last[i] = a[i][j];
-					}
-					j++;
+					ans++;
+					break;
 				}
-				break;
+			}
+			if (i < n - 1) continue;
+			for (i = 0; i < n - 1; ++i)
+			{
+				if (A[i][j] < A[i + 1][j]) vis[i] = 1;
 			}
 		}
 		return ans;
@@ -178,46 +161,16 @@ public:
 
 	//958. Check Completeness of a Binary Tree
 	bool isCompleteTree(TreeNode* root) {
-		if (!root) return false;
 		queue<TreeNode *> q;
 		q.push(root);
-
-		bool f = 0;
-		while (!q.empty())
+		while (!q.empty() && q.front())
 		{
-			int size = q.size();
-			while (size--)
-			{
-				auto u = q.front(); q.pop();
-				if (f)
-				{
-					if (u->left || u->right) return false;
-				}
-				else
-				{
-					if (u->left && u->right)
-					{
-						q.push(u->left);
-						q.push(u->right);
-
-					}
-					else if (u->left && !u->right)
-					{
-						q.push(u->left);
-						f = 1;
-					}
-					else if (!u->left && u->right)
-					{
-						return false;
-					}
-					else
-					{
-						f = 1;
-					}
-				}
-			}
+			q.push(q.front()->left);
+			q.push(q.front()->right);
+			q.pop();
 		}
-		return true;
+		while (!q.empty() && !q.front()) q.pop();
+		return q.size() == 0;
 	}
 };
 
