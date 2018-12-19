@@ -170,6 +170,28 @@ public:
 		while (!q.empty() && !q.front()) q.pop();
 		return q.size() == 0;
 	}
+
+	//960. Delete Columns to Make Sorted III
+	int minDeletionSize(vector<string>& a) {
+		int n = a.size(), m = a[0].size();
+
+		vector<int> dp(m, 1);
+		for (int i = 1; i < m; ++i)
+		{
+			for (int j = 0; j < i; ++j)
+			{
+
+				bool f = true;
+				for (int k = 0; f && k < n; ++k)
+					if (a[k][j] > a[k][i]) f = 0;
+				if (f)
+				{
+					dp[i] = max(dp[i], dp[j] + 1);
+				}
+			}
+		}
+		return m - *max_element(dp.begin(), dp.end());
+	}
 };
 
 int main()
