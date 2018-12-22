@@ -192,6 +192,70 @@ public:
 		}
 		return m - *max_element(dp.begin(), dp.end());
 	}
+
+	void dfs_959(int i, int j, int d, int n, vector<int> &invalid, vector<int> &vis)
+	{
+		//cout << i << " " << j << " " << d << endl;
+		static int dr[] = { 0, -1, 0, 1 };
+		static int dc[] = { -1, 0, 1, 0 };
+		int u = 4 * (i * n + j);
+		vis[u + d] = 1;
+		int dt;
+		if (d == 0 || d == 2) dt = 2 - d;
+		else dt = 4 - d;
+		int nx = i + dr[d], ny = j + dc[d];
+		int v = 4 * (nx * n + ny);
+		if (0 <= nx && nx < n && 0 <= ny && ny < n && !vis[v + dt])
+			dfs_959(nx, ny, dt, n, invalid, vis);
+		dt = d - 1;
+		if (dt < 0) dt += 4;
+		if (!vis[u + dt] && !invalid[u + dt]) dfs_959(i, j, dt, n, invalid, vis);
+		dt = d + 1;
+		if (dt >= 4) dt -= 4;
+		if (!vis[u + dt] && !invalid[u + d]) dfs_959(i, j, dt, n, invalid, vis);
+	}
+
+	//959. Regions Cut By Slashes
+	int regionsBySlashes(vector<string>& g) {
+		int n = g.size();
+		vector<int> invalid(4 * n * n);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (g[i][j] == ' ') continue;
+				int u = 4 * (i * n + j);
+				if (g[i][j] == '/')
+				{
+					invalid[u + 1] = 1;
+					invalid[u + 3] = 1;
+				}
+				else
+				{
+					invalid[u + 0] = 1;
+					invalid[u + 2] = 1;
+				}
+			}
+		}
+		vector<int> vis(4 * n * n);
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (int d = 0; d < 4; ++d)
+				{
+					int u = 4 * (i * n + j);
+					if (!vis[u + d])
+					{
+						ans++;
+						dfs_959(i, j, d, n, invalid, vis);
+					}
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
