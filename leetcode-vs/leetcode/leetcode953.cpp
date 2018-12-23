@@ -256,6 +256,50 @@ public:
 		}
 		return ans;
 	}
+
+	ll sqr(ll x) {
+		return x * x;
+	}
+	ll dis(vector<int>& a, vector<int>& b) {
+		return sqr(a[0] - b[0]) + sqr(a[1] - b[1]);
+	}
+
+	//963. Minimum Area Rectangle II
+	double minAreaFreeRect(vector<vector<int>>& p) {
+		int n = p.size();
+		double ret = 1e300;
+		for (int i = 0; i < n; ++i) {
+			for (int j = i + 1; j < n; ++j) {
+				for (int u = 0; u < n; ++u) {
+					if (u == i || u == j) continue;
+					for (int v = u + 1; v < n; ++v) {
+						if (v == i || v == j) continue;
+						int X1 = p[i][0] + p[j][0];
+						int Y1 = p[i][1] + p[j][1];
+						int X2 = p[u][0] + p[v][0];
+						int Y2 = p[u][1] + p[v][1];
+						if (X1 != X2 || Y1 != Y2) continue;
+						ll D1 = dis(p[i], p[j]);
+						ll D2 = dis(p[u], p[v]);
+						if (D1 == D2) {
+							ret = min(ret, sqrt(dis(p[i], p[u])) * sqrt(dis(p[i], p[v])));
+						}
+					}
+				}
+			}
+		}
+		if (ret > 1e200) ret = 0;
+		return ret;
+	}
+
+	//961. N-Repeated Element in Size 2N Array
+	int repeatedNTimes(vector<int>& A) {
+		for (auto i = 2; i < A.size(); ++i) {
+			if (A[i - 2] == A[i - 1] || A[i - 2] == A[i]) return A[i - 2];
+			if (A[i - 1] == A[i]) return A[i];
+		}
+		return A[A.size() - 1];
+	}
 };
 
 int main()
