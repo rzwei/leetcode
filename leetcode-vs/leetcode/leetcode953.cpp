@@ -701,99 +701,89 @@ public:
 	}
 
 	//979. Distribute Coins in Binary Tree
-	//map<TreeNode *, pair<int, int>> memo;
-	//pair<int, int> count(TreeNode *u)
-	//{
-	//	if (!u) return { 0, 0 };
-	//	if (memo.count(u)) return memo[u];
-	//	auto l = count(u->left), r = count(u->right);
-	//	auto val = make_pair(l.first + r.first + 1, l.second + r.second + u->val);
-	//	memo[u] = val;;
-	//	return val;
-	//}
-	//int dfs(TreeNode *u)
-	//{
-	//	if (!u) return 0;
-	//	auto lc = count(u->left), rc = count(u->right);
+	pair<int, int> dfs_979(TreeNode *u, int &sum)
+	{
+		if (!u) return {0, 0};
+		auto lc = dfs_979(u->left, sum), rc = dfs_979(u->right, sum);
 
-	//	int dl = lc.first - lc.second;
-	//	int dr = rc.first - rc.second;
+		int dl = lc.first - lc.second;
+		int dr = rc.first - rc.second;
 
-	//	int ans = 0;
 
-	//	ans += abs(dl) + abs(dr);
+		sum += abs(dl) + abs(dr);
 
-	//	ans += dfs(u->left) + dfs(u->right);
+		return {lc.first + rc.first + 1, lc.second + rc.second + u->val};
+	}
+	int distributeCoins(TreeNode* root) {
+		int  sum = 0;
+		dfs_979(root, sum);
+		return sum;
+	}
 
-	//	return ans;
-	//}
-	//int distributeCoins(TreeNode* root) {
-	//	return dfs(root);
-	//}
-
+/*
 	//980. Unique Paths III
-	//int n, m;
-	//int memo[20][1 << 20 + 1];
-	//int dfs(int i, int j, bitset<22> &s, vector<vector<int>> &g)
-	//{
-	//	static int dr[] = { 0, 1, 0, -1 };
-	//	static int dc[] = { 1, 0, -1, 0 };
-	//	int v = i * m + j;
+	int n, m;
+	int memo[20][(1 << 20) + 1];	//move to global space
+	int dfs(int i, int j, bitset<22> &s, vector<vector<int>> &g)
+	{
+		static int dr[] = { 0, 1, 0, -1 };
+		static int dc[] = { 1, 0, -1, 0 };
+		int v = i * m + j;
 
-	//	if (g[i][j] == 2)
-	//	{
-	//		// cout << s.to_string() << endl;
-	//		for (int i = 0, c = 0; i < n; ++i)
-	//		{
-	//			for (int j = 0; j < m; ++j, ++c)
-	//			{
-	//				if (c == v) continue;
-	//				if (s[c] == 0)
-	//				{
-	//					return 0;
-	//				}
-	//			}
-	//		}
-	//		return 1;
-	//	}
-	//	if (memo[v][s.to_ulong()] != -1) return memo[v][s.to_ulong()];
-	//	int ans = 0;
-	//	for (int d = 0; d < 4; ++d)
-	//	{
-	//		int nx = i + dr[d], ny = j + dc[d];
-	//		if (0 <= nx && nx < n && 0 <= ny && ny < m && s[nx * m + ny] == 0)
-	//		{
-	//			s[nx * m + ny] = 1;
-	//			ans += dfs(nx, ny, s, g);
-	//			s[nx * m + ny] = 0;
-	//		}
-	//	}
-	//	memo[v][s.to_ulong()] = ans;
-	//	return ans;
-	//}
+		if (g[i][j] == 2)
+		{
+			for (int i = 0, c = 0; i < n; ++i)
+			{
+				for (int j = 0; j < m; ++j, ++c)
+				{
+					if (c == v) continue;
+					if (s[c] == 0)
+					{
+						return 0;
+					}
+				}
+			}
+			return 1;
+		}
+		if (memo[v][s.to_ulong()] != -1) return memo[v][s.to_ulong()];
+		int ans = 0;
+		for (int d = 0; d < 4; ++d)
+		{
+			int nx = i + dr[d], ny = j + dc[d];
+			if (0 <= nx && nx < n && 0 <= ny && ny < m && s[nx * m + ny] == 0)
+			{
+				s[nx * m + ny] = 1;
+				ans += dfs(nx, ny, s, g);
+				s[nx * m + ny] = 0;
+			}
+		}
+		memo[v][s.to_ulong()] = ans;
+		return ans;
+	}
 
-	//int uniquePathsIII(vector<vector<int>>& grid) {
-	//	n = grid.size(), m = grid[0].size();
-	//	int ox = -1, oy = -1;
-	//	bitset<22> s;
-	//	memset(memo, -1, sizeof(memo));
-	//	for (int i = 0; i < n; ++i)
-	//	{
-	//		for (int j = 0; j < m; ++j)
-	//		{
-	//			if (grid[i][j] == 1)
-	//			{
-	//				ox = i, oy = j;
-	//				s[i * m + j] = 1;
-	//			}
-	//			else if (grid[i][j] == -1)
-	//			{
-	//				s[i * m + j] = 1;
-	//			}
-	//		}
-	//	}
-	//	return dfs(ox, oy, s, grid);
-	//}
+	int uniquePathsIII(vector<vector<int>>& grid) {
+		n = grid.size(), m = grid[0].size();
+		int ox = -1, oy = -1;
+		bitset<22> s;
+		memset(memo, -1, sizeof(memo));
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (grid[i][j] == 1)
+				{
+					ox = i, oy = j;
+					s[i * m + j] = 1;
+				}
+				else if (grid[i][j] == -1)
+				{
+					s[i * m + j] = 1;
+				}
+			}
+		}
+		return dfs(ox, oy, s, grid);
+	}
+*/
 };
 
 int main()
