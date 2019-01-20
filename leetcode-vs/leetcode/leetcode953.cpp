@@ -654,6 +654,146 @@ public:
 				return A[i] + A[i - 1] + A[i - 2];
 		return 0;
 	}
+
+	//977. Squares of a Sorted Array
+	vector<int> sortedSquares(vector<int>& A) {
+		for (int &e : A) e *= e;
+		sort(A.begin(), A.end());
+		return A;
+	}
+
+	//978. Longest Turbulent Subarray
+	int maxTurbulenceSize(vector<int>& a) {
+		int n = a.size();
+		vector<int> b(n - 1);
+		for (int i = 0; i + 1 < n; ++i)
+		{
+			if (a[i] < a[i + 1]) b[i] = 0;
+			else if (a[i] > a[i + 1]) b[i] = 1;
+			else b[i] = -1;
+		}
+		int ans = 0;
+		int pre = -1, dp0 = 0, dp1 = 0;
+		for (int i = 0; i < n - 1; ++i)
+		{
+			if (b[i] == -1)
+			{
+				dp0 = 0;
+				dp1 = 0;
+				continue;
+			}
+			else
+			{
+				if (b[i] == 1)
+				{
+					dp1 = dp0 + 1;
+					dp0 = 0;
+				}
+				else
+				{
+					dp0 = dp1 + 1;
+					dp1 = 0;
+				}
+			}
+			ans = max(ans, max(dp0, dp1));
+		}
+		return ans + 1;
+	}
+
+	//979. Distribute Coins in Binary Tree
+	//map<TreeNode *, pair<int, int>> memo;
+	//pair<int, int> count(TreeNode *u)
+	//{
+	//	if (!u) return { 0, 0 };
+	//	if (memo.count(u)) return memo[u];
+	//	auto l = count(u->left), r = count(u->right);
+	//	auto val = make_pair(l.first + r.first + 1, l.second + r.second + u->val);
+	//	memo[u] = val;;
+	//	return val;
+	//}
+	//int dfs(TreeNode *u)
+	//{
+	//	if (!u) return 0;
+	//	auto lc = count(u->left), rc = count(u->right);
+
+	//	int dl = lc.first - lc.second;
+	//	int dr = rc.first - rc.second;
+
+	//	int ans = 0;
+
+	//	ans += abs(dl) + abs(dr);
+
+	//	ans += dfs(u->left) + dfs(u->right);
+
+	//	return ans;
+	//}
+	//int distributeCoins(TreeNode* root) {
+	//	return dfs(root);
+	//}
+
+	//980. Unique Paths III
+	//int n, m;
+	//int memo[20][1 << 20 + 1];
+	//int dfs(int i, int j, bitset<22> &s, vector<vector<int>> &g)
+	//{
+	//	static int dr[] = { 0, 1, 0, -1 };
+	//	static int dc[] = { 1, 0, -1, 0 };
+	//	int v = i * m + j;
+
+	//	if (g[i][j] == 2)
+	//	{
+	//		// cout << s.to_string() << endl;
+	//		for (int i = 0, c = 0; i < n; ++i)
+	//		{
+	//			for (int j = 0; j < m; ++j, ++c)
+	//			{
+	//				if (c == v) continue;
+	//				if (s[c] == 0)
+	//				{
+	//					return 0;
+	//				}
+	//			}
+	//		}
+	//		return 1;
+	//	}
+	//	if (memo[v][s.to_ulong()] != -1) return memo[v][s.to_ulong()];
+	//	int ans = 0;
+	//	for (int d = 0; d < 4; ++d)
+	//	{
+	//		int nx = i + dr[d], ny = j + dc[d];
+	//		if (0 <= nx && nx < n && 0 <= ny && ny < m && s[nx * m + ny] == 0)
+	//		{
+	//			s[nx * m + ny] = 1;
+	//			ans += dfs(nx, ny, s, g);
+	//			s[nx * m + ny] = 0;
+	//		}
+	//	}
+	//	memo[v][s.to_ulong()] = ans;
+	//	return ans;
+	//}
+
+	//int uniquePathsIII(vector<vector<int>>& grid) {
+	//	n = grid.size(), m = grid[0].size();
+	//	int ox = -1, oy = -1;
+	//	bitset<22> s;
+	//	memset(memo, -1, sizeof(memo));
+	//	for (int i = 0; i < n; ++i)
+	//	{
+	//		for (int j = 0; j < m; ++j)
+	//		{
+	//			if (grid[i][j] == 1)
+	//			{
+	//				ox = i, oy = j;
+	//				s[i * m + j] = 1;
+	//			}
+	//			else if (grid[i][j] == -1)
+	//			{
+	//				s[i * m + j] = 1;
+	//			}
+	//		}
+	//	}
+	//	return dfs(ox, oy, s, grid);
+	//}
 };
 
 int main()
