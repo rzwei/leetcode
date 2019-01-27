@@ -20,6 +20,31 @@
 using namespace std;
 typedef long long ll;
 
+//981. Time Based Key-Value Store
+class TimeMap {
+public:
+	map<string, map<int, string>> m;
+	/** Initialize your data structure here. */
+	TimeMap() {
+
+	}
+
+	void set(string key, string value, int timestamp) {
+		m[key][timestamp] = value;
+	}
+
+	string get(string key, int timestamp) {
+		if (!m.count(key)) return "";
+		auto it = m[key].upper_bound(timestamp);
+		if (it == m[key].begin())
+		{
+			return "";
+		}
+		--it;
+		return it->second;
+	}
+};
+
 class Solution
 {
 public:
@@ -784,6 +809,128 @@ public:
 		return dfs(ox, oy, s, grid);
 	}
 */
+	
+	int dfs_983(int i, vector<int> &a, vector<int> &cost, vector<int> &memo)
+	{
+		if (i >= a.size()) return 0;
+		if (memo[i] != -1) return memo[i];
+		int ans = dfs_983(i + 1, a, cost, memo) + cost[0];
+		int j = i + 1;
+
+		while (j < a.size() && a[j] < a[i] + 7)
+		{
+			j++;
+		}
+
+		ans = min(ans, dfs_983(j, a, cost, memo) + cost[1]);
+		while (j < a.size() && a[j] < a[i] + 30)
+		{
+			j++;
+		}
+
+		ans = min(ans, dfs_983(j, a, cost, memo) + cost[2]);
+		memo[i] = ans;
+		return ans;
+	}
+
+	//983. Minimum Cost For Tickets
+	int mincostTickets(vector<int>& days, vector<int>& costs) {
+		vector<int> memo(days.size(), -1);
+		return dfs_983(0, days, costs, memo);
+	}
+
+	//982. Triples with Bitwise AND Equal To Zero
+	int countTriplets(vector<int>& A) {
+		int n = A.size();
+		int const B = (1 << 16);
+		vector<int> cnt(B);
+		int mask = ((1 << 17) - 1);
+
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				cnt[A[i] & A[j]]++;
+			}
+		}
+
+		vector<int> cnt2(B);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int v = 0; v < B; ++v)
+			{
+				cnt2[A[i] & v] += cnt[v];
+			}
+		}
+		return cnt2[0];
+	}
+
+	string fun2(char c[2], int cnt)
+	{
+		string ans;
+		for (int i = 0; i < cnt; ++i)
+		{
+			ans.push_back(c[0]);
+			ans.push_back(c[1]);
+		}
+		return ans;
+	}
+
+	string fun(char c[2], int cnt[2])
+	{
+		int f = 0;
+		int cur = 0;
+		string ans;
+		while (cnt[0] > 0 && cnt[0] != cnt[1])
+		{
+			if (cur == 2)
+			{
+				ans.push_back(c[1 - f]);
+				cnt[1 - f]--;
+				cur = 0;
+			}
+			else
+			{
+				ans.push_back(c[f]);
+				cur++;
+				cnt[f]--;
+			}
+		}
+
+		if (cnt[0] == cnt[1])
+		{
+			if (!ans.empty())
+			{
+				if (ans.back() != c[0])
+					ans += fun2(c, cnt[0]);
+				else
+				{
+					swap(c[0], c[1]);
+					ans += fun2(c, cnt[0]);
+				}
+			}
+			else ans += fun2(c, cnt[0]);
+		}
+		return ans;
+	}
+
+	//984. String Without AAA or BBB
+	string strWithout3a3b(int A, int B) {
+		if (A > B)
+		{
+			char c[] = { 'a', 'b' };
+			int cnt[] = { A, B };
+			return fun(c, cnt);
+
+		}
+		else
+		{
+			char c[] = { 'b', 'a' };
+			int cnt[] = { B, A };
+			return fun(c, cnt);
+		}
+	}
+
 };
 
 int main()
