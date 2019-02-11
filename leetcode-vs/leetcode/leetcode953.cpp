@@ -20,6 +20,14 @@
 using namespace std;
 typedef long long ll;
 
+struct Interval {
+    int start;
+    int end;
+    Interval() : start(0), end(0) {}
+    Interval(int s, int e) : start(s), end(e) {}
+};
+
+
 //981. Time Based Key-Value Store
 class TimeMap {
 public:
@@ -931,6 +939,181 @@ public:
 		}
 	}
 
+	//985. Sum of Even Numbers After Queries
+	vector<int> sumEvenAfterQueries(vector<int>& a, vector<vector<int>>& q) {
+		int n = a.size();
+		vector<int> cnt(2);
+
+		for (int &e : a) cnt[e & 1] += e;
+
+		vector<int> ans(n);
+
+		for (int i = 0; i < n; ++i)
+		{
+			int val = q[i][0];
+			int idx = q[i][1];
+
+			cnt[a[idx] & 1] -= a[idx];
+
+			a[idx] += val;
+
+			cnt[a[idx] & 1] += a[idx];
+			ans[i] = cnt[0];
+		}
+		return ans;
+	}
+
+
+	vector<Interval> intervalIntersection(vector<Interval>& a, vector<Interval>& b) {
+		vector<Interval> ans;
+		int i = 0, j = 0;
+		int n = a.size(), m = b.size();
+		while (i < n && j < m)
+		{
+			if (a[i].end < b[j].start)
+			{
+				i++;
+			}
+			else if (a[i].start > b[j].end)
+			{
+				j++;
+			}
+			else
+			{
+				int l = max(a[i].start, b[j].start);
+				int r = min(a[i].end, b[j].end);
+				if (l <= r) ans.emplace_back(l, r);
+				if (a[i].end < b[j].end) i++;
+				else j++;
+			}
+		}
+		return ans;
+	}
+
+
+	void dfs_987(TreeNode *u, int x, int y, map<int, vector<pair<int, int>>> &ans)
+	{
+		if (!u) return;
+		ans[y].emplace_back(x, u->val);
+		dfs_987(u->left, x + 1, y - 1, ans);
+		dfs_987(u->right, x + 1, y + 1, ans);
+	}
+
+	//987. Vertical Order Traversal of a Binary Tree
+	vector<vector<int>> verticalTraversal(TreeNode* root) {
+		map<int, vector<pair<int, int>>> ans;
+
+		dfs_987(root, 0, 0, ans);
+		
+		vector<vector<int>> a;
+		for (auto &e : ans)
+		{
+			sort(e.second.begin(), e.second.end());
+			vector<int> tmp;
+			for (auto &p : e.second)
+			{
+				tmp.push_back(p.second);
+			}
+			a.push_back(tmp);
+		}
+		return a;
+	}
+
+
+	
+	void dfs(string &path, TreeNode *u, string &ans)
+	{
+		if (!u) return;
+		path.push_back('a' + u->val);
+		if (!u->left && !u->right)
+		{
+			if (ans == "" || less(path, ans))
+				ans = path;
+		}
+		else {
+			dfs(path, u->left, ans);
+			dfs(path, u->right, ans);
+		}
+		path.pop_back();
+	}
+
+
+	bool less(string &a, string &b)
+	{
+		int i = a.size() - 1, j = b.size() - 1;
+		while (i >= 0 && j >= 0)
+		{
+			if (a[i] != b[j]) return a[i] < b[j];
+			i--;
+			j--;
+		}
+		return i == -1;
+	}
+
+	//988. Smallest String Starting From Leaf
+	string smallestFromLeaf(TreeNode* root) {
+		string ans, path;
+		dfs(path, root, ans);
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+
+	//989. Add to Array-Form of Integer
+	vector<int> addToArrayForm(vector<int>& a, int K) {
+		int n = a.size();
+		int c = K;
+		for (int i = n - 1; i >= 0 && c; --i)
+		{
+			int v = a[i] + c;
+			a[i] = v % 10;
+			c = v / 10;
+		}
+		while (c)
+		{
+			a.insert(a.begin(), c % 10);
+			c /= 10;
+		}
+		return a;
+	}
+
+	int find(int a, vector<int> &par)
+	{
+		if (a == par[a]) return a;
+		par[a] = find(par[a], par);
+		return par[a];
+	}
+
+	void Union(int a, int b, vector<int> &par)
+	{
+		int fa = find(a, par), fb = find(b, par);
+		if (fa == fb) return;
+		par[fa] = fb;
+	}
+
+	//990. Satisfiability of Equality Equations
+	bool equationsPossible(vector<string>& g) {
+		vector<int> a(26);
+		for (int i = 0; i < 26; ++i) a[i] = i;
+		for (auto &s : g)
+		{
+			char op = s[1];
+			char l = s[0] - 'a', r = s[3] - 'a';
+			if (op == '=')
+			{
+				Union(l, r, a);
+			}
+		}
+		for (auto &s : g)
+		{
+			char op = s[1];
+			char l = s[0] - 'a', r = s[3] - 'a';
+			if (op == '!')
+			{
+				if (find(l, a) == find(r, a)) return false;
+			}
+		}
+		return true;
+	}
 };
 
 int main()
