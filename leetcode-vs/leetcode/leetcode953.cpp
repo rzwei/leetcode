@@ -1114,6 +1114,37 @@ public:
 		}
 		return true;
 	}
+
+	//992. Subarrays with K Different Integers
+	int subarraysWithKDistinct(vector<int>& a, int k) {
+		int i = 0, l = 0, r = 0, cnt = 0, cnt2 = 0;
+		int n = a.size();
+		map<int, int> win, win2;
+
+		int ans = 0;
+		for (; i < n; ++i)
+		{
+			if (win[a[i]]++ == 0) cnt++;
+			while (cnt > k)
+			{
+				if (--win[a[l++]] == 0)
+				{
+					cnt--;
+				}
+			}
+
+			if (win2[a[i]]++ == 0) cnt2++;
+			while (cnt2 >= k)
+			{
+				if (--win2[a[r++]] == 0)
+				{
+					cnt2--;
+				}
+			}
+			ans += r - l;
+		}
+		return ans;
+	}
 };
 
 int main()
