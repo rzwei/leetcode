@@ -1104,6 +1104,150 @@ public:
 		if (Y & 1) return 1 + brokenCalc(X, Y + 1);
 		return 1 + brokenCalc(X, Y / 2);
 	}
+/*
+	//993. Cousins in Binary Tree
+	TreeNode *fx, *fy;
+	int dx, dy;
+	int x, y;
+	void dfs(TreeNode *u, TreeNode *par, int dep)
+	{
+		if (!u) return;
+		if (fx && fy) return;
+		if (u->val == x)
+		{
+			fx = par;
+			dx = dep;
+		}
+		if (u->val == y)
+		{
+			fy = par;
+			dy = dep;
+		}
+		dfs(u->left, u, dep + 1);
+		dfs(u->right, u, dep + 1);
+	}
+
+
+	bool isCousins(TreeNode* root, int x, int y) {
+		this->x = x;
+		this->y = y;
+		fx = nullptr;
+		fy = nullptr;
+		dx = 0;
+		dy = 0;
+		dfs(root, nullptr, 0);
+		if (dx == dy && fx != fy) return true;
+		return false;
+	}
+	*/
+
+	//994. Rotting Oranges
+	int orangesRotting(vector<vector<int>>& g) {
+		int n = g.size();
+		int m = g[0].size();
+		queue<pair<int, int>> q;
+		int cnt = 0;
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j] == 2)
+				{
+					q.emplace(i, j);
+				}
+				else if (g[i][j] == 1)
+				{
+					cnt++;
+				}
+			}
+		int dr[] = { 0, 1, 0, -1 };
+		int dc[] = { 1, 0, -1, 0 };
+		int ans = 0;
+		while (!q.empty() && cnt)
+		{
+			int size = q.size();
+			ans++;
+			while (size--)
+			{
+				int x = q.front().first, y = q.front().second;
+				q.pop();
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = x + dr[d];
+					int ny = y + dc[d];
+					if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] == 1)
+					{
+						cnt--;
+						g[nx][ny] = 2;
+						q.emplace(nx, ny);
+					}
+				}
+			}
+		}
+		if (cnt == 0) return ans;
+		return -1;
+	}
+
+	/*
+	//996. Number of Squareful Arrays
+	int memo[1 << 12][12];
+	class Solution {
+	public:
+		int n;
+		bool isSqrt(long x)
+		{
+			long v = sqrt(x);
+			return v * v == x;
+		}
+
+		int dfs(int s, int u, int cnt, vector<vector<int>> &g, vector<int> &a)
+		{
+			if (cnt == n) return 1;
+			int &ans = memo[s][u];
+			if (ans != -1) return ans;
+			int tot = 0;
+			int last = -1;
+			for (const auto &v : g[u])
+			{
+				if ((last == -1 || a[v] != last) && (s & (1 << v)) == 0)
+				{
+					tot += dfs(s | (1 << v), v, cnt + 1, g, a);
+					last = a[v];
+				}
+			}
+			ans = tot;
+			return ans;
+		}
+		int numSquarefulPerms(vector<int>& a) {
+			sort(a.begin(), a.end());
+			memset(memo, -1, sizeof(memo));
+			n = a.size();
+			vector<vector<int>> g(n);
+			for (int i = 0; i < n; ++i)
+			{
+				for (int j = 0; j < n; ++j)
+				{
+					if (i == j) continue;
+					if (isSqrt(a[i] + a[j])) g[i].push_back(j);
+				}
+			}
+
+			auto cmp = [&](int i, int j) {
+				return a[i] < a[j];
+			};
+
+			for (auto &e : g)
+				sort(e.begin(), e.end());
+
+			int ans = 0;
+			for (int i = 0; i < n; ++i)
+			{
+				if (i == 0 || a[i] != a[i - 1])
+					ans += dfs((1 << i), i, 1, g, a);
+			}
+			return ans;
+		}
+	};
+*/
 };
 
 int main()
