@@ -864,79 +864,31 @@ public:
 
 		vector<int> cnt2(B);
 		for (int i = 0; i < n; ++i)
-		{
+		{ 
 			for (int v = 0; v < B; ++v)
-			{
+		 	{
 				cnt2[A[i] & v] += cnt[v];
 			}
 		}
 		return cnt2[0];
 	}
 
-	string fun2(char c[2], int cnt)
+	string solve(int a, int b, char A, char B)
 	{
 		string ans;
-		for (int i = 0; i < cnt; ++i)
+		while (a--)
 		{
-			ans.push_back(c[0]);
-			ans.push_back(c[1]);
-		}
-		return ans;
-	}
-
-	string fun(char c[2], int cnt[2])
-	{
-		int f = 0;
-		int cur = 0;
-		string ans;
-		while (cnt[0] > 0 && cnt[0] != cnt[1])
-		{
-			if (cur == 2)
-			{
-				ans.push_back(c[1 - f]);
-				cnt[1 - f]--;
-				cur = 0;
-			}
-			else
-			{
-				ans.push_back(c[f]);
-				cur++;
-				cnt[f]--;
-			}
-		}
-
-		if (cnt[0] == cnt[1])
-		{
-			if (!ans.empty())
-			{
-				if (ans.back() != c[0])
-					ans += fun2(c, cnt[0]);
-				else
-				{
-					swap(c[0], c[1]);
-					ans += fun2(c, cnt[0]);
-				}
-			}
-			else ans += fun2(c, cnt[0]);
+			ans += A;
+			if (a > b) ans += A, a--;
+			if (b-- > 0) ans += B;
 		}
 		return ans;
 	}
 
 	//984. String Without AAA or BBB
 	string strWithout3a3b(int A, int B) {
-		if (A > B)
-		{
-			char c[] = { 'a', 'b' };
-			int cnt[] = { A, B };
-			return fun(c, cnt);
-
-		}
-		else
-		{
-			char c[] = { 'b', 'a' };
-			int cnt[] = { B, A };
-			return fun(c, cnt);
-		}
+		if (A >= B) return solve(A, B, 'A', 'B');
+		return solve(B, A, 'B', 'A');
 	}
 
 	//985. Sum of Even Numbers After Queries
