@@ -1119,7 +1119,7 @@ public:
 	int subarraysWithKDistinct(vector<int>& a, int k) {
 		int i = 0, l = 0, r = 0, cnt = 0, cnt2 = 0;
 		int n = a.size();
-		map<int, int> win, win2;
+		vector<int>win(n + 1), win2(n + 1);
 
 		int ans = 0;
 		for (; i < n; ++i)
