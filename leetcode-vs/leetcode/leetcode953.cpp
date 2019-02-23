@@ -1248,9 +1248,36 @@ public:
 		}
 	};
 */
+
+	//995. Minimum Number of K Consecutive Bit Flips
+	int minKBitFlips(vector<int>& A, int K) {
+		int n = A.size();
+		int ans = 0;
+		vector<bool> op(n + 1);
+		for (int i = 0; i < n; ++i)
+		{
+			if (i > 0) op[i] = op[i] ^ op[i - 1];
+			if (op[i] == 1) A[i] ^= 1;
+			if (A[i] == 0)
+			{
+				if (i + K <= n)
+				{
+					op[i] = op[i] ^ 1;
+					op[i + K] = op[i + K] ^ 1;
+					ans++;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
 {
+
 	return 0;
 }
