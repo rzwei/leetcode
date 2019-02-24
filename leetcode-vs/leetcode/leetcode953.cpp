@@ -1359,7 +1359,7 @@ public:
 	//1001. Grid Illumination
 	vector<int> gridIllumination(int N, vector<vector<int>>& lamps, vector<vector<int>>& queries) {
 		map<int, int> X, Y, X_add_Y, X_m_Y;
-		map<int, set<int>> g;
+		set<pair<int, int>> g;
 		for (auto &e : lamps)
 		{
 			int x = e[0], y = e[1];
@@ -1367,7 +1367,7 @@ public:
 			Y[y]++;
 			X_add_Y[x + y]++;
 			X_m_Y[x - y]++;
-			g[x].insert(y);
+			g.emplace(x, y);
 		}
 		int n = queries.size();
 		vector<int> ans(n);
@@ -1378,26 +1378,22 @@ public:
 			{
 				ans[i] = 1;
 			}
-			auto it = g.lower_bound(x - 1);
-			while (it != g.end() && abs(it->first - x) <= 1)
+
+			for (int cur_x = x - 1; cur_x <= x + 1; ++cur_x)
 			{
-
-				auto &y_set = it->second;
-				auto j = y_set.lower_bound(y - 1);
-				while (j != y_set.end() && abs(*j - y) <= 1)
+				for (int cur_y = y - 1; cur_y <= y + 1; ++cur_y)
 				{
-					int cur_x = it->first;
-					int cur_y = *j;
-					X[cur_x]--;
-					Y[cur_y]--;
-					X_add_Y[cur_x + cur_y]--;
-					X_m_Y[cur_x - cur_y]--;
-
-					j = y_set.erase(j);
+					if (g.count({ cur_x, cur_y }))
+					{
+						X[cur_x]--;
+						Y[cur_y]--;
+						X_add_Y[cur_x + cur_y]--;
+						X_m_Y[cur_x - cur_y]--;
+						g.erase({ cur_x, cur_y });
+					}
 				}
-
-				it++;
 			}
+
 		}
 		return ans;
 	}
