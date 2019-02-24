@@ -1304,58 +1304,37 @@ public:
 		int n = g.size();
 		int m = g[0].size();
 		int ox, oy;
+
 		for (int i = 0; i < n; ++i)
 		{
 			for (int j = 0; j < m; ++j)
 			{
 				if (g[i][j] == 'R')
 				{
-					ox = i, oy = j;
+					ox = i;
+					oy = j;
 					break;
 				}
 			}
 		}
+
+		int dr[] = {0, 1, 0, -1};
+		int dc[] = {1, 0, -1, 0};
+
 		int ans = 0;
-		for (int i = ox; i < n; ++i)
+		for (int d = 0; d < 4; ++d)
 		{
-			if (g[i][oy] == '.') continue;
-			else if (g[i][oy] == 'B') break;
-			else if (g[i][oy] == 'p')
+			int i = ox, j = oy;
+			while (0 <= i && i < n && 0 <= j && j < m)
 			{
-				ans++;
-				break;
-			}
-		}
-
-		for (int i = ox; i >= 0; --i)
-		{
-			if (g[i][oy] == '.') continue;
-			else if (g[i][oy] == 'B') break;
-			else if (g[i][oy] == 'p')
-			{
-				ans++;
-				break;
-			}
-		}
-
-		for (int j = oy; j < m; ++j)
-		{
-			if (g[ox][j] == '.') continue;
-			else if (g[ox][j] == 'B') break;
-			else if (g[ox][j] == 'p')
-			{
-				ans++;
-				break;
-			}
-		}
-		for (int j = oy; j >= 0; --j)
-		{
-			if (g[ox][j] == '.') continue;
-			else if (g[ox][j] == 'B') break;
-			else if (g[ox][j] == 'p')
-			{
-				ans++;
-				break;
+				if (g[i][j] == 'B') break;
+				else if (g[i][j] == 'p')
+				{
+					ans++;
+					break;
+				}
+				i += dr[d];
+				j += dc[d];
 			}
 		}
 		return ans;
@@ -1426,6 +1405,9 @@ public:
 
 int main()
 {
-
+	vector<vector<char>> g;
+	g = { {'.','.','.','.','.','.','.','.'},{'.','.','.','p','.','.','.','.'},{'.','.','.','R','.','.','.','p'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','p','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'} };
+	Solution sol;
+	cout << sol.numRookCaptures(g) << endl;
 	return 0;
 }
