@@ -1277,26 +1277,17 @@ public:
 
 	//997. Find the Town Judge
 	int findJudge(int N, vector<vector<int>>& a) {
-		vector<int> inorder(N + 1), outorder(N + 1);
+		vector<int> count(N + 1);
 		for (auto &e : a)
 		{
-			inorder[e[1]]++;
-			outorder[e[0]] ++;
+			count[e[0]] --;
+			count[e[1]] ++;
 		}
-		int ans = 0, ansi = -1;
 		for (int i = 1; i <= N; ++i)
 		{
-			if (inorder[i] == N - 1 && outorder[i] == 0)
-			{
-				ans++;
-				if (ans == 1)
-				{
-					ansi = i;
-				}
-				else return -1;
-			}
+			if (count[i] == N - 1) return i;
 		}
-		return ansi;
+		return -1;
 	}
 
 	//999. Available Captures for Rook
