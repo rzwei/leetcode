@@ -1274,6 +1274,154 @@ public:
 		}
 		return ans;
 	}
+
+	//997. Find the Town Judge
+	int findJudge(int N, vector<vector<int>>& a) {
+		vector<int> inorder(N + 1), outorder(N + 1);
+		for (auto &e : a)
+		{
+			inorder[e[1]]++;
+			outorder[e[0]] ++;
+		}
+		int ans = 0, ansi = -1;
+		for (int i = 1; i <= N; ++i)
+		{
+			if (inorder[i] == N - 1 && outorder[i] == 0)
+			{
+				ans++;
+				if (ans == 1)
+				{
+					ansi = i;
+				}
+				else return -1;
+			}
+		}
+		return ansi;
+	}
+
+	//999. Available Captures for Rook
+	int numRookCaptures(vector<vector<char>>& g) {
+		int n = g.size();
+		int m = g[0].size();
+		int ox, oy;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j] == 'R')
+				{
+					ox = i, oy = j;
+					break;
+				}
+			}
+		}
+		int ans = 0;
+		for (int i = ox; i < n; ++i)
+		{
+			if (g[i][oy] == '.') continue;
+			else if (g[i][oy] == 'B') break;
+			else if (g[i][oy] == 'p')
+			{
+				ans++;
+				break;
+			}
+		}
+
+		for (int i = ox; i >= 0; --i)
+		{
+			if (g[i][oy] == '.') continue;
+			else if (g[i][oy] == 'B') break;
+			else if (g[i][oy] == 'p')
+			{
+				ans++;
+				break;
+			}
+		}
+
+		for (int j = oy; j < m; ++j)
+		{
+			if (g[ox][j] == '.') continue;
+			else if (g[ox][j] == 'B') break;
+			else if (g[ox][j] == 'p')
+			{
+				ans++;
+				break;
+			}
+		}
+		for (int j = oy; j >= 0; --j)
+		{
+			if (g[ox][j] == '.') continue;
+			else if (g[ox][j] == 'B') break;
+			else if (g[ox][j] == 'p')
+			{
+				ans++;
+				break;
+			}
+		}
+		return ans;
+	}
+
+	//998. Maximum Binary Tree II
+	TreeNode* insertIntoMaxTree(TreeNode* root, int val) {
+		if (!root) return new TreeNode(val);
+		if (val > root->val)
+		{
+			auto ret = new TreeNode(val);
+			ret->left = root;
+			return ret;
+		}
+		else
+		{
+			root->right = insertIntoMaxTree(root->right, val);
+			return root;
+		}
+	}
+
+	//1001. Grid Illumination
+	vector<int> gridIllumination(int N, vector<vector<int>>& lamps, vector<vector<int>>& queries) {
+		map<int, int> X, Y, X_add_Y, X_m_Y;
+		map<int, set<int>> g;
+		for (auto &e : lamps)
+		{
+			int x = e[0], y = e[1];
+			X[x]++;
+			Y[y]++;
+			X_add_Y[x + y]++;
+			X_m_Y[x - y]++;
+			g[x].insert(y);
+		}
+		int n = queries.size();
+		vector<int> ans(n);
+		for (int i = 0; i < n; ++i)
+		{
+			int x = queries[i][0], y = queries[i][1];
+			if (X[x] > 0 || Y[y] > 0 || X_add_Y[x + y] > 0 || X_m_Y[x - y] > 0)
+			{
+				ans[i] = 1;
+			}
+			auto it = g.lower_bound(x - 1);
+			while (it != g.end() && abs(it->first - x) <= 1)
+			{
+
+				auto &y_set = it->second;
+				auto j = y_set.lower_bound(y - 1);
+				while (j != y_set.end() && abs(*j - y) <= 1)
+				{
+					int cur_x = it->first;
+					int cur_y = *j;
+					X[cur_x]--;
+					Y[cur_y]--;
+					X_add_Y[cur_x + cur_y]--;
+					X_m_Y[cur_x - cur_y]--;
+
+					j = y_set.erase(j);
+				}
+
+				it++;
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
