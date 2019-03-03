@@ -1284,7 +1284,7 @@ public:
 			count[e[1]] ++;
 		}
 		for (int i = 1; i <= N; ++i)
-		{
+		{ 
 			if (count[i] == N - 1) return i;
 		}
 		return -1;
@@ -1387,6 +1387,85 @@ public:
 
 		}
 		return ans;
+	}
+
+	//1002. Find Common Characters
+	vector<string> commonChars(vector<string>& A) {
+		int n = A.size();
+		vector<int> cnt(26, n);
+		for (int i = 0; i < n; ++i)
+		{
+			vector<int> cnt2(26);
+			for (char c : A[i])
+			{
+				cnt2[c - 'a'] ++;
+			}
+			for (int i = 0; i < 26; ++i)
+			{
+				cnt[i] = min(cnt[i], cnt2[i]);
+			}
+		}
+		vector<string> ans;
+		for (int i = 0; i < 26; ++i)
+		{
+			for (int j = 0; j < cnt[i]; ++j) ans.push_back(string(1, i + 'a'));
+		}
+		return ans;
+	}
+
+	//1003. Check If Word Is Valid After Substitutions
+	bool isValid(string S) {
+		vector<int> cnt(3);
+		for (auto &c : S)
+			cnt[c - 'a'] ++;
+		if (cnt[0] != cnt[1] || cnt[0] != cnt[2] || cnt[1] != cnt[2]) return false;
+
+		string stk;
+		for (auto &c : S)
+		{
+			if (c == 'c')
+			{
+				if (stk.size() >= 2 && stk[stk.size() - 1] == 'b' && stk[stk.size() - 2] == 'a')
+				{
+					stk.pop_back();
+					stk.pop_back();
+				}
+			}
+			else
+			{
+				stk.push_back(c);
+			}
+		}
+		return stk.empty();
+	}
+
+	//1004. Max Consecutive Ones III
+	int longestOnes(vector<int>& a, int k) {
+		int n = a.size();
+		vector<int> cnt(n + 1);
+		for (int i = 0; i < n; ++i)
+		{
+			cnt[i + 1] = cnt[i] + (a[i] == 0);
+		}
+		int l = k, r = a.size() + 1;
+		while (l < r)
+		{
+			int m = (l + r) / 2;
+			bool f = false;
+			for (int i = 0, j = i + m - 1; j < n; ++i, ++j)
+			{
+				if (cnt[j + 1] - cnt[i] <= k)
+				{
+					f = true;
+					break;
+				}
+			}
+			if (f)
+				l = m + 1;
+			else
+				r = m;
+		}
+		return r - 1;
 	}
 };
 
