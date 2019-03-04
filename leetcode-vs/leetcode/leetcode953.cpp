@@ -439,42 +439,24 @@ public:
 	}
 
 
-	
-	int dfs_968(TreeNode *u, int isCam, int isCov, map<pair<TreeNode *, int>, int> &memo)
-	{
-		if (!u) return 0;
-		auto key = make_pair(u, (isCam << 1) | isCov);
-		if (memo.count(key)) return memo[key];
-		auto l = u->left, r = u->right;
-		int ans = INT_MAX;
-
-		if (isCam)
-		{
-			ans = min(ans, dfs_968(u->left, 0, 1, memo) + dfs_968(u->right, 0, 1, memo));
-			ans = min(ans, dfs_968(u->left, 1, 1, memo) + dfs_968(u->right, 1, 1, memo) + 1);
-		}
-		else
-		{
-			if (isCov)
-			{
-				if (u->left || u->right) ans = min(ans, dfs_968(u->left, 0, 0, memo) + dfs_968(u->right, 0, 0, memo));
-				ans = min(ans, dfs_968(u->left, 1, 1, memo) + dfs_968(u->right, 1, 1, memo) + 1);
-				if (u->left) ans = min(ans, dfs_968(u->left->left, 1, 1, memo) + 1 + dfs_968(u->left->right, 1, 1, memo) + dfs_968(u->right, 0, 1, memo));
-				if (u->right) ans = min(ans, dfs_968(u->left, 0, 1, memo) + dfs_968(u->right->left, 1, 1, memo) + 1 + dfs_968(u->right->right, 1, 1, memo));
-			}
-			else
-			{
-				ans = min(ans, dfs_968(u->left, 1, 1, memo) + dfs_968(u->right, 1, 1, memo) + 1);
-			}
-		}
-		memo[key] = ans;
-		return ans;
-	}
-
 	//968. Binary Tree Cameras
 	int minCameraCover(TreeNode* root) {
-		map<pair<TreeNode *, int>, int> memo;
-		return dfs_968(root, 0, 1, memo);
+		auto t = helper_968(root);
+		return min(get<1>(t), get<2>(t));
+	}
+
+	tuple<int, int, int> helper_968(TreeNode *root) {
+		if (!root) {
+			return { 0, 0, 1 };
+		}
+		int left_not_covered, left_covered, left_parent_covered;
+		tie(left_not_covered, left_covered, left_parent_covered) = helper_968(root->left);
+		int right_not_covered, right_covered, right_parent_covered;
+		tie(right_not_covered, right_covered, right_parent_covered) = helper_968(root->right);
+		return { left_covered + right_covered,
+				min(left_not_covered + right_not_covered + 1,
+					min(left_parent_covered + right_covered, left_covered + right_parent_covered)),
+				min(left_not_covered, left_covered) + min(right_not_covered, right_covered) + 1 };
 	}
 
 
