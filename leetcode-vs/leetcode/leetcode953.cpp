@@ -1424,30 +1424,17 @@ public:
 	//1004. Max Consecutive Ones III
 	int longestOnes(vector<int>& a, int k) {
 		int n = a.size();
-		vector<int> cnt(n + 1);
+		int j = 0, cur = 0, ans = 0;
 		for (int i = 0; i < n; ++i)
 		{
-			cnt[i + 1] = cnt[i] + (a[i] == 0);
-		}
-		int l = k, r = a.size() + 1;
-		while (l < r)
-		{
-			int m = (l + r) / 2;
-			bool f = false;
-			for (int i = 0, j = i + m - 1; j < n; ++i, ++j)
+			cur += (a[i] == 0);
+			while (cur > k)
 			{
-				if (cnt[j + 1] - cnt[i] <= k)
-				{
-					f = true;
-					break;
-				}
+				cur -= (a[j++] == 0);
 			}
-			if (f)
-				l = m + 1;
-			else
-				r = m;
+			ans = max(ans, i - j + 1);
 		}
-		return r - 1;
+		return ans;
 	}
 };
 
