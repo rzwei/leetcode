@@ -19,16 +19,16 @@
 #include <numeric>
 using namespace std;
 typedef long long ll;
+int const INF = INT_MAX / 8;
 
 class Solution {
-	int const maxn = INT_MAX / 8;
 	int dfs_1000(int l, int r, int m, vector<int> &sums, int k, vector<vector<vector<int>>> &memo)
 	{
-		if ((r - l + 1 - m) % (k - 1)) return maxn;
+		if ((r - l + 1 - m) % (k - 1)) return INF;
 		if (memo[l][r][m] != -1) return memo[l][r][m];
-		if (l == r) return m == 1 ? 0 : maxn;
+		if (l == r) return m == 1 ? 0 : INF;
 		if (m == 1) return dfs_1000(l, r, k, sums, k, memo) + sums[r + 1] - sums[l];
-		int ans = maxn;
+		int ans = INF;
 		for (int i = l; i < r; i += k - 1)
 		{
 			ans = min(ans, dfs_1000(l, i, 1, sums, k, memo) + dfs_1000(i + 1, r, m - 1, sums, k, memo));
@@ -48,6 +48,34 @@ class Solution {
 		vector<vector<vector<int>>> memo(n + 1, vector<vector<int>>(n + 1, vector<int>(n + 1, -1)));
 		return dfs_1000(0, n - 1, 1, sums, k, memo);
 	}
+
+	int dfs_964(int cur, int target, int x, map<pair<int, int>, int> &memo)
+	{
+		if (target == 0) return 0;
+		if (target == 1) return cost(cur);
+		if (memo.count({ cur, target }))
+			return memo[{cur, target}];
+
+		if (cur > 30) return INF;
+
+		int r = target % x;
+		int t = target / x;
+		int ans = INF;
+		ans = min(ans, dfs_964(cur + 1, t, x, memo) + r * cost(cur));
+		ans = min(ans, dfs_964(cur + 1, t + 1, x, memo) + (x - r) * cost(cur));
+		memo[{cur, target}] = ans;
+		return ans;
+	}
+	int cost(int x)
+	{
+		return x > 0 ? x : 2;
+	}
+	//964. Least Operators to Express Number
+	int leastOpsExpressTarget(int x, int target) {
+		map<pair<int, int>, int> memo;
+		return dfs_964(0, target, x, memo) - 1;
+	}
+
 };
 int main()
 {
