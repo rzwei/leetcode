@@ -349,6 +349,24 @@ class Solution {
 		}
 		return tot - ans;
 	}
+
+	//int dfs(int s, int n, int N)
+	//{
+	//	if (n > N) return 0;
+	//	int ans = 1;
+	//	if (n * 10 > N) return ans;
+	//	for (int i = 0; i < 10; ++i)
+	//	{
+	//		if (s & (1 << i)) continue;
+	//		if (!s && i == 0) continue;
+	//		ans += dfs(s | (1 << i), n * 10 + i, N);
+	//	}
+	//	return ans;
+	//}
+
+	//int numDupDigitsAtMostN(int N) {
+	//	return N + 1 - dfs(0, 0, N);
+	//}
 };
 int main()
 {
