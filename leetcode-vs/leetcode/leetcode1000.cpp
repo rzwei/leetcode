@@ -197,6 +197,158 @@ class Solution {
 	TreeNode* bstFromPreorder(vector<int> & preorder) {
 		return build(0, preorder.size() - 1, preorder);
 	}
+
+	//1012. Complement of Base 10 Integer
+    int bitwiseComplement(int N) {
+        if (N == 0) return 1;
+        int ans = 0;
+        int t = 1;
+        while (N)
+        {
+            if (N & 1)
+            {
+                
+            }
+            else
+            {
+                ans |= t;
+            }
+            N >>= 1;
+            t <<= 1;
+        }
+        return ans;
+    }
+
+	//1013. Pairs of Songs With Total Durations Divisible by 60
+    int numPairsDivisibleBy60(vector<int>& time) {
+        vector<int> cnt(60);
+        int n = time.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            int v = time[i] % 60;
+            ans += cnt[(60 - v) % 60];
+            cnt[v] ++;
+        }
+        return ans;
+    }
+
+	int check(vector<int>& a, int v)
+	{
+		int ans = 1, cur = 0;
+		for (auto& e : a)
+		{
+			cur += e;
+			if (cur > v)
+			{
+				ans++;
+				cur = e;
+			}
+		}
+		return ans;
+	}
+	//1014. Capacity To Ship Packages Within D Days
+	int shipWithinDays(vector<int>& weights, int D) {
+		int l = 0, r = 0;
+		for (auto& e : weights) r += e, l = max(l, e);
+		while (l < r)
+		{
+			int m = (l + r) / 2;
+			if (check(weights, m) <= D)
+			{
+				r = m;
+			}
+			else
+			{
+				l = m + 1;
+			}
+		}
+		return l;
+	}
+
+
+	int dfs(bitset<10>& vis, int i, int f, vector<int>& num, map<vector<long long>, int> &memo)
+	{
+		if (i == num.size())
+		{
+			return 1;
+		}
+		int ans = 0;
+		vector<long long> key = { (long long)vis.to_ullong(), i, f };
+		if (memo.count(key)) return memo[key];
+		if (f)
+		{
+			for (int j = 0; j < num[i]; ++j)
+			{
+				if (!vis[j])
+				{
+					vis[j] = 1;
+					ans += dfs(vis, i + 1, 0, num, memo);
+					vis[j] = 0;
+				}
+			}
+			if (!vis[num[i]])
+			{
+				vis[num[i]] = 1;
+				ans += dfs(vis, i + 1, f, num, memo);
+				vis[num[i]] = 0;
+			}
+		}
+		else
+		{
+			for (int j = 0; j <= 9; ++j)
+			{
+				if (!vis[j])
+				{
+					vis[j] = 1;
+					ans += dfs(vis, i + 1, 0, num, memo);
+					vis[j] = 0;
+				}
+			}
+		}
+		memo[key] = ans;
+		return ans;
+	}
+
+	//1015. Numbers With 1 Repeated Digit
+	int numDupDigitsAtMostN(int N) {
+		map<vector<long long>, int> memo;
+		vector<int> num;
+		int tot = N;
+		while (N)
+		{
+			num.push_back(N % 10);
+			N /= 10;
+		}
+		reverse(num.begin(), num.end());
+		int ans = 0;
+		bitset<10> vis;
+		for (int i = 0; i < num.size(); ++i)
+		{
+			if (i == 0)
+			{
+				vis[num[i]] = 1;
+				ans += dfs(vis, i + 1, 1, num, memo);
+				vis[num[i]] = 0;
+				for (int j = 1; j < num[i]; ++j)
+				{
+					vis[j] = 1;
+					ans += dfs(vis, i + 1, 0, num, memo);
+					vis[j] = 0;
+				}
+			}
+			else
+			{
+				for (int j = 1; j <= 9; ++j)
+				{
+					vis[j] = 1;
+					ans += dfs(vis, i + 1, 0, num, memo);
+					vis[j] = 0;
+				}
+			}
+		}
+		return tot - ans;
+	}
 };
 int main()
 {
