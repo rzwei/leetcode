@@ -1,5 +1,6 @@
 #include <bitset>
 #include "headers.h"
+#include <random>
 #include <sstream>
 #include <functional>
 #include <iostream>
@@ -367,6 +368,78 @@ class Solution {
 	//int numDupDigitsAtMostN(int N) {
 	//	return N + 1 - dfs(0, 0, N);
 	//}
+
+	// 1020. Partition Array Into Three Parts With Equal Sum
+	bool canThreePartsEqualSum(vector<int>& a) {
+		int n = a.size();
+		int sum = accumulate(a.begin(), a.end(), 0);
+		if (sum % 3) return false;
+		int tar = sum / 3, cur = 0;
+		bool find_tar = false;
+		for (int i = 0; i < n; ++i)
+		{
+			cur += a[i];
+			if (!find_tar && cur == tar) find_tar = true;
+			else if (cur == tar * 2 && find_tar) return true;
+		}
+		return false;
+	}
+
+	//1022. Smallest Integer Divisible by K
+	int smallestRepunitDivByK(int K) {
+		set<int> vis;
+		int cur = 0, len = 0;
+		while (true)
+		{
+			cur = (cur * 10 + 1) % K;
+			len++;
+			if (cur == 0) return len;
+			if (vis.count(cur)) return -1;
+			vis.insert(cur);
+		}
+		return -1;
+	}
+
+	//1021. Best Sightseeing Pair
+	int maxScoreSightseeingPair(vector<int>& a) {
+		int n = a.size();
+		int ans = 0;
+		vector<int> right(n);
+		right[n - 1] = a[n - 1] - (n - 1);
+		for (int i = n - 2; i >= 0; --i)
+		{
+			right[i] = max(right[i + 1], a[i] - i);
+		}
+		int mx = a[0] + 0;
+		for (int i = 1; i < n; ++i)
+		{
+			ans = max(ans, mx + right[i]);
+			mx = max(mx, a[i] + i);
+		}
+		return ans;
+	}
+
+	//1023. Binary String With Substrings Representing 1 To N
+	bool queryString(string S, int N) {
+		int Max = 1e5;
+		mt19937 e;
+		while (Max)
+		{
+			int v = e() % N + 1;
+			string s;
+			while (v)
+			{
+				s.push_back(v % 2 + '0');
+				v /= 2;
+			}
+			reverse(s.begin(), s.end());
+			if (S.find(s) == string::npos) {
+				return false;
+			}
+			Max--;
+		}
+		return true;
+	}
 };
 int main()
 {
