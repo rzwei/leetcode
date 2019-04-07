@@ -440,6 +440,107 @@ class Solution {
 		}
 		return true;
 	}
+
+	//1017. Convert to Base -2
+	string baseNeg2(int N) {
+		if (N == 0) return "0";
+		string ans;
+		int n = N, u = 0;
+		while (n)
+		{
+			if (n & 1)
+			{
+				ans.push_back('1');
+				if (u % 2 == 1)
+					n += 2;
+			}
+			else ans.push_back('0');
+			n >>= 1;
+			u++;
+		}
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+
+	//1020. Number of Enclaves
+	int numEnclaves(vector<vector<int>>& A) {
+		int n = A.size(), m = A[0].size();
+		queue<int> q;
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+			for (int j = 0; j < m; ++j) ans += (A[i][j] == 1);
+		for (int i = 0; i < n; ++i)
+		{
+			if (A[i][0] == 1) q.push(i * m), A[i][0] = 0;
+			if (m && A[i][m - 1] == 1) q.push(i * m + m - 1), A[i][m - 1] = 0;
+		}
+		for (int j = 1; j < m - 1; ++j)
+		{
+			if (A[0][j]) q.push(0 * m + j), A[0][j] = 0;
+			if (n && A[n - 1][j]) q.push((n - 1) * m + j), A[n - 1][j] = 0;
+		}
+		int dr[] = { 0, 1, 0, -1 };
+		int dc[] = { 1, 0, -1, 0 };
+		ans -= q.size();
+		while (!q.empty())
+		{
+			int x = q.front() / m, y = q.front() % m; q.pop();
+			// cout << x << " " << y << endl;
+			for (int d = 0; d < 4; ++d)
+			{
+				int nx = x + dr[d], ny = y + dc[d];
+				if (0 <= nx && nx < n && 0 <= ny && ny < m && A[nx][ny] == 1)
+				{
+					A[nx][ny] = 0;
+					// cout << nx << " " << ny << endl;
+					q.push(nx * m + ny);
+					ans--;
+				}
+			}
+		}
+
+		return ans;
+	}
+
+	//1019. Next Greater Node In Linked List
+	vector<int> nextLargerNodes(ListNode* head) {
+		int n = 0;
+		auto u = head;
+		while (u)
+		{
+			u = u->next;
+			n++;
+		}
+		vector<int> ans(n);
+		stack<pair<int, int>> stk;
+		u = head;
+		int i = 0;
+		while (u)
+		{
+			while (!stk.empty() && stk.top().first < u->val)
+			{
+				ans[stk.top().second] = u->val;
+				stk.pop();
+			}
+			stk.push({ u->val, i });
+			u = u->next;
+			i++;
+		}
+		return ans;
+	}
+
+	//1018. Binary Prefix Divisible By 5
+	vector<bool> prefixesDivBy5(vector<int>& A) {
+		int n = A.size();
+		vector<bool> ans(n);
+		int s = 0, t = 1;
+		for (int i = 0; i < n; ++i)
+		{
+			s = (s * 2 + A[i]) % 5;
+			if (s == 0) ans[i] = 1;
+		}
+		return ans;
+	}
 };
 int main()
 {
