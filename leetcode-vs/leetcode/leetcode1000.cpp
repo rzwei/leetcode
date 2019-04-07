@@ -558,7 +558,7 @@ class Solution {
 	}
 
 
-	bool match5018(string& s, string& p)
+	bool match_5018(string& s, string& p)
 	{
 		int j = 0;
 		for (char& c : s)
@@ -576,7 +576,7 @@ class Solution {
 	vector<bool> camelMatch(vector<string> & queries, string pattern) {
 		int n = queries.size();
 		vector<bool> ans(n);
-		for (int i = 0; i < n; ++i) ans[i] = match5018(queries[i], pattern);
+		for (int i = 0; i < n; ++i) ans[i] = match_5018(queries[i], pattern);
 		return ans;
 	}
 
