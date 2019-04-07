@@ -552,7 +552,7 @@ class Solution {
 		return dfs_5017(u->left, cur) + dfs_5017(u->right, cur);
 	}
 
-	//5017. Sum of Root To Leaf Binary Numbers
+	//1022. Sum of Root To Leaf Binary Numbers
 	int sumRootToLeaf(TreeNode * root) {
 		return dfs_5017(root, 0);
 	}
@@ -572,7 +572,7 @@ class Solution {
 		return j == p.size();
 	}
 
-	//5018. Camelcase Matching
+	//1023. Camelcase Matching
 	vector<bool> camelMatch(vector<string> & queries, string pattern) {
 		int n = queries.size();
 		vector<bool> ans(n);
@@ -580,7 +580,7 @@ class Solution {
 		return ans;
 	}
 
-	//5019. Video Stitching
+	//1024. Video Stitching
 	int videoStitching(vector<vector<int>>& clips, int T) {
 		int n = clips.size();
 		sort(clips.begin(), clips.end());
@@ -611,7 +611,7 @@ class Solution {
 		return -1;
 	}
 
-	//5016. Remove Outermost Parentheses
+	//1021. Remove Outermost Parentheses
 	string removeOuterParentheses(string S) {
 		string ans;
 		int cnt = 0;
