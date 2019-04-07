@@ -541,6 +541,93 @@ class Solution {
 		}
 		return ans;
 	}
+
+	long long dfs_5017(TreeNode* u, int val)
+	{
+		static int const mod = 1e9 + 7;
+
+		if (!u) return 0;
+		long long cur = (val * 2ll + u->val) % mod;
+		if (!u->left && !u->right) return cur;
+		return dfs_5017(u->left, cur) + dfs_5017(u->right, cur);
+	}
+
+	//5017. Sum of Root To Leaf Binary Numbers
+	int sumRootToLeaf(TreeNode * root) {
+		return dfs_5017(root, 0);
+	}
+
+
+	bool match5018(string& s, string& p)
+	{
+		int j = 0;
+		for (char& c : s)
+		{
+			if (j < p.size() && p[j] == c)
+			{
+				j++;
+			}
+			else if ('A' <= c && c <= 'Z') return false;
+		}
+		return j == p.size();
+	}
+
+	//5018. Camelcase Matching
+	vector<bool> camelMatch(vector<string> & queries, string pattern) {
+		int n = queries.size();
+		vector<bool> ans(n);
+		for (int i = 0; i < n; ++i) ans[i] = match5018(queries[i], pattern);
+		return ans;
+	}
+
+	//5019. Video Stitching
+	int videoStitching(vector<vector<int>>& clips, int T) {
+		int n = clips.size();
+		sort(clips.begin(), clips.end());
+		int t = 0, nt = 0, ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (clips[i][0] <= t)
+			{
+				nt = max(nt, clips[i][1]);
+				if (nt >= T) return ans + 1;
+			}
+			else
+			{
+				if (clips[i][0] <= nt)
+				{
+					ans++;
+					t = nt;
+					nt = clips[i][1];
+					if (t >= T) return ans;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		}
+		if (nt >= T) return ans + 1;
+		return -1;
+	}
+
+	//5016. Remove Outermost Parentheses
+	string removeOuterParentheses(string S) {
+		string ans;
+		int cnt = 0;
+		for (char c : S)
+		{
+			int pre = cnt;
+			if (c == '(') cnt++;
+			else cnt--;
+			if (pre == 0 && cnt == 1 || pre == 1 && cnt == 0)
+			{
+				continue;
+			}
+			ans += c;
+		}
+		return ans;
+	}
 };
 int main()
 {
