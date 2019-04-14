@@ -696,32 +696,27 @@ class Solution {
 		if (!root) return 0;
 		return dfs_1026(root, root->val, root->val);
 	}
-/*
-	int memo[1001];
-	auto r = [&]() { memset(memo, -1, sizeof(memo)); return 0; }();
-	class Solution {
-	public:
-		//1025. Divisor Game
-		bool divisorGame(int N) {
-			if (memo[N] != -1) return memo[N];
-			if (N == 1) return false;
-			bool ret = false;
-			for (int i = 1; i < N; ++i)
+
+	//1025. Divisor Game
+	bool divisorGame(int N) {
+		vector<bool> dp(N + 1, 1);
+		dp[1] = 0;
+		for (int i = 2; i <= N; ++i)
+		{
+			bool f = false;
+			for (int j = 1; j < i; ++j)
 			{
-				if (N % i == 0)
+				if (i % j == 0 && dp[i - j] == false)
 				{
-					if (divisorGame(N - i) == false)
-					{
-						ret = true;
-						break;
-					}
+					f = true;
+					break;
 				}
 			}
-			memo[N] = ret;
-			return ret;
+			dp[i] = f;
 		}
-	};
-*/
+		return dp[N];
+	}
+
 };
 int main()
 {
