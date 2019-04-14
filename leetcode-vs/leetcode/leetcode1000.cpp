@@ -200,39 +200,39 @@ class Solution {
 	}
 
 	//1012. Complement of Base 10 Integer
-    int bitwiseComplement(int N) {
-        if (N == 0) return 1;
-        int ans = 0;
-        int t = 1;
-        while (N)
-        {
-            if (N & 1)
-            {
-                
-            }
-            else
-            {
-                ans |= t;
-            }
-            N >>= 1;
-            t <<= 1;
-        }
-        return ans;
-    }
+	int bitwiseComplement(int N) {
+		if (N == 0) return 1;
+		int ans = 0;
+		int t = 1;
+		while (N)
+		{
+			if (N & 1)
+			{
+
+			}
+			else
+			{
+				ans |= t;
+			}
+			N >>= 1;
+			t <<= 1;
+		}
+		return ans;
+	}
 
 	//1013. Pairs of Songs With Total Durations Divisible by 60
-    int numPairsDivisibleBy60(vector<int>& time) {
-        vector<int> cnt(60);
-        int n = time.size();
-        int ans = 0;
-        for (int i = 0; i < n; ++i)
-        {
-            int v = time[i] % 60;
-            ans += cnt[(60 - v) % 60];
-            cnt[v] ++;
-        }
-        return ans;
-    }
+	int numPairsDivisibleBy60(vector<int>& time) {
+		vector<int> cnt(60);
+		int n = time.size();
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			int v = time[i] % 60;
+			ans += cnt[(60 - v) % 60];
+			cnt[v] ++;
+		}
+		return ans;
+	}
 
 	int check(vector<int>& a, int v)
 	{
@@ -628,26 +628,72 @@ class Solution {
 		}
 		return ans;
 	}
-
+	/*
+		//1027. Longest Arithmetic Sequence
+		int longestArithSeqLength(vector<int>& a) {
+			int n = a.size();
+			vector<map<int, int>> dp(n);
+			for (int i = 0; i < n; ++i)
+			{
+				for (int j = 0; j < i; ++j)
+				{
+					int d = a[i] - a[j];
+					if (dp[j].count(d)) dp[i][d] = max(dp[i][d], dp[j][d] + 1);
+					else dp[i][d] = max(dp[i][d], 2);
+				}
+			}
+			int ans = 0;
+			for (int i = 0; i < n; ++i)
+			{
+				for (auto& p : dp[i])
+				{
+					ans = max(ans, p.second);
+				}
+			}
+			return ans;
+		}
+	*/
+	
 	//1027. Longest Arithmetic Sequence
 	int longestArithSeqLength(vector<int>& a) {
 		int n = a.size();
-		vector<map<int, int>> dp(n);
+		map<int, vector<int>> idx;
+		for (int i = 0; i < n; ++i) idx[a[i]].push_back(i);
+
+		vector<vector<int>> dp(n, vector<int>(n));
+
 		for (int i = 0; i < n; ++i)
 		{
 			for (int j = 0; j < i; ++j)
 			{
-				int d = a[i] - a[j];
-				if (dp[j].count(d)) dp[i][d] = max(dp[i][d], dp[j][d] + 1);
-				else dp[i][d] = max(dp[i][d], 2);
+				int x = a[j] * 2 - a[i];
+				dp[j][i] = 2;
+				if (idx.count(x))
+				{
+					auto it = upper_bound(idx[x].begin(), idx[x].end(), j);
+					if (it == idx[x].begin()) continue;
+					--it;
+					// for (auto k = idx[x].begin(); k != it; ++k)
+					// {
+					dp[j][i] = max(dp[j][i], dp[*it][j] + 1);
+					// }
+				}
 			}
 		}
+
+		// for (int i = 0; i < n; ++i)
+		// {
+		//     for (int j = 0; j < n; ++j)
+		//         cout << dp[i][j] << ' ';
+		//     cout << endl;
+		// }
+
 		int ans = 0;
 		for (int i = 0; i < n; ++i)
 		{
-			for (auto& p : dp[i])
+			for (int j = 0; j < i; ++j)
 			{
-				ans = max(ans, p.second);
+				ans = max(ans, dp[j][i]);
 			}
 		}
 		return ans;
@@ -699,22 +745,23 @@ class Solution {
 
 	//1025. Divisor Game
 	bool divisorGame(int N) {
-		vector<bool> dp(N + 1, 1);
-		dp[1] = 0;
-		for (int i = 2; i <= N; ++i)
-		{
-			bool f = false;
-			for (int j = 1; j < i; ++j)
-			{
-				if (i % j == 0 && dp[i - j] == false)
-				{
-					f = true;
-					break;
-				}
-			}
-			dp[i] = f;
-		}
-		return dp[N];
+		//vector<bool> dp(N + 1, 1);
+		//dp[1] = 0;
+		//for (int i = 2; i <= N; ++i)
+		//{
+		//	bool f = false;
+		//	for (int j = 1; j < i; ++j)
+		//	{
+		//		if (i % j == 0 && dp[i - j] == false)
+		//		{
+		//			f = true;
+		//			break;
+		//		}
+		//	}
+		//	dp[i] = f;
+		//}
+		//return dp[N];
+		return N % 2 == 0;
 	}
 
 };
