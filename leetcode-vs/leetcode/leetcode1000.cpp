@@ -175,7 +175,7 @@ class Solution {
 		return -1;
 	}
 
-	TreeNode* build(int l, int r, vector<int> & a)
+	TreeNode* build_1008(int l, int r, vector<int> & a)
 	{
 		if (r - l + 1 == 1) return new TreeNode(a[l]);
 		if (l > r) return nullptr;
@@ -189,14 +189,14 @@ class Solution {
 				break;
 			}
 		}
-		ret->left = build(l + 1, f - 1, a);
-		ret->right = build(f, r, a);
+		ret->left = build_1008(l + 1, f - 1, a);
+		ret->right = build_1008(f, r, a);
 		return ret;
 	}
 
 	//1008. Construct Binary Search Tree from Preorder Traversal
 	TreeNode* bstFromPreorder(vector<int> & preorder) {
-		return build(0, preorder.size() - 1, preorder);
+		return build_1008(0, preorder.size() - 1, preorder);
 	}
 
 	//1012. Complement of Base 10 Integer
@@ -268,7 +268,7 @@ class Solution {
 	}
 
 
-	int dfs(bitset<10>& vis, int i, int f, vector<int>& num, map<vector<long long>, int> &memo)
+	int dfs_1015(bitset<10>& vis, int i, int f, vector<int>& num, map<vector<long long>, int> &memo)
 	{
 		if (i == num.size())
 		{
@@ -284,14 +284,14 @@ class Solution {
 				if (!vis[j])
 				{
 					vis[j] = 1;
-					ans += dfs(vis, i + 1, 0, num, memo);
+					ans += dfs_1015(vis, i + 1, 0, num, memo);
 					vis[j] = 0;
 				}
 			}
 			if (!vis[num[i]])
 			{
 				vis[num[i]] = 1;
-				ans += dfs(vis, i + 1, f, num, memo);
+				ans += dfs_1015(vis, i + 1, f, num, memo);
 				vis[num[i]] = 0;
 			}
 		}
@@ -302,7 +302,7 @@ class Solution {
 				if (!vis[j])
 				{
 					vis[j] = 1;
-					ans += dfs(vis, i + 1, 0, num, memo);
+					ans += dfs_1015(vis, i + 1, 0, num, memo);
 					vis[j] = 0;
 				}
 			}
@@ -329,12 +329,12 @@ class Solution {
 			if (i == 0)
 			{
 				vis[num[i]] = 1;
-				ans += dfs(vis, i + 1, 1, num, memo);
+				ans += dfs_1015(vis, i + 1, 1, num, memo);
 				vis[num[i]] = 0;
 				for (int j = 1; j < num[i]; ++j)
 				{
 					vis[j] = 1;
-					ans += dfs(vis, i + 1, 0, num, memo);
+					ans += dfs_1015(vis, i + 1, 0, num, memo);
 					vis[j] = 0;
 				}
 			}
@@ -343,7 +343,7 @@ class Solution {
 				for (int j = 1; j <= 9; ++j)
 				{
 					vis[j] = 1;
-					ans += dfs(vis, i + 1, 0, num, memo);
+					ans += dfs_1015(vis, i + 1, 0, num, memo);
 					vis[j] = 0;
 				}
 			}
@@ -628,6 +628,100 @@ class Solution {
 		}
 		return ans;
 	}
+
+	//1027. Longest Arithmetic Sequence
+	int longestArithSeqLength(vector<int>& a) {
+		int n = a.size();
+		vector<map<int, int>> dp(n);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < i; ++j)
+			{
+				int d = a[i] - a[j];
+				if (dp[j].count(d)) dp[i][d] = max(dp[i][d], dp[j][d] + 1);
+				else dp[i][d] = max(dp[i][d], 2);
+			}
+		}
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (auto& p : dp[i])
+			{
+				ans = max(ans, p.second);
+			}
+		}
+		return ans;
+	}
+
+	TreeNode* build_1028(int& i, int dep, string& s)
+	{
+		if (i == s.size()) return nullptr;
+		int u = i, cur = 0;
+		while (u < s.size() && s[u] == '-') u++;
+		cur = u - i;
+		if (cur == dep)
+		{
+			int val = 0;
+			while (u < s.size() && '0' <= s[u] && s[u] <= '9') val = val * 10 + s[u++] - '0';
+			auto ret = new TreeNode(val);
+			i = u;
+			ret->left = build_1028(i, dep + 1, s);
+			ret->right = build_1028(i, dep + 1, s);
+			return ret;
+		}
+		else return nullptr;
+	}
+
+	//1028. Recover a Tree From Preorder Traversal
+	TreeNode* recoverFromPreorder(string s) {
+		int i = 0;
+		return build_1028(i, 0, s);
+	}
+
+	int dfs_1026(TreeNode* u, int pmax, int pmin)
+	{
+		if (!u) return 0;
+		int ans = 0;
+		ans = max(ans, abs(pmax - u->val));
+		ans = max(ans, abs(pmin - u->val));
+		ans = max(ans, abs(pmin - u->val));
+		pmax = max(pmax, u->val);
+		pmin = min(pmin, u->val);
+		ans = max(ans, dfs_1026(u->left, pmax, pmin));
+		ans = max(ans, dfs_1026(u->right, pmax, pmin));
+		return ans;
+	}
+	//1026. Maximum Difference Between Node and Ancestor
+	int maxAncestorDiff(TreeNode* root) {
+		if (!root) return 0;
+		return dfs_1026(root, root->val, root->val);
+	}
+/*
+	int memo[1001];
+	auto r = [&]() { memset(memo, -1, sizeof(memo)); return 0; }();
+	class Solution {
+	public:
+		//1025. Divisor Game
+		bool divisorGame(int N) {
+			if (memo[N] != -1) return memo[N];
+			if (N == 1) return false;
+			bool ret = false;
+			for (int i = 1; i < N; ++i)
+			{
+				if (N % i == 0)
+				{
+					if (divisorGame(N - i) == false)
+					{
+						ret = true;
+						break;
+					}
+				}
+			}
+			memo[N] = ret;
+			return ret;
+		}
+	};
+*/
 };
 int main()
 {
