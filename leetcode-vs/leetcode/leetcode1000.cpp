@@ -23,6 +23,7 @@ typedef long long ll;
 int const INF = INT_MAX / 8;
 
 class Solution {
+public:
 	int dfs_1000(int l, int r, int m, vector<int>& sums, int k, vector<vector<vector<int>>>& memo)
 	{
 		if ((r - l + 1 - m) % (k - 1)) return INF;
@@ -767,5 +768,7 @@ class Solution {
 };
 int main()
 {
+    Solution sol;
+    cout << sol.divisorGame(10) << endl;
 	return 0;
 }
