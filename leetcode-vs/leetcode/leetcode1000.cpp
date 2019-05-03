@@ -765,6 +765,86 @@ public:
 		return N % 2 == 0;
 	}
 
+	//1029. Two City Scheduling
+	int twoCitySchedCost(vector<vector<int>>& a) {
+		int n = a.size();
+		auto cmp = [](vector<int>& a, vector<int>& b) {
+			return a[0] - a[1] < b[0] - b[1];
+		};
+		sort(a.begin(), a.end(), cmp);
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (i < n / 2) ans += a[i][0];
+			else ans += a[i][1];
+		}
+		return ans;
+	}
+
+	//1030. Matrix Cells in Distance Order
+	vector<vector<int>> allCellsDistOrder(int R, int C, int r0, int c0) {
+		queue<pair<int, int>> q;
+		q.push({ r0, c0 });
+		static int dr[] = { 0, 1, 0, -1 };
+		static int dc[] = { 1, 0, -1, 0 };
+		vector<vector<int>> ans(R * C, vector<int>(2));
+		vector<vector<bool>> vis(R, vector<bool>(C));
+		vis[r0][c0] = 1;
+		int ansi = 0;
+		ans[ansi++] = { r0, c0 };
+		while (!q.empty())
+		{
+			int size = q.size();
+			while (size--)
+			{
+				auto x = q.front().first, y = q.front().second;
+				q.pop();
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = x + dr[d], ny = y + dc[d];
+					if (0 <= nx && nx < R && 0 <= ny && ny < C && !vis[nx][ny])
+					{
+						q.emplace(nx, ny);
+						vis[nx][ny] = 1;
+						ans[ansi][0] = nx;
+						ans[ansi][1] = ny;
+						ansi++;
+					}
+				}
+			}
+		}
+		return ans;
+	}
+
+	// 1031. Maximum Sum of Two Non - Overlapping Subarrays
+	int maxSumTwoNoOverlap(vector<int>& a, int L, int M) {
+		int ans = 0;
+		int n = a.size();
+		vector<int> sum(n + 1);
+		for (int i = 0; i < n; ++i) sum[i + 1] = sum[i] + a[i];
+		int pre = 0;
+		for (int i = L - 1; i < n; ++i)
+		{
+			pre = max(pre, sum[i + 1] - sum[i - L + 1]);
+			if (i + 1 + M <= n)
+			{
+				ans = max(ans, pre + sum[i + 1 + M] - sum[i + 1]);
+			}
+		}
+
+		pre = 0;
+		for (int i = M - 1; i < n; ++i)
+		{
+			pre = max(pre, sum[i + 1] - sum[i - M + 1]);
+			if (i + 1 + L <= n)
+			{
+				ans = max(ans, pre + sum[i + 1 + L] - sum[i + 1]);
+			}
+		}
+
+		return ans;
+	}
+
 };
 int main()
 {
