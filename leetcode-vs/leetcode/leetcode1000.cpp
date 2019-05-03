@@ -845,6 +845,155 @@ public:
 		return ans;
 	}
 
+	//1033. Moving Stones Until Consecutive
+	vector<int> numMovesStones(int a, int b, int c) {
+		vector<int> x = { a, b, c };
+		sort(x.begin(), x.end());
+		int mi = 2, mx = x[1] - x[0] - 1 + x[2] - x[1] - 1;
+
+
+		if (x[0] == x[1] - 1) mi--;
+		if (x[1] == x[2] - 1) mi--;
+
+		if (x[0] + 2 == x[1] || x[1] + 2 == x[2]) mi = 1;
+
+		return { mi, mx };
+	}
+
+	//1034. Coloring A Border
+	vector<vector<int>> colorBorder(vector<vector<int>>& g, int r0, int c0, int color) {
+		if (g[r0][c0] == color) return g;
+		int dr[] = { 0, 1, -1, 0 };
+		int dc[] = { 1, 0, 0, -1 };
+		int n = g.size();
+		int m = g[0].size();
+		queue<pair<int, int>> q;
+		q.push({ r0, c0 });
+		int c = g[r0][c0];
+		g[r0][c0] = 0;
+		while (!q.empty())
+		{
+			int x = q.front().first, y = q.front().second;
+			q.pop();
+			for (int d = 0; d < 4; ++d)
+			{
+				int nx = x + dr[d], ny = y + dc[d];
+				if (0 <= nx && nx < n && 0 <= ny && ny < m)
+				{
+					if (g[nx][ny] == c)
+					{
+						q.push({ nx, ny });
+						g[nx][ny] = 0;
+					}
+				}
+			}
+		}
+
+
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j] == 0)
+				{
+					bool f = false;
+					for (int d = 0; !f && d < 4; ++d)
+					{
+						int nx = i + dr[d], ny = j + dc[d];
+						if (nx < 0 || nx >= n || ny < 0 || ny >= m)
+						{
+							f = true;
+						}
+						else  if (g[nx][ny] != 0) f = true;
+					}
+					if (f)
+					{
+						q.push({ i, j });
+					}
+				}
+			}
+		}
+
+		for (auto& row : g)
+			for (auto& e : row)
+				if (e == 0) e = c;
+
+		while (!q.empty())
+		{
+			int x = q.front().first, y = q.front().second;
+			q.pop();
+			g[x][y] = color;
+		}
+		return g;
+	}
+
+	//1035. Uncrossed Lines
+	int maxUncrossedLines(vector<int>& a, vector<int>& b) {
+		int n = a.size(), m = b.size();
+		vector<vector<int>> dp(n + 1, vector<int>(m + 1));
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 1; j <= m; ++j)
+			{
+				if (a[i - 1] == b[j - 1])
+				{
+					dp[i][j] = max(dp[i - 1][j - 1] + 1, dp[i][j]);
+				}
+				else
+				{
+					dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+				}
+			}
+		}
+		return dp[n][m];
+	}
+
+	//1036. Escape a Large Maze
+	bool isEscapePossible(vector<vector<int>>& a, vector<int>& st, vector<int>& ed) {
+		int n = a.size();
+		set<pair<int, int>> block;
+		for (auto& e : a)
+		{
+			if (e[0] == ed[0] && e[1] == ed[1]) return false;
+			block.emplace(e[0], e[1]);
+		}
+
+		queue<pair<int, int>> q;
+		q.push({ st[0], st[1] });
+
+		set<pair<int, int>> vis;
+		vis.emplace(st[0], st[1]);
+
+		int dr[] = { 0, 1, 0, -1 };
+		int dc[] = { 1, 0, -1, 0 };
+
+		int const BOUND = 1e6;
+		int const max_level = 50 + 10;
+		int level = 0;
+
+		while (!q.empty() && level <= max_level)
+		{
+			int size = q.size();
+			level++;
+			while (size--)
+			{
+				auto x = q.front().first, y = q.front().second;
+				q.pop();
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = x + dr[d], ny = y + dc[d];
+					if (nx >= 0 && nx < BOUND && 0 <= ny && ny < BOUND && !vis.count({ nx, ny }) && !block.count({ nx, ny }))
+					{
+						if (ed[0] == nx && ed[1] == ny) return true;
+						vis.emplace(nx, ny);
+						q.emplace(nx, ny);
+					}
+				}
+			}
+		}
+		if (level >= max_level) return true;
+		return false;
+	}
 };
 int main()
 {
