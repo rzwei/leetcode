@@ -994,6 +994,156 @@ public:
 		if (level >= max_level) return true;
 		return false;
 	}
+
+	//1041. Robot Bounded In Circle
+	bool isRobotBounded(string instructions) {
+		vector<int> d(4);
+		int u = 0;
+		for (auto c : instructions)
+		{
+			if (c == 'G')
+			{
+				d[u]++;
+			}
+			else if (c == 'L')
+			{
+				u = (u + 1) % 4;
+			}
+			else
+			{
+				u = (u - 1 + 4) % 4;
+			}
+		}
+		return d[0] == d[2] && d[1] == d[3] || u != 0;
+	}
+
+	bool dfs_1042(int u, vector<int>& color, vector<vector<int>>& g)
+	{
+		vector<int> cnt(4 + 1);
+		for (auto& v : g[u])
+		{
+			if (color[v] != 0) cnt[color[v]] ++;
+		}
+		for (int i = 1; i <= 4; ++i)
+		{
+			if (cnt[i] == 0)
+			{
+				color[u] = i;
+
+				bool f = true;
+				for (auto& v : g[u])
+				{
+					if (!f) break;
+					if (color[v] == 0)
+					{
+						if (dfs_1042(v, color, g) == false)
+						{
+							f = false;
+						}
+					}
+				}
+				if (f) return true;
+				color[u] = 0;
+			}
+		}
+		return false;
+	}
+
+	//1042. Flower Planting With No Adjacent
+	vector<int> gardenNoAdj(int N, vector<vector<int>>& paths) {
+		vector<vector<int>> g(N + 1);
+		for (auto& e : paths)
+		{
+			int u = e[0], v = e[1];
+			g[u].push_back(v);
+			g[v].push_back(u);
+		}
+		vector<int> color(N + 1);
+		for (int i = 1; i <= N; ++i)
+		{
+			if (color[i] == 0)
+			{
+				dfs_1042(i, color, g);
+			}
+		}
+		color.erase(color.begin());
+		return color;
+	}
+
+	//1043. Partition Array for Maximum Sum
+	int maxSumAfterPartitioning(vector<int>& a, int k) {
+		int n = a.size();
+		vector<int> dp(n);
+		for (int i = 0; i < n; ++i)
+		{
+			int mx = 0;
+			for (int j = i; i - j + 1 <= k && j >= 0; --j)
+			{
+				mx = max(mx, a[j]);
+				dp[i] = max(dp[i], mx * (i - j + 1) + (j - 1 >= 0 ? dp[j - 1] : 0));
+			}
+		}
+		return dp[n - 1];
+	}
+
+	int getcommon(int i, int j, string& s)
+	{
+		int k = 0;
+		while (i + k < s.size() && j + k < s.size() && s[i + k] == s[j + k])
+		{
+			k++;
+		}
+		return k;
+	}
+
+	//1044. Longest Duplicate Substring
+	string longestDupSubstring(string s) {
+		int n = s.size();
+
+		bool same = true;
+		for (int i = 0; i < n; ++i)
+		{
+			if (s[i] != s[0])
+			{
+				same = false;
+				break;
+			}
+		}
+
+		if (same) return s.substr(1);
+
+
+		auto cmp = [&](int i, int j) {
+			int k = 0;
+			while (i + k < n && j + k < n)
+			{
+				if (s[i + k] == s[j + k]) k++;
+				else return s[i + k] < s[j + k];
+			}
+			if (j + k < n) return true;
+			return false;
+		};
+		vector<int> suff(n);
+		for (int i = 0; i < n; ++i)
+		{
+			suff[i] = i;
+		}
+		sort(suff.begin(), suff.end(), cmp);
+
+		int len = 0;
+		int pos = 0;
+		for (int i = 0; i + 1 < n; ++i)
+		{
+			int cur = getcommon(suff[i], suff[i + 1], s);
+			if (cur > len)
+			{
+				len = cur;
+				pos = suff[i];
+			}
+		}
+		return s.substr(pos, len);
+	}
+
 };
 int main()
 {
