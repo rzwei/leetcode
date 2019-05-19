@@ -1144,6 +1144,99 @@ public:
 		return s.substr(pos, len);
 	}
 
+	//1046. Last Stone Weight
+	int lastStoneWeight(vector<int>& a) {
+		priority_queue<int> pq(a.begin(), a.end());
+		while (pq.size() > 1)
+		{
+			int x = pq.top(); pq.pop();
+			int y = pq.top(); pq.pop();
+			if (x == y) continue;
+			pq.push(x - y);
+		}
+		if (pq.empty()) return 0;
+		return pq.top();
+	}
+
+	//1047. Remove All Adjacent Duplicates In String
+	string removeDuplicates(string s) {
+		string ans;
+		for (auto& c : s)
+		{
+			if (ans.empty()) ans.push_back(c);
+			else
+			{
+				if (ans.back() == c) ans.pop_back();
+				else ans.push_back(c);
+			}
+		}
+		return ans;
+	}
+
+	bool judge_1048(string& a, string& b)
+	{
+		if (b.size() != a.size() + 1) return false;
+		int cnt = 0;
+		int i = 0;
+		for (int j = 0; j < b.size(); ++j)
+		{
+			if (i < a.size() && a[i] == b[j])
+			{
+				i++;
+			}
+			else
+			{
+				cnt++;
+			}
+		}
+		return i == a.size() && cnt == 1;
+	}
+
+	int dfs_1048(int u, vector<vector<int>>& g, vector<int>& cnt)
+	{
+		if (cnt[u] != -1) return cnt[u];
+		if (g[u].empty()) return cnt[u] = 1;
+		int ans = 0;
+		for (auto& v : g[u])
+		{
+			ans = max(ans, dfs_1048(v, g, cnt) + 1);
+		}
+		cnt[u] = ans;
+		return ans;
+	}
+
+	//1048. Longest String Chain
+	int longestStrChain(vector<string>& a) {
+		int n = a.size();
+		vector<vector<int>> g(n);
+		auto cmp = [](string& a, string& b) {
+			return a.size() < b.size();
+		};
+		sort(a.begin(), a.end(), cmp);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (i == j) continue;
+				if (judge_1048(a[i], a[j]))
+				{
+					g[i].push_back(j);
+				}
+			}
+		}
+		vector<int> cnt(n, -1);
+		for (int i = 0; i < n; ++i)
+		{
+			if (cnt[i] == -1)
+			{
+				dfs_1048(i, g, cnt);
+			}
+		}
+		int ans = 0;
+		for (auto& e : cnt) ans = max(ans, e);
+		return ans;
+	}
+
 };
 int main()
 {
