@@ -22,6 +22,72 @@ using namespace std;
 typedef long long ll;
 int const INF = INT_MAX / 8;
 
+/*
+//1032. Stream of Characters
+class Node {
+public:
+	Node* next[26];
+	bool isend;
+	char v;
+	Node() :next{ nullptr }
+	{
+		isend = false;
+	}
+};
+
+class StreamChecker {
+public:
+	int const max_len = 2000;
+	Node* root;
+	list<char> q;
+	StreamChecker(vector<string>& words) {
+		root = new Node();
+		for (auto& s : words)
+		{
+			reverse(s.begin(), s.end());
+			add(s);
+		}
+	}
+
+	void add(string& s)
+	{
+		auto u = root;
+		for (auto& c : s)
+		{
+			if (u->next[c - 'a'] == nullptr)
+			{
+				u->next[c - 'a'] = new Node();
+				u->next[c - 'a']->v = c;
+			}
+			u = u->next[c - 'a'];
+		}
+		u->isend = true;
+	}
+
+	bool query(char c) {
+		q.push_back(c);
+		if (q.size() > max_len) q.pop_back();
+		auto it = --q.end();
+		auto u = root;
+		while (u)
+		{
+			if (u->next[*it - 'a'])
+			{
+				u = u->next[*it - 'a'];
+				if (u->isend) return true;
+				if (it == q.begin()) return false;
+				else --it;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return false;
+	}
+};
+*/
+
 class Solution {
 public:
 	int dfs_1000(int l, int r, int m, vector<int>& sums, int k, vector<vector<vector<int>>>& memo)
