@@ -1237,6 +1237,24 @@ public:
 		return ans;
 	}
 
+	//1040. Moving Stones Until Consecutive II
+	vector<int> numMovesStonesII(vector<int>& a) {
+		sort(a.begin(), a.end());
+		int n = a.size();
+		queue<int> q;
+		int l = 0, r = 0;
+		int mx = max(a[n - 1] - n + 2 - a[1], a[n - 2] - a[0] - n + 2), mi = n;
+		for (int i = 0; i < n; ++i)
+		{
+			q.push(a[i]);
+			while (q.size() >= 2 && q.back() - q.front() + 1 > n) q.pop();
+			if (q.size() == n - 1 && q.back() - q.front() == n - 2)
+				mi = min(mi, 2);
+			else
+				mi = min(mi, n - (int)q.size());
+		}
+		return { mi, mx };
+	}
 };
 int main()
 {
