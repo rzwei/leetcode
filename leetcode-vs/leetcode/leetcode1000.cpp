@@ -1321,6 +1321,23 @@ public:
 		}
 		return { mi, mx };
 	}
+
+	//1049. Last Stone Weight II
+	int lastStoneWeightII(vector<int>& a) {
+		int sum = 0;
+		for (auto& e : a) sum += e;
+		vector<int> dp(sum / 2 + 1);
+		int B = sum / 2;
+		for (auto& e : a)
+		{
+			for (int v = B; v >= e; --v)
+			{
+				dp[v] = max(dp[v], dp[v - e] + e);
+			}
+		}
+		return (sum - dp[B]) - dp[B];
+	}
+
 };
 int main()
 {
