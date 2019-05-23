@@ -1338,6 +1338,19 @@ public:
 		return (sum - dp[B]) - dp[B];
 	}
 
+	/*
+	//1039. Minimum Score Triangulation of Polygon
+	int dp[50][50] = {};
+	int minScoreTriangulation(vector<int>& A, int i = 0, int j = 0, int res = 0) {
+		if (j == 0) j = A.size() - 1;
+		if (dp[i][j] != 0) return dp[i][j];
+		for (auto k = i + 1; k < j; ++k) {
+			res = min(res == 0 ? INT_MAX : res,
+				minScoreTriangulation(A, i, k) + A[i] * A[k] * A[j] + minScoreTriangulation(A, k, j));
+		}
+		return dp[i][j] = res;
+	}
+	*/
 };
 int main()
 {
