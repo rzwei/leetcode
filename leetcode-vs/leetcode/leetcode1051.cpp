@@ -89,28 +89,19 @@ public:
 		vector<int> ans(n);
 		for (int i = 0; i < n; ++i)
 		{
-			if (i == 0)
+            auto mx = pq.top(); pq.pop();
+			if (i == 0 || a[i - 1] != mx.second)
 			{
-				auto u = pq.top(); pq.pop();
-				a[i] = u.second;
-				if (--u.first > 0) pq.push(u);
+				a[i] = mx.second;
+				if (--mx.first > 0) pq.push(mx);
 			}
 			else
 			{
-				auto mx = pq.top(); pq.pop();
-				if (a[i - 1] == mx.second)
-				{
-					if (pq.empty()) assert(0);
-					auto smx = pq.top(); pq.pop();
-					a[i] = smx.second;
-					if (--smx.first > 0) pq.push(smx);
-					pq.push(mx);
-				}
-				else
-				{
-					a[i] = mx.second;
-					if (--mx.first > 0) pq.push(mx);
-				}
+        		if (pq.empty()) assert(0);
+                auto smx = pq.top(); pq.pop();
+     			a[i] = smx.second;
+     			if (--smx.first > 0) pq.push(smx);
+                pq.push(mx);
 			}
 		}
 		return a;
