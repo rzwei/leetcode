@@ -70,8 +70,7 @@ public:
 				swap(a[i], a[idx]);
 				return a;
 			}
-			if (!pre.count(a[i]))
-				pre[a[i]] = i;
+			pre[a[i]] = i;
 		}
 		return a;
 	}
