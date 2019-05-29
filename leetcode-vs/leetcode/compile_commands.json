@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/ren/workspace/leetcode/leetcode-vs/leetcode/build",
+  "command": "clang++      -std=gnu++1z -o CMakeFiles/leetcode.dir/leetcode1000.cpp.o -c /home/ren/workspace/leetcode/leetcode-vs/leetcode/leetcode1000.cpp",
+  "file": "/home/ren/workspace/leetcode/leetcode-vs/leetcode/leetcode1000.cpp"
+}
+]
