@@ -61,19 +61,25 @@ public:
 		return ans;
 	}
 
-    
 	//1053. Previous Permutation With One Swap
 	vector<int> prevPermOpt1(vector<int>& a) {
 		int n = a.size();
 		map<int, int> pre;
+
+		auto first_less_than = [&](int val) {
+			auto it = pre.lower_bound(val);
+			if (it == pre.begin()) return pre.end();
+			return --it;
+		};
+
 		for (int i = n - 1; i >= 0; --i)
 		{
-            auto it = first_less_than(pre.begin(), pre.end(), a[i]);
-            if (it != pre.end())
-            {
-                swap(a[i], a[it->second]);
-                return a;
-            }
+			auto it = first_less_than(a[i]);
+			if (it != pre.end())
+			{
+				swap(a[i], a[it->second]);
+				return a;
+			}
 			pre[a[i]] = i;
 		}
 		return a;
