@@ -7,6 +7,12 @@
 
 using namespace std;
 
+template<typename T, typename V>
+T first_less_than(T f, T l, V v)
+{
+    auto it = lower_bound(f, l, v);
+    return it == f ? l : --it;
+}
 class Solution
 {
 public:
@@ -55,59 +61,61 @@ public:
 		return ans;
 	}
 
+    
 	//1053. Previous Permutation With One Swap
 	vector<int> prevPermOpt1(vector<int>& a) {
 		int n = a.size();
 		map<int, int> pre;
 		for (int i = n - 1; i >= 0; --i)
 		{
-			auto it = pre.lower_bound(a[i]);
-			if (it != pre.begin() && (it == pre.end() || it->first > a[i])) --it;
-			if (it != pre.begin() && (it == pre.end() || it->first == a[i])) --it;
-			if (it != pre.end() && it->first < a[i])
-			{
-				int idx = it->second;
-				swap(a[i], a[idx]);
-				return a;
-			}
+            auto it = first_less_than(pre.begin(), pre.end(), a[i]);
+            if (it != pre.end())
+            {
+                swap(a[i], a[it->second]);
+                return a;
+            }
 			pre[a[i]] = i;
 		}
 		return a;
 	}
 
 	//1054. Distant Barcodes
-	vector<int> rearrangeBarcodes(vector<int>& a) {
-		priority_queue<pair<int, int>> pq;
-		map<int, int> m;
-		for (auto& e : a) m[e] ++;
-		for (auto& it : m)
-		{
-			pq.push({ it.second, it.first });
-		}
-
-		int n = a.size();
-		vector<int> ans(n);
-		for (int i = 0; i < n; ++i)
-		{
-            auto mx = pq.top(); pq.pop();
-			if (i == 0 || a[i - 1] != mx.second)
-			{
-				a[i] = mx.second;
-				if (--mx.first > 0) pq.push(mx);
-			}
-			else
-			{
-        		if (pq.empty()) assert(0);
-                auto smx = pq.top(); pq.pop();
-     			a[i] = smx.second;
-     			if (--smx.first > 0) pq.push(smx);
-                pq.push(mx);
-			}
-		}
-		return a;
-	}
+    vector<int> rearrangeBarcodes(vector<int>& a) {
+        int n = a.size();
+        int const maxn = 10000 + 1;
+        vector<int> cnt(maxn);
+        int max_n = 0, max_cnt = 0;
+        for (int &e : a)
+        {
+            if (++ cnt[e] > max_cnt)
+            {
+                max_cnt = cnt[e];
+                max_n = e;
+            }
+        }
+        int pos = 0;
+        for (int i = 0; i < maxn; ++i)
+        {
+            int u = (i == 0 ? max_n : i);
+            while (cnt[u] > 0)
+            {
+                a[pos] = u;
+                pos += 2;
+                if (pos >= n) pos = 1;
+                cnt[u] --;
+            }
+        }
+        return a;
+    }
+        
 };
 int main()
 {
+    Solution sol;
+    vector<int> a;
+    a = { 3, 1, 1, 3 };
+    auto r = sol.prevPermOpt1(a);
+    for (auto &e : r) cout << e << " ";
+    cout << endl;
 	return 0;
 }
