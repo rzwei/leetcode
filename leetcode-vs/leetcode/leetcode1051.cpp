@@ -1,3 +1,5 @@
+#include <bitset>
+#include <set>
 #include <queue>
 #include <assert.h>
 #include <iostream>
@@ -13,6 +15,97 @@ T first_less_than(T f, T l, V v)
     auto it = lower_bound(f, l, v);
     return it == f ? l : --it;
 }
+
+
+/*int memo[11][1 << 11];
+
+class Solution {
+public:
+	int dfs(int u, vector<vector<int>> &wk, bitset<12> &vis, vector<vector<int>> &bk)
+	{
+		if (u == wk.size()) return 0;
+		if (memo[u][vis.to_ulong()] != -1) return memo[u][vis.to_ulong()];
+		int ans = INT_MAX / 2;
+		for (int i = 0; i < bk.size(); ++i)
+		{
+			if (vis[i] == 0)
+			{
+				vis[i] = 1;
+				int dist = abs(wk[u][0] - bk[i][0]) + abs(wk[u][1] - bk[i][1]);
+				ans = min(ans, dfs(u + 1, wk, vis, bk) + dist);
+				vis[i] = 0;
+			}
+		}
+		return memo[u][vis.to_ulong()] = ans;
+	}
+	//1057. Campus Bikes II
+	int assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+		bitset<12>vis;
+		memset(memo, -1, sizeof(memo));
+		return dfs(0, workers, vis, bikes);
+	}
+};
+*/
+
+
+/*
+int memo[11][2][11][2];
+
+class Solution {
+public:
+	int dfs(int i, int lim, int pre, int num, int d, vector<int> &a)
+	{
+		if (i == a.size())
+		{
+			return pre;
+		}
+		if (memo[i][lim][pre][num] != -1) return memo[i][lim][pre][num];
+		int ans = 0;
+		if (lim)
+		{
+			for (int v = 0; v <= a[i]; ++v)
+			{
+				int nx = (num | (v != 0));
+				ans += dfs(i + 1, v == a[i], nx ? pre + (v == d) : 0, nx, d, a);
+			}
+		}
+		else
+		{
+			for (int v = 0; v < 10; ++v)
+			{
+				int nx = (num | (v != 0));
+				ans += dfs(i + 1, 0, nx ? pre + (v == d) : 0, nx, d, a);
+			}
+		}
+		return memo[i][lim][pre][num] = ans;
+	}
+
+	//1 - v , count d
+	int count(int v, int d)
+	{
+		vector<int> digits;
+		while (v)
+		{
+			digits.push_back(v % 10);
+			v /= 10;
+		}
+		if (digits.size() == 0) return 0;
+		reverse(digits.begin(), digits.end());
+		int ans = 0;
+		memset(memo, -1, sizeof(memo));
+		for (int i = 0; i <= digits[0]; ++i)
+		{
+			int nx = (i != 0);
+			ans += dfs(1, digits[0] == i, nx ? i == d : 0, nx, d, digits);
+		}
+		return ans;
+	}
+	//1058. Digit Count in Range
+	int digitsCount(int d, int low, int high) {
+		return count(high, d) - count(low - 1, d);
+	}
+};
+*/
 class Solution
 {
 public:
@@ -113,7 +206,35 @@ public:
         }
         return a;
     }
-        
+	//1055. Fixed Point
+	int fixedPoint(vector<int>& A) {
+		int n = A.size();
+		for (int i = 0; i < n; ++i)
+		{
+			if (i == A[i]) return i;
+		}
+		return -1;
+	}
+
+	//1056. Index Pairs of a String
+	vector<vector<int>> indexPairs(string s, vector<string>& words) {
+		set<string> ss(words.begin(), words.end());
+		int n = s.size();
+		vector<vector<int>> ans;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = i; j < n; ++j)
+			{
+				if (ss.count(s.substr(i, j - i + 1)))
+				{
+					ans.push_back({ i, j });
+				}
+			}
+		}
+		return ans;
+	}
+
+
 };
 int main()
 {
