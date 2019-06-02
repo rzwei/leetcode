@@ -1,3 +1,5 @@
+#include <unordered_map>
+#include <unordered_set>
 #include <bitset>
 #include <set>
 #include <queue>
@@ -274,7 +276,7 @@ public:
 		}
 
 		int ans = 0;
-		map<int, int> pre;
+		unordered_map<int, int> pre;
 		for (int i = 0; i < m; ++i)
 		{
 			for (int j = 0; j <= i; ++j)
@@ -317,6 +319,41 @@ public:
 			}
 		}
 		return "";
+	}
+
+	int count_1072(vector<vector<int>>& a, vector<int>& fp)
+	{
+		int n = a.size(), m = a[0].size();
+		int ans = 0, ans2 = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			bool f = true, f2 = true;
+			for (int j = 1; (f || f2) && j < m; ++j)
+			{
+				if ((a[i][j] ^ fp[j]) != (a[i][0] ^ fp[0]))
+					f = false;
+				if ((a[i][j] ^ (~fp[j])) != (a[i][0] ^ (~fp[0])))
+					f2 = false;
+			}
+			ans += f;
+			ans2 += f2;
+		}
+		return max(ans, ans2);
+	}
+
+	//1072. Flip Columns For Maximum Number of Equal Rows
+	int maxEqualRowsAfterFlips(vector<vector<int>>& a) {
+		int n = a.size(), m = a[0].size();
+		vector<int> fp(m);
+		int ans = 0;
+		sort(a.begin(), a.end());
+		for (int i = 0; i < n; ++i)
+		{
+			if (i > 0 && a[i] == a[i - 1]) continue;
+			fp = a[i];
+			ans = max(ans, count_1072(a, fp));
+		}
+		return ans;
 	}
 
 };
