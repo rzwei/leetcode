@@ -3,7 +3,7 @@
 #include <bitset>
 #include <set>
 #include <queue>
-#include <assert.h>
+//#include <assert.h>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -354,6 +354,27 @@ public:
 			ans = max(ans, count_1072(a, fp));
 		}
 		return ans;
+	}
+
+	int count_1067(int n, int d)
+	{
+		int ans = 0;
+		for (int p = 1; p <= n; p *= 10)
+		{
+			int prefix = n / p / 10;
+			int digit = n / p % 10;
+			int suffix = n % p;
+			ans += prefix * p;
+			if (d == 0) ans -= p;
+			if (digit == d) ans += suffix + 1;
+			else if (d < digit) ans += p;
+		}
+		return ans;
+	}
+
+	//1067. Digit Count in Range
+	int digitsCount(int d, int low, int high) {
+		return count_1067(high, d) - count_1067(low - 1, d);
 	}
 
 };
