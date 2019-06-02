@@ -234,7 +234,31 @@ public:
 		return ans;
 	}
 
-
+	//1066. Campus Bikes II
+	int assignBikes(vector<vector<int>>& workers, vector<vector<int>>& bikes) {
+		int n = workers.size(), m = bikes.size();
+		int B = (1 << m);
+		int const maxn = INT_MAX / 2;
+		vector<int> dp(B, maxn), nx(B, maxn);
+		dp[0] = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			fill(nx.begin(), nx.end(), maxn);
+			for (int s = 0; s < B; ++s)
+			{
+				for (int j = 0; j < m; ++j)
+				{
+					// nx[s] = INT_MAX;
+					if ((s >> j) & 1)
+					{
+						nx[s] = min(nx[s], dp[s ^ (1 << j)] + abs(workers[i][0] - bikes[j][0]) + abs(workers[i][1] - bikes[j][1]));
+					}
+				}
+			}
+			dp = nx;
+		}
+		return *min_element(dp.begin(), dp.end());
+	}
 };
 int main()
 {
