@@ -259,6 +259,66 @@ public:
 		}
 		return *min_element(dp.begin(), dp.end());
 	}
+
+	//1074. Number of Submatrices That Sum to Target
+	int numSubmatrixSumTarget(vector<vector<int>>& a, int t) {
+		int n = a.size(), m = a[0].size();
+
+		vector<vector<int>> sums(n, vector<int>(m + 1));
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				sums[i][j + 1] = sums[i][j] + a[i][j];
+			}
+		}
+
+		int ans = 0;
+		map<int, int> pre;
+		for (int i = 0; i < m; ++i)
+		{
+			for (int j = 0; j <= i; ++j)
+			{
+				pre.clear();
+				pre[0] = 1;
+				int s = 0;
+				for (int k = 0; k < n; ++k)
+				{
+					int v = sums[k][i + 1] - sums[k][j];
+					s += v;
+					if (pre.count(s - t)) ans += pre[s - t];
+					pre[s] ++;
+				}
+			}
+		}
+		return ans;
+	}
+
+	bool check_1071(string& p, string t)
+	{
+		if (p.size() % t.size()) return false;
+		int n = p.size(), m = t.size();
+		for (int i = 0; i < n; ++i)
+		{
+			if (p[i] != t[i % m]) return false;
+		}
+		return true;
+	}
+
+	//1071. Greatest Common Divisor of Strings
+	string gcdOfStrings(string str1, string str2) {
+		if (str1.size() < str2.size()) swap(str1, str2);
+		int n = str2.size();
+		for (int i = n; i >= 1; --i)
+		{
+			if (check_1071(str1, str2.substr(0, i)) && check_1071(str2, str2.substr(0, i)))
+			{
+				return str2.substr(0, i);
+			}
+		}
+		return "";
+	}
+
 };
 int main()
 {
