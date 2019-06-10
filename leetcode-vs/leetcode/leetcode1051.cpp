@@ -363,6 +363,28 @@ public:
 		return ans;
 	}
 
+	////316. Remove Duplicate Letters
+	//string removeDuplicateLetters(string s) {
+	//	int n = s.size();
+	//	vector<int> cnt(26);
+	//	vector<bool> vis(26);
+	//	for (auto& c : s) cnt[c - 'a'] ++;
+	//	string ans;
+	//	for (auto& c : s)
+	//	{
+	//		cnt[c - 'a'] --;
+	//		if (vis[c - 'a']) continue;
+	//		while (!ans.empty() && c < ans.back() && cnt[ans.back() - 'a'])
+	//		{
+	//			vis[ans.back() - 'a'] = 0;
+	//			ans.pop_back();
+	//		}
+	//		ans.push_back(c);
+	//		vis[c - 'a'] = 1;
+	//	}
+	//	return ans;
+	//}
+
 	//1081. Smallest Subsequence of Distinct Characters
 	string smallestSubsequence(string s) {
 		int n = s.size();
