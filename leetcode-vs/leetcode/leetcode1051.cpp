@@ -18,6 +18,13 @@ T first_less_than(T f, T l, V v)
     return it == f ? l : --it;
 }
 
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
 
 /*int memo[11][1 << 11];
 
@@ -356,6 +363,117 @@ public:
 		return ans;
 	}
 
+	bool dfs_1081(int u, int vis, string& cur, vector<int>& dp, vector<vector<int>>& idx)
+	{
+		if (u == dp.size()) return true;
+		for (int i = 0; i < 26; ++i)
+		{
+			if (vis & (1 << i))
+			{
+				auto& idx_i = idx[i];
+				auto j = lower_bound(idx_i.begin(), idx_i.end(), u);
+				for (; j != idx_i.end(); ++j)
+				{
+					int nx = vis ^ (1 << i);
+					if ((nx | dp[*j + 1]) == dp[*j + 1])
+					{
+						cur.push_back(i + 'a');
+						dfs_1081(*j + 1, nx, cur, dp, idx);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	//1081. Smallest Subsequence of Distinct Characters
+	string smallestSubsequence(string s) {
+		int n = s.size();
+		vector<int> dp(n + 1);
+		vector<vector<int>> idx(26);
+		for (int i = n - 1; i >= 0; --i) dp[i] = dp[i + 1] | (1 << (s[i] - 'a'));
+		for (int i = 0; i < n; ++i) idx[s[i] - 'a'].push_back(i);
+		string ans;
+		dfs_1081(0, dp[0], ans, dp, idx);
+		return ans;
+	}
+
+	vector<string> split(string& s)
+	{
+		vector<string> ans;
+		string u;
+		for (auto& c : s)
+		{
+			if (c == ' ')
+			{
+				if (!u.empty())
+				{
+					ans.push_back(u);
+					u.clear();
+				}
+			}
+			else
+			{
+				u.push_back(c);
+			}
+		}
+		if (!u.empty()) ans.push_back(u);
+		return ans;
+	}
+	//1078. Occurrences After Bigram
+	vector<string> findOcurrences(string text, string first, string second) {
+		auto s = split(text);
+		int n = s.size();
+		vector<string> ans;
+		for (int i = 0; i + 2 < n; ++i)
+		{
+			if (s[i] == first && s[i + 1] == second)
+			{
+				ans.push_back(s[i + 2]);
+			}
+		}
+		return ans;
+	}
+
+	void dfs_1079(string& cur, int vis, string& s, set<string> &ans)
+	{
+		if (cur.size() == s.size())
+		{
+			ans.insert(cur);
+			return;
+		}
+		ans.insert(cur);
+		int n = s.size();
+		for (int i = 0; i < n; ++i)
+		{
+			if ((vis & (1 << i)) == 0)
+			{
+				cur.push_back(s[i]);
+				dfs_1079(cur, vis | (1 << i), s, ans);
+				cur.pop_back();
+			}
+		}
+		return;
+	}
+	//1079. Letter Tile Possibilities
+	int numTilePossibilities(string s) {
+		string cur;
+		set<string> ans;
+		dfs_1079(cur, 0, s, ans);
+		return ans.size() - 1;
+	}
+
+	//1080. Insufficient Nodes in Root to Leaf Paths
+	TreeNode* sufficientSubset(TreeNode* root, int limit) {
+		if (root->left == root->right)
+			return root->val < limit ? NULL : root;
+		if (root->left)
+			root->left = sufficientSubset(root->left, limit - root->val);
+		if (root->right)
+			root->right = sufficientSubset(root->right, limit - root->val);
+		return root->left == root->right ? NULL : root;
+	}
 };
 int main()
 {
