@@ -363,39 +363,38 @@ public:
 		return ans;
 	}
 
-	bool dfs_1081(int u, int vis, string& cur, vector<int>& dp, vector<vector<int>>& idx)
-	{
-		if (u == dp.size()) return true;
-		for (int i = 0; i < 26; ++i)
-		{
-			if (vis & (1 << i))
-			{
-				auto& idx_i = idx[i];
-				auto j = lower_bound(idx_i.begin(), idx_i.end(), u);
-				for (; j != idx_i.end(); ++j)
-				{
-					int nx = vis ^ (1 << i);
-					if ((nx | dp[*j + 1]) == dp[*j + 1])
-					{
-						cur.push_back(i + 'a');
-						dfs_1081(*j + 1, nx, cur, dp, idx);
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
 	//1081. Smallest Subsequence of Distinct Characters
 	string smallestSubsequence(string s) {
 		int n = s.size();
 		vector<int> dp(n + 1);
-		vector<vector<int>> idx(26);
-		for (int i = n - 1; i >= 0; --i) dp[i] = dp[i + 1] | (1 << (s[i] - 'a'));
-		for (int i = 0; i < n; ++i) idx[s[i] - 'a'].push_back(i);
+		for (int i = n - 1; i >= 0; --i)
+		{
+			dp[i] = dp[i + 1] | (1 << (s[i] - 'a'));
+		}
 		string ans;
-		dfs_1081(0, dp[0], ans, dp, idx);
+		int cur = dp[0];
+		int u = 0;
+		while (cur && u < n)
+		{
+			char mi = 'z';
+			for (int i = u; i < n; ++i)
+			{
+				if (cur & (1 << (s[i] - 'a')))
+				{
+					if ((cur | dp[i]) == dp[i])
+					{
+						if (s[i] < mi)
+						{
+							mi = s[i];
+							u = i;
+						}
+					}
+				}
+			}
+			ans.push_back(mi);
+			cur ^= (1 << (mi - 'a'));
+			u++;
+		}
 		return ans;
 	}
 
