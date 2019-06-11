@@ -457,34 +457,28 @@ public:
 		return ans;
 	}
 
-	void dfs_1079(string& cur, int vis, string& s, set<string> &ans)
+	int dfs_1079(vector<int>& cnt)
 	{
-		if (cur.size() == s.size())
+		int ans = 0;
+		for (int i = 0; i < 26; ++i)
 		{
-			ans.insert(cur);
-			return;
+			if (cnt[i] == 0) continue;
+			ans++;
+			cnt[i] --;
+			ans += dfs_1079(cnt);
+			cnt[i] ++;
 		}
-		ans.insert(cur);
-		int n = s.size();
-		for (int i = 0; i < n; ++i)
-		{
-			if ((vis & (1 << i)) == 0)
-			{
-				cur.push_back(s[i]);
-				dfs_1079(cur, vis | (1 << i), s, ans);
-				cur.pop_back();
-			}
-		}
-		return;
+		return ans;
 	}
 	//1079. Letter Tile Possibilities
 	int numTilePossibilities(string s) {
-		string cur;
-		set<string> ans;
-		dfs_1079(cur, 0, s, ans);
-		return ans.size() - 1;
+		vector<int> cnt(26);
+		for (auto& c : s)
+		{
+			cnt[c - 'A'] ++;
+		}
+		return dfs_1079(cnt);
 	}
-
 	//1080. Insufficient Nodes in Root to Leaf Paths
 	TreeNode* sufficientSubset(TreeNode* root, int limit) {
 		if (root->left == root->right)
