@@ -490,6 +490,133 @@ public:
 		return root->left == root->right ? NULL : root;
 	}
 
+	//1085. Sum of Digits in the Minimum Number
+	int sumOfDigits(vector<int>& a) {
+		int v = *min_element(a.begin(), a.end());
+		int ans = 0;
+		while (v)
+		{
+			ans += v % 10;
+			v /= 10;
+		}
+		return ans % 2 ? 0 : 1;
+	}
+
+	//1086. High Five
+	vector<vector<int>> highFive(vector<vector<int>>& a) {
+		map<int, vector<int>> x;
+		for (auto& e : a)
+		{
+			int id = e[0], sc = e[1];
+			x[id].push_back(sc);
+		}
+		for (auto& e : x)
+		{
+			sort(e.second.begin(), e.second.end(), greater<int>());
+		}
+		vector<vector<int>> ans;
+		for (auto& e : x)
+		{
+			int id = e.first;
+			int tot = 0;
+			for (int i = 0; i < 5; ++i)
+			{
+				tot += e.second[i];
+			}
+			ans.push_back({ id, tot / 5 });
+		}
+		return ans;
+	}
+
+	void dfs_1087(int u, string& s, string& cur, vector<string>& ans)
+	{
+		if (u == s.size())
+		{
+			ans.push_back(cur);
+			return;
+		}
+		if (s[u] == '{')
+		{
+			vector<char> values;
+			int i = u + 1;
+			while (s[i] != '}')
+			{
+				char v = s[i];
+				values.push_back(v);
+				if (s[i + 1] == '}')
+				{
+					i += 2;
+					break;
+				}
+				else if (s[i + 1] == ',')
+				{
+					i += 2;
+				}
+			}
+			sort(values.begin(), values.end());
+			for (auto& e : values)
+			{
+				cur.push_back(e);
+				dfs_1087(i, s, cur, ans);
+				cur.pop_back();
+			}
+		}
+		else
+		{
+			cur.push_back(s[u]);
+			dfs_1087(u + 1, s, cur, ans);
+			cur.pop_back();
+		}
+	}
+	//1087. Permutation of Letters
+	vector<string> permute(string S) {
+		vector<string> ans;
+		string cur;
+		dfs_1087(0, S, cur, ans);
+		return ans;
+	}
+
+	/*
+	//1088. Confusing Number II
+	typedef long long int64;
+	class Solution {
+	public:
+		map<int, int> A;
+		int n, ret;
+		bool check(int64 n) {
+			int64 ret = 0;
+			for (int64 m = n; m; m /= 10) {
+				ret = ret * 10 + A[m % 10];
+			}
+			return ret != n;
+		}
+		void search(int pos, int64 cur) {
+			//cout << "search:" << pos << " " << cur << endl;
+			if (cur > n) return;
+			if (cur && check(cur)) {
+				//cout << cur << endl;
+				++ret;
+			}
+			for (auto& it : A) {
+				if (pos == 0 && it.first == 0) continue;
+				search(pos + 1, cur * 10 + it.first);
+			}
+		}
+		int confusingNumberII(int n) {
+			A.clear();
+			A[0] = 0;
+			A[1] = 1;
+			A[8] = 8;
+			A[6] = 9;
+			A[9] = 6;
+			this->n = n;
+			ret = 0;
+			search(0, 0LL);
+			return ret;
+		}
+	};
+	*/
+
 	//1090. Largest Values From Labels
 	int largestValsFromLabels(vector<int>& values, vector<int>& labels, int num_wanted, int use_limit) {
 		int n = values.size();
