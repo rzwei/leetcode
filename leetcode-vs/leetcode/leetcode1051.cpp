@@ -490,132 +490,180 @@ public:
 		return root->left == root->right ? NULL : root;
 	}
 
-	//1085. Sum of Digits in the Minimum Number
-	int sumOfDigits(vector<int>& a) {
-		int v = *min_element(a.begin(), a.end());
+	//1090. Largest Values From Labels
+	int largestValsFromLabels(vector<int>& values, vector<int>& labels, int num_wanted, int use_limit) {
+		int n = values.size();
+		vector<pair<int, int>> a(n);
+		for (int i = 0; i < n; ++i)
+		{
+			a[i].first = values[i];
+			a[i].second = labels[i];
+		}
+		sort(a.begin(), a.end());
+		map<int, int> cnt;
 		int ans = 0;
-		while (v)
+		for (int i = n - 1; i >= 0 && num_wanted; --i)
 		{
-			ans += v % 10;
-			v /= 10;
-		}
-		return ans % 2 ? 0 : 1;
-	}
-
-	//1086. High Five
-	vector<vector<int>> highFive(vector<vector<int>>& a) {
-		map<int, vector<int>> x;
-		for (auto &e : a)
-		{
-			int id = e[0], sc = e[1];
-			x[id].push_back(sc);
-		}
-		for (auto &e : x)
-		{
-			sort(e.second.begin(), e.second.end(), greater<int>());
-		}
-		vector<vector<int>> ans;
-		for (auto &e : x)
-		{
-			int id = e.first;
-			int tot = 0;
-			for (int i = 0; i < 5; ++i)
+			if (cnt[a[i].second] == use_limit)
 			{
-				tot += e.second[i];
+				continue;
 			}
-			ans.push_back({ id, tot / 5 });
+			else
+			{
+				cnt[a[i].second]++;
+				ans += a[i].first;
+				num_wanted--;
+			}
 		}
 		return ans;
 	}
 
-	void dfs_1087(int u, string &s, string &cur, vector<string> &ans)
-	{
-		if (u == s.size())
+	//1091. Shortest Path in Binary Matrix
+	int shortestPathBinaryMatrix(vector<vector<int>>& a) {
+		int n = a.size();
+		if (a[0][0] == 1 || a[n - 1][n - 1] == 1) return -1;
+		if (n == 1) return 1;
+		queue<pair<int, int>> q;
+		int ans = 1;
+		vector<vector<int>> d = { {0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1,}, {1, -1}, {-1, 1}, {-1, -1} };
+		q.push({ 0, 0 });
+		a[0][0] = 1;
+		while (!q.empty())
 		{
-			ans.push_back(cur);
-			return;
-		}
-		if (s[u] == '{')
-		{
-			vector<char> values;
-			int i = u + 1;
-			while (s[i] != '}')
+			ans++;
+			int size = q.size();
+			while (size--)
 			{
-				char v = s[i];
-				values.push_back(v);
-				if (s[i + 1] == '}')
+
+				int x = q.front().first, y = q.front().second;
+				q.pop();
+
+				for (int i = 0; i < d.size(); ++i)
 				{
-					i += 2;
-					break;
-				}
-				else if (s[i + 1] == ',')
-				{
-					i += 2;
+					int nx = x + d[i][0], ny = y + d[i][1];
+					if (0 <= nx && nx < n && 0 <= ny && ny < n && a[nx][ny] == 0)
+					{
+						q.push({ nx, ny });
+						a[nx][ny] = 1;
+						if (nx == n - 1 && ny == n - 1)
+						{
+							return ans;
+						}
+					}
 				}
 			}
-			sort(values.begin(), values.end());
-			for (auto &e : values)
-			{
-				cur.push_back(e);
-				dfs_1087(i, s, cur, ans);
-				cur.pop_back();
-			}
 		}
-		else
-		{
-			cur.push_back(s[u]);
-			dfs_1087(u + 1, s, cur, ans);
-			cur.pop_back();
-		}
+		return -1;
 	}
-	//1087. Permutation of Letters
-	vector<string> permute(string S) {
-		vector<string> ans;
-		string cur;
-		dfs_1087(0, S, cur, ans);
+
+	//1092. Shortest Common Supersequence
+	string shortestCommonSupersequence(string s, string p) {
+		int n = s.size(), m = p.size();
+		vector<vector<int>> dp(n + 1, vector<int>(m + 1));
+		vector<vector<int>> path(n + 1, vector<int>(m + 1, -1));
+
+		// 0 match;
+		// 1 i,j + 1
+		// 2 i + 1, j;
+
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (s[i] == p[j])
+				{
+					dp[i + 1][j + 1] = dp[i][j] + 1;
+					path[i + 1][j + 1] = 0;
+				}
+				else
+				{
+					if (dp[i][j + 1] > dp[i + 1][j])
+					{
+						dp[i + 1][j + 1] = dp[i][j + 1];
+						path[i + 1][j + 1] = 1;
+					}
+					else
+					{
+						dp[i + 1][j + 1] = dp[i + 1][j];
+						path[i + 1][j + 1] = 2;
+					}
+				}
+			}
+		}
+		int i = n, j = m;
+		string ans;
+		int lasti = n - 1, lastj = m - 1;
+		while (i >= 0 && j >= 0 && path[i][j] != -1)
+		{
+			if (path[i][j] == 0)
+			{
+				while (lasti > i - 1)
+				{
+					ans.push_back(s[lasti--]);
+				}
+				while (lastj > j - 1)
+				{
+					ans.push_back(p[lastj--]);
+				}
+				ans.push_back(s[i - 1]);
+				i--;
+				j--;
+				lasti--;
+				lastj--;
+			}
+			else if (path[i][j] == 1)
+			{
+				i--;
+			}
+			else if (path[i][j] == 2)
+			{
+				j--;
+			}
+		}
+		while (lasti >= 0)
+		{
+			ans.push_back(s[lasti--]);
+		}
+		while (lastj >= 0)
+		{
+			ans.push_back(p[lastj--]);
+		}
+		reverse(ans.begin(), ans.end());
 		return ans;
 	}
 
-/*
-//1088. Confusing Number II
-typedef long long int64;
-class Solution {
-public:
-    map<int, int> A;
-    int n, ret;
-    bool check(int64 n) {
-        int64 ret = 0;
-        for (int64 m = n; m; m /= 10) {
-            ret = ret * 10 + A[m % 10];
-        }
-        return ret != n;
-    }
-    void search(int pos, int64 cur) {
-        //cout << "search:" << pos << " " << cur << endl;
-        if (cur > n) return;
-        if (cur && check(cur)) {
-            //cout << cur << endl;
-            ++ret;
-        }
-        for (auto& it : A) {
-            if (pos == 0 && it.first == 0) continue;
-            search(pos + 1, cur * 10 + it.first);
-        }
-    }
-    int confusingNumberII(int n) {
-        A.clear();
-        A[0] = 0;
-        A[1] = 1;
-        A[8] = 8;
-        A[6] = 9;
-        A[9] = 6;
-        this->n = n;
-        ret = 0;
-        search(0, 0LL);
-        return ret;
-    }
-};
-*/
+	//1089. Duplicate Zeros
+	void duplicateZeros(vector<int>& a) {
+		int n = a.size();
+		int len = 0;
+		int s = 0;
+		for (int i = 0; len < n && i < n; ++i)
+		{
+			len++;
+			len += a[i] == 0;
+			s = i;
+		}
+		for (int j = n - 1; j > s; --s)
+		{
+			if (a[s] == 0)
+			{
+				if (j == n - 1 && len > n)
+				{
+					a[j--] = 0;
+
+				}
+				else
+				{
+					a[j--] = 0;
+					a[j--] = 0;
+				}
+			}
+			else
+			{
+				a[j--] = a[s];
+			}
+		}
+	}
 };
 int main()
 {
