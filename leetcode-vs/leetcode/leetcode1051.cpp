@@ -25,7 +25,18 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-
+class MountainArray {
+public:
+	int get(int index)
+	{
+		return 0;
+	}
+	int length()
+	{
+		return 0;
+	}
+	
+};
 /*int memo[11][1 << 11];
 
 class Solution {
@@ -790,6 +801,238 @@ public:
 				a[j--] = a[s];
 			}
 		}
+	}
+
+	vector<string> unique(vector<string>& s)
+	{
+		sort(s.begin(), s.end());
+		vector<string> ans;
+		for (int i = 0; i < s.size(); ++i)
+		{
+			if (ans.empty() || ans.back() != s[i]) ans.push_back(s[i]);
+		}
+		return ans;
+	}
+
+	vector<string> parse_1096(int& i, string& s)
+	{
+		if (i == s.size()) return {};
+		vector<string> ret;
+		vector<string> cur;
+		while (i < s.size())
+		{
+			if (s[i] == '{')
+			{
+				auto r = parse_1096(++i, s);
+				if (cur.empty()) cur = r;
+				else
+				{
+					vector<string> tmp;
+					for (auto& v : r)
+					{
+						for (auto& e : cur)
+						{
+							tmp.push_back(e + v);
+						}
+					}
+					cur = tmp;
+				}
+			}
+			else if (s[i] == ',')
+			{
+				if (ret.empty())
+					ret = cur;
+				else
+				{
+					for (auto& e : cur)
+						ret.push_back(e);
+				}
+				cur.clear();
+				i++;
+			}
+			else if (s[i] == '}')
+			{
+				++i;
+				if (ret.empty()) ret = cur;
+				else
+				{
+					for (auto& e : cur) ret.push_back(e);
+				}
+				return unique(ret);
+			}
+			else
+			{
+				if (cur.empty())
+				{
+					cur.push_back(string(1, s[i]));
+				}
+				else
+				{
+					for (auto& e : cur)
+						e.push_back(s[i]);
+				}
+				i++;
+			}
+		}
+		if (ret.empty()) ret = cur;
+		else
+		{
+			for (auto& e : cur) ret.push_back(e);
+		}
+		return unique(ret);
+	}
+	//1096. Brace Expansion II
+	vector<string> braceExpansionII(string s) {
+		int i = 0;
+		return parse_1096(i, s);
+	}
+
+	//1095. Find in Mountain Array
+	int findInMountainArray(int t, MountainArray& a) {
+		int n = a.length();
+		int l = 0, r = n - 1;
+		int pos = 0;
+		while (l < r)
+		{
+			int mid = (l + r) / 2;
+			int mid1 = mid + 1;
+			int mid_v = a.get(mid), mid1_v = a.get(mid1);
+			if (mid1_v < mid_v)
+			{
+				r = mid;
+			}
+			else
+			{
+				l = mid1;
+			}
+		}
+		int mx = a.get(l);
+		pos = l;
+		l = 0, r = pos;
+		while (l <= r)
+		{
+			int mid = (l + r) / 2;
+			int v = a.get(mid);
+			if (v == t)
+			{
+				return mid;
+			}
+			else if (v < t)
+			{
+				l = mid + 1;
+			}
+			else
+			{
+				r = mid - 1;
+			}
+		}
+		l = pos, r = n - 1;
+		while (l <= r)
+		{
+			int mid = (l + r) / 2;
+			int v = a.get(mid);
+			if (v == t)
+			{
+				return mid;
+			}
+			else if (v < t)
+			{
+				r = mid - 1;
+			}
+			else
+			{
+				l = mid + 1;
+			}
+		}
+		return -1;
+	}
+
+	//1094. Car Pooling
+	bool carPooling(vector<vector<int>>& a, int cap) {
+		int cur = 0, n = a.size();
+		vector<pair<int, int>> b(n + n);
+		for (int i = 0; i < n; ++i)
+		{
+			b[2 * i] = make_pair(a[i][1], a[i][0]);
+			b[2 * i + 1] = make_pair(a[i][2], -a[i][0]);
+		}
+		sort(b.begin(), b.end());
+		for (int i = 0; i < n + n; ++i)
+		{
+			cur += b[i].second;
+			if (cur > cap) return false;
+		}
+		return true;
+	}
+	
+
+	//1093. Statistics from a Large Sample
+	vector<double> sampleStats(vector<int>& count) {
+		int n = count.size();
+		double mi = 1e9 + 10, mx = 0, common = -1;
+		int tot = 0;
+		double sum = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			tot += count[i];
+			if (common == -1 || count[i] > count[common])
+			{
+				common = i;
+			}
+			if (count[i])
+			{
+				mi = min(mi, (double)i);
+				mx = max(mx, (double)i);
+			}
+			sum += count[i] * i;
+		}
+
+		double zw = 0;
+		// cout << tot << endl;
+		if (tot & 1)
+		{
+			int mid = (tot + 1) / 2;
+			int cur = 0;
+			for (int i = 0; i < n; ++i)
+			{
+				cur += count[i];
+				if (cur >= mid)
+				{
+					zw = i;
+					break;
+				}
+			}
+		}
+		else
+		{
+
+			int cur = 0, mid = tot / 2;
+
+			bool pre = false;
+
+			for (int i = 0; i < n; ++i)
+			{
+				cur += count[i];
+				if (!pre && cur >= mid + 1)
+				{
+					zw += i + i;
+					break;
+				}
+				else if (cur >= mid && cur < mid + 1)
+				{
+					zw += i;
+					pre = true;
+				}
+				else if (pre && cur >= mid + 1)
+				{
+					zw += i;
+					break;
+				}
+				if (cur >= mid + 1) break;
+			}
+			zw /= 2;
+		}
+		return { mi, mx, sum / tot, zw, common };
 	}
 };
 int main()
