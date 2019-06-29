@@ -37,6 +37,35 @@ public:
 	}
 	
 };
+
+class DSU{
+public:
+    int const maxn = 100 + 1;
+    vector<int> fa;
+    int tot;
+    void init(int n)
+    {
+        fa.assign(n, 0);
+        tot = n;
+        for (int i = 0; i < n; ++i) fa[i] = i;
+    }
+    int find(int x)
+    {
+        if (x == fa[x]) return x;
+        return fa[x] = find(fa[x]);
+    }
+    void merge(int x, int y)
+    {
+
+        int fx = find(x), fy = find(y);
+        if (fx != fy)
+        {
+            fa[fx] = fy;
+            tot--;
+        }
+    }
+};
+
 /*int memo[11][1 << 11];
 
 class Solution {
@@ -1034,6 +1063,114 @@ public:
 		}
 		return { mi, mx, sum / tot, zw, common };
 	}
+	//1099. Two Sum Less Than K
+    int twoSumLessThanK(vector<int>& A, int K) {
+        set<int> pre;
+        int ans = -1;
+        for (auto &e : A)
+        {
+            auto it = pre.lower_bound(K - e);
+            if (it != pre.begin())
+            {
+                --it;
+                ans = max(ans, *it + e);
+            }
+            pre.insert(e);
+        }
+        return ans;
+    }
+	   
+	//1100. Find K-Length Substrings With No Repeated Characters
+	int numKLenSubstrNoRepeats(string S, int K) {
+        int n = S.size();
+        vector<int> cnt(26);
+        int rep = 0;
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            int idx = S[i] - 'a';
+            cnt[idx] ++;
+            if (cnt[idx] == 1) rep ++;
+            if (i >= K - 1)
+            {
+                ans += rep == K;
+                cnt[S[i - K + 1] - 'a'] --;
+                if (cnt[S[i - K + 1] - 'a'] == 0) rep --;
+            }
+        }
+        return ans;
+    }
+	
+	//1101. The Earliest Moment When Everyone Become Friends
+	int earliestAcq(vector<vector<int>>& logs, int N) {
+        sort(logs.begin(), logs.end());
+        DSU dsu;
+        dsu.init(N);
+        for (auto &e : logs)
+        {
+            int st = e[0], a = e[1], b = e[2];
+            dsu.merge(a, b);
+            if (dsu.tot == 1) return st;
+        }
+        return -1;
+    }
+	
+    bool check_1102(vector<vector<int>> &a, int k)
+    {
+        int dr[] = {0, 1, 0, -1};
+        int dc[] = {1, 0, -1, 0};
+
+        queue<pair<int, int>> q;
+        if (a[0][0] < k) return false;
+        q.push({0, 0});
+        int n = a.size(), m = a[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m));
+        vis[0][0] = 1;
+        while (!q.empty())
+        {
+            int x = q.front().first, y = q.front().second;
+            
+            q.pop();
+            for (int d = 0; d < 4; ++ d)
+            {
+                int nx = x + dr[d], ny = y + dc[d];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m && !vis[nx][ny] && a[nx][ny] >= k)
+                {
+                    if (nx == n - 1 && ny == m - 1) return true;
+                    q.push({nx, ny});
+                    vis[nx][ny] = true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    //1102. Path With Maximum Minimum Value
+    int maximumMinimumPath(vector<vector<int>>& a) {
+        int l = INT_MAX, r = INT_MIN;
+        for (auto &row : a)
+        {
+            for (auto &e : row)
+            {
+                r = max(e, r);
+                l = min(e, l);
+            }
+        }
+        r ++;
+        while (l < r)
+        {
+            int m = (l + r) / 2;
+            if (!check_1102(a, m))
+            {
+                r = m;   
+            }
+            else
+            {
+                l = m + 1;
+            }
+        }
+        return l - 1;
+    }
 };
 int main()
 {
