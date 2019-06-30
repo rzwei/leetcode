@@ -1064,7 +1064,8 @@ public:
 		return { mi, mx, sum / tot, zw, common };
 	}
 	//1099. Two Sum Less Than K
-    int twoSumLessThanK(vector<int>& A, int K) {
+    int twoSumLessThanK(vector<int>& A, int K)
+	{
         set<int> pre;
         int ans = -1;
         for (auto &e : A)
@@ -1081,7 +1082,8 @@ public:
     }
 	   
 	//1100. Find K-Length Substrings With No Repeated Characters
-	int numKLenSubstrNoRepeats(string S, int K) {
+	int numKLenSubstrNoRepeats(string S, int K)
+	{
         int n = S.size();
         vector<int> cnt(26);
         int rep = 0;
@@ -1102,7 +1104,8 @@ public:
     }
 	
 	//1101. The Earliest Moment When Everyone Become Friends
-	int earliestAcq(vector<vector<int>>& logs, int N) {
+	int earliestAcq(vector<vector<int>>& logs, int N) 
+	{
         sort(logs.begin(), logs.end());
         DSU dsu;
         dsu.init(N);
@@ -1171,14 +1174,165 @@ public:
         }
         return l - 1;
     }
+
+	//1103. Distribute Candies to People
+	vector<int> distributeCandies(int can, int n) {
+		vector<int> ans(n);
+		int cur = 1, i = 0;
+		while (can)
+		{
+			int v = min(cur, can);
+			ans[(i++) % n] += v;
+			can -= v;
+			cur++;
+		}
+		return ans;
+	}
+
+	//1104. Path In Zigzag Labelled Binary Tree
+	vector<int> pathInZigZagTree(int n) {
+		int l = 1, r = 0;
+		while (l * 2 <= n)
+		{
+			l *= 2;
+			r++;
+		}
+		l /= 2;
+
+		vector<int> ans;
+		ans.push_back(n);
+		while (n != 1)
+		{
+			int fa = n / 2;
+			int tot = l + l * 2 - 1;
+			fa = tot - fa;
+			ans.push_back(fa);
+			n = fa;
+			l /= 2;
+			r--;
+		}
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+
+	bool parse_1106(int& i, string& s)
+	{
+		bool ret = true;
+		while (i < s.size())
+		{
+			if (s[i] == '|')
+			{
+				ret = false;
+				i++; //(
+				i++; //expr
+				while (i < s.size() && s[i] != ')')
+				{
+					if (s[i] == '!' || s[i] == '&' || s[i] == '|')
+					{
+						ret |= parse_1106(i, s);
+					}
+					else if (s[i] == 't')
+					{
+						ret |= true;
+						++i;
+					}
+					else if (s[i] == 'f')
+					{
+						ret |= false;
+						++i;
+					}
+					else if (s[i] == ',')
+					{
+						++i;
+					}
+				}
+				i++; // )
+				return ret;
+			}
+			else if (s[i] == '&')
+			{
+				ret = true;
+				i++;
+				i++;
+				while (i < s.size() && s[i] != ')')
+				{
+					if (s[i] == '!' || s[i] == '&' || s[i] == '|')
+					{
+						ret &= parse_1106(i, s);
+					}
+					else if (s[i] == 't')
+					{
+						ret &= true;
+						++i;
+					}
+					else if (s[i] == 'f')
+					{
+						ret &= false;
+						++i;
+					}
+					else if (s[i] == ',')
+					{
+						++i;
+					}
+				}
+				i++;
+				return ret;
+			}
+			else if (s[i] == '!')
+			{
+				++i;
+				++i;
+				ret = parse_1106(i, s);
+				++i;//)
+				return !ret;
+			}
+			else if (s[i] == ',')
+			{
+				++i;
+			}
+			else if (s[i] == 't')
+			{
+				++i;
+				return true;
+			}
+			else if (s[i] == 'f')
+			{
+				++i;
+				return false;
+			}
+		}
+	}
+
+	//1106. Parsing A Boolean Expression
+	bool parseBoolExpr(string s) {
+		int i = 0;
+		return parse_1106(i, s);
+	}
+
+	//1105. Filling Bookcase Shelves
+	int minHeightShelves(vector<vector<int>>& a, int wd) {
+		int n = a.size();
+
+		vector<int> dp(n, INT_MAX);
+		for (int i = 0; i < n; ++i)
+		{
+			int cur = 0, hi = 0;
+			for (int j = i; j >= 0 && cur + a[j][0] <= wd; --j)
+			{
+				cur += a[j][0];
+				hi = max(hi, a[j][1]);
+				dp[i] = min(dp[i], (j - 1 >= 0 ? dp[j - 1] : 0) + hi);
+			}
+		}
+		return dp[n - 1];
+	}
+
 };
 int main()
 {
     Solution sol;
-    vector<int> a;
-    a = { 3, 1, 1, 3 };
-    auto r = sol.prevPermOpt1(a);
-    for (auto &e : r) cout << e << " ";
-    cout << endl;
+	vector<vector<int>> a;
+	a = { { 1,1},{ 2,3},{ 2,3},{ 1,1},{ 1,1},{ 1,1},{ 1,2} };
+	cout << sol.minHeightShelves(a, 4) << endl;
 	return 0;
 }
