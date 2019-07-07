@@ -1,3 +1,4 @@
+#include <stack>
 #include <unordered_map>
 #include <unordered_set>
 #include <bitset>
@@ -1327,6 +1328,97 @@ public:
 		return dp[n - 1];
 	}
 
+	//1108. Defanging an IP Address
+	string defangIPaddr(string address) {
+		string ans;
+		for (auto& c : address)
+		{
+			if (c == '.') ans += "[.]";
+			else ans += c;
+		}
+		return ans;
+	}
+
+	//1109. Corporate Flight Bookings
+	vector<int> corpFlightBookings(vector<vector<int>>& bookings, int n) {
+		vector<int> ans(n);
+		for (auto& e : bookings)
+		{
+			int i = e[0], j = e[1], k = e[2];
+			ans[i - 1] += k;
+			if (j < n) ans[j] -= k;
+		}
+		for (int i = 1; i < n; ++i) ans[i] += ans[i - 1];
+		return ans;
+	}
+
+	//1110. Delete Nodes And Return Forest
+	void dfs_1110(TreeNode* u, set<int>& val, vector<TreeNode*>& ans)
+	{
+		if (!u) return;
+		bool head = val.count(u->val);
+		if (u->left)
+		{
+			if (val.count(u->left->val))
+			{
+				auto left = u->left;
+				u->left = nullptr;
+				dfs_1110(left, val, ans);
+			}
+			else
+			{
+				if (head) ans.push_back(u->left);
+				dfs_1110(u->left, val, ans);
+			}
+		}
+		if (u->right)
+		{
+			if (val.count(u->right->val))
+			{
+				auto right = u->right;
+				u->right = nullptr;
+				dfs_1110(right, val, ans);
+			}
+			else
+			{
+				if (head) ans.push_back(u->right);
+				dfs_1110(u->right, val, ans);
+			}
+		}
+
+	}
+
+	vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+		if (!root) return {};
+		vector<TreeNode*> ans;
+		set<int> val(to_delete.begin(), to_delete.end());
+		if (!val.count(root->val))
+			ans.push_back(root);
+		dfs_1110(root, val, ans);
+		return ans;
+	}
+
+	//1111. Maximum Nesting Depth of Two Valid Parentheses Strings
+	vector<int> maxDepthAfterSplit(string s) {
+		int n = s.size();
+		stack<int> stk;
+		vector<int> ans(n);
+		for (int i = 0; i < n; ++i)
+		{
+			if (s[i] == '(')
+			{
+				stk.push(i);
+			}
+			else
+			{
+				int dep = stk.size() % 2;
+				ans[i] = dep;
+				ans[stk.top()] = dep;
+				stk.pop();
+			}
+		}
+		return ans;
+	}
 };
 int main()
 {
