@@ -215,6 +215,84 @@ public:
 	}
 };
 
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+
+class Solution
+{
+public:
+	//1118. Number of Days in a Month
+	int numberOfDays(int Y, int M) {
+		//                      1   2   3   4   5   6   7   8   9  10   
+		vector<int> nums = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+		if (M == 2 && (Y % 400 == 0 || Y % 4 == 0 && Y % 100)) return nums[2] + 1;
+		else return nums[M];
+	}
+	//1119. Remove Vowels from a String
+	string removeVowels(string s) {
+		vector<char> ss;
+		ss = { 'a', 'e', 'i', 'o', 'u' };
+		string ans;
+		for (char c : s)
+		{
+			if (find(ss.begin(), ss.end(), c) == ss.end())
+				ans.push_back(c);
+		}
+		return ans;
+	}
+	pair<int, int> dfs_1120(TreeNode* u, double& ans)
+	{
+		if (!u) return { 0, 0 };
+		auto r = dfs_1120(u->right, ans);
+		auto l = dfs_1120(u->left, ans);
+		if (u->left) ans = max(ans, ((double)(l.first) / l.second));
+		if (u->right) ans = max(ans, ((double)(r.first) / r.second));
+		int tot = l.first + r.first + u->val;
+		int num = l.second + r.second + 1;
+		ans = max(ans, (double)tot / num);
+		return { tot, num };
+	}
+	//1120. Maximum Average Subtree
+	double maximumAverageSubtree(TreeNode* root) {
+		double ans = 0;
+		dfs_1120(root, ans);
+		return ans;
+	}
+
+	//1121. Divide Array Into Increasing Sequences
+	bool canDivideIntoSubsequences(vector<int>& a, int k) {
+		map<int, priority_queue<int>> len;
+		for (int& e : a)
+		{
+			if (len.empty() || len.begin()->first >= e)
+			{
+				len[e].push(-1);
+			}
+			else
+			{
+				auto v = -len.begin()->second.top() + 1;
+				len[e].push(-v);
+				len.begin()->second.pop();
+				if (len.begin()->second.empty())
+				{
+					len.erase(len.begin());
+				}
+			}
+		}
+		for (auto& e : len)
+		{
+			auto& pq = e.second;
+			if (!pq.empty() && -pq.top() < k) return false;
+		}
+		return true;
+	}
+};
+
 int main()
 {
 	return 0;
