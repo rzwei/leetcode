@@ -406,6 +406,27 @@ public:
 		auto ret = dfs(root);
 		return ret.second;
 	}
+
+	//1124. Longest Well-Performing Interval
+	int longestWPI(vector<int>& hours) {
+		unordered_map<int, int> m;
+		int n = hours.size();
+		int rolling = 0, res = 0;
+		for (int i = 0; i < n; i++) {
+			rolling += hours[i] > 8 ? 1 : -1;
+			if (rolling > 0) {
+				res = i + 1;
+			}
+			else {
+				if (m.count(rolling - 1))
+					res = max(res, i - m[rolling - 1]);
+			}
+
+			if (!m.count(rolling))
+				m[rolling] = i;
+		}
+		return res;
+	}
 };
 
 int main()
