@@ -266,30 +266,14 @@ public:
 
 	//1121. Divide Array Into Increasing Sequences
 	bool canDivideIntoSubsequences(vector<int>& a, int k) {
-		map<int, priority_queue<int>> len;
-		for (int& e : a)
+		const int maxn = 1e5 + 1;
+		vector<int> cnt(maxn);
+		int need = 0;
+		for (auto& e : a)
 		{
-			if (len.empty() || len.begin()->first >= e)
-			{
-				len[e].push(-1);
-			}
-			else
-			{
-				auto v = -len.begin()->second.top() + 1;
-				len[e].push(-v);
-				len.begin()->second.pop();
-				if (len.begin()->second.empty())
-				{
-					len.erase(len.begin());
-				}
-			}
+			need = max(need, ++cnt[e]);
 		}
-		for (auto& e : len)
-		{
-			auto& pq = e.second;
-			if (!pq.empty() && -pq.top() < k) return false;
-		}
-		return true;
+		return static_cast<long long>(k) * need <= a.size();
 	}
 };
 
