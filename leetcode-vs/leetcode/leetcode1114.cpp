@@ -222,7 +222,92 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+/*
+//1125. Smallest Sufficient Team
+const int maxn = INT_MAX / 2;
+int memo[1 << 16][60 + 1];
+long long path[1 << 16][60 + 1];
 
+class Solution {
+public:
+	int sub_bit(int s, int v)
+	{
+		return s ^ (s & v);
+	}
+	int dfs(int s, int u, vector<int>& a)
+	{
+		if (u == a.size())
+		{
+			return s == 0 ? 0 : maxn;
+		}
+		if (memo[s][u] != -1) return memo[s][u];
+
+		int v_noSelect = dfs(s, u + 1, a);
+		int v_Select = (sub_bit(s, a[u]) < s ? dfs(sub_bit(s, a[u]), u + 1, a) + 1 : maxn);
+
+		if (v_Select < v_noSelect)
+		{
+			path[s][u] = path[sub_bit(s, a[u])][u + 1] | (1LL << u);
+		}
+		else
+		{
+			path[s][u] = path[s][u + 1];
+		}
+
+		// int ans = min(dfs(sub_bit(s, a[u]), u + 1, a) + 1, dfs(s, u + 1, a));
+		return memo[s][u] = min(v_Select, v_noSelect);
+	}
+
+	vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
+		map<string, int> idx;
+		vector<int> req;
+		int n = people.size();
+		vector<int> a(n);
+		for (int i = 0; i < n; ++i)
+		{
+			int u = 0;
+			for (int j = 0; j < people[i].size(); ++j)
+			{
+				auto& s = people[i][j];
+				int val = idx.size();
+				if (!idx.count(s)) idx[s] = val;
+				u |= (1 << idx[s]);
+			}
+			a[i] = u;
+		}
+		int tot = idx.size();
+		for (int s = 0; s < (1 << idx.size()); ++s)
+		{
+			for (int i = 0; i < people.size(); ++i)
+			{
+				memo[s][i] = -1;
+				path[s][i] = 0;
+			}
+		}
+		int s = 0;
+		for (auto& e : req_skills)
+		{
+			if (!idx.count(e))
+			{
+				int val = idx.size();
+				idx[e] = val;
+			}
+			s |= (1 << idx[e]);
+		}
+		int ret = dfs(s, 0, a);
+		long long vis = path[s][0];
+		vector<int> ans;
+		for (long long i = 0, mask = 1; i < people.size(); ++i, mask <<= 1)
+		{
+			if (mask & vis)
+			{
+				ans.push_back(i);
+			}
+		}
+		return ans;
+	}
+};
+*/
 class Solution
 {
 public:
@@ -274,6 +359,52 @@ public:
 			need = max(need, ++cnt[e]);
 		}
 		return static_cast<long long>(k) * need <= a.size();
+	}
+
+	//1122. Relative Sort Array
+	vector<int> relativeSortArray(vector<int>& a, vector<int>& b) {
+		const int maxn = 1000;
+		vector<int> order(maxn + 1);
+		for (auto& e : a)
+		{
+			if (order[e] == maxn + maxn)
+			{
+				order[e] = maxn + e;
+			}
+		}
+		for (int i = 0; i < b.size(); ++i)
+		{
+			order[b[i]] = i;
+		}
+		sort(a.begin(), a.end(), [&](int i, int j) {
+			return order[i] < order[j];
+			});
+		return a;
+	}
+
+
+	pair<int, TreeNode*> dfs(TreeNode* u)
+	{
+		if (!u) return { 0, u };
+		// return max(dfs(u->left), dfs(u->right)) + 1;
+		auto left = dfs(u->left), right = dfs(u->right);
+		if (left.first > right.first)
+		{
+			return { left.first + 1, left.second };
+		}
+		else if (left.first == right.first)
+		{
+			return { left.first + 1, u };
+		}
+		else
+		{
+			return { right.first + 1, right.second };
+		}
+	}
+	//1123. Lowest Common Ancestor of Deepest Leaves
+	TreeNode* lcaDeepestLeaves(TreeNode* root) {
+		auto ret = dfs(root);
+		return ret.second;
 	}
 };
 
