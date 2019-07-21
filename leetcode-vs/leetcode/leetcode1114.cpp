@@ -1,3 +1,4 @@
+
 #include <future>
 #include <stack>
 #include <unordered_map>
@@ -383,11 +384,11 @@ public:
 	}
 
 
-	pair<int, TreeNode*> dfs(TreeNode* u)
+	pair<int, TreeNode*> dfs_1123(TreeNode* u)
 	{
 		if (!u) return { 0, u };
 		// return max(dfs(u->left), dfs(u->right)) + 1;
-		auto left = dfs(u->left), right = dfs(u->right);
+		auto left = dfs_1123(u->left), right = dfs_1123(u->right);
 		if (left.first > right.first)
 		{
 			return { left.first + 1, left.second };
@@ -403,7 +404,7 @@ public:
 	}
 	//1123. Lowest Common Ancestor of Deepest Leaves
 	TreeNode* lcaDeepestLeaves(TreeNode* root) {
-		auto ret = dfs(root);
+		auto ret = dfs_1123(root);
 		return ret.second;
 	}
 
@@ -426,6 +427,158 @@ public:
 				m[rolling] = i;
 		}
 		return res;
+	}
+	int dfs_1130(int i, int j, vector<int>& a, vector<vector<int>>& g, vector<vector<int>>& memo)
+	{
+		if (i >= j) return 0;
+		if (memo[i][j] != -1) return memo[i][j];
+		int ans = INT_MAX;
+		for (int k = i; k + 1 <= j; ++k)
+		{
+			ans = min(ans, dfs_1130(i, k, a, g, memo) + dfs_1130(k + 1, j, a, g, memo) + g[i][k] * g[k + 1][j]);
+		}
+		memo[i][j] = ans;
+		return ans;
+	}
+	//1130. Minimum Cost Tree From Leaf Values
+	int mctFromLeafValues(vector<int>& a) {
+		int n = a.size();
+		vector<vector<int>> g(n, vector<int>(n));
+		for (int i = 0; i < n; ++i)
+		{
+			g[i][i] = a[i];
+			for (int j = i + 1; j < n; ++j)
+			{
+				g[i][j] = max(a[j], g[i][j - 1]);
+			}
+		}
+		vector<vector<int>> memo(n, vector<int>(n, -1));
+		return dfs_1130(0, n - 1, a, g, memo);
+	}
+
+	//1131. Maximum of Absolute Value Expression
+	int maxAbsValExpr(vector<int>& a, vector<int>& b) {
+		int n = a.size();
+
+		vector<function<int(int)>> funs;
+		funs.push_back([&](int i) { return a[i] + b[i] + i; });
+		funs.push_back([&](int i) { return -a[i] - b[i] + i; });
+		funs.push_back([&](int i) { return -a[i] + b[i] + i; });
+		funs.push_back([&](int i) { return a[i] - b[i] + i; });
+
+		auto get_value = [&](int i, int j)
+		{
+			return abs(a[i] - a[j]) + abs(b[i] - b[j]) + abs(i - j);
+		};
+		vector<int> pre(8, 0);
+		int ans = 0;
+
+		for (int i = 1; i < n; ++i)
+		{
+			for (int j = 0; j < 8; ++j)
+			{
+				ans = max(ans, get_value(i, pre[j]));
+			}
+			int f = 1;
+			for (int j = 0; j < 8; ++j)
+			{
+				if (j % 2) f = -1;
+				else f = 1;
+
+				if (f * funs[j / 2](i) > f * funs[j / 2](pre[j]))
+				{
+					pre[j] = i;
+				}
+			}
+		}
+		return ans;
+	}
+	
+	//1128. Number of Equivalent Domino Pairs
+	int numEquivDominoPairs(vector<vector<int>>& a) {
+		int n = a.size();
+		map<pair<int, int>, int> cnt;
+		for (auto& e : a)
+		{
+			if (e[0] > e[1])
+			{
+				swap(e[0], e[1]);
+			}
+			cnt[{e[0], e[1]}] ++;
+		}
+		int ans = 0;
+		for (auto& e : cnt)
+		{
+			int u = e.second;
+			if (u > 1)
+			{
+				ans += u * (u - 1) / 2;
+			}
+		}
+		return ans;
+	}
+
+
+	struct Node_1129
+	{
+		int u, prev;
+		bool operator < (const Node_1129& v) const
+		{
+			return u == v.u ? prev < v.prev : u < v.u;
+		}
+	};
+	//1129. Shortest Path with Alternating Colors
+	vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& red, vector<vector<int>>& blue) {
+		vector<vector<pair<int, int>>> g(n);
+		for (auto& e : red)
+		{
+			int u = e[0], v = e[1];
+			g[u].emplace_back(v, 0);
+		}
+		for (auto& e : blue)
+		{
+			int u = e[0], v = e[1];
+			g[u].emplace_back(v, 1);
+		}
+		int const maxn = INT_MAX / 2;
+		vector<int> dist(n, maxn);
+		dist[0] = 0;
+		queue<Node_1129> q;
+		const int N = 100 + 1;
+		vector<vector<int>> memo(N, vector<int>(2, maxn));
+		memo[0][0] = 0;
+		memo[0][1] = 0;
+		q.push({ 0, 0 });
+		q.push({ 0, 1 });
+		while (!q.empty())
+		{
+			auto x = q.front();
+			q.pop();
+			int u = x.u, prev = x.prev;
+			for (auto& e : g[u])
+			{
+				int v = e.first, color = e.second;
+				if (prev != color)
+				{
+					if (memo[v][color] > memo[u][prev] + 1)
+					{
+						memo[v][color] = memo[u][prev] + 1;
+						dist[v] = memo[v][color];
+						q.push({ v, color });
+					}
+				}
+			}
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			dist[i] = min(dist[i], memo[i][0]);
+			dist[i] = min(dist[i], memo[i][1]);
+		}
+		for (auto& e : dist)
+		{
+			if (e == maxn) e = -1;
+		}
+		return dist;
 	}
 };
 
