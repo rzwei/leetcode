@@ -16,6 +16,45 @@
 #include <mutex>
 using namespace std;
 
+class DSU {
+	vector<int> parent;
+	vector<int> rank;
+	vector<int> sz;
+public:
+	DSU(int N) : parent(N), rank(N), sz(N, 1) {
+		for (int i = 0; i < N; ++i)
+			parent[i] = i;
+	}
+
+	int find(int x) {
+		if (parent[x] != x) parent[x] = find(parent[x]);
+		return parent[x];
+	}
+
+	void Union(int x, int y) {
+		int xr = find(x), yr = find(y);
+		if (xr == yr) return;
+
+		if (rank[xr] < rank[yr]) {
+			int tmp = yr;
+			yr = xr;
+			xr = tmp;
+		}
+		if (rank[xr] == rank[yr])
+			rank[xr]++;
+
+		parent[yr] = xr;
+		sz[xr] += sz[yr];
+	}
+
+	int size(int x) {
+		return sz[find(x)];
+	}
+
+	int top() {
+		return size(sz.size() - 1) - 1;
+	}
+};
 class Sem_N
 {
 	mutex mtx;
@@ -579,6 +618,100 @@ public:
 			if (e == maxn) e = -1;
 		}
 		return dist;
+	}
+
+	//1133. Largest Unique Number
+	int largestUniqueNumber(vector<int>& a) {
+		vector<int> cnt(1001);
+		for (auto& e : a) cnt[e] ++;
+		for (int i = 1000; i >= 0; --i)
+		{
+			if (cnt[i] == 1) return i;
+		}
+		return -1;
+	}
+
+	//1134. Armstrong Number
+	bool isArmstrong(int n) {
+		int val = n;
+		long long ans = 0;
+		int len = log(n) / log(10) + 1;
+		while (n)
+		{
+			ans += pow(n % 10, len);
+			n /= 10;
+		}
+		return ans == val;
+	}
+
+	int minimumCost(int N, vector<vector<int>>& a) {
+		sort(a.begin(), a.end(), [](vector<int>& a, vector<int>& b) {
+			return a[2] < b[2];
+			});
+
+		DSU d(N + 1);
+
+		vector<int> vis(N + 1);
+		int ans = 0;
+		for (auto& e : a)
+		{
+			int u = e[0], v = e[1], cost = e[2];
+			int fu = d.find(u), fv = d.find(v);
+			if (fu != fv)
+			{
+				ans += cost;
+				d.Union(u, v);
+			}
+		}
+		int tot = 0;
+		for (int i = 1; i <= N; ++i)
+		{
+			tot += d.find(i) == i;
+		}
+		if (tot > 1) return -1;
+		return ans;
+	}
+
+
+	//1136. Parallel Courses
+	int minimumSemesters(int n, vector<vector<int>>& a) {
+		int ans = 0;
+		vector<int> in(n + 1);
+		vector<vector<int>> g(n + 1);
+		for (auto& e : a)
+		{
+			int u = e[0], v = e[1];
+			in[v]++;
+			g[u].push_back(v);
+		}
+		queue<int> q;
+		vector<int> vis(n + 1);
+		for (int i = 1; i <= n; ++i)
+		{
+			if (in[i] == 0)
+			{
+				q.push(i);
+				vis[i] = 1;
+			}
+		}
+		while (!q.empty())
+		{
+			int size = q.size();
+			ans++;
+			while (size--)
+			{
+				auto u = q.front();
+				q.pop();
+				for (auto v : g[u])
+				{
+					if (vis[v]) continue;
+					if (--in[v] == 0)
+						q.push(v);
+				}
+			}
+		}
+		for (int i = 1; i <= n; ++i) if (in[i]) return -1;
+		return ans;
 	}
 };
 
