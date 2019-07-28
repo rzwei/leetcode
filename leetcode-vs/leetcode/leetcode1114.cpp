@@ -814,25 +814,37 @@ public:
 	int largest1BorderedSquare(vector<vector<int>>& a) {
 		int n = a.size(), m = a[0].size();
 		int ans = 0;
+
+		vector<vector<int>> sums_h(n, vector<int>(m)), sums_v(n, vector<int>(m));
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				sums_v[i][j] = (i - 1 >= 0 ? sums_v[i - 1][j] : 0) + a[i][j];
+			}
+		}
+
+		for (int j = 0; j < m; ++j)
+		{
+			for (int i = 0; i < n; ++i)
+			{
+				sums_h[i][j] = (j - 1 >= 0 ? sums_h[i][j - 1] : 0) + a[i][j];
+			}
+		}
+
 		for (int l = min(n, m); l >= 1; --l)
 		{
 			for (int i = 0; i < n; ++i)
 			{
 				for (int j = 0; j < m; ++j)
 				{
-					bool f = true;
 					if (i + l - 1 >= n || j + l - 1 >= m) continue;
-					for (int dj = 0; f && dj < l; ++dj)
-					{
-						if (a[i + 0][j + dj] != 1) f = false;
-						if (a[i + l - 1][j + dj] != 1) f = false;
-					}
-					for (int di = 0; f && di < l; ++di)
-					{
-						if (a[i + di][j + 0] != 1) f = false;
-						if (a[i + di][j + l - 1] != 1) f = false;
-					}
-					if (f)
+					if (sums_h[i][j + l - 1] - (j - 1 >= 0 ? sums_h[i][j - 1] : 0) == l &&
+						sums_h[i + l - 1][j + l - 1] - (j - 1 >= 0 ? sums_h[i + l - 1][j - 1] : 0) == l &&
+						
+						sums_v[i + l - 1][j] - (i - 1 >= 0 ? sums_v[i - 1][j] : 0) == l &&
+						sums_v[i + l - 1][j + l - 1] - (i - 1 >= 0 ? sums_v[i - 1][j + l - 1] : 0) == l
+						)
 					{
 						return l * l;
 					}
@@ -868,5 +880,9 @@ public:
 
 int main()
 {
+	Solution sol;
+	vector<vector<int>> a;
+	a = { {1,1,1},{1,0,1},{1,1,1} };
+	cout << sol.largest1BorderedSquare(a) << endl;
 	return 0;
 }
