@@ -644,6 +644,7 @@ public:
 		return ans == val;
 	}
 
+	//1135.	Connecting Cities With Minimum Cost
 	int minimumCost(int N, vector<vector<int>>& a) {
 		sort(a.begin(), a.end(), [](vector<int>& a, vector<int>& b) {
 			return a[2] < b[2];
@@ -712,6 +713,156 @@ public:
 		}
 		for (int i = 1; i <= n; ++i) if (in[i]) return -1;
 		return ans;
+	}
+
+
+	//1137. N-th Tribonacci Number
+	int tribonacci(int n) {
+		vector<int> a(40);
+		a[0] = 0;
+		a[1] = 1;
+		a[2] = 1;
+		for (int i = 3; i <= n; ++i)
+			a[i] = a[i - 1] + a[i - 2] + a[i - 3];
+		return a[n];
+	}
+
+	//1138. Alphabet Board Path
+	string move_h(int y, int v)
+	{
+		string ans;
+		while (y < v)
+		{
+			ans += "R";
+			y++;
+		}
+		while (y > v)
+		{
+			ans += "L";
+			y--;
+		}
+		return ans;
+	}
+
+	string move_v(int x, int u)
+	{
+		string ans;
+		while (x < u)
+		{
+			ans += "D";
+			x++;
+		}
+		while (x > u)
+		{
+			ans += "U";
+			x--;
+		}
+		return ans;
+	}
+	string bfs_1138(char from, char to, vector<pair<int, int>>& g)
+	{
+
+		if (from == to) return "!";
+		int x = g[from - 'a'].first, y = g[from - 'a'].second;
+		int u = g[to - 'a'].first, v = g[to - 'a'].second;
+		int dy = v - y;
+		int dx = u - x;
+
+		string ans;
+		if (to == 'z')
+		{
+			ans += move_h(y, v);
+			ans += move_v(x, u);
+		}
+		else if (from == 'z')
+		{
+			ans += move_v(x, u);
+			ans += move_h(y, v);
+		}
+		else
+		{
+			ans += move_v(x, u);
+			ans += move_h(y, v);
+		}
+		ans += "!";
+		return ans;
+	}
+
+	//1138. Alphabet Board Path
+	string alphabetBoardPath(string s) {
+		vector<string> b = { "abcde", "fghij", "klmno", "pqrst", "uvwxy", "z" };
+		vector<pair<int, int>> g(26);
+
+		for (int i = 0; i < b.size(); ++i)
+		{
+			for (int j = 0; j < b[i].size(); ++j)
+			{
+				g[b[i][j] - 'a'] = { i, j };
+			}
+		}
+		string ans;
+		char pre = 'a';
+		for (int i = 0; i < s.size(); ++i)
+		{
+			ans += bfs_1138(pre, s[i], g);
+			pre = s[i];
+		}
+		return ans;
+	}
+
+	//1139. Largest 1-Bordered Square
+	int largest1BorderedSquare(vector<vector<int>>& a) {
+		int n = a.size(), m = a[0].size();
+		int ans = 0;
+		for (int l = min(n, m); l >= 1; --l)
+		{
+			for (int i = 0; i < n; ++i)
+			{
+				for (int j = 0; j < m; ++j)
+				{
+					bool f = true;
+					if (i + l - 1 >= n || j + l - 1 >= m) continue;
+					for (int dj = 0; f && dj < l; ++dj)
+					{
+						if (a[i + 0][j + dj] != 1) f = false;
+						if (a[i + l - 1][j + dj] != 1) f = false;
+					}
+					for (int di = 0; f && di < l; ++di)
+					{
+						if (a[i + di][j + 0] != 1) f = false;
+						if (a[i + di][j + l - 1] != 1) f = false;
+					}
+					if (f)
+					{
+						return l * l;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	int dfs(int u, int m, vector<int>& a, vector<vector<int>>& memo)
+	{
+		if (u >= a.size()) return 0;
+		if (memo[u][m] != -1) return memo[u][m];
+		int ans = INT_MIN;
+		int sum = 0;
+		for (int i = 1; i <= m + m && u + i - 1 < a.size(); ++i)
+		{
+			sum += a[u + i - 1];
+			ans = max(ans, sum - dfs(u + i, max(i, m), a, memo));
+		}
+		return memo[u][m] = ans;
+	}
+	//1140. Stone Game II
+	int stoneGameII(vector<int>& piles) {
+		int n = piles.size();
+		vector<vector<int>> memo(n, vector<int>(n + n, -1));
+		int tot = 0;
+		for (int e : piles) tot += e;
+		int diff = dfs(0, 1, piles, memo);
+		return (tot + diff) / 2;
 	}
 };
 
