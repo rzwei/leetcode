@@ -842,7 +842,7 @@ public:
 		return 0;
 	}
 
-	int dfs(int u, int m, vector<int>& a, vector<vector<int>>& memo)
+	int dfs_1140(int u, int m, vector<int>& a, vector<vector<int>>& memo)
 	{
 		if (u >= a.size()) return 0;
 		if (memo[u][m] != -1) return memo[u][m];
@@ -851,7 +851,7 @@ public:
 		for (int i = 1; i <= m + m && u + i - 1 < a.size(); ++i)
 		{
 			sum += a[u + i - 1];
-			ans = max(ans, sum - dfs(u + i, max(i, m), a, memo));
+			ans = max(ans, sum - dfs_1140(u + i, max(i, m), a, memo));
 		}
 		return memo[u][m] = ans;
 	}
@@ -861,7 +861,7 @@ public:
 		vector<vector<int>> memo(n, vector<int>(n + n, -1));
 		int tot = 0;
 		for (int e : piles) tot += e;
-		int diff = dfs(0, 1, piles, memo);
+		int diff = dfs_1140(0, 1, piles, memo);
 		return (tot + diff) / 2;
 	}
 };
