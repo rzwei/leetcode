@@ -348,6 +348,34 @@ public:
 	}
 };
 */
+
+//1146. Snapshot Array
+class SnapshotArray {
+public:
+
+	vector<map<int, int>> a;
+	int m_snap;
+	SnapshotArray(int length) : a(length), m_snap(0) {
+	}
+
+	void set(int index, int val) {
+		a[index][m_snap] = val;
+	}
+
+	int snap() {
+		return m_snap++;
+	}
+
+	int get(int index, int snap_id) {
+		auto& val = a[index];
+		auto it = val.upper_bound(snap_id);
+		if (it == val.begin()) return 0;
+		--it;
+		return it->second;
+	}
+};
+
+
 class Solution
 {
 public:
@@ -875,6 +903,88 @@ public:
 		for (int e : piles) tot += e;
 		int diff = dfs_1140(0, 1, piles, memo);
 		return (tot + diff) / 2;
+	}
+
+	int offset_1144(int s, vector<int>& a)
+	{
+		int ans = 0;
+		int n = a.size();
+		for (int i = s; i < n; i += 2)
+		{
+			int v = INT_MAX;
+			if (i + 1 < n) v = a[i + 1];
+			if (i - 1 >= 0) v = min(v, a[i - 1]);
+			if (a[i] < v) continue;
+			ans += a[i] - v + 1;
+		}
+		return ans;
+	}
+
+	//1144. Decrease Elements To Make Array Zigzag
+	int movesToMakeZigzag(vector<int>& a) {
+		return min(offset_1144(0, a), offset_1144(1, a));
+	}
+
+	int dfs_1145(TreeNode* u, int x, int &fa,int &left, int &right, int n)
+	{
+		if (!u) return 0;
+		if (u->val == x)
+		{
+			int l = dfs_1145(u->left, x, fa, left, right, n);
+			int r = dfs_1145(u->right, x, fa, left, right, n);
+			left = l;
+			right = r;
+			fa = n - 1 - l - r;
+			return l + r + 1;
+		}
+		else
+		{
+			return dfs_1145(u->left, x, fa, left, right, n) + dfs_1145(u->right, x, fa, left, right, n) + 1;
+		}
+	}
+	//1145. Binary Tree Coloring Game
+	bool btreeGameWinningMove(TreeNode* root, int n, int x) {
+		vector<vector<int>> g(n + 1);
+		int fa = 0, left = 0, right = 0;
+		dfs_1145(root, x, fa, left, right, n);
+		vector<int> a = { fa, left, right };
+		for (int i = 0; i < 3; ++i)
+		{
+			if (a[i] > n - a[i])
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	int dfs_1147(int i, int j, string& s, vector<vector<int>> &memo)
+	{
+		if (i == j) return 1;
+		if (i > j) return 0;
+		if (memo[i][j] != -1) return memo[i][j];
+		int ans = 1;
+		for (int l = 1; i + l - 1 < j - l + 1; ++l)
+		{
+			bool same = true;
+			for (int k = 0; same && k < l; ++k)
+			{
+				if (s[i + k] != s[j - l + 1 + k])
+					same = false;
+			}
+			if (same)
+			{
+				ans = max(ans, dfs_1147(i + l, j - l, s, memo) + 2);
+			}
+		}
+		return memo[i][j] = ans;
+	}
+
+	//1147. Longest Chunked Palindrome Decomposition
+	int longestDecomposition(string s) {
+		vector<vector<int>> memo(s.size(), vector<int>(s.size(), -1));
+		return dfs_1147(0, s.size() - 1, s, memo);
 	}
 };
 
