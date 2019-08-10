@@ -986,6 +986,172 @@ public:
 		vector<vector<int>> memo(s.size(), vector<int>(s.size(), -1));
 		return dfs_1147(0, s.size() - 1, s, memo);
 	}
+
+	//1150. Check If a Number Is Majority Element in a Sorted Array
+	bool isMajorityElement(vector<int>& nums, int target) {
+		int cnt = 0;
+		for (auto& e : nums)
+		{
+			if (e == target)
+			{
+				if (++cnt > nums.size() / 2) return true;
+			}
+		}
+		return false;
+	}
+
+	bool check_1151(int v, int cnt, vector<int>& a)
+	{
+		int u = 0;
+		for (int i = 0; i < a.size(); ++i)
+		{
+			u += a[i];
+			if (i >= cnt - 1)
+			{
+				if (v >= cnt - u)
+				{
+					return true;
+				}
+				u -= a[i - cnt + 1];
+			}
+		}
+		return false;
+	}
+	//1151. Minimum Swaps to Group All 1's Together
+	int minSwaps(vector<int>& a) {
+		int n = a.size();
+		int s = 0;
+		for (auto& e : a) s += e;
+		int l = 0, r = n;
+		while (l < r)
+		{
+			int m = (l + r) / 2;
+			if (check_1151(m, s, a))
+			{
+				r = m;
+			}
+			else
+			{
+				l = m + 1;
+			}
+		}
+		return r;
+	}
+
+	bool dfs_1153(int u, vector<set<int>>& g, int color, vector<int>& vis)
+	{
+		if (vis[u] != -1) return true;
+		vis[u] = color;
+		if (g[u].empty()) return false;
+		return dfs_1153(*g[u].begin(), g, color, vis);
+	}
+	//1153. String Transforms Into Another String
+	bool canConvert(string s, string p) {
+		if (s == p) return true;
+		vector<set<int>> cnt(26);
+		int n = s.size();
+		for (int i = 0; i < n; ++i)
+		{
+			cnt[s[i] - 'a'].insert(p[i] - 'a');
+		}
+		for (int i = 0; i < 26; ++i)
+		{
+			if (cnt[i].size() > 1) return false;
+		}
+
+		int use = 0;
+		vector<bool> visp(26);
+		for (auto& e : p) visp[e - 'a'] = 1;
+		for (int i = 0; i < 26; ++i)
+		{
+			use += visp[i];
+		}
+
+		if (use == 26)
+		{
+			vector<int> vis(26, -1);
+			int color = 0;
+			int cyc = 0;
+			for (int i = 0; i < 26; ++i)
+			{
+				if (vis[i] == -1)
+				{
+					if (dfs_1153(i, cnt, color++, vis)) return false;
+				}
+			}
+		}
+		return true;
+	}
+
+
+	struct Node_1152
+	{
+	public:
+		string name, page;
+		int time;
+		bool operator < (const Node_1152& v) const
+		{
+			return name == v.name ? time < v.time : name < v.name;
+		}
+	};
+
+	int count_1152(vector<string>& p, vector<Node_1152>& a)
+	{
+		int n = a.size();
+		int ans = 0;
+		for (int i = 0; i < n; )
+		{
+			int j = i;
+			string name = a[i].name;
+			int u = 0;
+			for (; j < n && a[j].name == name; ++j)
+			{
+				if (u < p.size() && p[u] == a[j].page)
+				{
+					u++;
+				}
+			}
+			if (u == p.size())
+				ans++;
+			i = j;
+		}
+		return ans;
+	}
+	//1152. Analyze User Website Visit Pattern
+	vector<string> mostVisitedPattern(vector<string>& username, vector<int>& timestamp, vector<string>& website) {
+		int n = username.size();
+		vector<Node_1152> a(n);
+		for (int i = 0; i < n; ++i)
+		{
+			a[i] = { username[i], website[i], timestamp[i] };
+		}
+		sort(a.begin(), a.end());
+		int cnt = 0;
+		vector<string> ans;
+		vector<string> pages;
+		for (auto& e : website)
+			pages.push_back(e);
+		sort(pages.begin(), pages.end());
+		pages.erase(unique(pages.begin(), pages.end()), pages.end());
+		n = pages.size();
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (int k = 0; k < n; ++k)
+				{
+					vector<string> tmp = { pages[i], pages[j], pages[k] };
+					int cur = count_1152(tmp, a);
+					if (cnt < cur)
+					{
+						cnt = cur;
+						ans = tmp;
+					}
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
