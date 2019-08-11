@@ -1000,51 +1000,26 @@ public:
 		return false;
 	}
 
-	bool check_1151(int v, int cnt, vector<int>& a)
-	{
+	//1151. Minimum Swaps to Group All 1's Together
+	int minSwaps(vector<int>& a) {
+		int n = a.size();
+		int cnt = 0;
+		for (int& e : a) cnt += e;
+		int ans = INT_MAX;
+		if (cnt == 0) return 0;
 		int u = 0;
-		for (int i = 0; i < a.size(); ++i)
+		for (int i = 0; i < n; ++i)
 		{
 			u += a[i];
 			if (i >= cnt - 1)
 			{
-				if (v >= cnt - u)
-				{
-					return true;
-				}
+				ans = min(ans, cnt - u);
 				u -= a[i - cnt + 1];
 			}
 		}
-		return false;
-	}
-	//1151. Minimum Swaps to Group All 1's Together
-	int minSwaps(vector<int>& a) {
-		int n = a.size();
-		int s = 0;
-		for (auto& e : a) s += e;
-		int l = 0, r = n;
-		while (l < r)
-		{
-			int m = (l + r) / 2;
-			if (check_1151(m, s, a))
-			{
-				r = m;
-			}
-			else
-			{
-				l = m + 1;
-			}
-		}
-		return r;
+		return ans;
 	}
 
-	bool dfs_1153(int u, vector<set<int>>& g, int color, vector<int>& vis)
-	{
-		if (vis[u] != -1) return true;
-		vis[u] = color;
-		if (g[u].empty()) return false;
-		return dfs_1153(*g[u].begin(), g, color, vis);
-	}
 	//1153. String Transforms Into Another String
 	bool canConvert(string s, string p) {
 		if (s == p) return true;
@@ -1067,22 +1042,9 @@ public:
 			use += visp[i];
 		}
 
-		if (use == 26)
-		{
-			vector<int> vis(26, -1);
-			int color = 0;
-			int cyc = 0;
-			for (int i = 0; i < 26; ++i)
-			{
-				if (vis[i] == -1)
-				{
-					if (dfs_1153(i, cnt, color++, vis)) return false;
-				}
-			}
-		}
+		if (use == 26) return false;
 		return true;
 	}
-
 
 	struct Node_1152
 	{
