@@ -1198,70 +1198,45 @@ public:
 	//1155. Number of Dice Rolls With Target Sum
 	int numRollsToTarget(int d, int f, int t) {
 		int const mod = 1e9 + 7;
-		vector<vector<int>> dp(d + 1, vector<int>(t + 1));
-		dp[0][0] = 1;
+		vector<int> dp(t + 1), pre(t + 1);
+		pre[0] = 1;
 		for (int i = 1; i <= d; ++i)
 		{
-			for (int s = 1; s <= t; ++s)
+			fill(dp.begin(), dp.end(), 0);
+			for (int s = 0; s <= t; ++s)
 			{
-				for (int v = 1; v <= f; ++v)
+				for (int v = 1; v <= f && v + s <= t; ++v)
 				{
-					if (s - v >= 0)
-					{
-						dp[i][s] = (dp[i - 1][s - v] + dp[i][s]) % mod;
-					}
+					dp[v + s] = (dp[v + s] + pre[s]) % mod;
 				}
 			}
+			swap(pre, dp);
 		}
-		return dp[d][t] % mod;
-	}
-
-	bool check_1156(char c, string& s, int len, int cnt)
-	{
-		int n = s.size();
-		int u = 0;
-		for (int i = 0; i < n; ++i)
-		{
-			u += s[i] == c;
-			if (i >= len - 1)
-			{
-				if (u == len || u == len - 1 && cnt > u)
-				{
-					return true;
-				}
-				u -= s[i - len + 1] == c;
-			}
-		}
-		return false;
+		return pre[t];
 	}
 
 	//1156. Swap For Longest Repeated Character Substring
 	int maxRepOpt1(string s) {
-		vector<int> cnt(26);
-		for (auto& c : s) cnt[c - 'a'] ++;
-		int l = 0, r = s.size() + 1;
-		while (l < r)
-		{
-			int m = (l + r) / 2;
-			bool f = false;
-			for (int i = 0; i < 26; ++i)
-			{
-				if (check_1156(i + 'a', s, m, cnt[i]))
-				{
-					f = true;
-					break;
+		int n = s.size(), ret = 0;
+		for (int k = 0; k < 26; ++k) {
+			vector<pair<int, int>> a;
+			for (int i = 0, j; i < n; i = j) {
+				for (; i < n && s[i] != 'a' + k; ++i);
+				if (i == n) break;
+				for (j = i + 1; j < n && s[j] == s[i]; ++j);
+				a.push_back({ i, j });
+			}
+			if (a.size() > 1) {
+				for (int i = 1; i < a.size(); ++i) {
+					if (a[i - 1].second + 1 != a[i].first) continue;
+					ret = max(ret, a[i - 1].second - a[i - 1].first + a[i].second - a[i].first + (a.size() >= 3));
 				}
 			}
-			if (!f)
-			{
-				r = m;
-			}
-			else
-			{
-				l = m + 1;
+			for (int i = 0; i < a.size(); ++i) {
+				ret = max(ret, a[i].second - a[i].first + (a.size() >= 2));
 			}
 		}
-		return l - 1;
+		return ret;
 	}
 };
 
