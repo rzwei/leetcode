@@ -375,6 +375,61 @@ public:
 	}
 };
 
+//1157. Online Majority Element In Subarray
+class MajorityChecker {
+public:
+	vector<map<int, int>> cnt;
+	int n;
+	map<int, vector<int>> idx;
+	vector<vector<int>> order;
+	MajorityChecker(vector<int>& a) : n(a.size()) {
+		for (int i = 0; i < n; ++i)
+		{
+			idx[a[i]].push_back(i);
+		}
+		for (auto& e : idx)
+		{
+			e.second.push_back(e.first);
+			order.push_back(e.second);
+		}
+		sort(order.begin(), order.end(), [](const vector<int>& a, const vector<int>& b) {
+			return a.size() < b.size(); });
+	}
+	int count(int v, vector<int>& a)
+	{
+		auto it = lower_bound(a.begin(), a.end() - 1, v);
+		return it - a.begin();
+	}
+	int count2(int v, vector<int>& a)
+	{
+		auto it = upper_bound(a.begin(), a.end() - 1, v);
+		return it - a.begin();
+	}
+	int query(int left, int right, int t) {
+		int l = 0, r = order.size();
+		while (l < r)
+		{
+			int m = (l + r) / 2;
+			if (order[m].size() >= t)
+			{
+				r = m;
+			}
+			else
+			{
+				l = m + 1;
+			}
+		}
+		if (l == order.size()) return -1;
+		for (int i = l; i < order.size(); ++i)
+		{
+			int tot = count2(right, order[i]) - count(left, order[i]);
+			if (tot >= t) return order[i].back();
+		}
+		return -1;
+	}
+};
+
+
 
 class Solution
 {
@@ -1113,6 +1168,100 @@ public:
 			}
 		}
 		return ans;
+	}
+
+
+	//1154. Day of the Year
+	int dayOfYear(string s) {
+		vector<int> nums = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+		for (int i = 1; i < nums.size(); ++i)
+		{
+			nums[i] += nums[i - 1];
+		}
+		vector<int> date;
+		int u = 0;
+		for (int i = 0; i < s.size(); ++i)
+		{
+			if (s[i] == '-')
+			{
+				date.push_back(u);
+				u = 0;
+				continue;
+			}
+			u = u * 10 + (s[i] - '0');
+		}
+		date.push_back(u);
+		int y = date[0], m = date[1], d = date[2];
+		return nums[m - 1] + (2 < m && (y % 400 == 0 || y % 4 == 0 && y % 100) ? 1 : 0) + d;
+	}
+
+	//1155. Number of Dice Rolls With Target Sum
+	int numRollsToTarget(int d, int f, int t) {
+		int const mod = 1e9 + 7;
+		vector<vector<int>> dp(d + 1, vector<int>(t + 1));
+		dp[0][0] = 1;
+		for (int i = 1; i <= d; ++i)
+		{
+			for (int s = 1; s <= t; ++s)
+			{
+				for (int v = 1; v <= f; ++v)
+				{
+					if (s - v >= 0)
+					{
+						dp[i][s] = (dp[i - 1][s - v] + dp[i][s]) % mod;
+					}
+				}
+			}
+		}
+		return dp[d][t] % mod;
+	}
+
+	bool check_1156(char c, string& s, int len, int cnt)
+	{
+		int n = s.size();
+		int u = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			u += s[i] == c;
+			if (i >= len - 1)
+			{
+				if (u == len || u == len - 1 && cnt > u)
+				{
+					return true;
+				}
+				u -= s[i - len + 1] == c;
+			}
+		}
+		return false;
+	}
+
+	//1156. Swap For Longest Repeated Character Substring
+	int maxRepOpt1(string s) {
+		vector<int> cnt(26);
+		for (auto& c : s) cnt[c - 'a'] ++;
+		int l = 0, r = s.size() + 1;
+		while (l < r)
+		{
+			int m = (l + r) / 2;
+			bool f = false;
+			for (int i = 0; i < 26; ++i)
+			{
+				if (check_1156(i + 'a', s, m, cnt[i]))
+				{
+					f = true;
+					break;
+				}
+			}
+			if (!f)
+			{
+				r = m;
+			}
+			else
+			{
+				l = m + 1;
+			}
+		}
+		return l - 1;
 	}
 };
 
