@@ -1238,6 +1238,134 @@ public:
 		}
 		return ret;
 	}
+
+	bool check_1160(string& s, vector<int>& cnt)
+	{
+		vector<int> cnt2(26);
+		for (auto& e : s) cnt2[e - 'a'] ++;
+		for (int i = 0; i < 26; ++i) if (cnt2[i] > cnt[i]) return false;
+		return true;
+	}
+
+	//1160. Find Words That Can Be Formed by Characters
+	int countCharacters(vector<string>& words, string chars) {
+		vector<int> cnt(26);
+		for (auto& e : chars) cnt[e - 'a'] ++;
+		int ans = 0;
+		for (auto& e : words)
+		{
+			if (check_1160(e, cnt))
+				ans += e.size();
+		}
+		return ans;
+	}
+
+
+	//1161. Maximum Level Sum of a Binary Tree
+	int maxLevelSum(TreeNode* root) {
+		int ans = 0;
+		int ansi = 1;
+		queue<TreeNode*> q;
+		q.push(root);
+		int curi = 1;
+		while (!q.empty())
+		{
+			int size = q.size();
+			int cur = 0;
+			while (size--)
+			{
+				auto u = q.front();
+				q.pop();
+				cur += u->val;
+				if (u->left) q.push(u->left);
+				if (u->right) q.push(u->right);
+			}
+			if (cur > ans)
+			{
+				ans = cur;
+				ansi = curi;
+			}
+			curi++;
+		}
+		return ansi;
+	}
+
+
+	//1163. Last Substring in Lexicographical Order
+	string lastSubstring(string s) {
+		queue<pair<int, int>> q;
+		int n = s.size();
+		vector<int> vis(26);
+		for (auto& e : s) vis[e - 'a'] ++;
+		int pos = 0;
+		for (int i = 26 - 1; i >= 0; --i)
+		{
+			if (vis[i])
+			{
+				pos = i;
+				break;
+			}
+		}
+
+		for (int i = 0; i < 26; ++i)
+		{
+			if (vis[i] == n)
+			{
+				return s;
+			}
+		}
+
+		for (int i = 0; i < n; ++i)
+		{
+			if (s[i] == pos + 'a')
+			{
+				q.push({ i, i });
+			}
+		}
+		while (!q.empty())
+		{
+			int size = q.size();
+			queue<pair<int, int>> tmp;
+			queue<pair<int, int>> tmp_end;
+			int mx = 'a' - 1;
+			while (size--)
+			{
+				auto u = q.front();
+				q.pop();
+				if (u.second + 1 < n)
+				{
+					if (mx < s[u.second + 1])
+					{
+						mx = s[u.second + 1];
+					}
+					u.second++;
+					tmp.push(u);
+				}
+				else
+				{
+					tmp_end.push(u);
+				}
+			}
+			if (mx == 'a' - 1)
+			{
+				auto u = tmp_end.front();
+				return s.substr(u.first, u.second - u.first + 1);
+			}
+			else
+			{
+				while (!tmp.empty())
+				{
+					auto u = tmp.front();
+					tmp.pop();
+					if (s[u.second] == mx)
+					{
+						q.push(u);
+					}
+				}
+			}
+		}
+		return "";
+	}
 };
 
 int main()
