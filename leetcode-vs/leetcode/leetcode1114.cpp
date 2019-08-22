@@ -1293,78 +1293,31 @@ public:
 
 	//1163. Last Substring in Lexicographical Order
 	string lastSubstring(string s) {
-		queue<pair<int, int>> q;
-		int n = s.size();
-		vector<int> vis(26);
-		for (auto& e : s) vis[e - 'a'] ++;
-		int pos = 0;
-		for (int i = 26 - 1; i >= 0; --i)
-		{
-			if (vis[i])
-			{
-				pos = i;
-				break;
-			}
-		}
+		if (s.length() < 2) return s;
 
-		for (int i = 0; i < 26; ++i)
-		{
-			if (vis[i] == n)
-			{
-				return s;
-			}
-		}
+		int maxindex = 0;
+		int i = 1;
+		int size = s.length();
 
-		for (int i = 0; i < n; ++i)
-		{
-			if (s[i] == pos + 'a')
-			{
-				q.push({ i, i });
+		while (i < s.length()) {
+			if (s[i] > s[maxindex]) {
+				maxindex = i;
 			}
+			else if (s[i] == s[maxindex]) {
+				int curri = i;
+				int j = maxindex;
+				while (i < size && s[j] == s[i] && j < curri) {
+					i++;
+					j++;
+				}
+				if (i >= size || j >= curri || s[j] > s[i])
+					continue;
+				maxindex = curri;
+				continue;
+			}
+			i++;
 		}
-		while (!q.empty())
-		{
-			int size = q.size();
-			queue<pair<int, int>> tmp;
-			queue<pair<int, int>> tmp_end;
-			int mx = 'a' - 1;
-			while (size--)
-			{
-				auto u = q.front();
-				q.pop();
-				if (u.second + 1 < n)
-				{
-					if (mx < s[u.second + 1])
-					{
-						mx = s[u.second + 1];
-					}
-					u.second++;
-					tmp.push(u);
-				}
-				else
-				{
-					tmp_end.push(u);
-				}
-			}
-			if (mx == 'a' - 1)
-			{
-				auto u = tmp_end.front();
-				return s.substr(u.first, u.second - u.first + 1);
-			}
-			else
-			{
-				while (!tmp.empty())
-				{
-					auto u = tmp.front();
-					tmp.pop();
-					if (s[u.second] == mx)
-					{
-						q.push(u);
-					}
-				}
-			}
-		}
-		return "";
+		return s.substr(maxindex);
 	}
 
 	//1162. As Far from Land as Possible
