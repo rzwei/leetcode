@@ -1366,6 +1366,47 @@ public:
 		}
 		return "";
 	}
+
+	//1162. As Far from Land as Possible
+	int maxDistance(vector<vector<int>>& g) {
+		int n = g.size();
+		queue<pair<int, int>> q;
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (g[i][j] == 1)
+				{
+					q.push({ i, j });
+				}
+			}
+		}
+		int dr[] = { 0, 1, 0, -1 };
+		int dc[] = { 1, 0, -1, 0 };
+		int cnt = n * n - q.size();
+		if (cnt == 0 || cnt == n * n) return -1;
+		while (!q.empty())
+		{
+			int size = q.size();
+			while (size--)
+			{
+				auto x = q.front().first, y = q.front().second;
+				q.pop();
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = x + dr[d], ny = y + dc[d];
+					if (0 <= nx && nx < n && 0 <= ny && ny < n && g[nx][ny] == 0)
+					{
+						g[nx][ny] = 1;
+						q.push({ nx, ny });
+					}
+				}
+			}
+			ans++;
+		}
+		return ans - 1;
+	}
 };
 
 int main()
