@@ -46,7 +46,22 @@ public:
 		parent[yr] = xr;
 		sz[xr] += sz[yr];
 	}
+	bool merge(int x, int y) {
+		int xr = find(x), yr = find(y);
+		if (xr == yr) return false;
 
+		if (rank[xr] < rank[yr]) {
+			int tmp = yr;
+			yr = xr;
+			xr = tmp;
+		}
+		if (rank[xr] == rank[yr])
+			rank[xr]++;
+
+		parent[yr] = xr;
+		sz[xr] += sz[yr];
+		return true;
+	}
 	int size(int x) {
 		return sz[find(x)];
 	}
@@ -429,6 +444,84 @@ public:
 	}
 };
 
+
+
+struct Node_1166
+{
+	Node_1166() {
+		value = 0;
+	};
+	Node_1166(int v)
+	{
+		value = v;
+	}
+	int value;
+	map<string, Node_1166*> next;
+};
+
+//1166. Design File System
+class FileSystem {
+public:
+	vector<string> split(string& s)
+	{
+		vector<string> ans;
+		string u;
+		for (int i = 1; i < s.size(); ++i)
+		{
+			char c = s[i];
+			if (c == '/')
+			{
+				ans.push_back(u);
+				u.clear();
+			}
+			else
+			{
+				u.push_back(c);
+			}
+		}
+		if (!u.empty()) ans.push_back(u);
+		return ans;
+	}
+
+	Node_1166* root;
+	FileSystem() {
+		root = new Node_1166();
+	}
+
+	bool create(string path, int value) {
+		if (path.empty() || path == "/") return false;
+		auto tokens = split(path);
+		auto u = root;
+		for (int i = 0; i < tokens.size() - 1; ++i)
+		{
+			if (!u->next.count(tokens[i]))
+			{
+				return false;
+			}
+			else
+			{
+				u = u->next[tokens[i]];
+			}
+		}
+		if (u->next.count(tokens.back()))
+			return false;
+		u->next[tokens.back()] = new Node_1166(value);
+		return true;
+	}
+
+	int get(string path) {
+		if (path.empty() || path == "/") return -1;
+		auto ts = split(path);
+		auto u = root;
+		for (auto& e : ts)
+		{
+			if (!u->next.count(e)) return -1;
+			u = u->next[e];
+		}
+		if (u == nullptr) return -1;
+		return u->value;
+	}
+};
 
 
 class Solution
@@ -1359,6 +1452,66 @@ public:
 			ans++;
 		}
 		return ans - 1;
+	}
+
+	//1165. Single-Row Keyboard
+	int calculateTime(string k, string w) {
+		vector<int> m(26);
+		for (int i = 0; i < 26; ++i)
+		{
+			m[k[i] - 'a'] = i;
+		}
+		int ans = 0;
+		int last = 0;
+		for (auto& c : w)
+		{
+			ans += abs(m[c - 'a'] - last);
+			last = m[c - 'a'];
+		}
+		return ans;
+	}
+
+	//1167. Minimum Cost to Connect Sticks
+	int connectSticks(vector<int>& a) {
+		if (a.size() == 1) return 0;
+		if (a.size() == 2) return a[0] + a[1];
+
+		priority_queue<int, vector<int>, greater<int>> pq(a.begin(), a.end());
+		int ans = 0;
+		while (pq.size() > 1)
+		{
+			auto u = pq.top();
+			pq.pop();
+			auto v = pq.top();
+			pq.pop();
+			ans += u + v;
+			pq.push(u + v);
+		}
+		return ans;
+	}
+
+	//1168. Optimize Water Distribution in a Village
+	int minCostToSupplyWater(int n, vector<int>& cost, vector<vector<int>>& a) {
+		int m = a.size();
+		a.resize(n + m);
+		for (int i = 0; i < n; ++i)
+		{
+			a[m + i] = { n + 1, i + 1, cost[i] };
+		}
+		sort(a.begin(), a.end(), [](const vector<int>& a, const vector<int>& b) {
+			return a[2] < b[2];
+			});
+		DSU dsu(n + 2);
+		int ans = 0;
+		for (int i = 0; i < n + m; ++i)
+		{
+			int u = a[i][0], v = a[i][1], c = a[i][2];
+			if (dsu.merge(u, v))
+			{
+				ans += c;
+			}
+		}
+		return ans;
 	}
 };
 
