@@ -14,6 +14,7 @@
 #include <thread>
 #include <functional>
 #include <mutex>
+#include <string>
 using namespace std;
 
 class DSU {
@@ -277,6 +278,12 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
 /*
 //1125. Smallest Sufficient Team
 const int maxn = INT_MAX / 2;
@@ -523,6 +530,67 @@ public:
 	}
 };
 
+//1172. Dinner Plate Stacks
+class DinnerPlates {
+public:
+	set<int> p_push;
+	map<int, stack<int>> stk;
+	int size;
+	int pos;
+	DinnerPlates(int capacity) : size(capacity), pos(0) {
+		p_push.insert(pos);
+	}
+
+	int getPush()
+	{
+		if (p_push.empty()) return -1;
+		return *p_push.begin();
+	}
+	void push(int val) {
+		int idx = getPush();
+		stk[idx].push(val);
+		if (stk[idx].size() == size)
+		{
+			p_push.erase(idx);
+			if (p_push.empty() && idx == pos)
+			{
+				p_push.insert(++pos);
+			}
+		}
+	}
+
+	int pop() {
+		if (stk.empty()) return -1;
+		for (auto it = prev(stk.end()); ; --it)
+		{
+			auto& s = it->second;
+			auto idx = it->first;
+			if (!s.empty())
+			{
+				auto ret = s.top();
+				s.pop();
+				if (s.empty())
+				{
+					stk.erase(idx);
+				}
+				p_push.insert(idx);
+				return ret;
+			}
+		}
+		return -1;
+	}
+
+	int popAtStack(int idx) {
+		if (!stk.count(idx)) return -1;
+		auto& s = stk[idx];
+		auto ret = s.top();
+		s.pop();
+		p_push.insert(idx);
+		if (s.empty())
+			stk.erase(idx);
+		return ret;
+	}
+};
 
 class Solution
 {
@@ -1511,6 +1579,161 @@ public:
 				ans += c;
 			}
 		}
+		return ans;
+	}
+
+	//1171. Remove Zero Sum Consecutive Nodes from Linked List
+	ListNode* removeZeroSumSublists(ListNode* head) {
+		vector<int> a;
+		while (head)
+		{
+			a.push_back(head->val);
+			head = head->next;
+		}
+		int n = a.size();
+		vector<int> sums(n + 1);
+		for (int i = 1; i <= n; ++i)
+		{
+			sums[i] = sums[i - 1] + a[i - 1];
+		}
+		if (sums.back() == 0)
+			return nullptr;
+		vector<int> cnt(n + 1);
+		map<int, pair<int, int>> pos;
+		int mx = 0, mxv = -1;
+		for (int i = 0; i <= n; ++i)
+		{
+			if (pos.count(sums[i]))
+			{
+				pos[sums[i]].second = i;
+				if (i - pos[sums[i]].first > mx)
+				{
+					mx = i - pos[sums[i]].first;
+					mxv = sums[i];
+				}
+			}
+			else
+			{
+				pos[sums[i]] = { i, i };
+			}
+		}
+		auto ret = new ListNode(0);
+		auto p = ret;
+		int i = 0;
+		while (i <= n)
+		{
+			int v = sums[i];
+			int l = pos[v].first, r = pos[v].second;
+			if (r < n)
+			{
+				p->next = new ListNode(a[r]);
+				p = p->next;
+			}
+			i = r + 1;
+		}
+		return ret->next;
+	}
+	int solve_1170(string& s)
+	{
+		vector<int> cnt(26);
+		for (auto& c : s) cnt[c - 'a'] ++;
+		for (int i = 0; i < 26; ++i) if (cnt[i]) return cnt[i];
+		return 0;
+	}
+
+	//1170. Compare Strings by Frequency of the Smallest Character
+	vector<int> numSmallerByFrequency(vector<string>& a, vector<string>& b) {
+		int n = a.size();
+		int m = b.size();
+		vector<int> word(m);
+		for (int i = 0; i < m; ++i)
+		{
+			word[i] = solve_1170(b[i]);
+		}
+		vector<int> q(n);
+		for (int i = 0; i < n; ++i)
+		{
+			q[i] = solve_1170(a[i]);
+		}
+		sort(word.begin(), word.end());
+		vector<int> ans(n);
+		for (int i = 0; i < n; ++i)
+		{
+			ans[i] = m - (upper_bound(word.begin(), word.end(), q[i]) - word.begin());
+		}
+		return ans;
+	}
+
+	vector<string> split_1169(string& s)
+	{
+		vector<string> ans;
+		string u;
+		for (auto& c : s)
+		{
+			if (c == ',')
+			{
+				ans.push_back(u);
+				u.clear();
+			}
+			else
+			{
+				u.push_back(c);
+			}
+		}
+		if (!u.empty())
+			ans.push_back(u);
+		return ans;
+	}
+
+	//1169. Invalid Transactions
+	vector<string> invalidTransactions(vector<string>& a) {
+		map<string, vector<tuple<int, string, int>>> t;
+		for (auto& e : a)
+		{
+			auto ts = split_1169(e);
+			string name = ts[0];
+			int time = stoi(ts[1]);
+			int money = stoi(ts[2]);
+			string city = ts[3];
+			t[name].push_back({ time, city, money });
+		}
+		set<string> ans_set;
+		vector<string> ans;
+		for (auto& e : t)
+		{
+			string name = e.first;
+			sort(e.second.begin(), e.second.end());
+			auto& b = e.second;
+			for (int i = 0; i < b.size(); ++i)
+			{
+				if (get<2>(b[i]) > 1000)
+				{
+					ans_set.insert(
+						name + "," + to_string(get<0>(b[i])) + "," + to_string(get<2>(b[i])) + "," + get<1>(b[i])
+					);
+				}
+				for (int j = i - 1; j >= 0; --j)
+				{
+					if (i == j) continue;
+					if (get<1>(b[i]) == get<1>(b[j])) continue;
+					if (abs(get<0>(b[i]) - get<0>(b[j])) <= 60)
+					{
+						ans_set.insert(
+							name + "," + to_string(get<0>(b[i])) + "," + to_string(get<2>(b[i])) + "," + get<1>(b[i])
+						);
+						ans_set.insert(
+							name + "," + to_string(get<0>(b[j])) + "," + to_string(get<2>(b[j])) + "," + get<1>(b[j])
+						);
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+		}
+		for (auto& e : ans_set)
+			ans.push_back(e);
 		return ans;
 	}
 };
