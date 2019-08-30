@@ -1584,54 +1584,34 @@ public:
 
 	//1171. Remove Zero Sum Consecutive Nodes from Linked List
 	ListNode* removeZeroSumSublists(ListNode* head) {
-		vector<int> a;
-		while (head)
+		ListNode* dummy = new ListNode(0);
+		dummy->next = head;
+		auto p = dummy;
+		auto q = head;
+		map<int, ListNode*> prev;
+		int sum = 0;
+		while (p)
 		{
-			a.push_back(head->val);
-			head = head->next;
-		}
-		int n = a.size();
-		vector<int> sums(n + 1);
-		for (int i = 1; i <= n; ++i)
-		{
-			sums[i] = sums[i - 1] + a[i - 1];
-		}
-		if (sums.back() == 0)
-			return nullptr;
-		vector<int> cnt(n + 1);
-		map<int, pair<int, int>> pos;
-		int mx = 0, mxv = -1;
-		for (int i = 0; i <= n; ++i)
-		{
-			if (pos.count(sums[i]))
+			sum += p->val;
+			if (prev.count(sum))
 			{
-				pos[sums[i]].second = i;
-				if (i - pos[sums[i]].first > mx)
+				auto u = prev[sum]->next;
+				while (u && u != p)
 				{
-					mx = i - pos[sums[i]].first;
-					mxv = sums[i];
+					sum += u->val;
+					prev.erase(sum);
+					u = u->next;
 				}
+				sum += p->val;
+				prev[sum]->next = p->next;
 			}
 			else
 			{
-				pos[sums[i]] = { i, i };
+				prev[sum] = p;
 			}
+			p = p->next;
 		}
-		auto ret = new ListNode(0);
-		auto p = ret;
-		int i = 0;
-		while (i <= n)
-		{
-			int v = sums[i];
-			int l = pos[v].first, r = pos[v].second;
-			if (r < n)
-			{
-				p->next = new ListNode(a[r]);
-				p = p->next;
-			}
-			i = r + 1;
-		}
-		return ret->next;
+		return dummy->next;
 	}
 	int solve_1170(string& s)
 	{
@@ -1736,6 +1716,8 @@ public:
 			ans.push_back(e);
 		return ans;
 	}
+
+
 };
 
 int main()
