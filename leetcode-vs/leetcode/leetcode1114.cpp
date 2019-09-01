@@ -1717,7 +1717,134 @@ public:
 		return ans;
 	}
 
+	//5173. Prime Arrangements
+	int numPrimeArrangements(int n) {
+		if (n == 1) return 1;
+		vector<bool> isprime(n + 1, 1);
+		isprime[0] = 0;
+		isprime[1] = 0;
+		int tot = 0;
+		for (int i = 2; i <= n; ++i)
+		{
+			if (isprime[i])
+			{
+				for (int j = i + i; j <= n; j += i)
+				{
+					isprime[j] = 0;
+				}
+				tot++;
+			}
+		}
 
+		int const mod = 1e9 + 7;
+		long long ans = 1;
+		for (int i = 1; i <= tot; ++i)
+		{
+			ans = (ans * i) % mod;
+		}
+		for (int i = 1; i <= n - tot; ++i)
+		{
+			ans = (ans * i) % mod;
+		}
+		return ans;
+	}
+
+	//5174. Diet Plan Performance
+	int dietPlanPerformance(vector<int>& a, int k, int lower, int upper) {
+		int n = a.size();
+		int ans = 0;
+		int u = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			u += a[i];
+			if (i >= k - 1)
+			{
+				if (u < lower) ans--;
+				else if (u > upper) ans++;
+				u -= a[i - k + 1];
+			}
+		}
+		return ans;
+	}
+
+	//5175. Can Make Palindrome from Substring
+	vector<bool> canMakePaliQueries(string s, vector<vector<int>>& q) {
+		int n = s.size();
+		vector<vector<int>> sum(n + 1, vector<int>(26));
+		for (int i = 1; i <= n; ++i)
+		{
+			sum[i] = sum[i - 1];
+			sum[i][s[i - 1] - 'a'] ++;
+		}
+		vector<bool> ans(q.size());
+		for (int i = 0; i < q.size(); ++i)
+		{
+			int l = q[i][0], r = q[i][1], x = q[i][2];
+			vector<int> cc(2);
+			for (int j = 0; j < 26; ++j)
+			{
+				int v = sum[r + 1][j] - sum[l][j];
+				// cnt[j] = v;;
+				cc[v % 2] ++;
+			}
+			int odd = cc[1];
+			if (l == r)
+			{
+				ans[i] = true;
+			}
+			else
+			{
+				if ((r - l + 1) % 2)
+				{
+					if (odd - 1 <= 2 * x)
+						ans[i] = true;
+					else
+						ans[i] = false;
+				}
+				else
+				{
+					if (odd <= 2 * x) ans[i] = true;
+					else ans[i] = false;
+				}
+			}
+		}
+		return ans;
+	}
+
+	//5176. Number of Valid Words for Each Puzzle
+	vector<int> findNumOfValidWords(vector<string>& ws, vector<string>& ps)
+	{
+		map<int, int> wmap;
+		for (auto& e : ws)
+		{
+			int u = 0;
+			for (auto& c : e)
+			{
+				u |= (1 << (c - 'a'));
+			}
+			wmap[u] ++;
+		}
+		int n = ps.size();
+		vector<int> ans(n);
+		for (int i = 0; i < n; ++i)
+		{
+			string& s = ps[i];
+			char st = s[0];
+			int u = 0;
+			for (auto& c : s)
+			{
+				u |= (1 << (c - 'a'));
+			}
+			for (int x = u; x; x = (x - 1) & u)
+			{
+				if (x & (1 << (st - 'a')))
+				{
+					ans[i] += wmap[x];
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
