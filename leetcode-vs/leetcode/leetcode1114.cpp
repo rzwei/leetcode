@@ -1784,7 +1784,6 @@ public:
 			for (int j = 0; j < 26; ++j)
 			{
 				int v = sum[r + 1][j] - sum[l][j];
-				// cnt[j] = v;;
 				cc[v % 2] ++;
 			}
 			int odd = cc[1];
@@ -1796,15 +1795,11 @@ public:
 			{
 				if ((r - l + 1) % 2)
 				{
-					if (odd - 1 <= 2 * x)
-						ans[i] = true;
-					else
-						ans[i] = false;
+					ans[i] = odd - 1 <= 2 * x;
 				}
 				else
 				{
-					if (odd <= 2 * x) ans[i] = true;
-					else ans[i] = false;
+					ans[i] = odd <= 2 * x;
 				}
 			}
 		}
