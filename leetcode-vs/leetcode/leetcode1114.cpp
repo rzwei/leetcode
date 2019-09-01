@@ -1717,7 +1717,7 @@ public:
 		return ans;
 	}
 
-	//5173. Prime Arrangements
+	//1175. Prime Arrangements
 	int numPrimeArrangements(int n) {
 		if (n == 1) return 1;
 		vector<bool> isprime(n + 1, 1);
@@ -1749,7 +1749,7 @@ public:
 		return ans;
 	}
 
-	//5174. Diet Plan Performance
+	//1176. Diet Plan Performance
 	int dietPlanPerformance(vector<int>& a, int k, int lower, int upper) {
 		int n = a.size();
 		int ans = 0;
@@ -1767,7 +1767,7 @@ public:
 		return ans;
 	}
 
-	//5175. Can Make Palindrome from Substring
+	//1177. Can Make Palindrome from Substring
 	vector<bool> canMakePaliQueries(string s, vector<vector<int>>& q) {
 		int n = s.size();
 		vector<vector<int>> sum(n + 1, vector<int>(26));
@@ -1806,7 +1806,7 @@ public:
 		return ans;
 	}
 
-	//5176. Number of Valid Words for Each Puzzle
+	//1178. Number of Valid Words for Each Puzzle
 	vector<int> findNumOfValidWords(vector<string>& ws, vector<string>& ps)
 	{
 		map<int, int> wmap;
