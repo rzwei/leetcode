@@ -1985,6 +1985,38 @@ public:
 		}
 		return ans;
 	}
+
+	//1185. Day of the Week
+	string dayOfTheWeek(int day, int month, int y) {
+		if (month < 3) {
+			y--;
+			month += 12;
+		}
+		static string S[7] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+		int w = (y + y / 4 - y / 100 + y / 400 + (13 * month + 8) / 5 + day) % 7;
+		return S[w];
+	}
+
+	//1183. Maximum Number of Ones
+	int maximumNumberOfOnes(int m, int n, int k, int x) {
+		// a[i][j] == a[i + k][j]
+		vector<vector<int>> cnt(k, vector<int>(k, 0));
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				cnt[i % k][j % k]++;
+			}
+		}
+		vector<int> result;
+		for (int i = 0; i < k; i++) {
+			for (int j = 0; j < k; j++) 
+				result.push_back(cnt[i][j]);
+		}
+		sort(result.begin(), result.end());
+		reverse(result.begin(), result.end());
+		int ans = 0;
+		for (int i = 0; i < x; i++) ans += result[i];
+		return ans;
+	}
 };
 
 int main()
