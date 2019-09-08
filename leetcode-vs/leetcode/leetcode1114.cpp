@@ -1840,6 +1840,151 @@ public:
 		}
 		return ans;
 	}
+	//1180. Count Substrings with Only One Distinct Letter
+	int countLetters(string s) {
+		int n = s.size();
+		int ans = 0;
+		for (int i = 0; i < n; )
+		{
+			int cnt = 0;
+			int val = s[i];
+			while (i < n && s[i] == val)
+			{
+				cnt++;
+				ans += cnt;
+				i++;
+			}
+		}
+		return ans;
+	}
+
+	string get_first(string& s)
+	{
+		string ans;
+		for (int i = 0; i < s.size() && s[i] != ' '; ++i)
+		{
+			ans.push_back(s[i]);
+		}
+		return ans;
+	}
+	string get_last(string& s)
+	{
+		string ans;
+		int n = s.size();
+		for (int i = n - 1; i >= 0 && s[i] != ' '; --i)
+		{
+			ans = s[i] + ans;
+		}
+		return ans;
+	}
+
+	bool judge(string& a, string& b)
+	{
+		auto left = get_last(a);
+		auto right = get_first(b);
+		if (left == right)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	string connect(string& a, string& b)
+	{
+		auto x = get_last(a);
+		return a + b.substr(x.size());
+	}
+
+	//1181. Before and After Puzzle
+	vector<string> beforeAndAfterPuzzles(vector<string>& a) {
+		sort(a.begin(), a.end());
+		vector<string> ans;
+		int n = a.size();
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (i != j && judge(a[i], a[j]))
+				{
+					ans.push_back(connect(a[i], a[j]));
+				}
+			}
+		}
+		sort(ans.begin(), ans.end());
+		ans.erase(unique(ans.begin(), ans.end()), ans.end());
+		return ans;
+	}
+	//1182. Shortest Distance to Target Color
+	vector<int> shortestDistanceColor(vector<int>& a, vector<vector<int>>& q) {
+		int n = a.size();
+		vector<vector<int>> left(n, vector<int>(4, INT_MAX));
+		vector<vector<int>> right(n, vector<int>(4, INT_MAX));
+		int m = q.size();
+		vector<int> ans(m);
+		left[0][a[0]] = 0;
+		for (int i = 1; i < n; ++i)
+		{
+			left[i] = left[i - 1];
+			left[i][a[i]] = i;
+		}
+		right[n - 1][a[n - 1]] = n - 1;
+		for (int i = n - 2; i >= 0; --i)
+		{
+			right[i] = right[i + 1];
+			right[i][a[i]] = i;
+		}
+		for (int i = 0; i < m; ++i)
+		{
+			int idx = q[i][0], c = q[i][1];
+			ans[i] = INT_MAX;
+			if (left[idx][c] != INT_MAX) ans[i] = min(ans[i], idx - left[idx][c]);
+			if (right[idx][c] != INT_MAX) ans[i] = min(ans[i], right[idx][c] - idx);
+			if (ans[i] > n)
+			{
+				ans[i] = -1;
+			}
+		}
+		return ans;
+	}
+
+	//1184. Distance Between Bus Stops
+	int distanceBetweenBusStops(vector<int>& a, int st, int ed) {
+		int ans = 0;
+		int n = a.size();
+		for (int i = st; i != ed; i = (i + 1) % n)
+		{
+			ans += a[i];
+		}
+		int sum = 0;
+		for (auto& e : a) sum += e;
+		return min(ans, sum - ans);
+	}
+
+	//1186. Maximum Subarray Sum with One Deletion
+	int maximumSum(vector<int>& a) {
+		int n = a.size();
+		vector<vector<int>> dp(n, vector<int>(2));
+		dp[0][0] = a[0];
+		dp[0][1] = max(0, a[0]);
+		for (int i = 1; i < n; ++i)
+		{
+			dp[i][0] = max(a[i], dp[i - 1][0] + a[i]);
+			dp[i][1] = max(dp[i - 1][0], dp[i - 1][1] + a[i]);
+		}
+		int ans = INT_MIN;
+		for (int& e : a)
+			ans = max(ans, e);
+		if (ans <= 0)
+		{
+			return ans;
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			ans = max(ans, dp[i][0]);
+			ans = max(ans, dp[i][1]);
+		}
+		return ans;
+	}
 };
 
 int main()
