@@ -2064,6 +2064,75 @@ public:
 		for (int i = 0; i < x; i++) ans += result[i];
 		return ans;
 	}
+
+	//1189. Maximum Number of Balloons
+	int maxNumberOfBalloons(string s) {
+		string tar = "balloon";
+		vector<int> cnt(26);
+		for (auto& c : tar)
+		{
+			cnt[c - 'a'] ++;
+		}
+		vector<int> cc(26);
+		for (auto& e : s)
+		{
+			cc[e - 'a'] ++;
+		}
+		int ans = s.size();
+		for (int i = 0; i < 26; ++i)
+		{
+			if (cnt[i] == 0) continue;
+			ans = min(ans, cc[i] / cnt[i]);
+		}
+		return ans;
+	}
+
+	string parse_1190(int& i, string& s)
+	{
+		string ans;
+		while (i < s.size())
+		{
+			if (s[i] == '(')
+			{
+				++i;
+				ans += parse_1190(i, s);
+			}
+			else if (s[i] == ')')
+			{
+				++i;
+				break;
+			}
+			else
+			{
+				ans.push_back(s[i++]);
+			}
+		}
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+
+	// 1190. Reverse Substrings Between Each Pair of Parentheses
+	string reverseParentheses(string s) {
+		string ans;
+		int i = 0;
+		while (i < s.size())
+		{
+			if (s[i] == '(')
+			{
+				++i;
+				ans += parse_1190(i, s);
+			}
+			else if (s[i] == ')')
+			{
+				++i;
+			}
+			else
+			{
+				ans.push_back(s[i++]);
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
