@@ -1,4 +1,4 @@
-
+#include <numeric>
 #include <future>
 #include <stack>
 #include <unordered_map>
@@ -2132,6 +2132,52 @@ public:
 			}
 		}
 		return ans;
+	}
+
+	long long solve_1191(vector<int>& a)
+	{
+		int u = 0;
+		int ans = 0;
+		for (int& c : a)
+		{
+			u = max(c, u + c);
+			ans = max(ans, u);
+		}
+		return ans;
+	}
+
+	//1191. K-Concatenation Maximum Sum
+	int kConcatenationMaxSum(vector<int>& a, int k) {
+		if (k == 1) return solve_1191(a);
+		long long sum = accumulate(a.begin(), a.end(), 0);
+		long long ans = solve_1191(a);
+		int const mod = 1e9 + 7;
+		int n = a.size();
+		if (sum > 0)
+		{
+			ans = max(ans, sum * k);
+			long long left = 0, right = 0;
+			long long left_mx = 0, right_mx = 0;
+			for (int i = 0; i < n; ++i)
+			{
+				left += a[i];
+				left_mx = max(left_mx, left);
+			}
+			for (int i = n - 1; i >= 0; --i)
+			{
+				right += a[i];
+				right_mx = max(right_mx, right);
+			}
+			ans = max(ans, left_mx + right_mx + max(0, k - 2) * sum);
+		}
+		else
+		{
+			auto b = a;
+			b.resize(n + n);
+			for (int i = n; i < n + n; ++i) b[i] = a[i - n];
+			ans = max(ans, solve_1191(b));
+		}
+		return ans % mod;
 	}
 };
 

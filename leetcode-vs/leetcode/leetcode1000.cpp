@@ -207,7 +207,7 @@ public:
 		return ans;
 	}
 
-	int solve(vector<int> & a, vector<int> & b)
+	int solve_1007(vector<int> & a, vector<int> & b)
 	{
 		int n = a.size();
 		int ans = INT_MAX;
@@ -237,7 +237,7 @@ public:
 
 	//1007. Minimum Domino Rotations For Equal Row
 	int minDominoRotations(vector<int> & a, vector<int> & b) {
-		int ret = min(solve(a, b), solve(b, a));
+		int ret = min(solve_1007(a, b), solve_1007(b, a));
 		if (ret != INT_MAX) return ret;
 		return -1;
 	}
