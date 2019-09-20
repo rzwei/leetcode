@@ -150,7 +150,7 @@ public:
 
 class Solution
 {
-
+public:
 };
 
 int main()
