@@ -15,6 +15,8 @@
 #include <mutex>
 #include <string>
 using namespace std;
+
+/*
 typedef pair<int, int> ii;
 const int N = 1e5 + 10;
 vector<ii> a[N];
@@ -67,6 +69,88 @@ public:
 		DFS(0, -1, ret);
 		return ret;
 	}
+};
+*/
+
+//1195. Fizz Buzz Multithreaded
+class FizzBuzz {
+private:
+	int n;
+	condition_variable cv;
+	mutex mtx;
+	int i;
+	bool finish;
+public:
+	FizzBuzz(int n) : i(1), finish(false) {
+		this->n = n;
+	}
+
+	// printFizz() outputs "fizz".
+	void fizz(function<void()> printFizz) {
+		int last = -1;
+		while (true)
+		{
+			unique_lock<mutex> lck(mtx);
+			cv.wait(lck, [&]() {
+				return (i % 3 == 0 && i % 5 && i != last) || finish;
+				});
+			if (finish) break;
+			printFizz();
+			last = i;
+		}
+	}
+
+	// printBuzz() outputs "buzz".
+	void buzz(function<void()> printBuzz) {
+		int last = -1;
+		while (true)
+		{
+			unique_lock<mutex> lck(mtx);
+			cv.wait(lck, [&]() {
+				return (i % 5 == 0 && i % 3 && last != i) || finish;
+				});
+			if (finish) break;
+			printBuzz();
+			last = i;
+		}
+	}
+
+	// printFizzBuzz() outputs "fizzbuzz".
+	void fizzbuzz(function<void()> printFizzBuzz) {
+		int last = -1;
+		while (true)
+		{
+			unique_lock<mutex> lck(mtx);
+			cv.wait(lck, [&]() {
+				return (last != i && i % 3 == 0 && i % 5 == 0) || finish;
+				});
+			if (finish) break;
+			printFizzBuzz();
+			last = i;
+		}
+	}
+
+	// printNumber(x) outputs "x", where x is an integer.
+	void number(function<void(int)> printNumber) {
+		for (; i <= n; ++i)
+		{
+			if (i % 3 == 0 || i % 5 == 0)
+			{
+				cv.notify_all();
+			}
+			else
+			{
+				printNumber(i);
+			}
+		}
+		finish = true;
+		cv.notify_all();
+	}
+};
+
+class Solution
+{
+
 };
 
 int main()
