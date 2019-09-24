@@ -318,6 +318,120 @@ public:
 		}
 		return s;
 	}
+
+
+	bool topoSort(vector<vector<int>>& a, vector<int>& level)
+	{
+		int n = a.size();
+		vector<int> order(n);
+		vector<vector<int>> g(n);
+		for (int i = 0; i < n; ++i)
+		{
+			order[i] = a[i].size();
+			for (auto& v : a[i])
+			{
+				g[v].push_back(i);
+			}
+		}
+		queue<int> q;
+		vector<bool> vis(n);
+		level.resize(n);
+		fill(level.begin(), level.end(), 0);
+		for (int i = 0; i < n; ++i)
+		{
+			if (order[i] == 0)
+			{
+				vis[i] = 1;
+				q.push(i);
+			}
+		}
+		int cur = 0;
+		while (!q.empty())
+		{
+			int size = q.size();
+			cur++;
+			while (size--)
+			{
+				auto u = q.front(); q.pop();
+				for (auto& v : g[u])
+				{
+					if (vis[v]) continue;
+					if (--order[v] == 0)
+					{
+						q.push(v);
+						level[v] = cur;
+						vis[v] = 1;
+					}
+				}
+			}
+		}
+		for (auto& e : order)
+		{
+			if (e)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	//1203. Sort Items by Groups Respecting Dependencies
+	vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+		for (int& e : group)
+		{
+			if (e == -1)
+			{
+				e = m++;
+			}
+		}
+		vector<int> item_level;
+		if (!topoSort(beforeItems, item_level)) return {};
+		vector<vector<int>> gps(m);
+		for (int i = 0; i < n; ++i)
+		{
+			gps[group[i]].push_back(i);
+		}
+		vector<vector<int>> g_before(m);
+		for (int i = 0; i < m; ++i)
+		{
+			for (auto& j : gps[i])
+			{
+				for (auto& v : beforeItems[j])
+				{
+					if (group[v] == i) continue;
+					g_before[i].push_back(group[v]);
+				}
+			}
+		}
+		for (auto& e : g_before)
+		{
+			sort(e.begin(), e.end());
+			e.erase(unique(e.begin(), e.end()), e.end());
+		}
+		vector<int> g_level;
+		topoSort(g_before, g_level);
+		for (auto& e : gps)
+		{
+			sort(e.begin(), e.end(), [&](int a, int b) {
+				return item_level[a] < item_level[b];
+				});
+		}
+		vector<int> gps_idx(m);
+		iota(gps_idx.begin(), gps_idx.end(), 0);
+		sort(gps_idx.begin(), gps_idx.end(), [&](int a, int b) {
+			return g_level[a] < g_level[b];
+			});
+		vector<int> ans;
+		ans.reserve(n);
+		for (auto& i : gps_idx)
+		{
+			for (auto& e : gps[i])
+			{
+				ans.push_back(e);
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
