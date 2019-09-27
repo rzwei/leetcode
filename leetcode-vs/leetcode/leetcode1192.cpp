@@ -320,18 +320,16 @@ public:
 	}
 
 	//1199. Minimum Time to Build Blocks
-	int minBuildTime(vector<int>& blocks, int split) {
-		priority_queue<int> pq;
-		for (int b : blocks) pq.push(-b);
-		while (pq.size() > 1)
+	int minBuildTime(vector<int>& a, int split) {
+		priority_queue<int, vector<int>, greater<int>> pq(a.begin(), a.end());
+		int ans = 0;
+		while (pq.size() >= 2)
 		{
-			int a = -pq.top();
-			pq.pop();
-			int b = -pq.top();
-			pq.pop();
-			pq.push(-(split + b));
+			int x = pq.top(); pq.pop();
+			int y = pq.top(); pq.pop();
+			pq.push(split + y);
 		}
-		return -pq.top();
+		return pq.top();
 	}
 
 	bool topoSort(vector<vector<int>>& a, vector<int>& level)
