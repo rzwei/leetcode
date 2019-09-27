@@ -329,7 +329,7 @@ public:
 			pq.pop();
 			int b = -pq.top();
 			pq.pop();
-			pq.push(-(split + max(a, b)));
+			pq.push(-(split + b));
 		}
 		return -pq.top();
 	}
