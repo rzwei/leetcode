@@ -334,8 +334,6 @@ public:
 		return -pq.top();
 	}
 
-
-
 	bool topoSort(vector<vector<int>>& a, vector<int>& level)
 	{
 		int n = a.size();
@@ -392,7 +390,8 @@ public:
 	}
 
 	//1203. Sort Items by Groups Respecting Dependencies
-	vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+	vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) 
+	{
 		for (int& e : group)
 		{
 			if (e == -1)
