@@ -445,6 +445,90 @@ public:
 		}
 		return ans;
 	}
+	//1207. Unique Number of Occurrences
+	bool uniqueOccurrences(vector<int>& a) {
+		map<int, int> cnt;
+		for (auto& e : a)
+		{
+			cnt[e] ++;
+		}
+		set<int> pre;
+		for (auto& e : cnt)
+		{
+			if (pre.count(e.second)) return false;
+			pre.insert(e.second);
+		}
+		return true;
+	}
+	//1208. Get Equal Substrings Within Budget
+	int equalSubstring(string s, string t, int V) {
+		int n = s.size();
+		vector<int> cost(n);
+		for (int i = 0; i < n; ++i) cost[i] = abs(s[i] - t[i]);
+		int j = 0;
+		int cur = 0, ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			cur += cost[i];
+			while (cur > V)
+			{
+				cur -= cost[j++];
+			}
+			ans = max(ans, i - j + 1);
+		}
+		return ans;
+	}
+
+	//1209. Remove All Adjacent Duplicates in String II
+	string removeDuplicates(string s, int k) {
+		vector<pair<char, int>> stk;
+		for (auto& e : s)
+		{
+			if (!stk.empty() && stk.back().first == e)
+			{
+				if (++stk.back().second == k)
+				{
+					stk.pop_back();
+				}
+			}
+			else
+			{
+				stk.push_back({ e, 1 });
+			}
+		}
+		string ans;
+		for (auto& e : stk)
+		{
+			ans += string(e.second, e.first);
+		}
+		return ans;
+	}
+	//1210. Minimum Moves to Reach Target with Rotations
+	int minimumMoves(vector<vector<int>>& grid) {
+		int f[105][105][2];
+		int n = grid.size(), i, j, ans;
+		memset(f, 127, sizeof(f));
+		f[0][0][0] = 0;
+		for (i = 0; i < n; i++)
+			for (j = 0; j < n; j++)
+				if (!grid[i][j])
+				{
+					if (i + 1 < n && j + 1 < n && !grid[i + 1][j] && !grid[i][j + 1] && !grid[i + 1][j + 1])
+					{
+						f[i][j][0] = min(f[i][j][0], f[i][j][1] + 1);
+						f[i][j][1] = min(f[i][j][1], f[i][j][0] + 1);
+						f[i + 1][j][0] = min(f[i + 1][j][0], f[i][j][0] + 1);
+						f[i][j + 1][1] = min(f[i][j + 1][1], f[i][j][1] + 1);
+					}
+					if (j + 2 < n && !grid[i][j + 1] && !grid[i][j + 2])
+						f[i][j + 1][0] = min(f[i][j + 1][0], f[i][j][0] + 1);
+					if (i + 2 < n && !grid[i + 1][j] && !grid[i + 2][j])
+						f[i + 1][j][1] = min(f[i + 1][j][1], f[i][j][1] + 1);
+				}
+		ans = f[n - 1][n - 2][0];
+		if (ans == 2139062143) ans = -1;
+		return ans;
+	}
 };
 
 int main()
