@@ -73,6 +73,13 @@ public:
 };
 */
 
+struct TreeNode {
+	int val;
+	TreeNode* left;
+	TreeNode* right;
+	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
 //1195. Fizz Buzz Multithreaded
 class FizzBuzz {
 private:
@@ -529,9 +536,150 @@ public:
 		if (ans == 2139062143) ans = -1;
 		return ans;
 	}
+
+	//5079. Intersection of Three Sorted Arrays
+	vector<int> arraysIntersection(vector<int>& a, vector<int>& b, vector<int>& c) {
+		set<int> ins;
+		for (auto& e : a)
+		{
+			auto it = lower_bound(b.begin(), b.end(), e);
+			if (it != b.end() && *it == e)
+			{
+				ins.insert(e);
+			}
+		}
+		vector<int> ans;
+		for (auto& e : c)
+		{
+			if (ins.count(e))
+			{
+				ans.push_back(e);
+			}
+		}
+		ans.erase(unique(ans.begin(), ans.end()), ans.end());
+		return ans;
+	}
+
+	void dfs_5080(TreeNode* u, vector<int>& out)
+	{
+		if (!u) return;
+		dfs_5080(u->left, out);
+		out.push_back(u->val);
+		dfs_5080(u->right, out);
+	}
+
+	//5080. Two Sum BSTs
+	bool twoSumBSTs(TreeNode* root1, TreeNode* root2, int target) {
+		vector<int> a, b;
+		dfs_5080(root1, a);
+		dfs_5080(root2, b);
+		int n = a.size(), m = b.size();
+		vector<int> c(n + m);
+		vector<int> pos(n + m);
+		int i = 0, j = 0, k = 0;
+		while (i < n || j < m)
+		{
+			if (i < n && j < m)
+			{
+				if (a[i] < b[j])
+				{
+					pos[k] = 1;
+					c[k++] = a[i++];
+				}
+				else
+				{
+					pos[k] = 2;
+					c[k++] = b[j++];
+				}
+			}
+			else if (i < n)
+			{
+				pos[k] = 1;
+				c[k++] = a[i++];
+			}
+			else
+			{
+				pos[k] = 2;
+				c[k++] = b[j++];
+			}
+		}
+		for (i = 0, j = 1; j < n + m; ++j)
+		{
+			if (c[i] != c[j])
+			{
+				c[++i] = c[j];
+				pos[i] = pos[j];
+			}
+			else
+			{
+				pos[i] |= pos[j];
+			}
+		}
+		j = 0;
+		while (j < i)
+		{
+			int v = c[j] + c[i];
+			if (v == target) return (pos[j] | pos[i]) == 3;
+			else if (v > target) --i;
+			else ++j;
+		}
+		return false;
+	}
+
+	void dfs_5081(ll num, int pre, int low, int high, set<int>& ans)
+	{
+		if (num > high) return;
+		if (low <= num && num <= high)
+		{
+			ans.insert(num);
+		}
+		if (pre + 1 < 10) dfs_5081(num * 10 + pre + 1, pre + 1, low, high, ans);
+		if (pre - 1 >= 0) dfs_5081(num * 10 + pre - 1, pre - 1, low, high, ans);
+	}
+
+	//5081. Stepping Numbers
+	vector<int> countSteppingNumbers(int low, int high) {
+		set<int> nums;
+		for (int i = 0; i < 10; ++i)
+		{
+			dfs_5081(i, i, low, high, nums);
+		}
+		vector<int> ans(nums.begin(), nums.end());
+		return ans;
+	}
+
+	//5099. Valid Palindrome III
+	bool isValidPalindrome(string s, int k) {
+		int n = s.size();
+		vector<vector<int>> dp(n, vector<int>(n));
+		for (int i = 0; i < n; ++i)
+		{
+			dp[i][i] = 1;
+			if (i + 1 < n)
+			{
+				dp[i][i + 1] = 1 + (s[i] == s[i + 1]);
+			}
+		}
+		for (int l = 3; l <= n; ++l)
+		{
+			for (int i = 0, j = i + l - 1; j < n; ++i, ++j)
+			{
+				if (s[i] == s[j])
+				{
+					dp[i][j] = dp[i + 1][j - 1] + 2;
+				}
+				else
+				{
+					dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+				}
+			}
+		}
+		return dp[0][n - 1] + k >= n;
+	}
 };
 
 int main()
 {
+	
 	return 0;
 }
