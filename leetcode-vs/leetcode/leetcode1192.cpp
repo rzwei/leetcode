@@ -676,6 +676,131 @@ public:
 		}
 		return dp[0][n - 1] + k >= n;
 	}
+
+	//1217. Play with Chips
+	int minCostToMoveChips(vector<int>& a) {
+		int ans = 0, n = a.size();
+		for (auto& e : a) ans += e % 2;
+		return min(ans, n - ans);
+	}
+
+	//1218. Longest Arithmetic Subsequence of Given Difference
+	int longestSubsequence(vector<int>& a, int diff) {
+		int const maxn = 1e4;
+		int const offset = maxn;
+		vector<int> dp(maxn * 2 + 1);
+		for (auto e : a)
+		{
+			e += offset;
+			if (e - diff >= 0 && e - diff < maxn * 2)
+			{
+				dp[e] = max(dp[e], dp[e - diff] + 1);
+			}
+			dp[e] = max(dp[e], 1);
+		}
+		return *max_element(dp.begin(), dp.end());
+	}
+
+	//1220. Count Vowels Permutation
+	int countVowelPermutation(int n) {
+		int const mod = 1e9 + 7;
+		vector<long long> dp(5, 1);
+		for (int i = 1; i < n; ++i)
+		{
+			vector<long long> nx(5);
+			nx[0] = dp[1];
+			nx[1] = (dp[0] + dp[2]) % mod;
+			nx[2] = (dp[0] + dp[1] + dp[3] + dp[4]) % mod;
+			nx[3] = (dp[2] + dp[4]) % mod;
+			nx[4] = dp[0];
+			dp = nx;
+		}
+		return accumulate(dp.begin(), dp.end(), 0ll) % mod;
+	}
+
+	//1219. Path with Maximum Gold
+	int getMaximumGold(vector<vector<int>>& g) {
+		int n = g.size(), m = g[0].size();
+		vector<pair<int, int>> pts;
+		vector<vector<int>> idx(n, vector<int>(m, -1));
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j])
+				{
+					idx[i][j] = pts.size();
+					pts.push_back({ i, j });
+				}
+			}
+		}
+		int const maxn = 25;
+		struct Node
+		{
+			bitset<maxn> state;
+			int x, y;
+			bool operator < (const Node& rhs) const
+			{
+				for (int i = 0; i < maxn; ++i)
+				{
+					if (state[i] != rhs.state[i])
+						return state[i] < rhs.state[i];
+				}
+				if (x != rhs.x) return x < rhs.x;
+				return y < rhs.y;
+			}
+		};
+		queue<Node> q;
+		map<Node, int> val;
+		set<Node> visit;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j] != 0)
+				{
+					bitset<maxn> state;
+					state[idx[i][j]] = 1;
+					q.push({ state, i, j });
+					val[{ state, i, j }] = g[i][j];
+					visit.insert({ state, i, j });
+				}
+			}
+		}
+		int dr[] = { 0, 1, 0, -1 };
+		int dc[] = { 1, 0, -1, 0 };
+		int ans = 0;
+		while (!q.empty())
+		{
+			auto u = q.front(); q.pop();
+			visit.erase(u);
+			auto state = u.state;
+			auto x = u.x, y = u.y;
+			auto cost = val[u];
+			ans = max(ans, cost);
+			for (int d = 0; d < 4; ++d)
+			{
+				int nx = x + dr[d], ny = y + dc[d];
+				if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] != 0 &&
+					state[idx[nx][ny]] == 0)
+				{
+					state[idx[nx][ny]] = 1;
+					Node v = { state, nx, ny };
+					if (!val.count(v) || cost + g[nx][ny] > val[v])
+					{
+						val[v] = cost + g[nx][ny];
+						if (!visit.count(v))
+						{
+							q.push(v);
+							visit.insert(v);
+						}
+					}
+					state[idx[nx][ny]] = 0;
+				}
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
