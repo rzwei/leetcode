@@ -537,7 +537,7 @@ public:
 		return ans;
 	}
 
-	//5079. Intersection of Three Sorted Arrays
+	//1213. Intersection of Three Sorted Arrays
 	vector<int> arraysIntersection(vector<int>& a, vector<int>& b, vector<int>& c) {
 		set<int> ins;
 		for (auto& e : a)
@@ -560,19 +560,19 @@ public:
 		return ans;
 	}
 
-	void dfs_5080(TreeNode* u, vector<int>& out)
+	void dfs_1214(TreeNode* u, vector<int>& out)
 	{
 		if (!u) return;
-		dfs_5080(u->left, out);
+		dfs_1214(u->left, out);
 		out.push_back(u->val);
-		dfs_5080(u->right, out);
+		dfs_1214(u->right, out);
 	}
 
-	//5080. Two Sum BSTs
+	//1214. Two Sum BSTs
 	bool twoSumBSTs(TreeNode* root1, TreeNode* root2, int target) {
 		vector<int> a, b;
-		dfs_5080(root1, a);
-		dfs_5080(root2, b);
+		dfs_1214(root1, a);
+		dfs_1214(root2, b);
 		int n = a.size(), m = b.size();
 		vector<int> c(n + m);
 		vector<int> pos(n + m);
@@ -626,29 +626,29 @@ public:
 		return false;
 	}
 
-	void dfs_5081(ll num, int pre, int low, int high, set<int>& ans)
+	void dfs_1215(ll num, int pre, int low, int high, set<int>& ans)
 	{
 		if (num > high) return;
 		if (low <= num && num <= high)
 		{
 			ans.insert(num);
 		}
-		if (pre + 1 < 10) dfs_5081(num * 10 + pre + 1, pre + 1, low, high, ans);
-		if (pre - 1 >= 0) dfs_5081(num * 10 + pre - 1, pre - 1, low, high, ans);
+		if (pre + 1 < 10) dfs_1215(num * 10 + pre + 1, pre + 1, low, high, ans);
+		if (pre - 1 >= 0) dfs_1215(num * 10 + pre - 1, pre - 1, low, high, ans);
 	}
 
-	//5081. Stepping Numbers
+	//1215. Stepping Numbers
 	vector<int> countSteppingNumbers(int low, int high) {
 		set<int> nums;
 		for (int i = 0; i < 10; ++i)
 		{
-			dfs_5081(i, i, low, high, nums);
+			dfs_1215(i, i, low, high, nums);
 		}
 		vector<int> ans(nums.begin(), nums.end());
 		return ans;
 	}
 
-	//5099. Valid Palindrome III
+	//1216. Valid Palindrome III
 	bool isValidPalindrome(string s, int k) {
 		int n = s.size();
 		vector<vector<int>> dp(n, vector<int>(n));
