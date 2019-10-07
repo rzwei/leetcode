@@ -718,84 +718,36 @@ public:
 		return accumulate(dp.begin(), dp.end(), 0ll) % mod;
 	}
 
+	int dfs_1219(int x, int y, vector<vector<int>>& g, vector<vector<bool>>& vis)
+	{
+		static int dr[] = { 0, 1, 0, -1 };
+		static int dc[] = { 1, 0, -1, 0 };
+		int ans = g[x][y];
+		vis[x][y] = 1;
+		int n = g.size(), m = g.size();
+		for (int d = 0; d < 4; ++d)
+		{
+			int nx = x + dr[d], ny = y + dc[d];
+			if (0 <= nx && nx < n && 0 <= ny && ny < m && vis[nx][ny] == 0 && g[nx][ny] > 0)
+			{
+				ans = max(ans, g[x][y] + dfs_1219(nx, ny, g, vis));
+			}
+		}
+		vis[x][y] = 0;
+		return ans;
+	}
 	//1219. Path with Maximum Gold
 	int getMaximumGold(vector<vector<int>>& g) {
-		int n = g.size(), m = g[0].size();
-		vector<pair<int, int>> pts;
-		vector<vector<int>> idx(n, vector<int>(m, -1));
+		int ans = 0;
+		int n = g.size(), m = g.size();
+		vector<vector<bool>> vis(n, vector<bool>(m));
 		for (int i = 0; i < n; ++i)
 		{
 			for (int j = 0; j < m; ++j)
 			{
 				if (g[i][j])
 				{
-					idx[i][j] = pts.size();
-					pts.push_back({ i, j });
-				}
-			}
-		}
-		int const maxn = 25;
-		struct Node
-		{
-			bitset<maxn> state;
-			int x, y;
-			bool operator < (const Node& rhs) const
-			{
-				for (int i = 0; i < maxn; ++i)
-				{
-					if (state[i] != rhs.state[i])
-						return state[i] < rhs.state[i];
-				}
-				if (x != rhs.x) return x < rhs.x;
-				return y < rhs.y;
-			}
-		};
-		queue<Node> q;
-		map<Node, int> val;
-		set<Node> visit;
-		for (int i = 0; i < n; ++i)
-		{
-			for (int j = 0; j < m; ++j)
-			{
-				if (g[i][j] != 0)
-				{
-					bitset<maxn> state;
-					state[idx[i][j]] = 1;
-					q.push({ state, i, j });
-					val[{ state, i, j }] = g[i][j];
-					visit.insert({ state, i, j });
-				}
-			}
-		}
-		int dr[] = { 0, 1, 0, -1 };
-		int dc[] = { 1, 0, -1, 0 };
-		int ans = 0;
-		while (!q.empty())
-		{
-			auto u = q.front(); q.pop();
-			visit.erase(u);
-			auto state = u.state;
-			auto x = u.x, y = u.y;
-			auto cost = val[u];
-			ans = max(ans, cost);
-			for (int d = 0; d < 4; ++d)
-			{
-				int nx = x + dr[d], ny = y + dc[d];
-				if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] != 0 &&
-					state[idx[nx][ny]] == 0)
-				{
-					state[idx[nx][ny]] = 1;
-					Node v = { state, nx, ny };
-					if (!val.count(v) || cost + g[nx][ny] > val[v])
-					{
-						val[v] = cost + g[nx][ny];
-						if (!visit.count(v))
-						{
-							q.push(v);
-							visit.insert(v);
-						}
-					}
-					state[idx[nx][ny]] = 0;
+					ans = max(ans, dfs_1219(i, j, g, vis));
 				}
 			}
 		}
