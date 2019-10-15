@@ -753,6 +753,98 @@ public:
 		}
 		return ans;
 	}
+
+	//1221. Split a String in Balanced Strings
+	int balancedStringSplit(string s) {
+		int ans = 0;
+		int cur = 0;
+		for (auto& c : s)
+		{
+			if (c == 'L') cur++;
+			else cur--;
+			ans += cur == 0;
+		}
+		return ans;
+	}
+
+	//1222. Queens That Can Attack the King
+	vector<vector<int>> queensAttacktheKing(vector<vector<int>>& qs, vector<int>& ks) {
+		int x = ks[0], y = ks[1];
+		const int n = 8;
+		set<pair<int, int>> pos;
+		for (auto& e : qs) pos.insert({ e[0], e[1] });
+		vector<vector<int>> ans;
+		for (int dx = -1; dx <= 1; dx += 1)
+		{
+			for (int dy = -1; dy <= 1; dy += 1)
+			{
+				if (dx == 0 && dy == 0) continue;
+				int nx = x + dx, ny = y + dy;
+				while (0 <= nx && nx < n && 0 <= ny && ny < n)
+				{
+					if (pos.count({ nx, ny }))
+					{
+						ans.push_back({ nx, ny });
+						break;
+					}
+					nx += dx;
+					ny += dy;
+				}
+			}
+		}
+		return ans;
+	}
+
+	//1224. Maximum Equal Frequency
+	int maxEqualFreq(vector<int>& a) {
+		class FreqMap
+		{
+		public:
+			map<int, int> freq;
+			map<int, set<int>> table;
+			void add(int v)
+			{
+				int f = freq[v] ++;
+				if (table.count(f) && table[f].count(v))
+				{
+					table[f].erase(v);
+					if (table[f].empty())
+						table.erase(f);
+				}
+				table[f + 1].insert(v);
+			}
+			bool check()
+			{
+				if (table.size() == 2)
+				{
+					auto last = prev(table.end());
+					auto start = table.begin();
+					return (start->first == last->first - 1 && last->second.size() == 1 || start->second.size() == 1 && start->first == 1);
+				}
+				else if (table.size() == 1)
+				{
+					if (table.begin()->second.size() == 1 || table.begin()->first == 1)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+
+		int n = a.size();
+		FreqMap fmap;
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			fmap.add(a[i]);
+			if (fmap.check())
+			{
+				ans = i + 1;
+			}
+		}
+		return ans;
+	}
 };
 
 int main()
