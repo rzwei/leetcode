@@ -824,52 +824,21 @@ public:
 
 	//1224. Maximum Equal Frequency
 	int maxEqualFreq(vector<int>& a) {
-		class FreqMap
-		{
-		public:
-			map<int, int> freq;
-			map<int, set<int>> table;
-			void add(int v)
-			{
-				int f = freq[v] ++;
-				if (table.count(f) && table[f].count(v))
-				{
-					table[f].erase(v);
-					if (table[f].empty())
-						table.erase(f);
-				}
-				table[f + 1].insert(v);
-			}
-			bool check()
-			{
-				if (table.size() == 2)
-				{
-					auto last = prev(table.end());
-					auto start = table.begin();
-					return (start->first == last->first - 1 && last->second.size() == 1 || start->second.size() == 1 && start->first == 1);
-				}
-				else if (table.size() == 1)
-				{
-					if (table.begin()->second.size() == 1 || table.begin()->first == 1)
-					{
-						return true;
-					}
-				}
-				return false;
-			}
-		};
-
-		int n = a.size();
-		FreqMap fmap;
-		int ans = 0;
-		for (int i = 0; i < n; ++i)
-		{
-			fmap.add(a[i]);
-			if (fmap.check())
-			{
+		vector<int> cnt(100001, 0), fre(100001, 0);
+		int maxcnt = 0, ans = 0;
+		for (int i = 0; i < nums.size(); ++i) {
+			int num = nums[i];
+			++cnt[num];
+			++fre[cnt[num]];
+			maxcnt = max(maxcnt, cnt[num]);
+			if ((fre[maxcnt] == 1 &&
+				maxcnt + (fre[maxcnt - 1] - 1) * (maxcnt - 1) == i + 1)
+				|| (fre[maxcnt] * maxcnt + 1 == i + 1)
+				)
 				ans = i + 1;
-			}
 		}
+		if (maxcnt == 1)
+			return nums.size();
 		return ans;
 	}
 };
