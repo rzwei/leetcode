@@ -156,6 +156,24 @@ public:
 	}
 };
 
+
+//1226. The Dining Philosophers
+class DiningPhilosophers {
+public:
+	DiningPhilosophers() {
+
+	}
+
+	void wantsToEat(int philosopher,
+		function<void()> pickLeftFork,
+		function<void()> pickRightFork,
+		function<void()> eat,
+		function<void()> putLeftFork,
+		function<void()> putRightFork) {
+
+	}
+};
+
 class Solution
 {
 public:
@@ -823,7 +841,7 @@ public:
 	}
 
 	//1224. Maximum Equal Frequency
-	int maxEqualFreq(vector<int>& a) {
+	int maxEqualFreq(vector<int>& nums) {
 		vector<int> cnt(100001, 0), fre(100001, 0);
 		int maxcnt = 0, ans = 0;
 		for (int i = 0; i < nums.size(); ++i) {
@@ -840,6 +858,13 @@ public:
 		if (maxcnt == 1)
 			return nums.size();
 		return ans;
+	}
+
+	//1227. Airplane Seat Assignment Probability
+	double nthPersonGetsNthSeat(int n) {
+		if (n == 1) return 1.0;
+		//return 1.0 / n + (n - 2.0) / n * nthPersonGetsNthSeat(n - 1);
+		return 0.5;
 	}
 };
 
