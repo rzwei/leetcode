@@ -157,11 +157,11 @@ public:
 };
 
 
+
 //1226. The Dining Philosophers
 class DiningPhilosophers {
 public:
 	DiningPhilosophers() {
-
 	}
 
 	void wantsToEat(int philosopher,
@@ -170,8 +170,29 @@ public:
 		function<void()> eat,
 		function<void()> putLeftFork,
 		function<void()> putRightFork) {
+		int l = philosopher;
+		int r = (philosopher + 1) % 5;
+		if (philosopher % 2 == 0) {
+			lock[r].lock();
+			lock[l].lock();
+			pickLeftFork();
+			pickRightFork();
+		}
+		else {
+			lock[l].lock();
+			lock[r].lock();
+			pickLeftFork();
+			pickRightFork();
+		}
 
+		eat();
+		putRightFork();
+		putLeftFork();
+		lock[l].unlock();
+		lock[r].unlock();
 	}
+private:
+	std::mutex lock[5];
 };
 
 class Solution
