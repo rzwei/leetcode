@@ -281,7 +281,7 @@ public:
 		return ans;
 	}
 
-	ll check(ll n, ll a, ll b, ll c)
+	ll check_1201(ll n, ll a, ll b, ll c)
 	{
 		ll ans = 0;
 		ans += n / a;
@@ -300,7 +300,7 @@ public:
 		while (l < r)
 		{
 			ll m = (l + r) / 2;
-			ll tot = check(m, a, b, c);
+			ll tot = check_1201(m, a, b, c);
 			if (tot >= n)
 			{
 				r = m;
@@ -886,6 +886,121 @@ public:
 		if (n == 1) return 1.0;
 		//return 1.0 / n + (n - 2.0) / n * nthPersonGetsNthSeat(n - 1);
 		return 0.5;
+	}
+
+	//5088. Missing Number In Arithmetic Progression
+	int missingNumber(vector<int>& a) {
+		int n = a.size();
+		int ans = 0;
+		if (a[1] - a[0] != a[n - 1] - a[n - 2])
+		{
+			if (abs(a[1] - a[0]) < abs(a[n - 1] - a[n - 2]))
+			{
+				return (a[n - 1] + a[n - 2]) / 2;
+			}
+			else
+			{
+				return (a[0] + a[1]) / 2;
+			}
+		}
+		int d = a[n - 1] - a[n - 2];
+		if (d == 0) return a[0];
+		for (int i = 1; i < n; ++i)
+		{
+			if (a[i] - a[i - 1] != d)
+			{
+				return (a[i] + a[i - 1]) / 2;
+			}
+		}
+		return -1;
+	}
+	//5089. Meeting Scheduler
+	vector<int> minAvailableDuration(vector<vector<int>>& a, vector<vector<int>>& b, int k) {
+		int n = a.size(), m = b.size();
+		sort(a.begin(), a.end());
+		sort(b.begin(), b.end());
+		int j = 0;
+		int nj = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (a[i][1] - a[i][0] < k) continue;
+			while (j < m && b[j][1] < a[i][0]) j++;
+			while (j < m && b[j][0] <= a[i][1])
+			{
+				if (i + 1 < n && b[j][1] < a[i + 1][0])
+				{
+					nj = j;
+				}
+				int t = min(a[i][1], b[j][1]);
+				int s = max(a[i][0], b[j][0]);
+				int len = t - s;
+				if (len >= k) return { s, s + k };
+				j++;
+			}
+			j = nj;
+		}
+		return {};
+	}
+
+	bool check_5111(vector<int>& a, int val, int k)
+	{
+		int cur = 0, cnt = 0;
+		for (auto& e : a)
+		{
+			cur += e;
+			if (cur >= val)
+			{
+				cnt++;
+				cur = 0;
+			}
+		}
+		return cnt >= k;
+	}
+	//5111. Divide Chocolate
+	int maximizeSweetness(vector<int>& a, int k) {
+		int l = INT_MAX, r = 0;
+		for (auto& e : a)
+		{
+			l = min(l, e);
+			r += e;
+		}
+		if (k == 0)
+		{
+			return r;
+		}
+		k++;
+		while (l < r)
+		{
+			int m = l + (r - l) / 2;
+			if (!check_5111(a, m, k))
+			{
+				r = m;
+			}
+			else
+			{
+				l = m + 1;
+			}
+		}
+		return l - 1;
+	}
+
+	//5090. Toss Strange Coins
+	double probabilityOfHeads(vector<double>& prob, int m) {
+		int n = prob.size();
+		vector<vector<double>> dp(n, vector<double>(m));
+		dp[0][0] = 1.0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j <= m; ++j)
+			{
+				dp[i + 1][j] += dp[i][j] * (1 - prob[i]);
+				if (j > 0)
+				{
+					dp[i + 1][j] += dp[i][j - 1] * prob[i];
+				}
+			}
+		}
+		return dp[n][m];
 	}
 };
 
