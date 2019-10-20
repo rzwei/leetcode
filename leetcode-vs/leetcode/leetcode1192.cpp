@@ -888,61 +888,74 @@ public:
 		return 0.5;
 	}
 
-	//5088. Missing Number In Arithmetic Progression
+	//1228. Missing Number In Arithmetic Progression
 	int missingNumber(vector<int>& a) {
-		int n = a.size();
-		int ans = 0;
-		if (a[1] - a[0] != a[n - 1] - a[n - 2])
-		{
-			if (abs(a[1] - a[0]) < abs(a[n - 1] - a[n - 2]))
-			{
-				return (a[n - 1] + a[n - 2]) / 2;
-			}
+		//int n = a.size();
+		//int first = a[0], last = a[0], sum = 0;
+		//for (auto& e : a)
+		//{
+		//	first = min(first, e);
+		//	last = max(last, e);
+		//	sum += e;
+		//}
+		//return (first + last) * (n + 1) / 2 - sum;
+		int n = a.size(), d = (a[n - 1] - a[0]) / n, left = 0, right = n;
+		while (left < right) {
+			int mid = (left + right) / 2;
+			if (a[mid] == a[0] + d * mid)
+				left = mid + 1;
 			else
-			{
-				return (a[0] + a[1]) / 2;
-			}
+				right = mid;
 		}
-		int d = a[n - 1] - a[n - 2];
-		if (d == 0) return a[0];
-		for (int i = 1; i < n; ++i)
-		{
-			if (a[i] - a[i - 1] != d)
-			{
-				return (a[i] + a[i - 1]) / 2;
-			}
-		}
-		return -1;
+		return a[0] + d * left;
 	}
-	//5089. Meeting Scheduler
+	//1229. Meeting Scheduler
 	vector<int> minAvailableDuration(vector<vector<int>>& a, vector<vector<int>>& b, int k) {
-		int n = a.size(), m = b.size();
-		sort(a.begin(), a.end());
-		sort(b.begin(), b.end());
-		int j = 0;
-		int nj = 0;
-		for (int i = 0; i < n; ++i)
-		{
-			if (a[i][1] - a[i][0] < k) continue;
-			while (j < m && b[j][1] < a[i][0]) j++;
-			while (j < m && b[j][0] <= a[i][1])
-			{
-				if (i + 1 < n && b[j][1] < a[i + 1][0])
-				{
-					nj = j;
-				}
-				int t = min(a[i][1], b[j][1]);
-				int s = max(a[i][0], b[j][0]);
-				int len = t - s;
-				if (len >= k) return { s, s + k };
+		//int n = a.size(), m = b.size();
+		//sort(a.begin(), a.end());
+		//sort(b.begin(), b.end());
+		//int j = 0;
+		//int nj = 0;
+		//for (int i = 0; i < n; ++i)
+		//{
+		//	if (a[i][1] - a[i][0] < k) continue;
+		//	while (j < m && b[j][1] < a[i][0]) j++;
+		//	while (j < m && b[j][0] <= a[i][1])
+		//	{
+		//		if (i + 1 < n && b[j][1] < a[i + 1][0])
+		//		{
+		//			nj = j;
+		//		}
+		//		int t = min(a[i][1], b[j][1]);
+		//		int s = max(a[i][0], b[j][0]);
+		//		int len = t - s;
+		//		if (len >= k) return { s, s + k };
+		//		j++;
+		//	}
+		//	j = nj;
+		//}
+		//return {};
+		sort(a.begin(), b.end()); // sort increasing by start time (default sorting by first value)
+		sort(b.begin(), b.end()); // sort increasing by start time (default sorting by first value)
+
+		int i = 0, j = 0;
+		int n1 = a.size(), n2 = b.size();
+		while (i < n1 && j < n2) {
+			// Find intersect between slots1[i] and slots2[j]
+			int intersectStart = max(a[i][0], b[j][0]);
+			int intersectEnd = min(a[i][1], b[j][1]);
+
+			if (intersectStart + k <= intersectEnd) // Found the result
+				return { intersectStart, intersectStart + k };
+			else if (a[i][1] < b[j][1])
+				i++;
+			else
 				j++;
-			}
-			j = nj;
 		}
 		return {};
 	}
 
-	bool check_5111(vector<int>& a, int val, int k)
+	bool check_1231(vector<int>& a, int val, int k)
 	{
 		int cur = 0, cnt = 0;
 		for (auto& e : a)
@@ -956,7 +969,7 @@ public:
 		}
 		return cnt >= k;
 	}
-	//5111. Divide Chocolate
+	//1231. Divide Chocolate
 	int maximizeSweetness(vector<int>& a, int k) {
 		int l = INT_MAX, r = 0;
 		for (auto& e : a)
@@ -972,7 +985,7 @@ public:
 		while (l < r)
 		{
 			int m = l + (r - l) / 2;
-			if (!check_5111(a, m, k))
+			if (!check_1231(a, m, k))
 			{
 				r = m;
 			}
@@ -984,23 +997,23 @@ public:
 		return l - 1;
 	}
 
-	//5090. Toss Strange Coins
+	//1230. Toss Strange Coins
 	double probabilityOfHeads(vector<double>& prob, int m) {
 		int n = prob.size();
-		vector<vector<double>> dp(n, vector<double>(m));
-		dp[0][0] = 1.0;
+		vector<double> dp(m + 1);
+		dp[0] = 1.0;
 		for (int i = 0; i < n; ++i)
 		{
-			for (int j = 0; j <= m; ++j)
+			for (int j = min(m, i + 1); j >= 0; --j)
 			{
-				dp[i + 1][j] += dp[i][j] * (1 - prob[i]);
+				dp[j] = dp[j] * (1 - prob[i]);
 				if (j > 0)
 				{
-					dp[i + 1][j] += dp[i][j - 1] * prob[i];
+					dp[j] += dp[j - 1] * prob[i];
 				}
 			}
 		}
-		return dp[n][m];
+		return dp[m];
 	}
 };
 
