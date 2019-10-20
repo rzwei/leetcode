@@ -73,6 +73,41 @@ public:
 };
 */
 
+class BIT
+{
+	int lowbit(int x)
+	{
+		return x & (-x);
+	}
+	int n;
+public:
+	vector<int> a;
+	BIT(int n) : a(n + 1, 0), n(n)
+	{
+
+	}
+	int add(int i, int v)
+	{
+		while (i <= n)
+		{
+			a[i] = max(a[i], v);
+			i += lowbit(i);
+		}
+		return 0;
+	}
+	int query(int i)
+	{
+		int ans = 0;
+		while (i > 0)
+		{
+			ans = max(ans, a[i]);
+			i -= lowbit(i);
+		}
+		return ans;
+	}
+};
+
+
 struct TreeNode {
 	int val;
 	TreeNode* left;
@@ -1014,6 +1049,115 @@ public:
 			}
 		}
 		return dp[m];
+	}
+
+	//1232. Check If It Is a Straight Line
+	bool checkStraightLine(vector<vector<int>>& a) {
+		int n = a.size();
+		if (n <= 2) return true;
+		sort(a.begin(), a.end());
+		for (int i = 2; i < n; ++i)
+		{
+			if ((a[1][1] - a[0][1]) * (a[i][0] - a[0][0]) != (a[i][1] - a[0][1]) * (a[1][0] - a[0][0]))
+				return false;
+		}
+		return true;
+	}
+
+	//1233. Remove Sub-Folders from the Filesystem
+	vector<string> removeSubfolders(vector<string>& a) {
+		sort(a.begin(), a.end());
+		vector<string> ans;
+		for (auto& e : a)
+		{
+			if (ans.empty()) ans.push_back(e);
+			else
+			{
+				if (e.size() >= ans.back().size() && e.substr(0, ans.back().size()) == ans.back() && (e.size() == ans.size() || e[ans.back().size()] == '/'))
+				{
+
+				}
+				else
+				{
+					ans.push_back(e);
+				}
+			}
+		}
+		return ans;
+	}
+
+	bool valid_1234(vector<int>& cnt, int n)
+	{
+		for (auto& e : cnt)
+		{
+			if (e > n / 4) return false;
+		}
+		return true;
+	}
+	//1234. Replace the Substring for Balanced String
+	int balancedString(string s) {
+		int n = s.size();
+		vector<int> cnt(4);
+		map<char, int> idx;
+		idx['Q'] = 0;
+		idx['W'] = 1;
+		idx['E'] = 2;
+		idx['R'] = 3;
+		int i = 0, j = 0;
+		for (auto& c : s)
+		{
+			cnt[idx[c]] ++;
+		}
+		if (valid_1234(cnt, n)) return 0;
+		int ans = n;
+		for (; i < n; ++i)
+		{
+			cnt[idx[s[i]]] --;
+			while (j <= i && valid_1234(cnt, n))
+			{
+				ans = min(ans, i - j + 1);
+				cnt[idx[s[j++]]] ++;
+			}
+		}
+		return ans;
+	}
+	int jobScheduling(vector<int>& st, vector<int>& ed, vector<int>& pf) {
+		int n = st.size();
+		vector<int> pts(st.begin(), st.end());
+		for (auto& e : ed) pts.push_back(e);
+		sort(pts.begin(), pts.end());
+		pts.erase(unique(pts.begin(), pts.end()), pts.end());
+		int tot = pts.size();
+		map<int, int> idx;
+		for (int i = 0; i < tot; ++i)
+		{
+			idx[pts[i]] = i + 1;
+		}
+		vector<vector<int>> a(n, vector<int>(3));
+		for (int i = 0; i < n; ++i)
+		{
+			a[i] = { idx[ed[i]], idx[st[i]], pf[i] };
+		}
+		sort(a.begin(), a.end());
+
+		BIT bt(tot + 1);
+		int ans = 0;
+		vector<int> dp(tot);
+		for (int i = 0; i < n; ++i)
+		{
+			int s = a[i][1], t = a[i][0], p = a[i][2];
+			int last = bt.query(s);
+			if ((i > 0 && dp[i - 1] < p + last) || i == 0)
+			{
+				dp[i] = p + last;
+			}
+			else if (i > 0)
+			{
+				dp[i] = dp[i - 1];
+			}
+			bt.add(t, dp[i]);
+		}
+		return dp[n - 1];
 	}
 };
 
