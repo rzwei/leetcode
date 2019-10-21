@@ -1159,6 +1159,41 @@ public:
 		}
 		return dp[n - 1];
 	}
+
+	//bool check(string& s, string& p)
+	//{
+	//	return s == p || (s.size() > p.size() && s.substr(0, p.size()) == p && s[p.size()] == '/');
+	//}
+	//1236. Web Crawler
+	//vector<string> crawl(string startUrl, HtmlParser htmlParser) {
+	//	string domain = "http://";
+	//	for (int i = 7; i < startUrl.size(); ++i)
+	//	{
+	//		if (startUrl[i] == '/') break;
+	//		domain.push_back(startUrl[i]);
+	//	}
+	//	queue<string> urls;
+	//	urls.push(startUrl);
+	//	set<string> vis;
+	//	vector<string> ans;
+	//	ans.push_back(startUrl);
+	//	vis.insert(startUrl);
+	//	while (!urls.empty())
+	//	{
+	//		auto u = urls.front();
+	//		urls.pop();
+	//		for (auto& sub : htmlParser.getUrls(u))
+	//		{
+	//			if (!vis.count(sub) && check(sub, domain))
+	//			{
+	//				vis.insert(sub);
+	//				ans.push_back(sub);
+	//				urls.push(sub);
+	//			}
+	//		}
+	//	}
+	//	return ans;
+	//}
 };
 
 int main()
