@@ -1194,6 +1194,127 @@ public:
 	//	}
 	//	return ans;
 	//}
+
+	//1237. Find Positive Integer Solution for a Given Equation
+	//vector<vector<int>> findSolution(CustomFunction& fun, int z) {
+	//	vector<vector<int>> ans;
+	//	int const N = 1000;
+	//	for (int i = 1; i <= N; ++i)
+	//	{
+	//		int l = 1, r = 1000;
+	//		while (l <= r)
+	//		{
+	//			int m = (l + r) / 2;
+	//			int val = fun.f(i, m);
+	//			if (val == z)
+	//			{
+	//				ans.push_back({ i, m });
+	//				break;
+	//			}
+	//			else if (val > z)
+	//			{
+	//				r = m - 1;
+	//			}
+	//			else
+	//			{
+	//				l = m + 1;
+	//			}
+	//		}
+	//	}
+	//	return ans;
+	//}
+
+	//1238. Circular Permutation in Binary Representation
+	vector<int> circularPermutation(int n, int start) {
+		int cnt = (1 << n);
+		vector<int> ans(cnt);
+		vector<int> tmp;
+		int offset = 0;
+		bool f = true;
+		for (int i = 0; i < cnt; ++i)
+		{
+			ans[i] = (i ^ (i / 2));
+			if (ans[i] == start)
+			{
+				offset = i;
+				f = false;
+			}
+			if (f)
+			{
+				tmp.push_back(ans[i]);
+			}
+		}
+		int j = 0;
+		for (int i = offset; i < cnt; ++i)
+		{
+			ans[j++] = ans[i];
+		}
+		for (int i = 0; i < tmp.size(); ++i)
+		{
+			ans[j++] = tmp[i];
+		}
+		return ans;
+	}
+
+	int convert_1239(string& s)
+	{
+		int ret = 0;
+		for (auto& c : s)
+		{
+			int mask = (1 << (c - 'a'));
+			if (ret & mask) return -1;
+			ret |= mask;
+		}
+		return ret;
+	}
+	int dfs_1239(int u, int s, int len, vector<pair<int, int>>& a)
+	{
+		if (u == len) return 0;
+		int ans = 0;
+		for (int i = u; i < len; ++i)
+		{
+			if (s & a[i].first) continue;
+			ans = max(ans, a[i].second + dfs_1239(i + 1, s | a[i].first, len, a));
+		}
+		return ans;
+	}
+	//1239. Maximum Length of a Concatenated String with Unique Characters
+	int maxLength(vector<string>& arr) {
+		int n = arr.size();
+		vector<pair<int, int>> a;
+		for (int i = 0; i < n; ++i)
+		{
+			int ret = convert_1239(arr[i]);
+			if (ret != -1)
+			{
+				a.push_back({ ret, static_cast<int>(arr[i].length()) });
+			}
+		}
+		return dfs_1239(0, 0, a.size(), a);
+	}
+
+	//1240. Tiling a Rectangle with the Fewest Squares
+	int tilingRectangle(int n, int m) {
+		static vector<vector<int>> M = {
+			{1 },
+			{2, 1 },
+			{3, 3, 1 },
+			{4, 2, 4, 1 },
+			{5, 4, 4, 5, 1 },
+			{6, 3, 2, 3, 5, 1 },
+			{7, 5, 5, 5, 5, 5, 1 },
+			{8, 4, 5, 2, 5, 4, 7, 1 },
+			{9, 6, 3, 6, 6, 3, 6, 7, 1 },
+			{10, 5, 6, 4, 2, 4, 6, 5, 6, 1 },
+			{11, 7, 6, 6, 6, 6, 6, 6, 7, 6, 1 },
+			{12, 6, 4, 3, 6, 2, 6, 3, 4, 5, 7, 1 },
+			{13, 8, 7, 7, 6, 6, 6, 6, 7, 7, 6, 7, 1 },
+			{14, 7, 7, 5, 7, 5, 2, 5, 7, 5, 7, 5, 7, 1 },
+			{15, 9, 5, 7, 3, 4, 8, 8, 4, 3, 7, 5, 8, 7, 1},
+		};
+		if (n < m) swap(n, m);
+		return M[n - 1][m - 1];
+	}
 };
 
 int main()
