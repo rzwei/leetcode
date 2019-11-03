@@ -230,6 +230,54 @@ private:
 	std::mutex lock[5];
 };
 
+//1244. Design A Leaderboard
+class Leaderboard {
+public:
+	map<int, int> sc;
+	map<int, set<int>> mem_top;
+	Leaderboard() {
+
+	}
+
+	void addScore(int id, int c) {
+		if (sc.count(id))
+		{
+			mem_top[sc[id]].erase(id);
+			if (mem_top[sc[id]].empty())
+			{
+				mem_top.erase(sc[id]);
+			}
+		}
+		sc[id] += c;
+		mem_top[sc[id]].insert(id);
+	}
+
+	int top(int K) {
+		auto it = mem_top.rbegin();
+		int ans = 0;
+		while (K > 0)
+		{
+			ans += it->first * min(K, (int)it->second.size());
+			K -= it->second.size();
+			if (it == mem_top.rend())
+				break;
+			it++;
+		}
+		return ans;
+	}
+
+	void reset(int id) {
+		int old = sc[id];
+		mem_top[old].erase(id);
+		if (mem_top[old].empty())
+		{
+			mem_top.erase(old);
+		}
+		sc[id] = 0;
+		mem_top[sc[id]].insert(id);
+	}
+};
+
 class Solution
 {
 public:
@@ -1314,6 +1362,114 @@ public:
 		};
 		if (n < m) swap(n, m);
 		return M[n - 1][m - 1];
+	}
+
+	//1246. Palindrome Removal
+	int minimumMoves(vector<int>& a) {
+		int n = a.size();
+		vector<vector<int>> dp(n, vector<int>(n));
+		for (int i = 0; i < n; ++i) dp[i][i] = 1;
+		for (int l = 2; l <= n; ++l)
+		{
+			for (int i = 0, j = i + l - 1; j < n; ++i, ++j)
+			{
+				dp[i][j] = INT_MAX;
+				if (a[i] == a[j])
+				{
+					dp[i][j] = l > 2 ? dp[i + 1][j - 1] : 1;
+				}
+				for (int k = i; k + 1 <= j; ++k)
+				{
+					dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j]);
+				}
+			}
+		}
+		return dp[0][n - 1];
+	}
+
+	//1243. Array Transformation
+	vector<int> transformArray(vector<int>& a) {
+		int n = a.size();
+		bool change = true;
+		while (change)
+		{
+			change = false;
+			auto nx = a;
+			for (int i = 1; i < n - 1; ++i)
+			{
+				if (a[i] > a[i - 1] && a[i] > a[i + 1])
+				{
+					nx[i] --;
+					change = true;
+				}
+				else if (a[i] < a[i - 1] && a[i] < a[i + 1])
+				{
+					nx[i] ++;
+					change = true;
+				}
+			}
+			a = nx;
+		}
+		return a;
+	}
+
+	//1245. Tree Diameter
+	int treeDiameter(vector<vector<int>>& es) {
+		int n = es.size() + 1;
+		vector<vector<int>> g(n);
+		for (auto& e : es)
+		{
+			int u = e[0], v = e[1];
+			g[u].push_back(v);
+			g[v].push_back(u);
+		}
+		int st = 0;
+		queue<int> q;
+		q.push(st);
+		vector<bool> vis(n);
+		vis[st] = 1;
+		int last = -1;
+		while (!q.empty())
+		{
+			int size = q.size();
+			while (size--)
+			{
+				auto u = q.front();
+				q.pop();
+				last = u;
+				for (auto& v : g[u])
+				{
+					if (vis[v] == 0)
+					{
+						vis[v] = 1;
+						q.push(v);
+					}
+				}
+			}
+		}
+		int level = 0;
+		st = last;
+		q.push(st);
+		for (int i = 0; i < n; ++i) vis[i] = 0;
+		vis[st] = 1;
+		while (!q.empty())
+		{
+			int size = q.size();
+			level++;
+			while (size--)
+			{
+				auto u = q.front(); q.pop();
+				for (auto& v : g[u])
+				{
+					if (!vis[v])
+					{
+						vis[v] = 1;
+						q.push(v);
+					}
+				}
+			}
+		}
+		return level - 1;
 	}
 };
 
