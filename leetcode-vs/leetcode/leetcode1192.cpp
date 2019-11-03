@@ -1501,14 +1501,13 @@ public:
 		{
 			sums[i + 1] = sums[i] + nums[i] % 2;
 		}
-		map<int, int> cnt;
+		vector<int> cnt(n + 1);
 		int ans = 0;
 		cnt[0] = 1;
 		for (int i = 0; i < n; ++i)
 		{
 			int val = sums[i + 1] - k;
-			if (cnt.count(val))
-				ans += cnt[val];
+			if (val >= 0) ans += cnt[val];
 			cnt[sums[i + 1]] ++;
 		}
 		return ans;
@@ -1528,6 +1527,24 @@ public:
 			if (g == 1) return true;
 		}
 		return false;
+	}
+
+	//1249. Minimum Remove to Make Valid Parentheses
+	string minRemoveToMakeValid(string s) {
+		stack<int> st;
+		for (auto i = 0; i < s.size(); ++i) {
+			if (s[i] == '(') st.push(i);
+			if (s[i] == ')') {
+				if (!st.empty()) st.pop();
+				else s[i] = '*';
+			}
+		}
+		while (!st.empty()) {
+			s[st.top()] = '*';
+			st.pop();
+		}
+		s.erase(remove(s.begin(), s.end(), '*'), s.end());
+		return s;
 	}
 };
 
