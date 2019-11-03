@@ -1471,10 +1471,83 @@ public:
 		}
 		return level - 1;
 	}
+
+	int solve_1247(string& a, string& b)
+	{
+		int c0 = 0, c1 = 0;
+		int len = a.size();
+		if (len % 2) return -1;
+		for (int i = 0; i < len; ++i)
+		{
+			if (a[i] == 'x') c0++;
+			else c1++;
+		}
+		int ans = 0;
+		ans += c0 / 2;
+		ans += c1 / 2;
+		c0 %= 2;
+		c1 %= 2;
+		if (c0 && c1)
+			ans += 2;
+		else if (c0 || c1)
+		{
+			return -1;
+		}
+		return ans;
+	}
+	//1247. Minimum Swaps to Make Strings Equal
+	int minimumSwap(string s1, string s2) {
+		string a, b;
+		int n = s1.size();
+		for (int i = 0; i < n; ++i)
+		{
+			if (s1[i] != s2[i])
+			{
+				a += s1[i];
+				b += s2[i];
+			}
+		}
+		return solve_1247(a, b);
+	}
+	//1248. Count Number of Nice Subarrays
+	int numberOfSubarrays(vector<int>& nums, int k) {
+		int n = nums.size();
+		vector<int> sums(n + 1);
+		for (int i = 0; i < n; ++i)
+		{
+			sums[i + 1] = sums[i] + nums[i] % 2;
+		}
+		map<int, int> cnt;
+		int ans = 0;
+		cnt[0] = 1;
+		for (int i = 0; i < n; ++i)
+		{
+			int val = sums[i + 1] - k;
+			if (cnt.count(val))
+				ans += cnt[val];
+			cnt[sums[i + 1]] ++;
+		}
+		return ans;
+	}
+	//1250. Check If It Is a Good Array
+	bool isGoodArray(vector<int>& nums) {
+		int n = nums.size();
+		for (int i = 0; i < n; ++i)
+		{
+			if (nums[i] == 1) return true;
+		}
+		if (n < 2) return false;
+		int g = nums[0];
+		for (int i = 1; i < n; ++i)
+		{
+			g = gcd(g, nums[i]);
+			if (g == 1) return true;
+		}
+		return false;
+	}
 };
 
 int main()
 {
-	
 	return 0;
 }
