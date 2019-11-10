@@ -1546,6 +1546,166 @@ public:
 		s.erase(remove(s.begin(), s.end(), '*'), s.end());
 		return s;
 	}
+
+	int oddCells(int n, int m, vector<vector<int>>& a) {
+		vector<vector<int>> g(n, vector<int>(m));
+		for (auto& e : a)
+		{
+			int x = e[0], y = e[1];
+			for (int i = 0; i < n; ++i)
+			{
+				a[i][y] ++;
+			}
+			for (int j = 0; j < m; ++j)
+			{
+				a[x][j] ++;
+			}
+		}
+		int ans = 0;
+		for (auto& row : g)
+		{
+			for (auto& e : row)
+			{
+				ans += e % 2;
+			}
+		}
+		return ans;
+	}
+
+	vector<vector<int>> reconstructMatrix(int upper, int lower, vector<int>& colsum) {
+		int n = colsum.size();
+		vector<vector<int>> ans(2, vector<int>(n));
+		for (int i = 0; i < n; ++i)
+		{
+			if (colsum[i] == 2)
+			{
+				upper--;
+				lower--;
+				ans[0][i] = 1;
+				ans[1][i] = 1;
+			}
+			else if (colsum[i] == 1)
+			{
+				if (upper > lower)
+				{
+					upper--;
+					ans[0][i] = 1;
+				}
+				else
+				{
+					lower--;
+					ans[1][i] = 1;
+				}
+			}
+			else return {};
+		}
+		if (upper == 0 && lower == 0)
+		{
+			return ans;
+		}
+		else return {};
+	}
+
+
+	void dfs(vector<vector<int>>& g, int x, int y, int color)
+	{
+		static int dr[] = { 0, 1, 0, -1 };
+		static int dc[] = { 1, 0, -1, 0 };
+		g[x][y] = color;
+		int n = g.size(), m = g[0].size();
+		for (int d = 0; d < 4; ++d)
+		{
+			int nx = x + dr[d], ny = y + dc[d];
+			if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] == 0)
+			{
+				dfs(g, nx, ny, color);
+			}
+		}
+	}
+
+	int closedIsland(vector<vector<int>>& grid) {
+		int n = grid.size(), m = grid[0].size();
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			if (grid[i][0] == 0)
+			{
+				dfs(grid, i, 0, -1);
+			}
+			if (grid[i][m - 1] == 0)
+			{
+				dfs(grid, i, m - 1, -1);
+			}
+		}
+		for (int j = 1; j < m - 1; ++j)
+		{
+			if (grid[0][j] == 0)
+			{
+				dfs(grid, 0, j, -1);
+			}
+			if (grid[n - 1][j] == 0)
+			{
+				dfs(grid, n - 1, j, -1);
+			}
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (grid[i][j] == 0)
+				{
+					ans++;
+					dfs(grid, i, j, 3);
+				}
+			}
+		}
+		return ans;
+	}
+	int dfs(int u, vector<string>& ws, vector<int>& cnt, vector<int>& sc)
+	{
+		if (u > ws.size()) return 0;
+		int ans = 0;
+		for (int i = u; i < ws.size(); ++i)
+		{
+			vector<int> tmp(26);
+			int value = 0;
+			for (auto& c : ws[i])
+			{
+				tmp[c - 'a'] ++;
+				value += sc[c - 'a'];
+			}
+			bool valid = true;
+			for (int i = 0; i < 26; ++i)
+			{
+				if (tmp[i] > cnt[i])
+				{
+					valid = false;
+					break;
+				}
+			}
+			if (valid)
+			{
+				for (int i = 0; i < 26; ++i)
+				{
+					cnt[i] -= tmp[i];
+				}
+				ans = max(ans, value + dfs(i + 1, ws, cnt, sc));
+				for (int i = 0; i < 26; ++i)
+				{
+					cnt[i] += tmp[i];
+				}
+			}
+		}
+		return ans;
+	}
+	int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score) {
+		vector<int> cnt(26);
+		for (auto& c : letters)
+		{
+			cnt[c - 'a'] ++;
+		}
+		return dfs(0, words, cnt, score);
+	}
 };
 
 int main()
