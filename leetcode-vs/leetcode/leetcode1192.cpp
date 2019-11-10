@@ -1547,6 +1547,7 @@ public:
 		return s;
 	}
 
+	//1252. Cells with Odd Values in a Matrix
 	int oddCells(int n, int m, vector<vector<int>>& a) {
 		vector<vector<int>> g(n, vector<int>(m));
 		for (auto& e : a)
@@ -1572,6 +1573,7 @@ public:
 		return ans;
 	}
 
+	//1253. Reconstruct a 2-Row Binary Matrix
 	vector<vector<int>> reconstructMatrix(int upper, int lower, vector<int>& colsum) {
 		int n = colsum.size();
 		vector<vector<int>> ans(2, vector<int>(n));
@@ -1607,7 +1609,7 @@ public:
 	}
 
 
-	void dfs(vector<vector<int>>& g, int x, int y, int color)
+	void dfs_1254(vector<vector<int>>& g, int x, int y, int color)
 	{
 		static int dr[] = { 0, 1, 0, -1 };
 		static int dc[] = { 1, 0, -1, 0 };
@@ -1618,11 +1620,12 @@ public:
 			int nx = x + dr[d], ny = y + dc[d];
 			if (0 <= nx && nx < n && 0 <= ny && ny < m && g[nx][ny] == 0)
 			{
-				dfs(g, nx, ny, color);
+				dfs_1254(g, nx, ny, color);
 			}
 		}
 	}
 
+	//1254. Number of Closed Islands
 	int closedIsland(vector<vector<int>>& grid) {
 		int n = grid.size(), m = grid[0].size();
 		int ans = 0;
@@ -1630,22 +1633,22 @@ public:
 		{
 			if (grid[i][0] == 0)
 			{
-				dfs(grid, i, 0, -1);
+				dfs_1254(grid, i, 0, -1);
 			}
 			if (grid[i][m - 1] == 0)
 			{
-				dfs(grid, i, m - 1, -1);
+				dfs_1254(grid, i, m - 1, -1);
 			}
 		}
 		for (int j = 1; j < m - 1; ++j)
 		{
 			if (grid[0][j] == 0)
 			{
-				dfs(grid, 0, j, -1);
+				dfs_1254(grid, 0, j, -1);
 			}
 			if (grid[n - 1][j] == 0)
 			{
-				dfs(grid, n - 1, j, -1);
+				dfs_1254(grid, n - 1, j, -1);
 			}
 		}
 		for (int i = 0; i < n; ++i)
@@ -1655,13 +1658,13 @@ public:
 				if (grid[i][j] == 0)
 				{
 					ans++;
-					dfs(grid, i, j, 3);
+					dfs_1254(grid, i, j, 3);
 				}
 			}
 		}
 		return ans;
 	}
-	int dfs(int u, vector<string>& ws, vector<int>& cnt, vector<int>& sc)
+	int dfs_1255(int u, vector<string>& ws, vector<int>& cnt, vector<int>& sc)
 	{
 		if (u > ws.size()) return 0;
 		int ans = 0;
@@ -1689,7 +1692,7 @@ public:
 				{
 					cnt[i] -= tmp[i];
 				}
-				ans = max(ans, value + dfs(i + 1, ws, cnt, sc));
+				ans = max(ans, value + dfs_1255(i + 1, ws, cnt, sc));
 				for (int i = 0; i < 26; ++i)
 				{
 					cnt[i] += tmp[i];
@@ -1698,13 +1701,14 @@ public:
 		}
 		return ans;
 	}
+	//1255. Maximum Score Words Formed by Letters
 	int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score) {
 		vector<int> cnt(26);
 		for (auto& c : letters)
 		{
 			cnt[c - 'a'] ++;
 		}
-		return dfs(0, words, cnt, score);
+		return dfs_1255(0, words, cnt, score);
 	}
 };
 
