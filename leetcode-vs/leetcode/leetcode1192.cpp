@@ -1549,28 +1549,22 @@ public:
 
 	//1252. Cells with Odd Values in a Matrix
 	int oddCells(int n, int m, vector<vector<int>>& a) {
-		vector<vector<int>> g(n, vector<int>(m));
+		vector<int> row(n), col(m);
 		for (auto& e : a)
 		{
-			int x = e[0], y = e[1];
-			for (int i = 0; i < n; ++i)
-			{
-				a[i][y] ++;
-			}
-			for (int j = 0; j < m; ++j)
-			{
-				a[x][j] ++;
-			}
+			row[e[0]] ^= 1;
+			col[e[1]] ^= 1;
 		}
-		int ans = 0;
-		for (auto& row : g)
+		int cntrow = 0, cntcol = 0;
+		for (int i = 0; i < n; ++i)
 		{
-			for (auto& e : row)
-			{
-				ans += e % 2;
-			}
+			cntrow += row[i];
 		}
-		return ans;
+		for (int j = 0; j < m; ++j)
+		{
+			cntcol += col[j];
+		}
+		return m * cntrow + n * cntcol - 2 * cntrow * cntcol;
 	}
 
 	//1253. Reconstruct a 2-Row Binary Matrix
