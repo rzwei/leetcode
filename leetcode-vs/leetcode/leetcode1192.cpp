@@ -1704,6 +1704,85 @@ public:
 		}
 		return dfs_1255(0, words, cnt, score);
 	}
+
+	string encode(int num) {
+		if (num == 0) return "";
+		long len = 0;
+		long cur = 0;
+		while (cur + (1ll << len) <= num)
+		{
+			cur += (1 << len);
+			len++;
+		}
+		int tmp = num - cur;
+		string n;
+		while (tmp)
+		{
+			n.push_back(tmp % 2 + '0');
+			tmp /= 2;
+		}
+		reverse(n.begin(), n.end());
+		return (len > n.size() ? string(len - n.size(), '0') : "") + n;
+	}
+
+	string lca(string& u, string& a, string& b, map<string, vector<string>>& g, set<string>& vis)
+	{
+		if (u == a || u == b) return u;
+		vector<string> rets;
+		for (auto& v : g[u])
+		{
+			auto ret = lca(v, a, b, g, vis);
+			if (!ret.empty())
+			{
+				rets.push_back(ret);
+			}
+		}
+		if (rets.empty()) return "";
+		else if (rets.size() == 1) return rets[0];
+		else if (rets.size() == 2) return u;
+		return "";
+	}
+
+	string findSmallestRegion(vector<vector<string>>& regions, string region1, string region2) {
+		map<string, vector<string>> g;
+		map<string, int> indegree;
+		for (auto& e : regions)
+		{
+			auto name = e[0];
+			for (int i = 1; i < e.size(); ++i)
+			{
+				g[name].push_back(e[i]);
+				indegree[e[i]] ++;
+			}
+		}
+		set<string> vis;
+		for (auto& e : regions)
+		{
+			auto name = e[0];
+			if (indegree.count(name)) continue;
+			auto ret = lca(name, region1, region2, g, vis);
+			if (!ret.empty())
+			{
+				return ret;
+			}
+		}
+		return "";
+	}
+
+	int numberOfWays(int n) {
+		vector<int> dp(n + 1);
+		dp[0] = 1;
+		int const mod = 1e9 + 7;
+		for (int i = 2; i <= n; i += 2)
+		{
+			for (int l = 0; l <= i - 2; l += 2)
+			{
+				int r = i - 2 - l;
+				dp[i] = (dp[i] + static_cast<long long>(dp[l])* dp[r]) % mod;
+			}
+		}
+		return dp[n];
+	}
 };
 
 int main()
