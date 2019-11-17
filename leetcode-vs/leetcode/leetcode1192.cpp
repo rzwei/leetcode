@@ -278,6 +278,173 @@ public:
 	}
 };
 
+class FindElements {
+public:
+	set<int> nums;
+	void dfs(TreeNode* u, int val)
+	{
+		if (!u) return;
+		nums.insert(val);
+		u->val = val;
+		dfs(u->left, val * 2 + 1);
+		dfs(u->right, val * 2 + 2);
+	}
+
+	FindElements(TreeNode* root) {
+		nums.clear();
+		dfs(root, 0);
+	}
+
+	bool find(int target) {
+		return nums.count(target);
+	}
+};
+
+/*5266. Minimum Moves to Move a Box to Their Target Location
+int dr[] = { 0, 1, 0, -1 };
+int dc[] = { 1, 0, -1, 0 };
+int idr[] = { 0, -1, 0, 1 };
+int idc[] = { -1, 0, 1, 0 };
+class Solution {
+public:
+
+	bool ok(int x, int y)
+	{
+		return 0 <= x && x < n && 0 <= y && y < m;
+	}
+
+	int n, m;
+	int check(vector<vector<char>>& g, int sx, int sy, int ex, int ey)
+	{
+		if (g[sx][sy] == '#') return -1;
+		if (sx == ex && sy == ey) return 0;
+		queue<pair<int, int>> q;
+		q.push({ sx, sy });
+		vector<vector<bool>> vis(n, vector<bool>(m));
+		vis[sx][sy] = true;
+		int level = 0;
+		while (!q.empty())
+		{
+			int size = q.size();
+			level++;
+			while (size--)
+			{
+				auto [x, y] = q.front(); q.pop();
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = x + dr[d], ny = y + dc[d];
+					if (ok(nx, ny) && g[nx][ny] == '.' && !vis[nx][ny])
+					{
+						if (nx == ex && ny == ey)
+						{
+							return level;
+						}
+						vis[nx][ny] = 1;
+						q.push({ nx, ny });
+					}
+				}
+			}
+		}
+		return -1;
+	}
+
+	struct State
+	{
+		int x, y;
+		int px, py;
+		bool operator < (const State& rhs) const
+		{
+			if (x != rhs.x) return  x < rhs.x;
+			if (y != rhs.y) return  y < rhs.y;
+			if (px != rhs.px) return  px < rhs.px;
+			//if (py != rhs.py) return  py < rhs.py;
+			return  py < rhs.py;
+		}
+	};
+
+	int minPushBox(vector<vector<char>>& g) {
+		n = g.size(), m = g[0].size();
+		State st;
+		int tx, ty;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j] == 'B')
+				{
+					st.x = i;
+					st.y = j;
+					g[i][j] = '.';
+				}
+				if (g[i][j] == 'S')
+				{
+					st.px = i;
+					st.py = j;
+					g[i][j] = '.';
+				}
+				if (g[i][j] == 'T')
+				{
+					tx = i;
+					ty = j;
+					g[i][j] = '.';
+				}
+			}
+		}
+		queue<State> q;
+		q.push(st);
+		map<State, int> dp;
+		dp[st] = 0;
+		//int ans = INT_MAX;
+		int ans = 0;
+		while (!q.empty())
+		{
+			int size = q.size();
+			ans++;
+			while (size--)
+			{
+				auto curr = q.front();
+				auto [x, y, px, py] = q.front(); q.pop();
+				// cout << x << " " << y << " " << px << " " << py << endl;
+				int cost = dp[curr];
+				for (int d = 0; d < 4; ++d)
+				{
+					int nx = x + dr[d], ny = y + dc[d];
+					int pnx = x + idr[d], pny = y + idc[d];
+					if (ok(nx, ny) && ok(pnx, pny) && g[nx][ny] != '#' && g[pnx][pny] != '#')
+					{
+						g[px][py] = 'S';
+						g[x][y] = 'B';
+						int move = check(g, px, py, pnx, pny);
+						g[px][py] = '.';
+						g[x][y] = '.';
+						if (move != -1)
+						{
+							if (nx == tx && ny == ty)
+							{
+								return ans;
+							}
+							State nxt = { nx, ny, x, y };
+							if (!dp.count(nxt))
+							{
+								dp[nxt] = cost + 1;
+								q.push(nxt);
+							}
+							else if (dp[nxt] > cost + 1)
+							{
+								dp[nxt] = cost + 1;
+								q.push(nxt);
+							}
+						}
+					}
+				}
+			}
+		}
+		return -1;
+	}
+};
+*/
+
+
 class Solution
 {
 public:
@@ -1705,33 +1872,37 @@ public:
 		return dfs_1255(0, words, cnt, score);
 	}
 
-	string encode(int num) {
-		if (num == 0) return "";
-		long len = 0;
-		long cur = 0;
-		while (cur + (1ll << len) <= num)
-		{
-			cur += (1 << len);
-			len++;
-		}
-		int tmp = num - cur;
-		string n;
-		while (tmp)
-		{
-			n.push_back(tmp % 2 + '0');
-			tmp /= 2;
-		}
-		reverse(n.begin(), n.end());
-		return (len > n.size() ? string(len - n.size(), '0') : "") + n;
+	//1256. Encode Number
+	string encode_1256(int n) {
+		return n > 0 ? encode_1256((n - 1) / 2) + "10"[n % 2] : "";
 	}
+	//string encode_1256(int num) {
+	//	if (num == 0) return "";
+	//	long len = 0;
+	//	long cur = 0;
+	//	while (cur + (1ll << len) <= num)
+	//	{
+	//		cur += (1 << len);
+	//		len++;
+	//	}
+	//	int tmp = num - cur;
+	//	string n;
+	//	while (tmp)
+	//	{
+	//		n.push_back(tmp % 2 + '0');
+	//		tmp /= 2;
+	//	}
+	//	reverse(n.begin(), n.end());
+	//	return (len > n.size() ? string(len - n.size(), '0') : "") + n;
+	//}
 
-	string lca(string& u, string& a, string& b, map<string, vector<string>>& g, set<string>& vis)
+	string lca_1257(string& u, string& a, string& b, map<string, vector<string>>& g)
 	{
 		if (u == a || u == b) return u;
 		vector<string> rets;
 		for (auto& v : g[u])
 		{
-			auto ret = lca(v, a, b, g, vis);
+			auto ret = lca_1257(v, a, b, g);
 			if (!ret.empty())
 			{
 				rets.push_back(ret);
@@ -1743,6 +1914,7 @@ public:
 		return "";
 	}
 
+	//1257. Smallest Common Region
 	string findSmallestRegion(vector<vector<string>>& regions, string region1, string region2) {
 		map<string, vector<string>> g;
 		map<string, int> indegree;
@@ -1755,12 +1927,11 @@ public:
 				indegree[e[i]] ++;
 			}
 		}
-		set<string> vis;
 		for (auto& e : regions)
 		{
 			auto name = e[0];
 			if (indegree.count(name)) continue;
-			auto ret = lca(name, region1, region2, g, vis);
+			auto ret = lca_1257(name, region1, region2, g);
 			if (!ret.empty())
 			{
 				return ret;
@@ -1769,6 +1940,7 @@ public:
 		return "";
 	}
 
+	//1259. Handshakes That Don't Cross
 	int numberOfWays(int n) {
 		vector<int> dp(n + 1);
 		dp[0] = 1;
@@ -1778,10 +1950,54 @@ public:
 			for (int l = 0; l <= i - 2; l += 2)
 			{
 				int r = i - 2 - l;
-				dp[i] = (dp[i] + static_cast<long long>(dp[l])* dp[r]) % mod;
+				dp[i] = (dp[i] + static_cast<long long>(dp[l]) * dp[r]) % mod;
 			}
 		}
 		return dp[n];
+	}
+
+	vector<vector<int>> shiftGrid(vector<vector<int>>& g, int k) {
+		int n = g.size(), m = g[0].size();
+		vector<int> tmp(n * m);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				tmp[i * m + j] = g[i][j];
+			}
+		}
+		k %= (n * m);
+		for (int i = 0; i < n * m - k; ++i)
+		{
+			int offset = i + k;
+			int x = offset / m, y = offset % m;
+			g[x][y] = tmp[i];
+		}
+		for (int i = n * m - k; i < n * m; ++i)
+		{
+			int offset = i - (n * m - k);
+			int x = offset / m, y = offset % m;
+			g[x][y] = tmp[i];
+		}
+		return g;
+	}
+
+	int maxSumDivThree(vector<int>& nums) {
+		int n = nums.size();
+		vector<vector<int>> dp(n, vector<int>(3, -1));
+		dp[0][nums[0] % 3] = nums[0];
+		for (int i = 1; i < n; ++i)
+		{
+			dp[i] = dp[i - 1];
+			dp[i][nums[i] % 3] = max(dp[i][nums[i] % 3], nums[i]);
+			for (int j = 0; j < 3; ++j)
+			{
+				if (dp[i - 1][j] == -1) continue;
+				int k = (j + nums[i] % 3) % 3;
+				dp[i][k] = max(dp[i - 1][k], dp[i - 1][j] + nums[i]);
+			}
+		}
+		return dp[n - 1][0] == -1 ? 0 : dp[n - 1][0];
 	}
 };
 
