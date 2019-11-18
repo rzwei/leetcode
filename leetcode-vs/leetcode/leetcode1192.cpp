@@ -278,6 +278,7 @@ public:
 	}
 };
 
+//1261. Find Elements in a Contaminated Binary Tree
 class FindElements {
 public:
 	set<int> nums;
@@ -300,20 +301,19 @@ public:
 	}
 };
 
-/*5266. Minimum Moves to Move a Box to Their Target Location
+/*
+//1263. Minimum Moves to Move a Box to Their Target Location
 int dr[] = { 0, 1, 0, -1 };
 int dc[] = { 1, 0, -1, 0 };
 int idr[] = { 0, -1, 0, 1 };
 int idc[] = { -1, 0, 1, 0 };
 class Solution {
 public:
-
+	int n, m;
 	bool ok(int x, int y)
 	{
 		return 0 <= x && x < n && 0 <= y && y < m;
 	}
-
-	int n, m;
 	int check(vector<vector<char>>& g, int sx, int sy, int ex, int ey)
 	{
 		if (g[sx][sy] == '#') return -1;
@@ -394,7 +394,6 @@ public:
 		q.push(st);
 		map<State, int> dp;
 		dp[st] = 0;
-		//int ans = INT_MAX;
 		int ans = 0;
 		while (!q.empty())
 		{
@@ -404,7 +403,6 @@ public:
 			{
 				auto curr = q.front();
 				auto [x, y, px, py] = q.front(); q.pop();
-				// cout << x << " " << y << " " << px << " " << py << endl;
 				int cost = dp[curr];
 				for (int d = 0; d < 4; ++d)
 				{
@@ -444,6 +442,96 @@ public:
 };
 */
 
+/*
+//1258. Synonymous Sentences
+class Solution {
+public:
+	map<string, string> fa;
+	map<string, set<string>> order;
+	vector<string> split(string& s)
+	{
+		int i = 0, n = s.size();
+		string u;
+		vector<string> ans;
+		while (i < n)
+		{
+			while (i < n && s[i] == ' ') ++i;
+			while (i < n && s[i] != ' ')
+			{
+				u.push_back(s[i++]);
+			}
+			if (!u.empty())
+			{
+				ans.push_back(u);
+				u.clear();
+			}
+		}
+		if (!u.empty())
+		{
+			ans.push_back(u);
+			u.clear();
+		}
+		return ans;
+	}
+	string find(string& s, map<string, string>& fa)
+	{
+		if (fa[s] != s) return fa[s] = find(fa[s], fa);
+		return s;
+	}
+	void merge(string& u, string& v, map<string, string>& fa)
+	{
+		auto fu = find(u, fa), fv = find(v, fa);
+		fa[fu] = fv;
+	}
+	void dfs(string u, int i, vector<string>& tokens, vector<string>& ans)
+	{
+		if (i == tokens.size())
+		{
+			if (!u.empty())
+				u.pop_back();
+			ans.push_back(u);
+			return;
+		}
+		auto& val = tokens[i];
+		if (fa.count(val))
+		{
+			auto fval = find(val, fa);
+			for (auto& sub_value : order[fval])
+			{
+				dfs(u + sub_value + " ", i + 1, tokens, ans);
+			}
+		}
+		else
+		{
+			dfs(u + val + " ", i + 1, tokens, ans);
+		}
+	}
+
+	vector<string> generateSentences(vector<vector<string>>& sy, string text) {
+		vector<string> tokens = split(text);
+		fa.clear();
+		order.clear();
+		for (auto& e : sy)
+		{
+			auto& u = e[0], & v = e[1];
+			if (!fa.count(u)) fa[u] = u;
+			if (!fa.count(v)) fa[v] = v;
+			merge(u, v, fa);
+		}
+
+		for (auto& e : sy)
+		{
+			auto& u = e[0], & v = e[1];
+			auto fu = find(u, fa);
+			order[fu].insert(u);
+			order[fu].insert(v);
+		}
+		vector<string> ans;
+		dfs("", 0, tokens, ans);
+		return ans;
+	}
+};
+*/
 
 class Solution
 {
@@ -1956,6 +2044,7 @@ public:
 		return dp[n];
 	}
 
+	//1260. Shift 2D Grid
 	vector<vector<int>> shiftGrid(vector<vector<int>>& g, int k) {
 		int n = g.size(), m = g[0].size();
 		vector<int> tmp(n * m);
@@ -1982,6 +2071,7 @@ public:
 		return g;
 	}
 
+	//1262. Greatest Sum Divisible by Three
 	int maxSumDivThree(vector<int>& nums) {
 		int n = nums.size();
 		vector<vector<int>> dp(n, vector<int>(3, -1));
