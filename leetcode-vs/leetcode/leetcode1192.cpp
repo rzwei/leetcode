@@ -533,6 +533,93 @@ public:
 };
 */
 
+/*
+//1268. Search Suggestions System
+class TrieNode {
+public:
+	char v;
+	int isword;
+	TrieNode() :isword(0), next{ nullptr } {}
+	TrieNode(int c) :v(c), isword(0), next{ nullptr } {}
+	TrieNode* next[26];
+};
+
+
+class Trie {
+public:
+	TrieNode* root;
+	Trie() {
+		root = new TrieNode();
+	}
+
+	void add(string word) {
+		TrieNode* cur = root;
+		for (char i : word) {
+			if (cur->next[i - 'a'] == nullptr)
+				cur->next[i - 'a'] = new TrieNode(i);
+			cur = cur->next[i - 'a'];
+		}
+		cur->isword++;
+	}
+
+	void search(string& s, vector<string>& res, TrieNode* u)
+	{
+		if (!u) return;
+
+		if (u->isword > 0)
+		{
+			int num = min(int(3 - res.size()), u->isword);
+			for (int i = 0; i < num; ++i)
+			{
+				res.push_back(s);
+			}
+			if (res.size() == 3) return;
+		}
+		for (int i = 0; i < 26; ++i)
+		{
+			if (u->next[i])
+			{
+				s.push_back(i + 'a');
+				search(s, res, u->next[i]);
+				s.pop_back();
+				if (res.size() == 3) return;
+			}
+		}
+	}
+	TrieNode* topThree(char c, TrieNode* u, string& prefix, vector<string>& res)
+	{
+		if (!u) return u;
+		prefix.push_back(c);
+		res.clear();
+		search(prefix, res, u->next[c - 'a']);
+		return u->next[c - 'a'];
+	}
+};
+
+
+
+class Solution {
+public:
+	vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+		Trie tr;
+		for (auto& e : products)
+		{
+			tr.add(e);
+		}
+		vector<vector<string>> res;
+		string prefix;
+		TrieNode* u = tr.root;
+		for (auto& c : searchWord)
+		{
+			vector<string> cur;
+			u = tr.topThree(c, u, prefix, cur);
+			res.push_back(cur);
+		}
+		return res;
+	}
+};
+*/
+
 class Solution
 {
 public:
@@ -2089,6 +2176,72 @@ public:
 		}
 		return dp[n - 1][0] == -1 ? 0 : dp[n - 1][0];
 	}
+
+	//1266. Minimum Time Visiting All Points
+	int minTimeToVisitAllPoints(vector<vector<int>>& points) {
+		int ans = 0;
+		int n = points.size();
+		for (int i = 1; i < n; ++i)
+		{
+			int px = points[i - 1][0], py = points[i - 1][1];
+			int x = points[i][0], y = points[i][1];
+			int dx = x - px, dy = y - py;
+			ans += max(abs(dx), abs(dy));
+		}
+		return ans;
+	}
+
+	//1267. Count Servers that Communicate
+	int countServers(vector<vector<int>>& g) {
+		int n = g.size(), m = g[0].size();
+		vector<int> row(n), col(m);
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j])
+				{
+					row[i]++;
+					col[j]++;
+				}
+			}
+		}
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (g[i][j])
+				{
+					if (row[i] > 1 || col[j] > 1)
+					{
+						ans++;
+					}
+				}
+			}
+		}
+		return ans;
+	}
+
+	//1269. Number of Ways to Stay in the Same Place After Some Steps
+	int numWays(int n, int len) {
+		int const mod = 1e9 + 7;
+		vector<vector<int>> dp(n + 1, vector<int>(n + 1));
+		dp[0][0] = 1;
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 0; j <= min(i, len - 1); ++j)
+			{
+				long long t = 0;
+				t += dp[i - 1][j];
+				if (j - 1 >= 0) t += dp[i - 1][j - 1];
+				if (j + 1 < len && j + 1 <= i - 1) t += dp[i - 1][j + 1];
+				dp[i][j] = t % mod;
+			}
+		}
+		return dp[n][0];
+	}
+
 };
 
 int main()
