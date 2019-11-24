@@ -2223,6 +2223,19 @@ public:
 		return ans;
 	}
 
+	//1268. Search Suggestions System
+	vector<vector<string>> suggestedProducts(vector<string>& ps, string word) {
+		sort(begin(ps), end(ps));
+		vector<vector<string>> res(word.size());
+		for (auto l = 1; l <= word.size(); ++l) {
+			auto w = word.substr(0, l);
+			auto it = lower_bound(begin(ps), end(ps), w);
+			for (; it != end(ps) && it->substr(0, l) == w && res[l - 1].size() < 3; ++it)
+				res[l - 1].push_back(*it);
+		}
+		return res;
+	}
+
 	//1269. Number of Ways to Stay in the Same Place After Some Steps
 	int numWays(int n, int len) {
 		int const mod = 1e9 + 7;
