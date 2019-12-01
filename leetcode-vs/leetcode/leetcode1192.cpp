@@ -533,6 +533,93 @@ public:
 };
 */
 
+/*
+//1268. Search Suggestions System
+class TrieNode {
+public:
+	char v;
+	int isword;
+	TrieNode() :isword(0), next{ nullptr } {}
+	TrieNode(int c) :v(c), isword(0), next{ nullptr } {}
+	TrieNode* next[26];
+};
+
+
+class Trie {
+public:
+	TrieNode* root;
+	Trie() {
+		root = new TrieNode();
+	}
+
+	void add(string word) {
+		TrieNode* cur = root;
+		for (char i : word) {
+			if (cur->next[i - 'a'] == nullptr)
+				cur->next[i - 'a'] = new TrieNode(i);
+			cur = cur->next[i - 'a'];
+		}
+		cur->isword++;
+	}
+
+	void search(string& s, vector<string>& res, TrieNode* u)
+	{
+		if (!u) return;
+
+		if (u->isword > 0)
+		{
+			int num = min(int(3 - res.size()), u->isword);
+			for (int i = 0; i < num; ++i)
+			{
+				res.push_back(s);
+			}
+			if (res.size() == 3) return;
+		}
+		for (int i = 0; i < 26; ++i)
+		{
+			if (u->next[i])
+			{
+				s.push_back(i + 'a');
+				search(s, res, u->next[i]);
+				s.pop_back();
+				if (res.size() == 3) return;
+			}
+		}
+	}
+	TrieNode* topThree(char c, TrieNode* u, string& prefix, vector<string>& res)
+	{
+		if (!u) return u;
+		prefix.push_back(c);
+		res.clear();
+		search(prefix, res, u->next[c - 'a']);
+		return u->next[c - 'a'];
+	}
+};
+
+
+
+class Solution {
+public:
+	vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+		Trie tr;
+		for (auto& e : products)
+		{
+			tr.add(e);
+		}
+		vector<vector<string>> res;
+		string prefix;
+		TrieNode* u = tr.root;
+		for (auto& c : searchWord)
+		{
+			vector<string> cur;
+			u = tr.topThree(c, u, prefix, cur);
+			res.push_back(cur);
+		}
+		return res;
+	}
+};
+*/
+
 class Solution
 {
 public:
