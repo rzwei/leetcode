@@ -1885,7 +1885,7 @@ public:
 			s[st.top()] = '*';
 			st.pop();
 		}
-		s.erase(remove_1273(s.begin(), s.end(), '*'), s.end());
+		s.erase(remove(s.begin(), s.end(), '*'), s.end());
 		return s;
 	}
 
