@@ -1798,7 +1798,7 @@ public:
 			s[st.top()] = '*';
 			st.pop();
 		}
-		s.erase(remove(s.begin(), s.end(), '*'), s.end());
+		s.erase(remove_1273(s.begin(), s.end(), '*'), s.end());
 		return s;
 	}
 
@@ -2088,6 +2088,347 @@ public:
 			}
 		}
 		return dp[n - 1][0] == -1 ? 0 : dp[n - 1][0];
+	}
+
+	//1271. Hexspeak
+	string toHexspeak(string num) {
+		vector<char> valid = { 'A', 'B', 'C', 'D', 'E', 'F', 'I', 'O' };
+		set<char> sv(valid.begin(), valid.end());
+		long long v = 0;
+		for (auto& c : num) v = v * 10 + c - '0';
+		string s;
+		while (v)
+		{
+			int x = v % 16;
+			if (x < 10)
+				s.push_back(x + '0');
+			else
+				s.push_back(x - 10 + 'A');
+
+			v /= 16;
+		}
+		reverse(s.begin(), s.end());
+		for (auto& c : s)
+		{
+			if (c == '0') c = 'O';
+			else if (c == '1') c = 'I';
+		}
+		for (auto& c : s) if (!sv.count(c)) return "ERROR";
+		return s;
+	}
+
+	vector<vector<int>> minus_1272(int s, int t, int st, int ed)
+	{
+		if (t < st || s >= ed) return { {s, t} };
+		int it = min(ed, t);
+		int is = max(s, st);
+		//if (is >= it) return { {s,t} };
+		vector<vector<int>> ans;
+		if (s < is) ans.push_back({ s, is });
+		if (it < t) ans.push_back({ it, t });
+		return ans;
+	}
+
+	//1272. Remove Interval
+	vector<vector<int>> removeInterval(vector<vector<int>>& ins, vector<int>& rem) {
+		int st = rem[0], ed = rem[1];
+		int n = ins.size();
+		vector<vector<int>> ans;
+		for (int i = 0; i < n; ++i)
+		{
+			for (auto& e : minus_1272(ins[i][0], ins[i][1], st, ed))
+			{
+				ans.push_back(e);
+			}
+		}
+		return ans;
+	}
+
+	class Node_1273
+	{
+	public:
+		int val;
+		vector<Node_1273*> nx;
+		Node_1273() : val(-1) {}
+		Node_1273(int v) : val(v) {}
+	};
+	pair<int, int> remove_1273(Node_1273* u)
+	{
+		if (!u) return { 0, 0 };
+		int sum = u->val, cnt = 1;
+		for (auto& e : u->nx)
+		{
+			auto [sum_e, cnt_e] = remove_1273(e);
+			sum += sum_e;
+			cnt += cnt_e;
+		}
+		if (sum == 0)
+		{
+			return { 0, 0 };
+		}
+		else
+		{
+			return { sum, cnt };
+		}
+	}
+
+	//1273. Delete Tree Nodes
+	int deleteTreeNodes(int nodes_, vector<int>& parent, vector<int>& value) {
+		int n = nodes_;
+		Node_1273* root;
+		vector<Node_1273*> nodes(n), idx(n);
+
+		for (int i = 0; i < n; ++i)
+		{
+			nodes[i] = new Node_1273(value[i]);
+		}
+		for (int i = 1; i < n; ++i)
+		{
+			int par = parent[i];
+			nodes[par]->nx.push_back(nodes[i]);
+		}
+		root = nodes[0];
+		return remove_1273(root).second;
+	}
+
+
+	class Sea {
+	public:
+		bool hasShips(vector<int> topRight, vector<int> bottomLeft)
+		{
+			return 0;
+		}
+	};
+	int check_1274(Sea sea, int sx, int sy, int tx, int ty)
+	{
+		if (sx > tx || sy > ty) return 0;
+		if (!sea.hasShips({ tx, ty }, { sx, sy })) return 0;
+
+		if ((abs(tx - sx) + 1) <= 1 || (abs(ty - sy) + 1) <= 1)
+		{
+			int ans = 0;
+			int fx = tx - sx >= 0 ? 1 : -1;
+			int fy = ty - sy >= 0 ? 1 : -1;
+			for (int i = sx; i <= fx * tx; i += fx)
+			{
+				for (int j = sy; j <= fy * ty; j += fy)
+				{
+					ans += sea.hasShips({ i, j }, { i, j });
+				}
+			}
+			return ans;
+		}
+		int dx = tx - sx, dy = ty - sy;
+		int ox = dx / 2, oy = dy / 2;
+		/*
+		(sx, ty)		(sx + ox, ty)			(tx, ty)
+
+		(sx,  sy + oy)    (sx + ox, sy + oy)   (tx, sy + oy)
+
+		(sx, sy)		(sx + ox, sy)   		(tx, sy)
+		*/
+		int ans = 0;
+		ans += check_1274(sea, sx, sy, sx + ox - 1, sy + oy);
+		ans += check_1274(sea, sx, sy + oy + 1, sx + ox, ty);
+
+		ans += check_1274(sea, sx + ox + 1, sy + oy, tx, ty);
+		ans += check_1274(sea, sx + ox, sy, tx, sy + oy - 1);
+		ans += sea.hasShips({ sx + ox, sy + oy }, { sx + ox, sy + oy });
+		return ans;
+	}
+
+	//1274. Number of Ships in a Rectangle
+	int countShips(Sea sea, vector<int> tr, vector<int> bl) {
+		int sx = bl[0], sy = bl[1];
+		int tx = tr[0], ty = tr[1];
+		return check_1274(sea, sx, sy, tx, ty);
+	}
+
+
+	bool check(vector<vector<char>>& b)
+	{
+		int n = 3;
+		for (int i = 0; i < n; ++i)
+		{
+			bool win = true;
+			if (b[i][0] == ' ') continue;
+			for (int j = 1; j < n; ++j)
+			{
+				if (b[i][j] != b[i][0])
+				{
+					win = false;
+					break;
+				}
+			}
+			if (win) return true;
+		}
+		for (int j = 0; j < n; ++j)
+		{
+			bool win = true;
+			if (b[0][j] == ' ') continue;
+			for (int i = 1; i < n; ++i)
+			{
+				if (b[i][j] != b[0][j])
+				{
+					win = false;
+					break;
+				}
+			}
+			if (win) return true;
+
+		}
+		{
+			if (b[0][0] != ' ')
+			{
+				bool win = true;
+
+				for (int i = 1; i < n; ++i)
+				{
+					if (b[i][i] != b[0][0])
+					{
+						win = false;
+					}
+				}
+				if (win) return true;
+			}
+		}
+		{
+			if (b[0][n - 1] != ' ')
+			{
+				bool win = true;
+				for (int i = 1; i < n; ++i)
+				{
+					int j = n - 1 - i;
+					if (b[i][j] != b[0][n - 1])
+					{
+						win = false;
+						break;
+					}
+				}
+				if (win) return true;
+			}
+		}
+		return false;
+	}
+	//1275. Find Winner on a Tic Tac Toe Game
+	string tictactoe(vector<vector<int>>& moves) {
+		vector<vector<char>> b(3, vector<char>(3, ' '));
+		int n = moves.size();
+		for (int i = 0; i < n; ++i)
+		{
+			b[moves[i][0]][moves[i][1]] = 'A' + i % 2;
+			if (check(b))
+			{
+				string ret;
+				ret.push_back('A' + i % 2);
+				return ret;
+			}
+			if (i >= 8)
+				return "Draw";
+		}
+		return "Pending";
+	}
+
+	//1276. Number of Burgers with No Waste of Ingredients
+	vector<int> numOfBurgers(int ts, int cs) {
+		int tmp = ts - cs * 2;
+		if (tmp % 2) return {};
+		int x = tmp / 2;
+		int y = cs - x;
+		if (y < 0 || x < 0) return {};
+		return { x, y };
+	}
+
+	class NumMatrix_1277 {
+	public:
+		vector<vector<int>> sums;
+		int n, m;
+		NumMatrix_1277(vector<vector<int>> a) {
+			n = a.size();
+			if (n == 0)
+			{
+				a.push_back({ 0 });
+				return;
+			}
+			m = a[0].size();
+			sums.assign(n + 1, vector<int>(m + 1));
+			for (int i = 1; i <= n; ++i)
+			{
+				int cur = 0;
+				for (int j = 1; j <= m; ++j)
+				{
+					cur += a[i - 1][j - 1];
+					sums[i][j] = sums[i - 1][j] + cur;
+				}
+			}
+		}
+
+		int sumRegion(int row1, int col1, int row2, int col2) {
+			return sums[row2 + 1][col2 + 1] - sums[row2 + 1][col1] - sums[row1][col2 + 1] + sums[row1][col1];
+		}
+	};
+
+	//1277. Count Square Submatrices with All Ones
+	int countSquares(vector<vector<int>>& a) {
+		int n = a.size(), m = a[0].size();
+		NumMatrix_1277 nm(a);
+		int ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				ans += a[i][j];
+			}
+		}
+		for (int l = 2; l <= min(n, m); ++l)
+		{
+			for (int i = 0; i + l - 1 < n; ++i)
+			{
+				for (int j = 0; j + l - 1 < m; ++j)
+				{
+					if (nm.sumRegion(i, j, i + l - 1, j + l - 1) == l * l) ans++;
+				}
+			}
+		}
+		return ans;
+	}
+
+	//1278. Palindrome Partitioning III
+	int palindromePartition(string s, int k) {
+		int n = s.size();
+		vector<vector<int>> change(n, vector<int>(n));
+		for (int l = 1; l <= n; ++l)
+		{
+			for (int i = 0, j = i + l - 1; j < n; ++j, ++i)
+			{
+				if (l == 1) change[i][j] = 0;
+				else if (l == 2)
+				{
+					if (s[i] == s[j]) change[i][j] = 0;
+					else change[i][j] = 1;
+				}
+				else
+				{
+					change[i][j] = change[i + 1][j - 1] + (s[i] != s[j]);
+				}
+			}
+		}
+		vector<vector<int>> dp(k + 1, vector<int>(n + 1, n));
+		for (int i = 0; i < n; ++i)
+		{
+			dp[0][i] = change[0][i];
+		}
+		for (int j = 0; j < k; ++j)
+		{
+			for (int i = 0; i < n; ++i)
+			{
+				for (int m = i + 1; m < n; ++m)
+				{
+					dp[j + 1][m] = min(dp[j + 1][m], dp[j][i] + change[i + 1][m]);
+				}
+			}
+		}
+		return dp[k - 1][n - 1];
 	}
 };
 
