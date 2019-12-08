@@ -2518,7 +2518,7 @@ public:
 		return dp[k - 1][n - 1];
 	}
 
-	//5279. Subtract the Product and Sum of Digits of an Integer
+	//1281. Subtract the Product and Sum of Digits of an Integer
 	int subtractProductAndSum(int n) {
 		int sum = 0, mul = 1;
 		while (n)
@@ -2530,8 +2530,7 @@ public:
 		return mul - sum;
 	}
 
-
-	//5280. Group the People Given the Group Size They Belong To
+	//1282. Group the People Given the Group Size They Belong To
 	vector<vector<int>> groupThePeople(vector<int>& a) {
 		map<int, vector<int>> members;
 		int n = a.size();
@@ -2552,6 +2551,7 @@ public:
 		}
 		return ans;
 	}
+	//1283. Find the Smallest Divisor Given a Threshold
 	int smallestDivisor(vector<int>& nums, int threshold) {
 		int l = 1, r = 0;
 		for (auto& e : nums) r = max(r, e);
@@ -2576,7 +2576,7 @@ public:
 		return l;
 	}
 
-	//5281. Find the Smallest Divisor Given a Threshold
+	//1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix
 	int minFlips(vector<vector<int>>& a) {
 		typedef bitset<9> ele;
 		int n = a.size(), m = a[0].size();
@@ -2617,7 +2617,6 @@ public:
 						auto nx = modify(u, i, j, n, m);
 						if (nx.to_ulong() == 0)
 						{
-							int xx;
 							return ans;
 						}
 						if (!vis.count(nx.to_ulong()))
