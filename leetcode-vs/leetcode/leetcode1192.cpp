@@ -2517,6 +2517,120 @@ public:
 		}
 		return dp[k - 1][n - 1];
 	}
+
+	//5279. Subtract the Product and Sum of Digits of an Integer
+	int subtractProductAndSum(int n) {
+		int sum = 0, mul = 1;
+		while (n)
+		{
+			sum += n % 10;
+			mul *= n % 10;
+			n /= 10;
+		}
+		return mul - sum;
+	}
+
+
+	//5280. Group the People Given the Group Size They Belong To
+	vector<vector<int>> groupThePeople(vector<int>& a) {
+		map<int, vector<int>> members;
+		int n = a.size();
+		vector<vector<int>> ans;
+		for (int i = 0; i < n; ++i)
+		{
+			int mem = a[i];
+
+			if (members[mem].size() < mem)
+			{
+				members[mem].push_back(i);
+				if (members[mem].size() == mem)
+				{
+					ans.push_back(members[mem]);
+					members[mem].clear();
+				}
+			}
+		}
+		return ans;
+	}
+	int smallestDivisor(vector<int>& nums, int threshold) {
+		int l = 1, r = 0;
+		for (auto& e : nums) r = max(r, e);
+		while (l < r)
+		{
+			int m = (l + r) / 2;
+			long long t = 0;
+			for (auto& e : nums)
+			{
+				t += e / m;
+				if (e % m) t++;
+			}
+			if (t <= threshold)
+			{
+				r = m;
+			}
+			else
+			{
+				l = m + 1;
+			}
+		}
+		return l;
+	}
+
+	//5281. Find the Smallest Divisor Given a Threshold
+	int minFlips(vector<vector<int>>& a) {
+		typedef bitset<9> ele;
+		int n = a.size(), m = a[0].size();
+		ele st;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				st[i * m + j] = a[i][j];
+			}
+		}
+		auto modify = [](ele s, int i, int j, int n, int m)
+		{
+			s[i * m + j].flip();
+			if (i + 1 < n) s[(i + 1) * m + j].flip();
+			if (i - 1 >= 0) s[(i - 1) * m + j].flip();
+			if (j + 1 < m) s[i * m + j + 1].flip();
+			if (j - 1 >= 0) s[i * m + j - 1].flip();
+			return s;
+		};
+		queue<ele> q;
+		q.push(st);
+		if (st == 0) return 0;
+		set<int> vis;
+		vis.insert(st.to_ulong());
+		int ans = 0;
+		while (!q.empty())
+		{
+			ans++;
+			int size = q.size();
+			while (size--)
+			{
+				auto u = q.front(); q.pop();
+				for (int i = 0; i < n; ++i)
+				{
+					for (int j = 0; j < m; ++j)
+					{
+						auto nx = modify(u, i, j, n, m);
+						if (nx.to_ulong() == 0)
+						{
+							int xx;
+							return ans;
+						}
+						if (!vis.count(nx.to_ulong()))
+						{
+							q.push(nx);
+							vis.insert(nx.to_ulong());
+						}
+					}
+				}
+			}
+		}
+		return -1;
+	}
 };
 
 int main()
