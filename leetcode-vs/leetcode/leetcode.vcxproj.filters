@@ -29,7 +29,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="leetcode1192.cpp">
+    <ClCompile Include="leetcode1286.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
