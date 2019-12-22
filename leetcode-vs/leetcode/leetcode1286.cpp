@@ -272,7 +272,7 @@ class Solution
     };
     */
 
-	//5291. Find Numbers with Even Number of Digits
+	//1295. Find Numbers with Even Number of Digits
 	int findNumbers(vector<int>& a) {
 		int ans = 0;
 		for (auto e : a)
@@ -288,7 +288,7 @@ class Solution
 		return ans;
 	}
 
-	//5292. Divide Array in Sets of K Consecutive Numbers
+	//1296. Divide Array in Sets of K Consecutive Numbers
 	bool isPossibleDivide(vector<int>& nums, int k) {
 		map<int, int> cnt;
 		for (auto& e : nums)
@@ -315,7 +315,7 @@ class Solution
 		return true;
 	}
 
-	//5293. Maximum Number of Occurrences of a Substring
+	//1297. Maximum Number of Occurrences of a Substring
 	int maxFreq(string s, int maxLetters, int minSize, int maxSize) {
 		map<string, int> cnt;
 		vector<int> win(26);
@@ -354,7 +354,7 @@ class Solution
 	}
 
 
-	//5294. Maximum Candies You Can Get from Boxes
+	//1298. Maximum Candies You Can Get from Boxes
 	int maxCandies(vector<int>& status, vector<int>& candies, vector<vector<int>>& keys, vector<vector<int>>& containedBoxes, vector<int>& initialBoxes) {
 		queue<int> q;
 		for (auto& e : initialBoxes) q.push(e);
