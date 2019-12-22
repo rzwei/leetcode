@@ -193,7 +193,7 @@ class Solution
 		return ans;
 	}
 
-    vector<int> solve_len_5124(int n, int low, int high)
+    vector<int> solve_len_1291(int n, int low, int high)
     {
         vector<int> ans;
         for (int i = 1; i + n - 1 < 10; ++i)
@@ -213,7 +213,7 @@ class Solution
         vector<int> ans;
         for (int l = 1; l <= 9; ++l)
         {
-            for (auto& e : solve_len_5124(l, low, high))
+            for (auto& e : solve_len_1291(l, low, high))
             {
                 ans.push_back(e);
             }
@@ -303,8 +303,28 @@ class Solution
     };
     */
 
-    int minFallingPathSum(vector<vector<int>>& arr) {
-
+    //1289. Minimum Falling Path Sum II
+    int minFallingPathSum(vector<vector<int>>& a) {
+        int n = a.size(), m = a[0].size();
+        vector<vector<int>> dp(n, vector<int>(m, INT_MAX));
+        for (int j = 0; j < m; ++j) dp[0][j] = a[0][j];
+        for (int i = 1; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                for (int k = 0; k < m; ++k)
+                {
+                    if (j == k) continue;
+                    dp[i][j] = min(dp[i][j], dp[i - 1][k] + a[i][j]);
+                }
+            }
+        }
+        int ans = INT_MAX;
+        for (int j = 0; j < m; ++j)
+        {
+            ans = min(ans, dp[n - 1][j]);
+        }
+        return ans;
     }
 
 	//5291. Find Numbers with Even Number of Digits
