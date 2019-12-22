@@ -1,3 +1,4 @@
+#include "common.h"
 #include <numeric>
 #include <future>
 #include <stack>
@@ -2426,39 +2427,11 @@ public:
 		return { x, y };
 	}
 
-	class NumMatrix_1277 {
-	public:
-		vector<vector<int>> sums;
-		int n, m;
-		NumMatrix_1277(vector<vector<int>> a) {
-			n = a.size();
-			if (n == 0)
-			{
-				a.push_back({ 0 });
-				return;
-			}
-			m = a[0].size();
-			sums.assign(n + 1, vector<int>(m + 1));
-			for (int i = 1; i <= n; ++i)
-			{
-				int cur = 0;
-				for (int j = 1; j <= m; ++j)
-				{
-					cur += a[i - 1][j - 1];
-					sums[i][j] = sums[i - 1][j] + cur;
-				}
-			}
-		}
-
-		int sumRegion(int row1, int col1, int row2, int col2) {
-			return sums[row2 + 1][col2 + 1] - sums[row2 + 1][col1] - sums[row1][col2 + 1] + sums[row1][col1];
-		}
-	};
 
 	//1277. Count Square Submatrices with All Ones
 	int countSquares(vector<vector<int>>& a) {
 		int n = a.size(), m = a[0].size();
-		NumMatrix_1277 nm(a);
+		NumMatrix nm(a);
 		int ans = 0;
 		for (int i = 0; i < n; ++i)
 		{

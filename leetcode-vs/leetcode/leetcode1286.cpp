@@ -15,42 +15,11 @@
 #include <functional>
 #include <mutex>
 #include <string>
+
+#include "common.h"
+
 using namespace std;
 
-class NumMatrix {
-public:
-	vector<vector<int>> sums;
-	int n, m;
-	NumMatrix(vector<vector<int>> a) {
-		n = a.size();
-		if (n == 0)
-		{
-			a.push_back({ 0 });
-			return;
-		}
-		m = a[0].size();
-		sums.assign(n + 1, vector<int>(m + 1));
-		for (int i = 1; i <= n; ++i)
-		{
-			int cur = 0;
-			for (int j = 1; j <= m; ++j)
-			{
-				cur += a[i - 1][j - 1];
-				sums[i][j] = sums[i - 1][j] + cur;
-			}
-		}
-	}
-
-	int sumRegion(int row1, int col1, int row2, int col2) {
-		return sums[row2 + 1][col2 + 1] - sums[row2 + 1][col1] - sums[row1][col2 + 1] + sums[row1][col1];
-	}
-};
-
-struct ListNode {
-	int val;
-	ListNode* next;
-	ListNode(int x) : val(x), next(NULL) {}
-};
 
 //1286. Iterator for Combination
 class CombinationIterator {
@@ -302,30 +271,6 @@ class Solution
         }
     };
     */
-
-    //1289. Minimum Falling Path Sum II
-    int minFallingPathSum(vector<vector<int>>& a) {
-        int n = a.size(), m = a[0].size();
-        vector<vector<int>> dp(n, vector<int>(m, INT_MAX));
-        for (int j = 0; j < m; ++j) dp[0][j] = a[0][j];
-        for (int i = 1; i < n; ++i)
-        {
-            for (int j = 0; j < m; ++j)
-            {
-                for (int k = 0; k < m; ++k)
-                {
-                    if (j == k) continue;
-                    dp[i][j] = min(dp[i][j], dp[i - 1][k] + a[i][j]);
-                }
-            }
-        }
-        int ans = INT_MAX;
-        for (int j = 0; j < m; ++j)
-        {
-            ans = min(ans, dp[n - 1][j]);
-        }
-        return ans;
-    }
 
 	//5291. Find Numbers with Even Number of Digits
 	int findNumbers(vector<int>& a) {
