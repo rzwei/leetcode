@@ -317,40 +317,29 @@ class Solution
 
 	//1297. Maximum Number of Occurrences of a Substring
 	int maxFreq(string s, int maxLetters, int minSize, int maxSize) {
-		map<string, int> cnt;
-		vector<int> win(26);
-		int j = 0;
-		int len = s.size();
-		for (int i = 0; i < len; ++i)
-		{
-			vector<bool> vis(26);
-			int cur = 0;
-			for (int j = 0; j < 26 && i - j >= 0; ++j)
-			{
-				int k = i - j;
-				if (vis[s[k] - 'a'] == 0) cur++;
-				vis[s[k] - 'a'] = 1;
-
-				if (cur > maxLetters) break;
-
-				if (minSize <= i - k + 1 && i - k + 1 <= maxSize)
-				{
-					cnt[s.substr(k, i - k + 1)] ++;
-				}
-				else if (i - k + 1 > maxSize) break;
+		unordered_map<string, int> cnt;
+		int ans = 0;
+		int diff = 0, i = 0, j = 0;
+		int char_count[256] = { 0 };
+		for (; j < minSize; ++j) {
+			if (++char_count[s[j]] == 1) {
+				diff++;
 			}
 		}
-		string ans;
-		int ans_cnt = 0;
-		for (auto& e : cnt)
-		{
-			if (e.second > ans_cnt)
-			{
-				ans_cnt = e.second;
-				ans = e.first;
+		do {
+			if (diff <= maxLetters) {
+				ans = max(ans, ++cnt[s.substr(i, minSize)]);
 			}
-		}
-		return ans_cnt;
+			if (j == s.length()) break;
+			if (--char_count[s[i]] == 0) {
+				diff--;
+			}
+			if (++char_count[s[j]] == 1) {
+				diff++;
+			}
+			i++; j++;
+		} while (1);
+		return ans;
 	}
 
 
