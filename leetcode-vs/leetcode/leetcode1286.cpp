@@ -417,6 +417,310 @@ class Solution
 		}
 		return ans;
 	}
+
+    //1299. Replace Elements with Greatest Element on Right Side
+    vector<int> replaceElements(vector<int>& arr) {
+        int mx = -1;
+        for (int i = arr.size() - 1; i >= 0; --i)
+        {
+            int t = arr[i];
+            arr[i] = mx;
+            mx = max(mx, t);
+        }
+        return arr;
+    }
+
+    //1300. Sum of Mutated Array Closest to Target
+    int findBestValue(vector<int>& a, int t) {
+        int n = a.size();
+        int l = 0, r = 1e5 + 1;
+
+        int ret = 0;
+
+        while (l < r)
+        {
+            int m = (l + r) / 2;
+            int sum = 0;
+            for (int i = 0; i < n; ++i)
+            {
+                sum += min(m, a[i]);
+            }
+
+            if (sum >= t)
+            {
+                r = m;
+            }
+            else
+            {
+                l = m + 1;
+            }
+        }
+        int ans_less = 0, ans_big = 0;
+        for (auto& e : a)
+        {
+            ans_less += min(e, l - 1);
+            ans_big += min(e, l);
+        }
+
+        if (abs(ans_less - t) <= abs(ans_big - t))
+        {
+            return l - 1;
+        }
+        return l;
+    }
+
+    //1301. Number of Paths with Max Score
+    vector<int> pathsWithMaxScore(vector<string>& board) {
+        int n = board.size(), m = board[0].size(), mod = 1e9 + 7;
+        vector<pair<int, int>> dp(m + 1);
+        dp[0] = { 0, 1 };
+        for (int i = 0; i < n; i++) {
+            auto last = dp;
+            dp[0] = { 0, 0 };
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'X') {
+                    dp[j + 1] = { 0, 0 };
+                    continue;
+                }
+                auto [a0, a1] = dp[j];
+                auto [b0, b1] = last[j];
+                auto [c0, c1] = last[j + 1];
+                if (!a1 && !b1 && !c1)
+                    dp[j + 1] = { 0, 0 };
+                else {
+                    int64_t maxsum = max({ a0, b0, c0 }), ways = 0;
+                    ways += a0 == maxsum ? a1 : 0;
+                    ways += b0 == maxsum ? b1 : 0;
+                    ways += c0 == maxsum ? c1 : 0;;
+                    maxsum += isdigit(board[i][j]) ? board[i][j] - '0' : 0;
+                    dp[j + 1] = { maxsum % mod, ways % mod };
+                }
+            }
+        }
+        return { dp[m].first, dp[m].second };
+    }
+
+
+    void dfs_1302(int d, TreeNode* u, vector<int> &dep)
+    {
+        if (!u) return;
+        if (dep.size() < d + 1) dep.push_back(u->val);
+        else dep[d] += u->val;
+        dfs_1302(d + 1, u->left, dep);
+        dfs_1302(d + 1, u->right, dep);
+    }
+    //1302. Deepest Leaves Sum
+    int deepestLeavesSum(TreeNode* root) {
+        vector<int> dep;
+        dfs_1302(0, root, dep);
+        return dep.back();
+    }
+
+    //5295. Find N Unique Integers Sum up to Zero
+    vector<int> sumZero(int n) {
+        vector<int> ans;
+        if (n % 2) ans.push_back(0);
+        for (int i = 0; i < n / 2; ++i)
+        {
+            ans.push_back(i + 1);
+            ans.push_back(-i - 1);
+        }
+        return ans;
+    }
+
+    void dfs_5296(TreeNode* u, vector<int>& ans)
+    {
+        if (!u) return;
+        ans.push_back(u->val);
+        dfs_5296(u->left, ans);
+        dfs_5296(u->right, ans);
+    }
+    //5296. All Elements in Two Binary Search Trees
+    vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {
+        vector<int> ans;
+
+        dfs_5296(root1, ans);
+        dfs_5296(root2, ans);
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+
+    //5297. Jump Game III
+    bool canReach(vector<int>& a, int st) {
+        int n = a.size();
+        queue<int> q;
+        vector<bool> vis(n);
+        q.push(st);
+        vis[st] = 1;
+        if (a[st] == 0) return true;
+
+        while (!q.empty())
+        {
+            int size = q.size();
+            while (size--)
+            {
+                auto u = q.front();
+                q.pop();
+                if (a[u] == 0) return true;
+                if (u + a[u] < n)
+                {
+                    if (!vis[u + a[u]])
+                    {
+                        vis[u + a[u]] = 1;
+                        q.push(u + a[u]);
+                    }
+                }
+                if (u - a[u] >= 0)
+                {
+                    if (!vis[u - a[u]])
+                    {
+                        vis[u - a[u]] = 1;
+                        q.push(u - a[u]);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    int calc_left(vector<pair<char, int>>& left, int carry, map<char, int>& test)
+    {
+        int value_left = carry;
+        for (auto& e : left)
+        {
+            value_left += test[e.first] * e.second;
+        }
+        return value_left;
+    }
+
+    bool calc(vector<pair<char, int>>& left, int carry, char right, map<char, int>& test)
+    {
+        if (calc_left(left, carry, test) % 10 == test[right])
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    void dfs_5298(int u, vector<pair<char, int>>& left, int carry, char right, map<char, int>& test,
+        vector<map<char, int>>& out, map<char, int>& pre, vector<bool>& vis)
+    {
+        if (u == left.size())
+        {
+            if (pre.count(right))
+            {
+                test[right] = pre[right];
+                if (calc(left, carry, right, test))
+                {
+                    out.push_back(test);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 10; ++i)
+                {
+                    if (vis[i] == 0)
+                    {
+                        vis[i] = 1;
+                        test[right] = i;
+                        if (calc(left, carry, right, test))
+                        {
+                            out.push_back(test);
+                        }
+                        vis[i] = 0;
+                    }
+                }
+            }
+            return;
+        }
+
+
+        if (pre.count(left[u].first))
+        {
+            test[left[u].first] = pre[left[u].first];
+            dfs_5298(u + 1, left, carry, right, test, out, pre, vis);
+        }
+        else
+        {
+            for (int i = 0; i < 10; ++i)
+            {
+                if (vis[i] == 0)
+                {
+                    vis[i] = 1;
+                    test[left[u].first] = i;
+                    dfs_5298(u + 1, left, carry, right, test, out, pre, vis);
+                    vis[i] = 0;
+                }
+            }
+        }
+    }
+
+    vector<map<char, int>> generate(vector<pair<char, int>>& left, int carry, char right, map<char, int>& pre)
+    {
+        map<char, int> test;
+        vector<map<char, int>> out;
+
+        vector<bool> vis(10);
+        for (auto& e : pre)
+        {
+            vis[e.second] = 1;
+        }
+        dfs_5298(0, left, carry, right, test,
+            out, pre, vis);
+        return out;
+    }
+
+    bool dfs_5298(map<char, int>& pre, int pos, int carry, vector<string>& ws, string& res)
+    {
+        if (pos == res.size()) return true;
+        vector<int> cnt(26);
+        for (int i = 0; i < ws.size(); ++i)
+        {
+            if (pos < ws[i].size())
+            {
+                cnt[ws[i][pos] - 'A'] ++;
+            }
+        }
+        vector<pair<char, int>> left;
+        for (char i = 'A'; i <= 'Z'; ++i)
+        {
+            if (cnt[i - 'A'])
+            {
+                left.push_back({ i, cnt[i - 'A'] });
+            }
+        }
+        char right = res[pos];
+        auto test = generate(left, carry, right, pre);
+        for (auto& e : test)
+        {
+            vector<char> er;
+            for (auto& ej : e)
+            {
+                if (!pre.count(ej.first))
+                {
+                    er.push_back(ej.first);
+                }
+                pre[ej.first] = ej.second;
+            }
+            int value_left = calc_left(left, carry, e);
+            if (dfs_5298(pre, pos + 1, value_left / 10, ws, res))
+                return true;
+            for (auto& ej : er)
+            {
+                pre.erase(ej);
+            }
+        }
+        return false;
+    }
+
+    //5298. Verbal Arithmetic Puzzle
+    bool isSolvable(vector<string>& words, string result) {
+        for (auto& e : words) reverse(e.begin(), e.end());
+        reverse(result.begin(), result.end());
+        map<char, int> pre;
+        return dfs_5298(pre, 0, 0, words, result);
+    }
 };
 int main()
 {
