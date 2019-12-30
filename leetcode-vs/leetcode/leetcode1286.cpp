@@ -505,7 +505,7 @@ class Solution
         return dep.back();
     }
 
-    //5295. Find N Unique Integers Sum up to Zero
+    //1304. Find N Unique Integers Sum up to Zero
     vector<int> sumZero(int n) {
         vector<int> ans;
         if (n % 2) ans.push_back(0);
@@ -517,24 +517,25 @@ class Solution
         return ans;
     }
 
-    void dfs_5296(TreeNode* u, vector<int>& ans)
+
+    void dfs_1305(TreeNode* u, vector<int>& a)
     {
         if (!u) return;
-        ans.push_back(u->val);
-        dfs_5296(u->left, ans);
-        dfs_5296(u->right, ans);
+        dfs_1305(u->left, a);
+        a.push_back(u->val);
+        dfs_1305(u->right, a);
     }
-    //5296. All Elements in Two Binary Search Trees
+    //1305. All Elements in Two Binary Search Trees
     vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {
-        vector<int> ans;
-
-        dfs_5296(root1, ans);
-        dfs_5296(root2, ans);
-        sort(ans.begin(), ans.end());
-        return ans;
+        vector<int> a, b;
+        dfs_1305(root1, a);
+        dfs_1305(root2, b);
+        vector<int> c(a.size() + b.size());
+        merge(a.begin(), a.end(), b.begin(), b.end(), c.begin());
+        return c;
     }
-
-    //5297. Jump Game III
+    
+    //1306. Jump Game III
     bool canReach(vector<int>& a, int st) {
         int n = a.size();
         queue<int> q;
@@ -572,19 +573,20 @@ class Solution
         return false;
     }
 
-    int calc_left(vector<pair<char, int>>& left, int carry, map<char, int>& test)
+
+    int calc_left_5298(vector<pair<char, int>>& left, int carry, vector<int>& test)
     {
         int value_left = carry;
         for (auto& e : left)
         {
-            value_left += test[e.first] * e.second;
+            value_left += test[e.first - 'A'] * e.second;
         }
         return value_left;
     }
 
-    bool calc(vector<pair<char, int>>& left, int carry, char right, map<char, int>& test)
+    bool calc_5298(vector<pair<char, int>>& left, int carry, char right, vector<int>& test)
     {
-        if (calc_left(left, carry, test) % 10 == test[right])
+        if (calc_left_5298(left, carry, test) % 10 == test[right - 'A'])
         {
             return true;
         }
@@ -592,15 +594,15 @@ class Solution
     }
 
 
-    void dfs_5298(int u, vector<pair<char, int>>& left, int carry, char right, map<char, int>& test,
-        vector<map<char, int>>& out, map<char, int>& pre, vector<bool>& vis)
+    void dfs_5298(int u, vector<pair<char, int>>& left, int carry, char right, vector<int>& test,
+        vector<vector<int>>& out, vector<int>& pre, vector<bool>& vis)
     {
         if (u == left.size())
         {
-            if (pre.count(right))
+            if (pre[right - 'A'] != -1)
             {
-                test[right] = pre[right];
-                if (calc(left, carry, right, test))
+                test[right - 'A'] = pre[right - 'A'];
+                if (calc_5298(left, carry, right, test))
                 {
                     out.push_back(test);
                 }
@@ -612,8 +614,8 @@ class Solution
                     if (vis[i] == 0)
                     {
                         vis[i] = 1;
-                        test[right] = i;
-                        if (calc(left, carry, right, test))
+                        test[right - 'A'] = i;
+                        if (calc_5298(left, carry, right, test))
                         {
                             out.push_back(test);
                         }
@@ -625,9 +627,9 @@ class Solution
         }
 
 
-        if (pre.count(left[u].first))
+        if (pre[left[u].first - 'A'] != -1)
         {
-            test[left[u].first] = pre[left[u].first];
+            test[left[u].first - 'A'] = pre[left[u].first - 'A'];
             dfs_5298(u + 1, left, carry, right, test, out, pre, vis);
         }
         else
@@ -637,7 +639,7 @@ class Solution
                 if (vis[i] == 0)
                 {
                     vis[i] = 1;
-                    test[left[u].first] = i;
+                    test[left[u].first - 'A'] = i;
                     dfs_5298(u + 1, left, carry, right, test, out, pre, vis);
                     vis[i] = 0;
                 }
@@ -645,22 +647,23 @@ class Solution
         }
     }
 
-    vector<map<char, int>> generate(vector<pair<char, int>>& left, int carry, char right, map<char, int>& pre)
+    vector<vector<int>> generate_5298(vector<pair<char, int>>& left, int carry, char right, vector<int>& pre)
     {
-        map<char, int> test;
-        vector<map<char, int>> out;
+        vector<int> test(26, -1);
+        vector<vector<int>> out;
 
         vector<bool> vis(10);
-        for (auto& e : pre)
+        for (int i = 0; i < 26; ++i)
         {
-            vis[e.second] = 1;
+            if (pre[i] != -1) vis[pre[i]] = 1;
         }
+
         dfs_5298(0, left, carry, right, test,
             out, pre, vis);
         return out;
     }
 
-    bool dfs_5298(map<char, int>& pre, int pos, int carry, vector<string>& ws, string& res)
+    bool dfs_5298(vector<int>& pre, int pos, int carry, vector<string>& ws, string& res)
     {
         if (pos == res.size()) return true;
         vector<int> cnt(26);
@@ -680,34 +683,32 @@ class Solution
             }
         }
         char right = res[pos];
-        auto test = generate(left, carry, right, pre);
+        auto test = generate_5298(left, carry, right, pre);
         for (auto& e : test)
         {
-            vector<char> er;
-            for (auto& ej : e)
+            vector<int> er;
+            for (int i = 0; i < 26; ++i)
             {
-                if (!pre.count(ej.first))
-                {
-                    er.push_back(ej.first);
-                }
-                pre[ej.first] = ej.second;
+                if (e[i] == -1) continue;
+                if (pre[i] == -1) er.push_back(i);
+                pre[i] = e[i];
             }
-            int value_left = calc_left(left, carry, e);
+            int value_left = calc_left_5298(left, carry, e);
             if (dfs_5298(pre, pos + 1, value_left / 10, ws, res))
                 return true;
-            for (auto& ej : er)
+            for (auto& i : er)
             {
-                pre.erase(ej);
+                pre[i] = -1;
             }
         }
         return false;
     }
 
-    //5298. Verbal Arithmetic Puzzle
+    //1307. Verbal Arithmetic Puzzle
     bool isSolvable(vector<string>& words, string result) {
         for (auto& e : words) reverse(e.begin(), e.end());
         reverse(result.begin(), result.end());
-        map<char, int> pre;
+        vector<int> pre(26, -1);
         return dfs_5298(pre, 0, 0, words, result);
     }
 };
