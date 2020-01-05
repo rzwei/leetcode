@@ -712,7 +712,7 @@ class Solution
         return dfs_1307(pre, 0, 0, words, result);
     }
 
-    //5303. Decrypt String from Alphabet to Integer Mapping
+    //1309. Decrypt String from Alphabet to Integer Mapping
     string freqAlphabets(string s) {
         string ans;
         int n = s.size();
@@ -733,7 +733,7 @@ class Solution
         return ans;
     }
 
-    //5304. XOR Queries of a Subarray
+    //1310. XOR Queries of a Subarray
     vector<int> xorQueries(vector<int>& a, vector<vector<int>>& qs) {
         int n = a.size();
         vector<vector<int>> sums(n + 1, vector<int>(32));
@@ -762,7 +762,7 @@ class Solution
         return ans;
     }
 
-    //5305. Get Watched Videos by Your Friends
+    //1311. Get Watched Videos by Your Friends
     vector<string> watchedVideosByFriends(vector<vector<string>>& watchedVideos, vector<vector<int>>& g, int id, int level) {
         queue<int> q;
         map<string, int> freq;
@@ -810,7 +810,7 @@ class Solution
         return {};
     }
 
-    //5306. Minimum Insertion Steps to Make a String Palindrome
+    //1312. Minimum Insertion Steps to Make a String Palindrome
     int minInsertions(string s) {
         int n = s.size();
         vector<vector<int>> dp(n, vector<int>(n));
@@ -836,9 +836,7 @@ class Solution
                 }
             }
         }
-        int mx = dp[0][n - 1];
-
-        return n - mx;
+        return n - dp[0][n - 1];
     }
 };
 int main()
