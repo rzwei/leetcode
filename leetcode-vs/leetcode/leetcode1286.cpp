@@ -594,7 +594,7 @@ class Solution
     }
 
 
-    void dfs_5298(int u, vector<pair<char, int>>& left, int carry, char right, vector<int>& test,
+    void dfs_1307(int u, vector<pair<char, int>>& left, int carry, char right, vector<int>& test,
         vector<vector<int>>& out, vector<int>& pre, vector<bool>& vis)
     {
         if (u == left.size())
@@ -630,7 +630,7 @@ class Solution
         if (pre[left[u].first - 'A'] != -1)
         {
             test[left[u].first - 'A'] = pre[left[u].first - 'A'];
-            dfs_5298(u + 1, left, carry, right, test, out, pre, vis);
+            dfs_1307(u + 1, left, carry, right, test, out, pre, vis);
         }
         else
         {
@@ -640,7 +640,7 @@ class Solution
                 {
                     vis[i] = 1;
                     test[left[u].first - 'A'] = i;
-                    dfs_5298(u + 1, left, carry, right, test, out, pre, vis);
+                    dfs_1307(u + 1, left, carry, right, test, out, pre, vis);
                     vis[i] = 0;
                 }
             }
@@ -658,12 +658,12 @@ class Solution
             if (pre[i] != -1) vis[pre[i]] = 1;
         }
 
-        dfs_5298(0, left, carry, right, test,
+        dfs_1307(0, left, carry, right, test,
             out, pre, vis);
         return out;
     }
 
-    bool dfs_5298(vector<int>& pre, int pos, int carry, vector<string>& ws, string& res)
+    bool dfs_1307(vector<int>& pre, int pos, int carry, vector<string>& ws, string& res)
     {
         if (pos == res.size()) return true;
         vector<int> cnt(26);
@@ -694,7 +694,7 @@ class Solution
                 pre[i] = e[i];
             }
             int value_left = calc_left_5298(left, carry, e);
-            if (dfs_5298(pre, pos + 1, value_left / 10, ws, res))
+            if (dfs_1307(pre, pos + 1, value_left / 10, ws, res))
                 return true;
             for (auto& i : er)
             {
@@ -709,7 +709,136 @@ class Solution
         for (auto& e : words) reverse(e.begin(), e.end());
         reverse(result.begin(), result.end());
         vector<int> pre(26, -1);
-        return dfs_5298(pre, 0, 0, words, result);
+        return dfs_1307(pre, 0, 0, words, result);
+    }
+
+    //5303. Decrypt String from Alphabet to Integer Mapping
+    string freqAlphabets(string s) {
+        string ans;
+        int n = s.size();
+        for (int i = 0; i < n; )
+        {
+
+            if (i + 2 < n && s[i + 2] == '#')
+            {
+                ans.push_back((s[i] - '0') * 10 + s[i + 1] - '0' - 10 + 'j');
+                i += 3;
+            }
+            else
+            {
+                ans.push_back(s[i] - '0' - 1 + 'a');
+                i++;
+            }
+        }
+        return ans;
+    }
+
+    //5304. XOR Queries of a Subarray
+    vector<int> xorQueries(vector<int>& a, vector<vector<int>>& qs) {
+        int n = a.size();
+        vector<vector<int>> sums(n + 1, vector<int>(32));
+        for (int mask = 0; mask < 31; ++mask)
+        {
+            for (int i = 0; i < n; ++i)
+            {
+                sums[i + 1][mask] = sums[i][mask] + ((a[i] & (1 << mask)) != 0);
+            }
+        }
+        int m = qs.size();
+        vector<int> ans;
+        for (auto& e : qs)
+        {
+            int l = e[0], r = e[1];
+            int val = 0;
+            for (int i = 0; i < 31; ++i)
+            {
+                if ((sums[r + 1][i] - sums[l][i]) & 1)
+                {
+                    val += (1 << i);
+                }
+            }
+            ans.push_back(val);
+        }
+        return ans;
+    }
+
+    //5305. Get Watched Videos by Your Friends
+    vector<string> watchedVideosByFriends(vector<vector<string>>& watchedVideos, vector<vector<int>>& g, int id, int level) {
+        queue<int> q;
+        map<string, int> freq;
+        q.push(id);
+        int n = g.size();
+        vector<bool> vis(n);
+        vis[id] = 1;
+        while (!q.empty() && level)
+        {
+            freq.clear();
+            int size = q.size();
+            while (size--)
+            {
+                auto u = q.front();
+                q.pop();
+                for (auto& v : g[u])
+                {
+                    if (!vis[v])
+                    {
+                        vis[v] = 1;
+                        q.push(v);
+                        for (auto& e : watchedVideos[v])
+                        {
+                            freq[e] ++;
+                        }
+                    }
+                }
+            }
+            if (--level == 0)
+            {
+                vector<pair<int, string>> ord;
+                for (auto& e : freq)
+                {
+                    ord.push_back({ e.second, e.first });
+                }
+                sort(ord.begin(), ord.end());
+                vector<string> ans;
+                for (auto& e : ord)
+                {
+                    ans.push_back(e.second);
+                }
+                return ans;
+            }
+        }
+        return {};
+    }
+
+    //5306. Minimum Insertion Steps to Make a String Palindrome
+    int minInsertions(string s) {
+        int n = s.size();
+        vector<vector<int>> dp(n, vector<int>(n));
+        for (int i = 0; i < n; ++i)
+        {
+            dp[i][i] = 1;
+            if (i + 1 < n)
+            {
+                dp[i][i + 1] = 1 + (s[i] == s[i + 1]);
+            }
+        }
+        for (int l = 3; l <= n; ++l)
+        {
+            for (int i = 0, j = i + l - 1; j < n; ++i, ++j)
+            {
+                if (s[i] == s[j])
+                {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                }
+                else
+                {
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        int mx = dp[0][n - 1];
+
+        return n - mx;
     }
 };
 int main()
