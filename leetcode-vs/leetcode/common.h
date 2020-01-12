@@ -79,3 +79,31 @@ struct ListNode {
 	ListNode* next;
 	ListNode(int x) : val(x), next(NULL) {}
 };
+
+class partial_sum_str {
+	std::vector<int> _ps, _inv;
+	const int mod = 1e9 + 7;
+	std::tuple<int, int, int> gcdex(int a, int b)
+	{
+		if (!b) return { a, 1, 0 };
+		auto [r, x, y] = gcdex(b, a % b);
+		return { r, y, x - a / b * y };
+	}
+public:
+	partial_sum_str(const std::string& str) {
+		_ps.reserve(str.size() + 1);
+		_inv.reserve(str.size() + 1);
+		_ps.push_back(0);
+		_inv.push_back(1);
+		int64_t i = 1;
+		for (char c : str) {
+			_ps.push_back((_ps.back() + (c - 'a' + 1) * i) % mod);
+			i = i * 27 % mod;
+			_inv.push_back((std::get<1>(gcdex(i, mod)) + mod) % mod);
+		}
+	}
+	// [start, end)
+	int sum(size_t start, size_t end) {
+		return int64_t(_ps[end] - _ps[start] + mod) * _inv[start] % mod;
+	}
+};

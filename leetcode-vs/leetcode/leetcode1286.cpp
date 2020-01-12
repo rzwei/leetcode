@@ -15,7 +15,7 @@
 #include <functional>
 #include <mutex>
 #include <string>
-
+#include <array>
 #include "common.h"
 
 using namespace std;
@@ -92,6 +92,68 @@ public:
     }
 };
 
+
+/*
+//1320. Minimum Distance to Type a Word Using Two Fingers
+int memo[36][36][310];
+
+class Solution {
+public:
+    typedef pair<int, int> PTS;
+    vector<pair<int, int>> char2pts;
+    int dist(PTS a, PTS b)
+    {
+        return abs(a.first - b.first) + abs(a.second - b.second);
+    }
+    int dfs(PTS a, PTS b, int u, string& s)
+    {
+        if (u == s.size()) return 0;
+        int& ans = memo[a.first * 6 + a.second][b.first * 6 + b.second][u];
+        if (ans != -1) return ans;
+        auto nx = char2pts[s[u] - 'A'];
+        ans = INT_MAX;
+        int cost;
+        if (a.first != 5)
+        {
+            cost = dist(a, nx);
+        }
+        else
+        {
+            cost = 0;
+        }
+        ans = min(ans, dfs(nx, b, u + 1, s) + cost);
+
+        if (b.first != 5)
+        {
+            cost = dist(b, nx);
+        }
+        else
+        {
+            cost = 0;
+        }
+        ans = min(ans, dfs(a, nx, u + 1, s) + cost);
+        return ans;
+    }
+
+    int minimumDistance(string word) {
+        memset(memo, -1, sizeof(memo));
+        vector<pair<int, int>> pts(26);
+        int n = 5, m = 6;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                int c = i * m + j;
+                if (c >= 26) break;
+                pts[c] = { i, j };
+            }
+        }
+        char2pts = pts;
+        return dfs({ 5, 5 }, { 5, 5 }, 0, word);
+    }
+};
+
+*/
 class Solution
 {
     //1288. Remove Covered Intervals
@@ -840,8 +902,171 @@ class Solution
 
         return n - mx;
     }
+
+    //1313. Decompress Run-Length Encoded List
+    vector<int> decompressRLElist(vector<int>& nums) {
+        int n = nums.size();
+
+        int len = 0;
+        for (int i = 0; i * 2 + 1 < n; ++i)
+        {
+            int a = nums[i * 2];
+            len += a;
+        }
+
+        vector<int> ans;
+        ans.reserve(len);
+
+        for (int i = 0; i * 2 + 1 < n; ++i)
+        {
+            int a = nums[i * 2], b = nums[i * 2 + 1];
+            for (int j = 0; j < a; ++j)
+            {
+                ans.push_back(b);
+            }
+        }
+        return ans;
+    }
+
+    //1314. Matrix Block Sum
+    vector<vector<int>> matrixBlockSum(vector<vector<int>>& a, int k) {
+        NumMatrix nm(a);
+        int n = a.size(), m = a[0].size();
+        vector<vector<int>> ans(n, vector<int>(m));
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < m; ++j)
+            {
+                ans[i][j] = nm.sumRegion(max(i - k, 0), max(j - k, 0), min(i + k, n - 1), min(j + k, m - 1));
+            }
+        }
+        return ans;
+    }
+
+    //1315. Sum of Nodes with Even - Valued Grandparent
+    int dfs_1315(TreeNode* u, bool gp, bool p)
+    {
+        if (!u) return 0;
+        int ans = 0;
+        ans += dfs_1315(u->left, p, u->val % 2 == 0);
+        ans += dfs_1315(u->right, p, u->val % 2 == 0);
+        if (gp) ans += u->val;
+        return ans;
+    }
+    int sumEvenGrandparent(TreeNode* root) {
+        return dfs_1315(root, false, false);
+    }
+
+    //1316. Distinct Echo Substrings
+    int distinctEchoSubstrings(string text) {
+        partial_sum_str psum(text);
+        vector<vector<int>> pos(26);
+        int n = text.size();
+        unordered_set<int64_t> vis;
+        for (int i = 0; i < n; ++i)
+        {
+            for (auto j : pos[text[i] - 'a'])
+            {
+                int l = i - j;
+                if (i + l > n) continue;
+                int64_t hash = psum.sum(j, j + l);
+                if (hash == psum.sum(i, i + l))
+                {
+                    vis.insert(hash);
+                }
+            }
+            pos[text[i] - 'a'].push_back(i);
+        }
+        return vis.size();
+    }
+
+
+    bool check_1317(int n)
+    {
+        while (n)
+        {
+            if (n % 10 == 0) return false;
+            n /= 10;
+        }
+        return true;
+    }
+    //1317. Convert Integer to the Sum of Two No-Zero Integers
+    vector<int> getNoZeroIntegers(int n) {
+        for (int i = 1; i < n; ++i)
+        {
+            if (check_1317(i) && check_1317(n - i))
+            {
+                return { i, n - i };
+            }
+        }
+        return {};
+    }
+
+    //1318. Minimum Flips to Make a OR b Equal to c
+    int minFlips(int a, int b, int c) {
+
+        int m[2][2][2];
+        m[0][0][0] = 0;
+        m[0][0][1] = 1;
+
+        m[0][1][0] = 1;
+        m[0][1][1] = 0;
+
+        m[1][0][0] = 1;
+        m[1][0][1] = 0;
+
+        m[1][1][0] = 2;
+        m[1][1][1] = 0;
+
+        int ans = 0;
+        for (int i = 0; i < 31; ++i)
+        {
+            ans += m[a & 1][b & 1][c & 1];
+            a >>= 1;
+            b >>= 1;
+            c >>= 1;
+        }
+
+        return ans;
+    }
+
+    void dfs_1319(int u, vector<bool>& vis, vector<vector<int>>& g)
+    {
+        vis[u] = true;
+        for (auto& v : g[u])
+        {
+            if (!vis[v])
+            {
+                dfs_1319(v, vis, g);
+            }
+        }
+    }
+
+    //1319. Number of Operations to Make Network Connected
+    int makeConnected(int n, vector<vector<int>>& gx) {
+        if (gx.size() < n - 1) return -1;
+        vector<vector<int>> g(n);
+        for (auto& e : gx)
+        {
+            int u = e[0], v = e[1];
+            g[u].push_back(v);
+            g[v].push_back(u);
+        }
+        vector<bool> vis(n);
+        int ans = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (!vis[i])
+            {
+                ans++;
+                dfs_1319(i, vis, g);
+            }
+        }
+        return ans - 1;
+    }
 };
+
 int main()
 {
-
+    return 0;
 }
