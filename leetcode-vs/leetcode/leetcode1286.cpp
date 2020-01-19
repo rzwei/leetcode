@@ -94,6 +94,7 @@ public:
 
 class Solution
 {
+public:
     //1288. Remove Covered Intervals
     int removeCoveredIntervals(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end());
@@ -838,8 +839,133 @@ class Solution
         }
         return n - dp[0][n - 1];
     }
+    
+    //1323. Maximum 69 Number
+    int maximum69Number(int num) {
+
+        int mask = 1;
+        while (mask < num)
+        {
+            mask *= 10;
+        }
+
+        int ans = num;
+
+        for (; mask >= 1; mask /= 10)
+        {
+            int val = num / mask % 10;
+            if (val == 6)
+            {
+                ans += 3 * mask;
+                break;
+            }
+        }
+        return ans;
+    }
+
+    vector<string> split_1324(string& s)
+    {
+        vector<string> ans;
+        string u;
+        int n = s.size();
+        for (int i = 0; i < n; ++i)
+        {
+            while (i < n && s[i] == ' ') ++i;
+            while (i < n && isalpha(s[i]))
+            {
+                u.push_back(s[i++]);
+            }
+            ans.push_back(u);
+            u.clear();
+        }
+        return ans;
+    }
+
+    //1324. Print Words Vertically
+    vector<string> printVertically(string s) {
+        auto tokens = split_1324(s);
+        int n = tokens.size();
+        int maxlen = 0;
+        for (auto& e : tokens) maxlen = max(maxlen, static_cast<int>(e.size()));
+        vector<string> br(maxlen, string(n, ' '));
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < tokens[i].size(); ++j)
+            {
+                br[j][i] = tokens[i][j];
+            }
+        }
+        vector<string> ans;
+        for (auto& e : br)
+        {
+            ans.push_back("");
+
+            int len = e.size() - 1;
+            while (len >= 0 && e[len] == ' ') len--;
+
+            for (int i = 0; i <= len; ++i)
+                ans.back().push_back(e[i]);
+        }
+        return ans;
+    }
+
+    //1325. Delete Leaves With a Given Value
+    TreeNode* removeLeafNodes(TreeNode* root, int target) {
+        if (!root) return nullptr;
+        root->left = removeLeafNodes(root->left, target);
+        root->right = removeLeafNodes(root->right, target);
+        if (root->left == nullptr && root->right == nullptr)
+        {
+            if (root->val == target) return nullptr;
+        }
+        return root;
+    }
+
+    //1326. Minimum Number of Taps to Open to Water a Garden
+    int minTaps(int n, vector<int>& ranges) {
+        int m = ranges.size();
+        vector<pair<int, int>> intervals(m);
+        for (int i = 0; i < m; ++i)
+        {
+            intervals[i] = { max(i - ranges[i], 0), min(n, i + ranges[i]) };
+        }
+        sort(intervals.begin(), intervals.end(),
+            [](const pair<int, int>& a, const pair<int, int>& b)
+            {
+                if (a.first != b.first) return a.first < b.first;
+                return a.second > b.second;
+            }
+        );
+        int ans = 0;
+        int cur = 0;
+        int nx = 0;
+        for (int i = 0; i < m; ++i)
+        {
+            int s = intervals[i].first, e = intervals[i].second;
+            if (cur < s)
+            {
+                if (s <= nx)
+                {
+                    ans++;
+                    cur = nx;
+                    nx = max(nx, e);
+                }
+                else return -1;
+            }
+            else if (s <= cur)
+            {
+                nx = max(nx, e);
+            }
+            if (cur >= n) return ans;
+        }
+        if (cur >= n) return  ans;
+        else if (nx >= n) return ans + 1;
+        return -1;
+    }
 };
 int main()
 {
-
+    Solution sol;
+    cout << sol.maximum69Number(9669) << endl;
+    return 0;
 }
