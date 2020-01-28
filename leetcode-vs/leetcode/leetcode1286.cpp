@@ -1201,6 +1201,187 @@ public:
         }
         return ans - 1;
     }
+
+    //1329. Sort the Matrix Diagonally
+    vector<vector<int>> diagonalSort(vector<vector<int>>& a) {
+        int n = a.size(), m = a[0].size();
+        vector<pair<int, int>> pos;
+        for (int i = 0; i < n; ++i)
+        {
+            pos.push_back({ i, 0 });
+        }
+        for (int j = 1; j < m; ++j)
+        {
+            pos.push_back({ 0, j });
+        }
+        vector<int> tmp;
+        for (auto [sx, sy] : pos)
+        {
+            tmp.clear();
+
+            for (int i = sx, j = sy; i < n && j < m; ++i, ++j)
+            {
+                tmp.push_back(a[i][j]);
+            }
+
+            sort(tmp.begin(), tmp.end());
+            auto it = tmp.begin();
+            for (int i = sx, j = sy; i < n && j < m; ++i, ++j)
+            {
+                a[i][j] = *(it++);
+            }
+        }
+        return a;
+    }
+
+    //1331. Rank Transform of an Array
+    vector<int> arrayRankTransform(vector<int>& a) {
+        int n = a.size();
+        vector<pair<int, int>> pos(n);
+        for (int i = 0; i < n; ++i)
+        {
+            pos[i] = { a[i], i };
+        }
+        sort(pos.begin(), pos.end());
+        int rank = 1;
+        for (int i = 0; i < n; ++i)
+        {
+            auto [val, pos_val] = pos[i];
+            if (i - 1 >= 0 && val != pos[i - 1].first) rank++;
+            a[pos_val] = rank;
+        }
+        return a;
+    }
+
+    //1328. Break a Palindrome
+    string breakPalindrome(string s) {
+        if (s.size() == 1) return "";
+        int n = s.size();
+        for (int i = 0; i < n / 2; ++i)
+        {
+            if (s[i] != 'a')
+            {
+                s[i] = 'a';
+                return s;
+            }
+        }
+        s[n - 1] = 'b';
+        return s;
+    }
+
+    //1332. Remove Palindromic Subsequences
+    int removePalindromeSub(string s) {
+        int n = s.size();
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        bool f = true;
+        for (int i = 0, j = n - 1; i < j; ++i, --j)
+        {
+            if (s[i] != s[j])
+            {
+                f = false;
+                break;
+            }
+        }
+        if (f) return 1;
+        return 2;
+    }
+
+    //1333. Filter Restaurants by Vegan-Friendly, Price and Distance
+    vector<int> filterRestaurants(vector<vector<int>>& restaurants, int veganFriendly, int maxPrice, int maxDistance) {
+        vector<pair<int, int>> ans;
+        for (auto& res : restaurants)
+        {
+            int id = res[0], rate = res[1], vegan = res[2],
+                price = res[3], dist = res[4];
+            if (veganFriendly == false || veganFriendly == true && vegan)
+            {
+                if (price <= maxPrice && dist <= maxDistance)
+                {
+                    ans.push_back({ rate, id });
+                }
+            }
+        }
+        sort(ans.begin(), ans.end(), greater<pair<int, int>>());
+        vector<int> ret;
+        for (auto& e : ans)
+        {
+            ret.push_back(e.second);
+        }
+        return ret;
+    }
+
+    //1334. Find the City With the Smallest Number of Neighbors at a Threshold Distance
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        const int maxn = INT_MAX / 4;
+        vector<vector<int>> g(n, vector<int>(n, maxn));
+        for (auto& e : edges)
+        {
+            int u = e[0], v = e[1], cost = e[2];
+            g[u][v] = min(cost, g[u][v]);
+            g[v][u] = min(cost, g[v][u]);
+        }
+        for (int k = 0; k < n; ++k)
+        {
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                {
+                    if (i == j) continue;
+                    g[i][j] = min(g[i][k] + g[k][j], g[i][j]);
+                }
+            }
+        }
+        int ans = maxn;
+        int ret = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            int cnt = 0;
+            for (int j = 0; j < n; ++j)
+            {
+                if (g[i][j] <= distanceThreshold)
+                {
+                    cnt++;
+                }
+            }
+            if (ans >= cnt)
+            {
+                ans = cnt;
+                ret = i;
+            }
+        }
+        return ret;
+    }
+
+    //1335. Minimum Difficulty of a Job Schedule
+    int minDifficulty(vector<int>& a, int d) {
+
+        const int maxn = INT_MAX / 4;
+
+        int n = a.size();
+
+        vector<int> dp(n, 0), pre(n, 0);
+        pre[0] = a[0];
+        for (int i = 1; i < n; ++i)
+        {
+            pre[i] = max(pre[i - 1], a[i]);
+        }
+        for (int i = 0; i < d - 1; ++i)
+        {
+            fill(dp.begin(), dp.end(), maxn);
+            for (int j = 0; j < n; ++j)
+            {
+                int mx = 0;
+                for (int k = j + 1; k < n; ++k)
+                {
+                    mx = max(mx, a[k]);
+                    dp[k] = min(pre[j] + mx, dp[k]);
+                }
+            }
+            swap(dp, pre);
+        }
+        return pre[n - 1] == maxn ? -1 : pre[n - 1];
+    }
 };
 
 int main()
