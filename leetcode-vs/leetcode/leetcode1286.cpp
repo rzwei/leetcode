@@ -1382,6 +1382,32 @@ public:
         }
         return pre[n - 1] == maxn ? -1 : pre[n - 1];
     }
+    //1330. Reverse Subarray To Maximize Array Value
+    int maxValueAfterReverse(vector<int>& a) {
+        int ans = 0;
+        int n = a.size();
+        for (int i = 1; i < n; ++i)
+        {
+            ans += abs(a[i] - a[i - 1]);
+        }
+        int mi = INT_MAX, mx = INT_MIN;
+        int add = 0;
+        for (int i = 1; i < n; ++i)
+        {
+            mi = min(mi, max(a[i], a[i - 1]));
+            mx = max(mx, min(a[i], a[i - 1]));
+            add = max(add, (mx - mi) * 2);
+        }
+        for (int i = 1; i < n; ++i)
+        {
+            int diff = abs(a[i] - a[i - 1]);
+            int t1 = abs(a[0] - a[i]) - diff;
+            int t2 = abs(a[i - 1] - a[n - 1]) - diff;
+            add = max(add, t1);
+            add = max(add, t2);
+        }
+        return ans + add;
+    }
 };
 
 int main()
