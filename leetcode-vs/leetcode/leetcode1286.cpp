@@ -1409,6 +1409,7 @@ public:
         return ans + add;
     }
 
+    //1341. The K Weakest Rows in a Matrix
     vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {
         int n = mat.size(), m = mat[0].size();
         vector<vector<int>> a(n, vector<int>(2));
@@ -1434,6 +1435,7 @@ public:
         return ans;
     }
 
+    //1342. Reduce Array Size to The Half
     int minSetSize(vector<int>& arr) {
         map<int, int> cnt;
         int n = arr.size();
@@ -1459,7 +1461,6 @@ public:
         return m;
     }
 
-
     long long dfs(TreeNode* u, long long sum, long long& ans)
     {
         if (!u) return 0;
@@ -1472,6 +1473,7 @@ public:
         return left + right + u->val;
     }
 
+    //1343. Maximum Product of Splitted Binary Tree
     int maxProduct(TreeNode* root) {
         const int mod = 1e9 + 7;
         function<int(TreeNode*)> getsum;
@@ -1485,6 +1487,7 @@ public:
         return ans % mod;
     }
 
+    //1344. Jump Game V
     int maxJumps(vector<int>& a, int d) {
         int n = a.size();
         vector<int> left(n, -1);
