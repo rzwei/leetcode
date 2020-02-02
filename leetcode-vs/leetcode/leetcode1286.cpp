@@ -1408,6 +1408,150 @@ public:
         }
         return ans + add;
     }
+
+    vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {
+        int n = mat.size(), m = mat[0].size();
+        vector<vector<int>> a(n, vector<int>(2));
+        for (int i = 0; i < n; ++i)
+        {
+            int cnt = 0;
+            for (int j = 0; j < m; ++j)
+            {
+                if (mat[i][j])
+                {
+                    cnt++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            a[i] = { cnt, i };
+        }
+        sort(a.begin(), a.end());
+        vector<int> ans;
+        for (int i = 0; i < k; ++i) ans.push_back(a[i][2]);
+        return ans;
+    }
+
+    int minSetSize(vector<int>& arr) {
+        map<int, int> cnt;
+        int n = arr.size();
+        for (auto& e : arr) cnt[e] ++;
+        vector<int> num;
+        auto it = cnt.begin();
+        while (it != cnt.end())
+        {
+            num.push_back(it->second);
+            ++it;
+        }
+        int m = num.size();
+        sort(num.begin(), num.end());
+        int u = 0;
+        for (int i = m - 1; i >= 0; --i)
+        {
+            u += num[i];
+            if (u >= n / 2)
+            {
+                return m - i;
+            }
+        }
+        return m;
+    }
+
+
+    long long dfs(TreeNode* u, long long sum, long long& ans)
+    {
+        if (!u) return 0;
+        auto left = dfs(u->left);
+        auto right = dfs(u->right);
+
+        ans = max(ans, left * (sum - left));
+        ans = max(ans, right * (sum - right));
+
+        return left + right + u->val;
+    }
+
+    int maxProduct(TreeNode* root) {
+        const int mod = 1e9 + 7;
+        function<int(TreeNode*)> getsum;
+        getsum = [&](TreeNode* u) {
+            if (!u) return 0;
+            return getsum(u->left) + getsum(u->right) + u->val;
+        };
+        int sum = getsum(root);
+        long long ans = 0;
+        dfs(root, sum, ans);
+        return ans % mod;
+    }
+
+    int maxJumps(vector<int>& a, int d) {
+        int n = a.size();
+        vector<int> left(n, -1);
+        stack<int> stk;
+
+        for (int i = n - 1; i >= 0; --i)
+        {
+            while (!stk.empty() && a[stk.top()] < a[i])
+            {
+                left[stk.top()] = i;
+                stk.pop();
+            }
+            stk.push(i);
+        }
+        while (!stk.empty())
+        {
+            left[stk.top()] = -1;
+            stk.pop();
+        }
+
+        vector<int> right(n, -1);
+        for (int i = 0; i < n; ++i)
+        {
+            while (!stk.empty() && a[stk.top()] < a[i])
+            {
+                right[stk.top()] = i;
+                stk.pop();
+            }
+            stk.push(i);
+        }
+        while (!stk.empty())
+        {
+            right[stk.top()] = -1;
+            stk.pop();
+        }
+        queue<int> q;
+        for (int i = 0; i < n; ++i)
+        {
+            q.push(i);
+        }
+        int ans = 0;
+        vector<bool> vis(n);
+        while (!q.empty())
+        {
+            int size = q.size();
+            ans++;
+            fill(vis.begin(), vis.end(), 0);
+            while (size--)
+            {
+                auto u = q.front();
+                q.pop();
+                auto left_p = left[u];
+                auto right_p = right[u];
+                if (left_p != -1 && abs(left_p - u) <= d && !vis[left_p])
+                {
+                    q.push(left_p);
+                    vis[left_p] = 1;
+                }
+                if (right_p != -1 && abs(right_p - u) <= d && !vis[right_p])
+                {
+                    q.push(right_p);
+                    vis[right_p] = 1;
+                }
+            }
+        }
+        return ans;
+    }
 };
 
 int main()
