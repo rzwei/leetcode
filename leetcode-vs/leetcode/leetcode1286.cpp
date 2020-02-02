@@ -1529,27 +1529,27 @@ public:
             q.push(i);
         }
         int ans = 0;
-        vector<bool> vis(n);
+        vector<int> vis(n);
         while (!q.empty())
         {
             int size = q.size();
             ans++;
-            fill(vis.begin(), vis.end(), 0);
+            //fill(vis.begin(), vis.end(), 0);
             while (size--)
             {
                 auto u = q.front();
                 q.pop();
                 auto left_p = left[u];
                 auto right_p = right[u];
-                if (left_p != -1 && abs(left_p - u) <= d && !vis[left_p])
+                if (left_p != -1 && abs(left_p - u) <= d && vis[left_p] < ans)
                 {
                     q.push(left_p);
-                    vis[left_p] = 1;
+                    vis[left_p]++;
                 }
-                if (right_p != -1 && abs(right_p - u) <= d && !vis[right_p])
+                if (right_p != -1 && abs(right_p - u) <= d && vis[right_p] < ans)
                 {
                     q.push(right_p);
-                    vis[right_p] = 1;
+                    vis[right_p]++;
                 }
             }
         }
