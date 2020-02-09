@@ -1555,6 +1555,201 @@ public:
         }
         return ans;
     }
+
+    //1342. Number of Steps to Reduce a Number to Zero
+    int numberOfSteps(int num) {
+        return num == 0 ? 0 : log2(num) + bitset<32>(num).count();
+    }
+
+    //1343. Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int ans = 0;
+        int n = arr.size();
+        int sum = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            sum += arr[i];
+            if (i >= k - 1)
+            {
+                if (sum >= k * threshold)
+                {
+                    ans++;
+                }
+                sum -= arr[i - k + 1];
+            }
+        }
+        return ans;
+    }
+
+    //1344. Angle Between Hands of a Clock
+    double angleClock(int hour, int minutes) {
+        double s_hour = (hour + minutes / 60.0) * (360 / 12.0);
+        double s_minute = minutes * (360 / 60.0);
+        double ans = fabs(s_hour - s_minute);
+        return min(360 - ans, ans);
+    }
+
+    //1345. Jump Game IV
+    int minJumps(vector<int>& a) {
+        int n = a.size();
+        if (n == 1) return 0;
+
+        unordered_map<int, vector<int>> a_index;
+        for (int i = 0; i < n; ++i)
+        {
+            a_index[a[i]].push_back(i);
+        }
+
+        vector<bool> vis(n);
+        queue<int> q;
+        q.push(0);
+        vis[0] = 1;
+        unordered_set<int> value;
+        int ans = 0;
+        while (!q.empty())
+        {
+            int size = q.size();
+            while (size--)
+            {
+                auto i = q.front(); q.pop();
+                if (i == n - 1) return ans;
+                if (i - 1 >= 0 && !vis[i - 1])
+                {
+                    q.push(i - 1);
+                    vis[i - 1] = 1;
+                }
+                if (i + 1 < n && !vis[i + 1])
+                {
+                    q.push(i + 1);
+                    vis[i + 1] = 1;
+                }
+                if (!value.count(a[i]))
+                {
+                    value.insert(a[i]);
+                    for (auto& idx : a_index[a[i]])
+                    {
+                        if (!vis[idx])
+                        {
+                            q.push(idx);
+                            vis[idx] = 1;
+                        }
+                    }
+                }
+            }
+            ans++;
+        }
+        return n - 1;
+    }
+
+    //1346. Check If N and Its Double Exist
+    bool checkIfExist(vector<int>& a) {
+        int n = a.size();
+        map<int, int> cnt;
+        for (auto& e : a) cnt[e] ++;
+        for (auto it = cnt.begin(); it != cnt.end(); ++it)
+        {
+            int i = it->first, j = it->second;
+            if (i == 0)
+            {
+                if (j > 1) return true;
+            }
+            else if (cnt.count(i * 2))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //1347. Minimum Number of Steps to Make Two Strings Anagram
+    int minSteps(string s, string t) {
+        vector<int> cnt_s(26), cnt_t(26);
+        for (auto& c : s) cnt_s[c - 'a'] ++;
+        for (auto& c : t) cnt_t[c - 'a'] ++;
+        vector<int> diff(26);
+        int ans = 0;
+        for (int i = 0; i < 26; ++i) if (cnt_t[i] - cnt_s[i] > 0) ans += cnt_t[i] - cnt_s[i];
+        return ans;
+    }
+
+    /*
+    //1348. Tweet Counts Per Frequency
+    #include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <cstdio>
+#include <functional>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<
+int,
+    null_type, 
+        less<int>, 
+        rb_tree_tag, 
+        tree_order_statistics_node_update > order_set;
+
+
+    class TweetCounts {
+    public:
+        map<string, order_set> tweets;
+        TweetCounts() {
+
+        }
+
+        void recordTweet(string tweetName, int time) {
+            tweets[tweetName].insert(time);
+        }
+
+        vector<int> getTweetCountsPerFrequency(string freq, string tweetName, int startTime, int endTime) {
+            int diff = 0;
+            if (freq == "minute") diff = 60;
+            else if (freq == "hour") diff = 60 * 60;
+            else diff = 24 * 60 * 60;
+            vector<int> ans;
+            auto& cnt = tweets[tweetName];
+            int last = cnt.order_of_key(startTime);
+            for (int cur = startTime; cur <= endTime; cur += diff)
+            {
+                int rank = cnt.order_of_key(min(cur + diff, endTime + 1));
+                ans.push_back(rank - last);
+                last = rank;
+            }
+            return ans;
+        }
+    };
+    */
+
+    //1349. Maximum Students Taking Exam
+    int maxStudents(vector<vector<char>>& seats) {
+        int m = seats.size();
+        int n = seats[0].size();
+        vector<int> validity;
+        for (int i = 0; i < m; ++i) {
+            int cur = 0;
+            for (int j = 0; j < n; ++j) {
+                cur = cur * 2 + (seats[i][j] == '.');
+            }
+            validity.push_back(cur);
+        }
+
+        vector<vector<int>> f(m + 1, vector<int>(1 << n, -1));
+        f[0][0] = 0;
+        for (int i = 1; i <= m; ++i) {
+            int valid = validity[i - 1];
+            for (int j = 0; j < (1 << n); ++j) {
+                if ((j & valid) == j && !(j & (j >> 1))) {
+                    for (int k = 0; k < (1 << n); ++k) {
+                        if (!(j & (k >> 1)) && !((j >> 1)& k) && f[i - 1][k] != -1) {
+                            f[i][j] = max(f[i][j], f[i - 1][k] + __builtin_popcount(j));
+                        }
+                    }
+                }
+            }
+        }
+
+        return *max_element(f[m].begin(), f[m].end());
+    }
 };
 
 int main()
