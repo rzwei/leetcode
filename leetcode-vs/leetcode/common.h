@@ -107,3 +107,21 @@ public:
 		return int64_t(_ps[end] - _ps[start] + mod) * _inv[start] % mod;
 	}
 };
+
+
+template <typename T, typename M>
+T fastpow(T n, M p, T mod)
+{
+	T ans = 1;
+	while (p)
+	{
+		if (p & 1)
+		{
+			ans = (ans * n) % mod;
+		}
+
+		n = n * n % mod;
+		p >>= 1;
+	}
+	return ans;
+}

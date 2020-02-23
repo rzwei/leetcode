@@ -169,6 +169,36 @@ public:
     //    return abs(a / 6 - b / 6) + abs(a % 6 - b % 6);
     //}
 */
+
+//1357. Apply Discount Every n Orders
+class Cashier {
+public:
+    vector<int> product_prices;
+    int every_n, discount;
+    int cur = 0;
+    Cashier(int n, int discount, vector<int>& products, vector<int>& prices) : every_n(n), discount(discount), product_prices(201) {
+        int len = products.size();
+        for (int i = 0; i < len; ++i)
+        {
+            product_prices[products[i]] = prices[i];
+        }
+    }
+
+    double getBill(vector<int> product, vector<int> amount) {
+        double ans = 0;
+        int len = product.size();
+        for (int i = 0; i < len; ++i)
+        {
+            ans += product_prices[product[i]] * amount[i];
+        }
+        if ((++cur) % every_n == 0)
+        {
+            ans *= (100 - discount) / 100.0;
+        }
+        return ans;
+    }
+};
+
 class Solution
 {
 public:
@@ -1461,11 +1491,11 @@ public:
         return m;
     }
 
-    long long dfs(TreeNode* u, long long sum, long long& ans)
+    long long dfs_1343(TreeNode* u, long long sum, long long& ans)
     {
         if (!u) return 0;
-        auto left = dfs(u->left);
-        auto right = dfs(u->right);
+        auto left = dfs_1343(u->left, sum, ans);
+        auto right = dfs_1343(u->right, sum, ans);
 
         ans = max(ans, left * (sum - left));
         ans = max(ans, right * (sum - right));
@@ -1483,7 +1513,7 @@ public:
         };
         int sum = getsum(root);
         long long ans = 0;
-        dfs(root, sum, ans);
+        dfs_1343(root, sum, ans);
         return ans % mod;
     }
 
@@ -1673,8 +1703,8 @@ public:
     }
 
     /*
-    //1348. Tweet Counts Per Frequency
-    #include <ext/pb_ds/assoc_container.hpp>
+//1348. Tweet Counts Per Frequency
+#include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <cstdio>
 #include <functional>
@@ -1752,6 +1782,50 @@ int,
             }
         }
         return *max_element(dp[n].begin(), dp[n].end());
+    }
+
+    //1356. Sort Integers by The Number of 1 Bits
+    vector<int> sortByBits(vector<int>& arr) {
+        sort(arr.begin(), arr.end(), [](const int lhs, const int rhs) {
+            int cnt_l = __builtin_popcount(lhs), cnt_r = __builtin_popcount(rhs);
+            if (cnt_l == cnt_r) return lhs < rhs;
+            return cnt_l < cnt_r;
+            });
+        return arr;
+    }
+
+    //1358. Number of Substrings Containing All Three Characters
+    int numberOfSubstrings(string s) {
+        int ans = 0;
+        int len = s.size();
+        vector<int> cnt(3);
+        int valid = 0;
+        for (int i = 0, j = 0; j < len; ++j)
+        {
+            if ((++cnt[s[j] - 'a']) == 1)
+            {
+                valid++;
+            }
+            while (i < j && valid == 3)
+            {
+                if (cnt[s[i] - 'a'] == 1) break;
+                cnt[s[i++] - 'a'] --;
+            }
+            if (valid == 3) ans += i + 1;
+        }
+        return ans;
+    }
+
+    //1359. Count All Valid Pickup and Delivery Options
+    int countOrders(int n) {
+        int const mod = 1e9 + 7;
+        long long inv2 = fastpow(2, mod - 2, mod);
+        long long ans = 1;
+        for (long long i = n + n; i >= 2; i -= 2)
+        {
+            ans = (ans * (i * (i - 1)) % mod) * inv2 % mod;
+        }
+        return ans % mod;
     }
 };
 
