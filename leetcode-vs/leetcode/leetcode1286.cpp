@@ -1907,6 +1907,19 @@ int,
         }
     }
 
+    int days_1360(string date) {
+        int y = stoi(date.substr(0, 4)), m = stoi(date.substr(5, 2)), d = stoi(date.substr(8));
+        if (m < 3) {
+            m += 12;
+            y -= 1;
+        }
+        return 365 * y + y / 4 + y / 400 - y / 100 + d + (153 * m + 8) / 5;
+    }
+    //1360. Number of Days Between Two Dates
+    int daysBetweenDates(string date1, string date2) {
+        return abs(days_1360(date1) - days_1360(date2));
+    }
+
     //1363. Largest Multiple of Three
     string largestMultipleOfThree(vector<int>& digits) {
         sort(rbegin(digits), rend(digits));
