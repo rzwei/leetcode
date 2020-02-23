@@ -1827,6 +1827,123 @@ int,
         }
         return ans % mod;
     }
+
+    //1361. Validate Binary Tree Nodes
+    bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) {
+        vector<vector<int>> g(n);
+        vector<int> inorder(n);
+
+        for (int i = 0; i < n; ++i)
+        {
+            int left = leftChild[i], right = rightChild[i];
+            if (left != -1)
+            {
+                g[i].push_back(left);
+                inorder[left] ++;
+            }
+            if (right != -1)
+            {
+                g[i].push_back(right);
+                inorder[right] ++;
+            }
+        }
+        int root = -1;
+        for (int i = 0; i < n; ++i)
+        {
+            if (inorder[i] == 0)
+            {
+                if (root == -1)
+                {
+                    root = i;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (inorder[i] > 1) return false;
+        }
+        if (root == -1) return false;
+        stack<int> stk;
+        stk.push(root);
+        vector<int> vis(n);
+        vis[root] = 1;
+        while (!stk.empty())
+        {
+            auto u = stk.top();
+            stk.pop();
+            for (auto& e : g[u])
+            {
+                stk.push(e);
+                vis[e] = 1;
+            }
+        }
+        for (int i = 0; i < n; ++i) if (!vis[i]) return false;
+        return true;
+    }
+
+    pair<int, int> solve_1362(int n)
+    {
+        int v = sqrt(n);
+        for (int i = v; i >= 1; --i)
+        {
+            if (n % i == 0)
+            {
+                return { i, n / i };
+            }
+        }
+        return { 1, n };
+    }
+    //1362. Closest Divisors
+    vector<int> closestDivisors(int num) {
+        auto left = solve_1362(num + 1), right = solve_1362(num + 2);
+        if (abs(left.first - left.second) < abs(right.first - right.second))
+        {
+            return { left.first, left.second };
+        }
+        else
+        {
+            return { right.first, right.second };
+        }
+    }
+
+    //1363. Largest Multiple of Three
+    string largestMultipleOfThree(vector<int>& digits) {
+        sort(rbegin(digits), rend(digits));
+        int sum = 0, cnt[11] = {};
+        for (auto& d : digits) {
+            sum += d;
+            ++cnt[d];
+        }
+        function<bool(int)> done = [&](int d) {
+            if (cnt[d]) {
+                sum -= d;
+                --cnt[d];
+                for (int i = digits.size() - 1; i >= 0; --i) {
+                    if (digits[i] == d) {
+                        digits.erase(i + begin(digits));
+                        break;
+                    }
+                }
+            }
+            return sum % 3 == 0;
+        };
+        if (sum % 3 == 1) {
+            if (!done(1) && !done(4) && !done(7)) {
+                done(2) || done(2) || done(5) || done(5) || done(8) || done(8);
+            }
+        }
+        else if (sum % 3 == 2) {
+            if (!done(2) && !done(5) && !done(8)) {
+                done(1) || done(1) || done(4) || done(4) || done(7) || done(7);
+            }
+        }
+        string ans;
+        for (auto& d : digits) {
+            ans += to_string(d);
+        }
+        return ans[0] == '0' ? "0" : ans;
+    }
 };
 
 int main()

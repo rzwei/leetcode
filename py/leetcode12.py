@@ -459,8 +459,32 @@ class Solution:
         if country:
             local = '+' + '*' * country + '-' + local
         return local
-
-
+        
+    # 1360. Number of Days Between Two Dates
+    def daysBetweenDates(self, date1: str, date2: str) -> int:
+        date1 = datetime.strptime(date1, "%Y-%m-%d")
+        date2 = datetime.strptime(date2, "%Y-%m-%d")
+        return abs((date2 - date1).days)
+    # 1363. Largest Multiple of Three
+    def largestMultipleOfThree(self, a: List[int]) -> str:
+        n = len(a);
+        dp = [0, 0, 0]
+        hasValue = [False, False, False]
+        a.sort(key=lambda x : -x)
+        for digit in a:
+            ndp = [0, 0, 0]
+            for pre in dp:
+                temp = pre * 10 + digit
+                idx = temp % 3
+                hasValue[idx] = True
+                ndp[idx] = max(temp, ndp[idx])
+            for i in range(3):
+                ndp[i] = max(ndp[i], dp[i])
+            dp = ndp
+        if not hasValue[0]:
+            return ""
+        return str(dp[0])
+        
 if __name__ == '__main__':
     sol = Solution()
     print(sol.reorganizeString("aaab"))
