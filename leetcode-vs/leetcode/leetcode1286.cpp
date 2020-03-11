@@ -1957,6 +1957,227 @@ int,
         }
         return ans[0] == '0' ? "0" : ans;
     }
+
+    //1365. How Many Numbers Are Smaller Than the Current Number
+    vector<int> smallerNumbersThanCurrent(vector<int>& a) {
+        vector<int> ans = a;
+        sort(a.begin(), a.end());
+        int n = a.size();
+        for (int i = 0; i < n; ++i)
+        {
+            auto x = lower_bound(a.begin(), a.end(), ans[i]) - a.begin();
+            ans[i] = x;
+        }
+        return ans;
+    }
+
+    //1366. Rank Teams by Votes
+    string rankTeams(vector<string>& votes) {
+        vector<vector<int>> order(26, vector<int>(26));
+        int n = votes.size();
+        vector<bool> has(26);
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < votes[i].size(); ++j)
+            {
+                order[votes[i][j] - 'A'][j] ++;
+                has[votes[i][j] - 'A'] = true;
+            }
+        }
+        vector<int> idx(26);
+        for (int i = 0; i < 26; ++i) idx[i] = i;
+        sort(idx.begin(), idx.end(), [&](int i, int j) {
+            if (order[i] == order[j]) return i > j;
+            return order[i] < order[j];
+            });
+        string ans;
+        for (int i = 26 - 1; i >= 0; --i)
+        {
+            int c = idx[i];
+            if (!has[c]) break;
+            ans.push_back(c + 'A');
+        }
+        return ans;
+    }
+
+    bool checkdown_1367(ListNode* u, TreeNode* v)
+    {
+        if (!u) return true;
+        if (!v) return false;
+        if (u->val != v->val) return false;
+        return checkdown_1367(u->next, v->left) || checkdown_1367(u->next, v->right);
+    }
+    //1367. Linked List in Binary Tree
+    bool isSubPath(ListNode* head, TreeNode* root) {
+        if (!root) return false;
+        if (head->val == head->val)
+        {
+            if (checkdown_1367(head, root)) return true;
+        }
+        return isSubPath(head, root->left) || isSubPath(head, root->right);
+    }
+
+    int findSmallest_1370(int i, vector<int>& cnt)
+    {
+        for (int j = i + 1; j < cnt.size(); ++j)
+        {
+            if (cnt[j])
+            {
+                return j;
+            }
+        }
+        return -1;
+    }
+    int findLargest_1370(int i, vector<int>& cnt)
+    {
+        for (int j = i - 1; j >= 0; --j)
+        {
+            if (cnt[j])
+            {
+                return j;
+            }
+        }
+        return -1;
+    }
+    //1370. Increasing Decreasing String
+    string sortString(string s) {
+        vector<int> cnt(26);
+        for (auto& c : s) cnt[c - 'a'] ++;
+        string ans;
+        int tot = 0;
+        while (true)
+        {
+            auto mi = findSmallest_1370(-1, cnt);
+
+            if (mi == -1) break;
+            cnt[mi] --;
+
+            ans.push_back(mi + 'a');
+            int idx = mi;
+            while ((idx = findSmallest_1370(idx, cnt)) != -1)
+            {
+                ans.push_back(idx + 'a');
+                cnt[idx] --;
+            }
+
+            int mx = findLargest_1370(26, cnt);
+            if (mx == -1) break;
+            cnt[mx] --;
+            ans.push_back(mx + 'a');
+            idx = mx;
+            while ((idx = findLargest_1370(idx, cnt)) != -1)
+            {
+                ans.push_back(idx + 'a');
+                cnt[idx] --;
+            }
+        }
+        return ans;
+    }
+
+    //1371. Find the Longest Substring Containing Vowels in Even Counts
+    int findTheLongestSubstring(string s) {
+        vector<int> chs(26, -1);
+        string vowel = "aeiou";
+        for (int i = 0; i < vowel.size(); ++i)
+        {
+            chs[vowel[i] - 'a'] = i;
+        }
+
+        vector<int> last(1 << vowel.size(), -2);
+        int const mask = (1 << vowel.size()) - 1;
+        int n = s.size();
+        vector<int> cnt(n);
+        int ans = 0;
+        last[0] = -1;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            if (i != 0) cnt[i] = cnt[i - 1];
+            if (chs[s[i] - 'a'] != -1)
+            {
+                cnt[i] ^= (1 << chs[s[i] - 'a']);
+                cnt[i] &= mask;
+                if (last[cnt[i]] == -2) last[cnt[i]] = i;
+            }
+            ans = max(ans, i - last[cnt[i]]);
+        }
+        return ans;
+    }
+
+    //1374. Generate a String With Characters That Have Odd Counts
+    string generateTheString(int n) 
+    {
+        if (n & 1) return string(n, 'a');
+        else
+        {
+            int d = n / 2;
+            if (d & 1) return string(d, 'a') + string(n - d, 'b');
+            else return string(n / 2 + 1, 'a') + string(n - n / 2 - 1, 'b');
+        }
+    }
+
+    //1375. Bulb Switcher III
+    int numTimesAllBlue(vector<int>& light) {
+        int n = light.size();
+        BIT bit(n + 1);
+        int ans = 0;
+        int mx = -1;
+        for (auto& m : light)
+        {
+            bit.add(m, 1);
+            mx = max(mx, m);
+            if (mx == bit.query(mx)) ans++;
+        }
+        return ans;
+    }
+
+    int dfs_1376(int u, vector<int>& time, vector<vector<int>>& g)
+    {
+        if (g[u].empty()) return 0;
+        int ans = 0;
+        for (auto& v : g[u])
+        {
+            ans = max(ans, dfs_1376(v, time, g) + time[u]);
+        }
+        return ans;
+    }
+
+    //1376. Time Needed to Inform All Employees
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<vector<int>> g(n + 1);
+        for (int i = 0; i < n; ++i)
+        {
+            int mi = manager[i];
+            if (mi != -1)
+            {
+                g[mi].push_back(i);
+            }
+        }
+        return dfs_1376(headID, informTime, g);
+    }
+
+    //1372. Longest ZigZag Path in a Binary Tree
+    int longestZigZag(TreeNode* root) {
+        return max(dfs_1372(root->left, 1), dfs_1372(root->right, 0)) - 1;
+    }
+    int dfs_1372(TreeNode* root, int order)
+    {
+        if (!root)
+        {
+            return 0;
+        }
+        int ans = 0;
+        if (order == 1)
+        {
+            ans = max(ans, dfs_1372(root->right, 0) + 1);
+            ans = max(ans, dfs_1372(root->left, 1));
+        }
+
+        if (order == 0)
+        {
+            ans = max(ans, dfs_1372(root->left, 1) + 1);
+            ans = max(ans, dfs_1372(root->right, 0));
+        }
+    }
 };
 
 int main()
