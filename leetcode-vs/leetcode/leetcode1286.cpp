@@ -199,6 +199,51 @@ public:
     }
 };
 
+//1381. Design a Stack With Increment Operation
+class CustomStack {
+public:
+    vector<int> stk, op;
+    int maxSize, size;
+    CustomStack(int maxSize) : maxSize(maxSize), size(0)
+    {
+        stk.reserve(maxSize);
+        op.reserve(maxSize);
+    }
+
+    void push(int x)
+    {
+        if (size + 1 > maxSize) return;
+        stk.push_back(x);
+        op.push_back(0);
+        size++;
+    }
+
+    int pop()
+    {
+        if (size == 0) return -1;
+        size -= 1;
+
+        auto ret = stk.back();
+        stk.pop_back();
+
+        auto add = op.back();
+        op.pop_back();
+
+        if (size > 0)
+        {
+            auto nx = op.back();
+            op.pop_back();
+            op.push_back(nx + add);
+        }
+        return ret + add;
+    }
+
+    void increment(int k, int val) {
+        if (size == 0) return;
+        op[min(size - 1, k - 1)] += val;
+    }
+};
+
 class Solution
 {
 public:
@@ -2177,6 +2222,80 @@ int,
             ans = max(ans, dfs_1372(root->left, 1) + 1);
             ans = max(ans, dfs_1372(root->right, 0));
         }
+    }
+
+    //1380. Lucky Numbers in a Matrix
+    vector<int> luckyNumbers(vector<vector<int>>& a) {
+        int n = a.size(), m = a[0].size();
+        vector<int> ans;
+        for (int i = 0; i < n; ++i)
+        {
+            int mi = 0;
+            for (int j = 1; j < m; ++j)
+            {
+                if (a[i][j] < a[i][mi])
+                {
+                    mi = j;
+                }
+            }
+            bool f = true;
+            for (int k = 0; f && k < n; ++k)
+            {
+                if (a[k][mi] > a[i][mi])
+                {
+                    f = false;
+                }
+            }
+            if (f) ans.push_back(a[i][mi]);
+        }
+        return ans;
+    }
+
+    //1379. Find a Corresponding Node of a Binary Tree in a Clone of That Tree
+    TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) {
+        if (!original) return nullptr;
+        if (original == target)
+        {
+            return cloned;
+        }
+        TreeNode* ret;
+        ret = getTargetCopy(original->right, cloned->right, target);
+        if (ret) return ret;
+        return getTargetCopy(original->left, cloned->left, target);
+    }
+
+    TreeNode* build_1382(int i, int j, vector<int>& a)
+    {
+        if (i > j) return nullptr;
+        if (i == j) return new TreeNode(a[i]);
+        int m = (i + j) / 2;
+        auto ret = new TreeNode(a[m]);
+        ret->left = build_1382(i, m - 1, a);
+        ret->right = build_1382(m + 1, j, a);
+        return ret;
+    }
+
+    //1382. Balance a Binary Search Tree
+    TreeNode* balanceBST(TreeNode* root) {
+        vector<int> a;
+        stack<TreeNode*> stk;
+        auto cur = root;
+        while (cur || !stk.empty())
+        {
+            if (cur == nullptr)
+            {
+                cur = stk.top();
+                stk.pop();
+                a.push_back(cur->val);
+                cur = cur->right;
+            }
+            else
+            {
+                stk.push(cur);
+                cur = cur->left;
+            }
+        }
+        return build_1382(0, a.size() - 1, a);
     }
 };
 
