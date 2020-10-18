@@ -2400,7 +2400,7 @@ int,
         return ans;
     }
 
-    //5128. Graph Connectivity With Threshold
+    //1627. Graph Connectivity With Threshold
     vector<bool> areConnected(int n, int threshold, vector<vector<int>>& queries) {
         vector<int> parents(n + 1);
         for (int i = 1; i <= n; i++)
