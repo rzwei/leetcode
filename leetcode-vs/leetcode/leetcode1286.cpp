@@ -2297,6 +2297,137 @@ int,
         }
         return build_1382(0, a.size() - 1, a);
     }
+
+    //1624. Largest Substring Between Two Equal Characters
+    int maxLengthBetweenEqualCharacters(string s) {
+        map<char, int> pre;
+        int ans = -1;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            char c = s[i];
+            if (pre.count(c))
+            {
+                ans = max(ans, i - pre[c] - 1);
+            }
+            else
+            {
+                pre[c] = i;
+            }
+        }
+        return ans;
+    }
+
+    //1626. Best Team With No Conflicts
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        int n = scores.size();
+        vector<pair<int, int>> a(n);
+        for (int i = 0; i < n; ++i)
+        {
+            a[i].first = ages[i];
+            a[i].second = scores[i];
+        }
+        sort(a.begin(), a.end());
+        vector<int> dp(n);
+        dp[0] = a[0].second;
+        for (int i = 0; i < n; ++i)
+        {
+            dp[i] = a[i].second;
+            for (int j = i - 1; j >= 0; --j)
+            {
+                if (a[j].second <= a[i].second)
+                {
+                    dp[i] = max(dp[i], dp[j] + a[i].second);
+                }
+            }
+        }
+        return *max_element(dp.begin(), dp.end());
+    }
+
+    int solve_1625(int st, string& s, int a)
+    {
+        int d = 0;
+        vector<int> order(10);
+        int c = s[st] - '0';
+        int cnt = 0;
+        for (int i = 0; order[c] == 0; ++i)
+        {
+            order[c] = cnt;
+            c = (c + a) % 10;
+            cnt += a;
+        }
+        order[c] = cnt;
+        for (int i = 0; i < 10; ++i)
+        {
+            if (order[i]) return order[i];
+        }
+        return -1;
+    }
+    void get_1625(int odd, int even, string& ns)
+    {
+        for (int i = 0; i < ns.size(); ++i)
+        {
+            int v = ns[i] - '0';
+            ns[i] = (v + (i % 2 ? odd : even)) % 10 + '0';
+        }
+    }
+
+    //1625. Lexicographically Smallest String After Applying Operations
+    string findLexSmallestString(string s, int a, int b) {
+        string ans;
+        int n = s.size();
+        vector<int> vis(n);
+        for (int offset = 0; !vis[offset]; offset = (offset + b) % n)
+        {
+            vis[offset] = 1;
+            string ns = s.substr(offset) + s.substr(0, offset);
+            int odd, even;
+            if (b % 2)
+            {
+                odd = solve_1625(1, ns, a);
+                even = solve_1625(0, ns, a);
+            }
+            else
+            {
+                odd = solve_1625(1, ns, a);
+                even = 0;
+            }
+            get_1625(odd, even, ns);
+            if (ans.empty() || ans > ns)
+            {
+                ans = ns;
+            }
+        }
+        return ans;
+    }
+
+    //5128. Graph Connectivity With Threshold
+    vector<bool> areConnected(int n, int threshold, vector<vector<int>>& queries) {
+        vector<int> parents(n + 1);
+        for (int i = 1; i <= n; i++)
+            parents[i] = i;
+        vector<bool> visited(n + 1);
+        
+        function<int(vector<int>&, int)> find = [&](vector<int> & parents, int x) {
+            if (parents[x] != x)
+                parents[x] = find(parents, parents[x]);
+            return parents[x];
+        };
+        for (int i = threshold + 1; i < n; i++) {
+            if (visited[i])
+                continue;
+            visited[i] = true;
+            int p1 = find(parents, i);
+            for (int j = 2 * i; j <= n; j += i) {
+                int p2 = find(parents, j);
+                parents[p2] = p1;
+            }
+        }
+
+        vector<bool> ans;
+        for (auto& q : queries)
+            ans.push_back(find(parents, q[0]) == find(parents, q[1]));
+        return ans;
+    }
 };
 
 int main()
