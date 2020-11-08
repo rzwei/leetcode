@@ -2428,6 +2428,154 @@ int,
             ans.push_back(find(parents, q[0]) == find(parents, q[1]));
         return ans;
     }
+
+    //1646. Get Maximum in Generated Array
+    int getMaximumGenerated(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        vector<int> a(n + 1);
+        a[0] = 0;
+        a[1] = 1;
+        for (int i = 2; i <= n; ++i)
+        {
+            if (i & 1)
+            {
+                a[i] = a[i / 2] + a[i / 2 + 1];
+            }
+            else
+            {
+                a[i] = a[i / 2];
+            }
+        }
+        return *max_element(a.begin(), a.end());
+    }
+
+    //1647. Minimum Deletions to Make Character Frequencies Unique
+    int minDeletions(string s) {
+        vector<int> a(26);
+        for (auto& c : s) a[c - 'a'] ++;
+        sort(a.begin(), a.end());
+        int n = a.size();
+        int cur = INT_MAX;
+        int ans = 0;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            if (a[i] == 0) break;
+            if (a[i] < cur)
+            {
+                cur = a[i] - 1;
+            }
+            else
+            {
+                ans += a[i] - cur;
+                cur = max(cur - 1, 0);
+            }
+        }
+        return ans;
+    }
+/*
+* //1648. Sell Diminishing-Valued Colored Balls
+    int const mod = 1e9 + 7;
+long long fastpow(long long p, long long v)
+{
+    long long ans = 1;
+    while (v)
+    {
+        if (v & 1)
+        {
+            ans = (ans * p) % mod;
+        }
+        v >>= 1;
+        p = (p * p) % mod;
+    }
+    return ans;
+}
+
+long long inv2 = fastpow(2, mod - 2);
+
+class Solution {
+public:
+    // add from prev to value
+    long long merge(long long value, long long cnt, long long prev)
+    {
+        return (cnt * (value + prev) % mod) * (value - prev + 1) % mod * inv2 % mod;
+    }
+    int mergeCnt(long long value, long long cnt, long long prev)
+    {
+        return (value - prev + 1) * cnt % mod;
+    }
+
+    int maxProfit(vector<int>& a, int p) {
+        map<int, int> cnt;
+        cnt[0] = 0;
+        for (auto& e : a) cnt[e] ++;
+        long long ans = 0;
+        while (p)
+        {
+            auto last = prev(cnt.end());
+            int lastv = last->first;
+            int lastc = last->second;
+            auto llast = prev(last);
+            long long mcnt = mergeCnt(lastv, lastc, llast->first + 1);
+            if (mcnt <= p)
+            {
+                ans = (ans + merge(lastv, lastc, llast->first + 1)) % mod;
+                cnt.erase(lastv);
+                cnt[llast->first] += lastc;
+                p -= mcnt;
+            }
+            else
+            {
+                if (lastc >= p)
+                {
+                    ans = (ans + (long long)p * lastv) % mod;
+                }
+                else
+                {
+                    int l = llast->first, r = lastv;
+                    while (l < r)
+                    {
+                        int m = (l + r) / 2;
+                        auto mcnt = mergeCnt(lastv, lastc, m);
+                        if (mcnt <= p)
+                        {
+                            r = m;
+                        }
+                        else
+                        {
+                            l = m + 1;
+                        }
+                    }
+                    auto mv = merge(lastv, lastc, l);
+                    auto mc = mergeCnt(lastv, lastc, l);
+                    ans = (ans + mv) % mod;
+                    auto left = p - mc;
+                    ans = (ans + (long long)(l - 1) * left) % mod;
+                }
+                break;
+            }
+        }
+        return ans;
+    }
+};
+*/
+    //1649. Create Sorted Array through Instructions
+    int createSortedArray(vector<int>& ins) {
+        int ans = 0;
+        int mxn = 1e5;
+        BIT bt(mxn + 1);
+        int sum = 0;
+        int const mod = 1e9 + 7;
+        for (int e : ins)
+        {
+            int mi = bt.query(e - 1);
+            int v = min(mi, sum - bt.query(e));
+            bt.add(e, 1);
+            sum++;
+            ans = (ans + v) % mod;
+        }
+        return ans;
+    }
 };
 
 int main()
