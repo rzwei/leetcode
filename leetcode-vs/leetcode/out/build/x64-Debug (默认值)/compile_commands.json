@@ -1,7 +1,0 @@
-[
-{
-  "directory": "D:/projects/leetcode/leetcode-vs/leetcode/out/build/x64-Debug (默认值)",
-  "command": "clang++  /nologo /TP   /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\leetcode.dir\\leetcode1051.cpp.obj /FdTARGET_COMPILE_PDB /FS -c D:\\projects\\leetcode\\leetcode-vs\\leetcode\\leetcode1051.cpp",
-  "file": "D:/projects/leetcode/leetcode-vs/leetcode/leetcode1051.cpp"
-}
-]

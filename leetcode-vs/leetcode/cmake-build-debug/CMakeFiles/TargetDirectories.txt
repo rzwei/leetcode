@@ -1,3 +1,0 @@
-/mnt/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/mnt/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/d/projects/coder/leetcode-vs/leetcode/cmake-build-debug/CMakeFiles/leetcode.dir
