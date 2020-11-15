@@ -244,6 +244,36 @@ public:
     }
 };
 
+//1656. Design an Ordered Stream
+class OrderedStream {
+    vector<string> pr;
+    int len = 0;
+    int ptr = 1;
+public:
+    OrderedStream(int n) : pr(n + 1) {
+        len = n;
+    }
+
+    vector<string> insert(int id, string value) {
+        pr[id] = value;
+        vector<string> ans;
+        if (id == ptr)
+        {
+            for (int i = ptr; i <= len; ++i)
+            {
+                if (!pr[i].empty())
+                {
+                    ans.push_back(pr[i]);
+                }
+                else break;
+            }
+            ptr += ans.size();
+        }
+        return ans;
+    }
+};
+
+
 class Solution
 {
 public:
@@ -2575,6 +2605,62 @@ public:
             ans = (ans + v) % mod;
         }
         return ans;
+    }
+
+    //1657. Determine if Two Strings Are Close
+    bool closeStrings(string word1, string word2) {
+        vector<int> a(26), b(26);
+        for (auto& c : word1) a[c - 'a'] ++;
+        for (auto& c : word2) b[c - 'a'] ++;
+        for (int i = 0; i < 26; ++i)
+        {
+            if (a[i] && !b[i]) return false;
+            if (!a[i] && b[i]) return false;
+        }
+        sort(a.begin(), a.end());
+        sort(b.begin(), b.end());
+        int ans = true;
+        for (int i = 0; i < 26; ++i)
+        {
+            if (a[i] != b[i]) ans = false;
+        }
+        return ans;
+    }
+
+    //1658. Minimum Operations to Reduce X to Zero
+    int minOperations(vector<int>& a, int x) {
+        int n = a.size();
+        int sum = 0;
+        int left = n - 1;
+        int ans = n + 1;
+        for (int i = 0; i < n; ++i)
+        {
+            sum += a[i];
+            if (sum == x)
+            {
+                ans = i + 1;
+            }
+            else if (sum > x)
+            {
+                left = i;
+                break;
+            }
+        }
+        int right = n - 1;
+        for (int i = left; i >= 0; --i)
+        {
+            sum -= a[i];
+            while (right >= i && a[right] + sum <= x)
+            {
+                sum += a[right];
+                if (sum == x)
+                {
+                    ans = min(ans, i + n - right);
+                }
+                --right;
+            }
+        }
+        return ans == n + 1 ? -1 : ans;
     }
 };
 
